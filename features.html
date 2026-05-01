@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  ZopDev · features.html
+  ----------------------------------------------------------------------------
+  Full feature catalog. The homepage shows the headline 5; this page shows
+  ALL of them, grouped into 5 capability tracks (Atlas · Posture · Schedule
+  · Remediate · Showback) plus integrations, governance, and the CDCR loop.
+  Each capability gets a deep-dive card with illustrations, code samples,
+  trade-offs, and the exact action a customer can take today.
+
+  Uses homepage-chrome.css for nav/footer/buttons. All visuals are inline
+  SVG so the page works offline and never hits a CDN at runtime.
+  ============================================================================
+-->
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+
+<title>Features · ZopDev</title>
+<meta name="description" content="The full ZopDev feature catalog. 27 capabilities across discovery, scheduling, remediation, attribution, governance, and integrations."/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="homepage-chrome.css"/>
+<link rel="stylesheet" href="chrome-footer.css">
+
+<style>
+/* no-italic-site-wide */ em,i,cite,dfn,var,address,blockquote{font-style:normal}
+
+/* ============================================================================
+   FEATURES PAGE LAYOUT
+   ============================================================================
+   - Page head with eyebrow, headline, lede
+   - Sticky track filter bar
+   - Long form layout: alternating left/right deep-dive blocks
+   - Per-feature visualizations rendered inline
+   ============================================================================ */
+
+/* ─── PAGE HEAD ─── */
+.fp-head{
+  max-width:1240px; margin:0 auto;
+  padding:96px 32px 64px;
+  border-bottom:1px solid var(--line);
+}
+.fp-head .meta{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--mono); font-size:11px; font-weight:600;
+  text-transform:uppercase; letter-spacing:.14em; color:var(--zop-orange);
+  margin-bottom:18px;
+}
+.fp-head .meta::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
+.fp-head h1{
+  font-size:clamp(48px, 6.4vw, 96px);
+  font-weight:700; letter-spacing:-.045em; line-height:.96;
+  margin:0 0 18px; max-width:920px;
+}
+.fp-head .lede{
+  font-size:18px; color:var(--g-700);
+  max-width:720px; line-height:1.5; margin:0 0 24px;
+}
+html[data-theme="dark"] .fp-head .lede{ color:var(--g-300); }
+.fp-head .stats{
+  display:flex; flex-wrap:wrap; gap:14px 36px;
+  font-family:var(--mono); font-size:12px;
+  color:var(--g-700); letter-spacing:.04em;
+}
+html[data-theme="dark"] .fp-head .stats{ color:var(--g-300); }
+.fp-head .stats strong{ color:var(--ink); font-weight:700; font-size:22px; display:block; letter-spacing:-.02em; }
+html[data-theme="dark"] .fp-head .stats strong{ color:var(--g-50); }
+.fp-head .stats > div{ flex-shrink:0; }
+
+/* ─── STICKY TRACK FILTER ─── */
+.fp-filter{
+  position:sticky; top:64px; z-index:30;
+  background:var(--paper); border-bottom:1px solid var(--line);
+  padding:16px 32px;
+  display:flex; gap:0; flex-wrap:wrap;
+  font-family:var(--mono); font-size:11px; letter-spacing:.1em;
+  text-transform:uppercase;
+}
+html[data-theme="dark"] .fp-filter{ background:var(--paper); }
+.fp-filter a{
+  padding:8px 18px; color:var(--g-700); text-decoration:none;
+  border-right:1px solid var(--line);
+  transition:color .2s, background .2s;
+}
+.fp-filter a:hover{ color:var(--ink); background:var(--g-50); }
+.fp-filter a:last-child{ border-right:0; }
+html[data-theme="dark"] .fp-filter a{ color:var(--g-300); }
+html[data-theme="dark"] .fp-filter a:hover{ color:var(--g-50); background:#1a1a1f; }
+
+/* ─── TRACK SECTION ─── */
+.fp-track{
+  max-width:1240px; margin:0 auto;
+  padding:96px 32px;
+  border-bottom:1px solid var(--line);
+  scroll-margin-top:120px;
+}
+.fp-track:last-child{ border-bottom:0; }
+.fp-track-head{
+  display:grid; grid-template-columns:1fr 1.2fr;
+  gap:64px; align-items:end;
+  margin-bottom:64px;
+  padding-bottom:32px; border-bottom:1px dashed var(--line);
+}
+.fp-track-head .meta{
+  font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--g-600); font-weight:600;
+  margin-bottom:14px;
+  display:flex; align-items:center; gap:8px;
+}
+.fp-track-head .meta::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
+.fp-track-head h2{
+  font-size:clamp(36px, 4.4vw, 64px);
+  font-weight:700; letter-spacing:-.04em; line-height:1;
+  margin:0;
+}
+.fp-track-head p{
+  font-size:16px; color:var(--g-700); line-height:1.6; margin:0;
+  max-width:560px;
+}
+html[data-theme="dark"] .fp-track-head p{ color:var(--g-300); }
+@media (max-width:980px){
+  .fp-track-head{ grid-template-columns:1fr; gap:24px; }
+}
+
+/* ─── FEATURE BLOCKS · alternating L/R deep-dive ─── */
+.fp-feature{
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:64px; align-items:start;
+  padding:48px 0;
+  border-bottom:1px dashed var(--line);
+}
+.fp-feature:last-child{ border-bottom:0; padding-bottom:0; }
+.fp-feature.flip .fp-copy{ order:2; }
+.fp-feature.flip .fp-visual{ order:1; }
+
+.fp-copy .fp-num{
+  font-family:var(--mono); font-size:10px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--g-600); font-weight:700;
+  margin-bottom:10px;
+}
+.fp-copy h3{
+  font-size:clamp(24px, 2.4vw, 32px); font-weight:700;
+  letter-spacing:-.025em; line-height:1.1;
+  margin:0 0 12px;
+}
+.fp-copy .fp-lede{
+  font-size:16px; color:var(--g-700); line-height:1.55;
+  margin:0 0 24px; max-width:520px;
+}
+html[data-theme="dark"] .fp-copy .fp-lede{ color:var(--g-300); }
+.fp-copy .fp-bullets{
+  list-style:none; padding:0; margin:0 0 24px;
+  display:flex; flex-direction:column; gap:14px;
+}
+.fp-copy .fp-bullets li{
+  display:grid; grid-template-columns:14px 1fr; gap:12px;
+  align-items:start;
+  font-size:14px; color:var(--g-700); line-height:1.5;
+}
+html[data-theme="dark"] .fp-copy .fp-bullets li{ color:var(--g-300); }
+.fp-copy .fp-bullets li::before{
+  content:''; width:6px; height:6px; background:var(--ink);
+  margin-top:7px;
+}
+html[data-theme="dark"] .fp-copy .fp-bullets li::before{ background:var(--g-50); }
+.fp-copy .fp-bullets strong{ color:var(--ink); font-weight:600; }
+html[data-theme="dark"] .fp-copy .fp-bullets strong{ color:var(--g-50); }
+.fp-copy .fp-tags{
+  display:flex; flex-wrap:wrap; gap:6px;
+  margin-top:18px;
+}
+.fp-copy .fp-tag{
+  font-family:var(--mono); font-size:10px; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase;
+  padding:4px 9px; border:1px solid var(--line);
+  color:var(--g-600);
+}
+html[data-theme="dark"] .fp-copy .fp-tag{ color:var(--g-300); border-color:#2a2a30; }
+.fp-copy .fp-cta{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--font); font-size:14px; font-weight:600;
+  color:var(--ink); text-decoration:none;
+  border-bottom:1px solid var(--ink);
+  padding-bottom:2px; margin-top:8px;
+  transition:color .2s, border-color .2s;
+}
+.fp-copy .fp-cta:hover{ color:var(--zop-orange); border-color:var(--zop-orange); }
+html[data-theme="dark"] .fp-copy .fp-cta{ color:var(--g-50); border-color:var(--g-50); }
+
+/* ─── VISUAL CONTAINER ─── */
+.fp-visual{
+  position:relative;
+  border:1px solid var(--line);
+  background:var(--paper);
+  min-height:340px;
+  overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+html[data-theme="dark"] .fp-visual{ background:#15151a; }
+.fp-visual.dark{ background:#0F0F12; color:#F0EBDB; }
+
+/* Per-visual styles */
+.viz-atlas{ width:100%; height:340px; padding:24px; display:flex; align-items:center; justify-content:center; }
+.viz-atlas svg{ width:100%; height:100%; }
+
+.viz-posture{
+  width:100%; padding:24px;
+  display:grid; grid-template-columns:1.2fr 1fr; gap:24px;
+}
+.viz-posture .grade{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:24px; border:1px solid var(--line);
+  background:var(--zop-white);
+}
+html[data-theme="dark"] .viz-posture .grade{ background:#1a1a1e; border-color:#2a2a30; }
+.viz-posture .grade-letter{
+  font-family:var(--mono); font-size:96px; font-weight:700;
+  line-height:1; color:var(--zop-green);
+  text-shadow:0 0 18px rgba(127,178,54,.18);
+}
+.viz-posture .grade-num{
+  font-family:var(--mono); font-size:11px; color:var(--g-600);
+  letter-spacing:.1em; margin-top:8px;
+}
+.viz-posture .breakdown{ display:flex; flex-direction:column; gap:10px; }
+.viz-posture .breakdown-row{
+  display:grid; grid-template-columns:90px 1fr 50px;
+  gap:12px; align-items:center;
+  font-family:var(--mono); font-size:11px;
+}
+.viz-posture .br-label{ color:var(--g-600); letter-spacing:.06em; text-transform:uppercase; }
+.viz-posture .br-bar{
+  height:6px; background:var(--line); position:relative; overflow:hidden;
+}
+.viz-posture .br-fill{
+  position:absolute; left:0; top:0; bottom:0;
+  background:var(--ink);
+}
+.viz-posture .br-fill.green{ background:var(--zop-green); }
+.viz-posture .br-fill.orange{ background:var(--zop-orange); }
+.viz-posture .br-num{ font-weight:700; color:var(--ink); text-align:right; }
+html[data-theme="dark"] .viz-posture .br-num{ color:var(--g-50); }
+
+.viz-schedule{ width:100%; padding:24px; display:flex; flex-direction:column; gap:14px; }
+.viz-schedule .day-row{
+  display:grid; grid-template-columns:60px 1fr;
+  gap:14px; align-items:center;
+  font-family:var(--mono); font-size:11px;
+}
+.viz-schedule .day-label{ color:var(--g-600); letter-spacing:.08em; text-transform:uppercase; }
+.viz-schedule .day-bar{
+  height:18px; position:relative;
+  background:repeating-linear-gradient(90deg, var(--g-100) 0, var(--g-100) 1px, transparent 1px, transparent calc(100%/24));
+  border:1px solid var(--line);
+}
+html[data-theme="dark"] .viz-schedule .day-bar{
+  background:repeating-linear-gradient(90deg, #1a1a1e 0, #1a1a1e 1px, transparent 1px, transparent calc(100%/24));
+  border-color:#2a2a30;
+}
+.viz-schedule .day-on{
+  position:absolute; top:0; bottom:0;
+  background:var(--zop-orange);
+}
+
+.viz-remediate{ width:100%; padding:24px 28px; display:flex; flex-direction:column; gap:14px; font-family:var(--mono); font-size:12px; }
+.viz-remediate .r-row{
+  display:grid; grid-template-columns:18px 1fr 90px 100px;
+  gap:14px; align-items:center;
+  padding:10px 0; border-bottom:1px dashed var(--line);
+}
+.viz-remediate .r-row:last-child{ border-bottom:0; }
+.viz-remediate .r-row.done{ opacity:.45; }
+.viz-remediate .r-row.done .r-id::before{ content:'✓'; color:var(--zop-green); }
+.viz-remediate .r-id::before{ content:'·'; color:var(--g-500); }
+.viz-remediate .r-desc{ color:var(--ink); }
+html[data-theme="dark"] .viz-remediate .r-desc{ color:var(--g-50); }
+.viz-remediate .r-amt{ color:var(--zop-orange); font-weight:700; text-align:right; }
+.viz-remediate .r-btn{
+  font-family:var(--mono); font-size:9px; font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase;
+  padding:5px 10px; border:1px solid var(--ink);
+  background:var(--ink); color:var(--paper); text-align:center;
+  cursor:pointer;
+}
+.viz-remediate .r-row.done .r-btn{ background:transparent; color:var(--g-500); border-color:var(--line); }
+
+.viz-showback{ width:100%; padding:24px; display:flex; flex-direction:column; gap:14px; }
+.viz-showback .sb-team{
+  display:grid; grid-template-columns:120px 1fr 80px;
+  gap:14px; align-items:center;
+  font-family:var(--mono); font-size:12px;
+}
+.viz-showback .sb-name{ color:var(--ink); font-weight:600; }
+html[data-theme="dark"] .viz-showback .sb-name{ color:var(--g-50); }
+.viz-showback .sb-bar{ height:14px; background:var(--g-100); position:relative; overflow:hidden; }
+html[data-theme="dark"] .viz-showback .sb-bar{ background:#1a1a1e; }
+.viz-showback .sb-fill{ position:absolute; left:0; top:0; bottom:0; background:var(--zop-orange); }
+.viz-showback .sb-amt{ text-align:right; color:var(--ink); font-weight:700; }
+html[data-theme="dark"] .viz-showback .sb-amt{ color:var(--g-50); }
+
+@media (max-width:880px){
+  .fp-feature{ grid-template-columns:1fr; gap:32px; }
+  .fp-feature.flip .fp-copy{ order:1; }
+  .fp-feature.flip .fp-visual{ order:2; }
+}
+
+/* ─── INTEGRATION GRID ─── */
+.fp-integ-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+  gap:0; border:1px solid var(--line); margin-top:32px;
+}
+.fp-integ{
+  padding:18px 22px;
+  border-right:1px solid var(--line); border-bottom:1px solid var(--line);
+  display:flex; align-items:center; gap:12px;
+  font-family:var(--font); font-size:14px; color:var(--ink);
+  transition:background .2s;
+}
+html[data-theme="dark"] .fp-integ{ color:var(--g-50); border-color:#2a2a30; }
+.fp-integ:hover{ background:var(--g-50); }
+html[data-theme="dark"] .fp-integ:hover{ background:#1a1a1f; }
+.fp-integ-mark{
+  width:28px; height:28px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:10px; font-weight:700;
+  background:var(--ink); color:var(--paper);
+}
+.fp-integ-mark.aws    { background:#FF9900; color:#0a0a0c; }
+.fp-integ-mark.gcp    { background:#1a56c8; color:#FAF7EC; }
+.fp-integ-mark.az     { background:#0078D4; color:#FAF7EC; }
+.fp-integ-mark.k8s    { background:#326CE5; color:#FAF7EC; }
+.fp-integ-mark.tf     { background:#7B42BC; color:#FAF7EC; }
+.fp-integ-mark.gh     { background:#0a0a0a; color:#FAF7EC; }
+.fp-integ-mark.slack  { background:#4A154B; color:#FAF7EC; }
+.fp-integ-mark.dd     { background:#632CA6; color:#FAF7EC; }
+.fp-integ-mark.jira   { background:#0052CC; color:#FAF7EC; }
+.fp-integ-mark.okta   { background:#007DC1; color:#FAF7EC; }
+
+/* ─── FOOTER CTA ─── */
+.fp-footer-cta{
+  max-width:1240px; margin:0 auto;
+  padding:96px 32px;
+  text-align:center;
+  border-top:1px solid var(--line);
+}
+.fp-footer-cta h2{
+  font-size:clamp(36px, 4.4vw, 64px);
+  font-weight:700; letter-spacing:-.04em; line-height:1;
+  margin:0 0 18px;
+}
+.fp-footer-cta p{
+  font-size:16px; color:var(--g-700); margin:0 0 32px;
+  max-width:560px; margin-left:auto; margin-right:auto; line-height:1.55;
+}
+html[data-theme="dark"] .fp-footer-cta p{ color:var(--g-300); }
+.fp-footer-cta .actions{ display:inline-flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+</style>
+</head>
+<body>
+
+<!-- ========================================================================
+     SVG defs
+     ======================================================================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mark-zopdev" viewBox="0 0 32 32">
+      <rect x="0"  y="0"  width="16" height="16" fill="#2A4494"/>
+      <rect x="16" y="0"  width="16" height="16" fill="#F58549"/>
+      <rect x="16" y="16" width="16" height="16" fill="#7FB236"/>
+    </symbol>
+    <symbol id="logo-zopdev" viewBox="0 0 715 276">
+      <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+      <rect x="537" width="89" height="89" fill="#2A4494"/>
+      <rect x="626" width="89" height="89" fill="#F58549"/>
+      <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ============================================================
+     LIVE STATUS STRIP. Cloud-ops signal strip
+     ============================================================ -->
+<!-- ============================================================
+     SAVINGS CALCULATOR STRIP. Single CTA, links to the calculator.
+     ============================================================ -->
+<a class="live-strip live-strip-cta" href="#calculator" aria-label="Open the savings calculator">
+  <span class="ls-cta-anchor">
+    <span class="ls-live"><span class="ls-livedot"></span>Calculator</span>
+  </span>
+  <span class="ls-cta-msg">See how much your cloud is wasting right now.</span>
+  <span class="ls-cta-arrow">Try it <span class="ls-arrow">&rarr;</span></span>
+</a>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo-lockup sm" aria-label="ZopDev">
+      <svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <div class="nav-item" data-menu="product">
+        <a>Product <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <div class="nav-item" data-menu="resources">
+        <a>Resources <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="pricing.html">Pricing</a>
+      <div class="nav-item" data-menu="company">
+        <a>Company <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="community.html">Community</a>
+    </div>
+
+    <!-- Shared dropdown overlay. Content crossfades, panel slides left/right -->
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+      <div class="nav-panes" id="nav-panes">
+
+        <!-- ═══════ PRODUCT · 3 sub-products ═══════ -->
+        <div class="nav-pane" data-pane="product">
+          <!-- 3 equal cells. Inline grid-template-columns overrides the
+               default 1.3fr 1fr 1fr (which is built for a featured-hero
+               layout). All three products are equal here — no hero — so
+               no empty grid slots and no card stretches taller than its
+               siblings. -->
+          <div class="np-bento" style="grid-template-columns:1fr 1fr 1fr;">
+            <a class="np-cell" href="zopnight.html">
+              <span class="np-badge live">live</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopNight</h3>
+              <p class="np-cell-desc">Cloud cost optimization on autopilot. AWS, Azure, GCP.</p>
+            </a>
+            <a class="np-cell" href="zopday.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#F58549"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopDay</h3>
+              <p class="np-cell-desc">Deployment orchestration and release management.</p>
+            </a>
+            <a class="np-cell" href="zopcloud.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><rect x="12" y="8" width="8" height="6" fill="#FFFFFF"/><rect x="6" y="14" width="20" height="10" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopCloud</h3>
+              <p class="np-cell-desc">Multi-cloud resource graph and topology view.</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Live in Claude &amp; Codex</strong> · run ZopNight from your MCP client</span>
+            <a href="developers.html">Try MCP →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ RESOURCES · 9 cells in a 3×3 grid ═══════ -->
+        <div class="nav-pane" data-pane="resources">
+          <div class="np-bento np-bento--grid">
+            <a class="np-cell" href="blog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Blog</h3>
+              <p class="np-cell-desc">Engineering + cost optimization notes</p>
+            </a>
+            <a class="np-cell" href="free-ebooks.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 4h7v13H3zM10 4h7v13h-7z" stroke="currentColor" stroke-width="1.5"/><path d="M10 4v13" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Ebooks</h3>
+              <p class="np-cell-desc">Free playbooks · FinOps, K8s, CDCR</p>
+            </a>
+            <a class="np-cell" href="customers.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 16c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Case studies</h3>
+              <p class="np-cell-desc">42-67% cuts, real teams</p>
+            </a>
+            <a class="np-cell" href="solutions.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Use cases by industry</h3>
+              <p class="np-cell-desc">SaaS · fintech · retail · health</p>
+            </a>
+            <a class="np-cell" href="product-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M8 7l4 3-4 3z" fill="currentColor"/></svg>
+              </div>
+              <h3 class="np-cell-title">Product documentation</h3>
+              <p class="np-cell-desc">Walkthroughs · video tours</p>
+            </a>
+            <a class="np-cell" href="kubernetes-guide.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2l7 4v8l-7 4-7-4V6z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
+              </div>
+              <h3 class="np-cell-title">Kubernetes guide</h3>
+              <p class="np-cell-desc">From cluster basics to right-sizing</p>
+            </a>
+            <a class="np-cell" href="changelog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Changelog</h3>
+              <p class="np-cell-desc">What shipped this week</p>
+            </a>
+            <a class="np-cell" href="developer-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 6L3 10l4 4M13 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 class="np-cell-title">Developer documentation</h3>
+              <p class="np-cell-desc">REST API · SDKs · webhooks · MCP</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Weekly digest</strong> · waste signals, wins, war stories</span>
+            <a href="blog.html">Subscribe →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ COMPANY · 2 items ═══════ -->
+        <div class="nav-pane" data-pane="company">
+          <div class="np-bento" style="grid-template-columns:1fr 1fr;">
+            <a class="np-cell" href="about.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#0A0A0A"/><rect x="6" y="6" width="8" height="20" fill="#F0EBDB"/><rect x="18" y="12" width="8" height="14" fill="#F58549"/></svg>
+              </div>
+              <h3 class="np-cell-title">About</h3>
+              <p class="np-cell-desc">Founded 2024. The autopilot for multi-cloud cost.</p>
+            </a>
+            <a class="np-cell" href="careers.html">
+              <span class="np-badge">hiring</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="6" width="14" height="11" stroke="currentColor" stroke-width="1.5"/><path d="M7 6V4h6v2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Careers</h3>
+              <p class="np-cell-desc">Open roles · engineering, design, GTM</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>We're hiring</strong> · remote-first · 12 open roles</span>
+            <a href="careers.html">See roles →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="nav-cta">
+      <!-- Status pill · live dot · links to /status.html. Mirrors the
+           project's "always-on" identity (the live-ops strip above the
+           nav). Pulses green when all systems are operational. -->
+      <a class="nav-status" href="status.html" aria-label="System status">
+        <span class="nav-status-dot" aria-hidden="true"></span>
+        <span class="nav-status-text">Status</span>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" role="switch">
+        <span class="tt-opt tt-sun" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="8" cy="8" r="3" fill="currentColor" stroke="none"/>
+            <path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.9.9M11.7 11.7l.9.9M3.4 12.6l.9-.9M11.7 4.3l.9-.9"/>
+          </svg>
+        </span>
+        <span class="tt-opt tt-moon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M12.8 10.1a5.5 5.5 0 0 1-7-7 .5.5 0 0 0-.7-.6A6.5 6.5 0 1 0 13.4 10.8a.5.5 0 0 0-.6-.7z"/>
+          </svg>
+        </span>
+      </button>
+      <a class="chip-playground" href="playground.html"><span>Playground</span></a>
+      <a class="sign" href="signin.html">Sign In</a>
+      <a class="btn btn-accent" href="demo.html"><span>Book a Demo</span> <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- ========================================================================
+     PAGE HEAD
+     ======================================================================== -->
+<header class="fp-head">
+  <div class="meta">catalog · everything ZopDev does</div>
+  <h1>27 features.<br/>One continuous loop.</h1>
+  <p class="lede">The full catalog. Discovery, posture scoring, scheduling, remediation, attribution, governance, anomaly detection, every integration. Each capability ships with concrete trade-offs, code samples, and the action a customer can take today.</p>
+  <div class="stats">
+    <div><strong>27</strong>features</div>
+    <div><strong>5</strong>capability tracks</div>
+    <div><strong>32</strong>integrations</div>
+    <div><strong>4 min</strong>scan cadence</div>
+    <div><strong>7 days</strong>rollback window</div>
+  </div>
+</header>
+
+<!-- ========================================================================
+     STICKY TRACK FILTER
+     ======================================================================== -->
+<div class="fp-filter">
+  <a href="#discover">Discover</a>
+  <a href="#posture">Posture</a>
+  <a href="#schedule">Schedule</a>
+  <a href="#remediate">Remediate</a>
+  <a href="#showback">Showback</a>
+  <a href="#govern">Govern</a>
+  <a href="#integrate">Integrate</a>
+</div>
+
+<!-- ========================================================================
+     TRACK 01 · DISCOVER
+     ======================================================================== -->
+<section class="fp-track" id="discover">
+  <div class="fp-track-head">
+    <div>
+      <div class="meta">Track 01</div>
+      <h2>Discover.</h2>
+    </div>
+    <p>Map your entire footprint. Every resource, every region, every account. Know what you have before you can know what to fix.</p>
+  </div>
+
+  <article class="fp-feature">
+    <div class="fp-copy">
+      <div class="fp-num">F.01 · Atlas</div>
+      <h3>Multi-Cloud Atlas.</h3>
+      <p class="fp-lede">One read-only IAM role per account. Every resource scanned every 4 minutes. AWS, Azure, GCP, same screen, same filters, same provenance.</p>
+      <ul class="fp-bullets">
+        <li><strong>What it sees</strong> · Compute, storage, databases, networking, IAM, secrets, across every region the role can reach.</li>
+        <li><strong>How it scans</strong> · Read-only inventory APIs · no agents, no sidecars, no code in your repo.</li>
+        <li><strong>What stays out</strong> · Your data. Only metadata leaves the account. Findings + audit log live in ZopDev. Nothing else.</li>
+      </ul>
+      <div class="fp-tags">
+        <span class="fp-tag">aws</span><span class="fp-tag">azure</span><span class="fp-tag">gcp</span><span class="fp-tag">read-only</span>
+      </div>
+      <a class="fp-cta" href="product/zopnight/atlas.html">Read the deep dive →</a>
+    </div>
+    <div class="fp-visual">
+      <div class="viz-atlas">
+        <svg viewBox="0 0 400 280" aria-hidden="true">
+          <defs>
+            <pattern id="atlas-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" stroke-width=".5" opacity=".15"/>
+            </pattern>
+          </defs>
+          <rect width="400" height="280" fill="url(#atlas-grid)" color="currentColor"/>
+          <!-- AWS column -->
+          <text x="80" y="40" font-family="JetBrains Mono" font-size="10" font-weight="700" letter-spacing="2" text-anchor="middle" fill="currentColor">AWS</text>
+          <rect x="40" y="60" width="80" height="22" fill="none" stroke="currentColor" stroke-width="1"/>
+          <text x="80" y="74" font-family="JetBrains Mono" font-size="9" text-anchor="middle" fill="currentColor">us-east-1 · 184</text>
+          <rect x="40" y="92" width="80" height="22" fill="none" stroke="currentColor" stroke-width="1"/>
+          <text x="80" y="106" font-family="JetBrains Mono" font-size="9" text-anchor="middle" fill="currentColor">us-west-2 · 96</text>
+          <rect x="40" y="124" width="80" height="22" fill="none" stroke="currentColor" stroke-width="1"/>
+          <text x="80" y="138" font-family="JetBrains Mono" font-size="9" text-anchor="middle" fill="currentColor">eu-west-1 · 73</text>
+          <!-- GCP column -->
+          <text x="200" y="40" font-family="JetBrains Mono" font-size="10" font-weight="700" letter-spacing="2" text-anchor="middle" fill="currentColor">GCP</text>
+          <rect x="160" y="60" width="80" height="22" fill="none" stroke="currentColor" stroke-width="1"/>
+          <text x="200" y="74" font-family="JetBrains Mono" font-size="9" text-anchor="middle" fill="currentColor">us-central1 · 142</text>
+          <rect x="160" y="92" width="80" height="22" fill="none" stroke="currentColor" stroke-width="1"/>
+          <text x="200" y="106" font-family="JetBrains Mono" font-size="9" text-anchor="middle" fill="currentColor">europe-west4 · 58</text>
+          <!-- Azure column -->
+          <text x="320" y="40" font-family="JetBrains Mono" font-size="10" font-weight="700" letter-spacing="2" text-anchor="middle" fill="currentColor">AZURE</text>
+          <rect x="280" y="60" width="80" height="22" fill="none" stroke="currentColor" stroke-width="1"/>
+          <text x="320" y="74" font-family="JetBrains Mono" font-size="9" text-anchor="middle" fill="currentColor">eastus · 211</text>
+          <rect x="280" y="92" width="80" height="22" fill="none" stroke="currentColor" stroke-width="1"/>
+          <text x="320" y="106" font-family="JetBrains Mono" font-size="9" text-anchor="middle" fill="currentColor">westeurope · 83</text>
+          <!-- Total -->
+          <text x="200" y="200" font-family="JetBrains Mono" font-size="11" letter-spacing="1.5" text-anchor="middle" fill="currentColor" opacity=".5">TOTAL UNDER MANAGEMENT</text>
+          <text x="200" y="240" font-family="Space Grotesk" font-size="42" font-weight="700" letter-spacing="-1" text-anchor="middle" fill="#F58549">847</text>
+          <text x="200" y="260" font-family="JetBrains Mono" font-size="9" letter-spacing="1.5" text-anchor="middle" fill="currentColor" opacity=".4">RESOURCES · 4 REGIONS · 3 CLOUDS</text>
+        </svg>
+      </div>
+    </div>
+  </article>
+
+  <article class="fp-feature flip">
+    <div class="fp-copy">
+      <div class="fp-num">F.02 · Inventory diff</div>
+      <h3>What changed since 4 minutes ago.</h3>
+      <p class="fp-lede">Every scan is a snapshot. Diffs are first-class. Know what was added, retired, resized, or moved between regions, with the actor who did it.</p>
+      <ul class="fp-bullets">
+        <li><strong>Replayable</strong> · Walk inventory backward in 4-minute steps for the last 90 days.</li>
+        <li><strong>Attributable</strong> · Each change carries the IAM principal that ran it (when CloudTrail / Activity Log is wired).</li>
+        <li><strong>Subscribable</strong> · Webhook fires on the changes you care about · per-tag, per-account, per-resource-type filters.</li>
+      </ul>
+      <div class="fp-tags">
+        <span class="fp-tag">cloudtrail</span><span class="fp-tag">activity-log</span><span class="fp-tag">audit-log</span>
+      </div>
+    </div>
+    <div class="fp-visual dark">
+      <div style="width:100%; padding:24px; font-family:'JetBrains Mono', monospace; font-size:12px; color:#F0EBDB;">
+        <div style="font-size:10px; letter-spacing:.14em; color:#9C9588; margin-bottom:14px;">INVENTORY DIFF · LAST 4M</div>
+        <div style="display:flex; gap:8px; padding:6px 0; border-bottom:1px dashed #2a2a30;"><span style="color:#7FB236">+</span><span style="color:#F0EBDB">i-0a3f · m6i.large · us-east-1</span></div>
+        <div style="display:flex; gap:8px; padding:6px 0; border-bottom:1px dashed #2a2a30;"><span style="color:#7FB236">+</span><span style="color:#F0EBDB">db-staging-04 · postgres-15 · us-west-2</span></div>
+        <div style="display:flex; gap:8px; padding:6px 0; border-bottom:1px dashed #2a2a30;"><span style="color:#F58549">~</span><span style="color:#F0EBDB">sg-prod-web · added 0.0.0.0/0:443</span></div>
+        <div style="display:flex; gap:8px; padding:6px 0; border-bottom:1px dashed #2a2a30;"><span style="color:#9C9588">−</span><span style="color:#9C9588">i-9b2d · t3.micro · us-west-2 (terminated)</span></div>
+        <div style="display:flex; gap:8px; padding:6px 0;"><span style="color:#F58549">~</span><span style="color:#F0EBDB">cluster-prod-eks · scaled 6 → 4 nodes</span></div>
+        <div style="margin-top:14px; font-size:10px; color:#9C9588;">5 changes · 2 actors · scan #4,217</div>
+      </div>
+    </div>
+  </article>
+
+  <article class="fp-feature">
+    <div class="fp-copy">
+      <div class="fp-num">F.03 · Tag coverage</div>
+      <h3>Coverage that names itself.</h3>
+      <p class="fp-lede">Untagged resources don't show up in showback. ZopDev surfaces accounts below tag-coverage thresholds and prompts the likely owners in Slack until they're claimed.</p>
+      <ul class="fp-bullets">
+        <li><strong>Thresholds per account</strong> · 80% default · custom per environment.</li>
+        <li><strong>Inferred owners</strong> · Heuristic match against IAM creator + git blame + CODEOWNERS · suggest, never auto-assign.</li>
+        <li><strong>Decay</strong> · Tags expire after 90 days unless reaffirmed · stale tags are flagged, not deleted.</li>
+      </ul>
+    </div>
+    <div class="fp-visual">
+      <div style="width:100%; padding:24px;">
+        <div style="font-family:'JetBrains Mono', monospace; font-size:10px; letter-spacing:.14em; color:var(--g-600); margin-bottom:18px;">TAG COVERAGE · BY ACCOUNT</div>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div style="display:grid; grid-template-columns:140px 1fr 50px; gap:14px; align-items:center; font-family:'JetBrains Mono', monospace; font-size:11px;">
+            <span style="color:var(--ink)">prod-payments</span>
+            <div style="height:8px; background:var(--g-100); position:relative;"><div style="position:absolute; left:0; top:0; bottom:0; width:94%; background:var(--zop-green);"></div></div>
+            <span style="text-align:right; font-weight:700; color:var(--ink)">94%</span>
+          </div>
+          <div style="display:grid; grid-template-columns:140px 1fr 50px; gap:14px; align-items:center; font-family:'JetBrains Mono', monospace; font-size:11px;">
+            <span style="color:var(--ink)">prod-platform</span>
+            <div style="height:8px; background:var(--g-100); position:relative;"><div style="position:absolute; left:0; top:0; bottom:0; width:88%; background:var(--zop-green);"></div></div>
+            <span style="text-align:right; font-weight:700; color:var(--ink)">88%</span>
+          </div>
+          <div style="display:grid; grid-template-columns:140px 1fr 50px; gap:14px; align-items:center; font-family:'JetBrains Mono', monospace; font-size:11px;">
+            <span style="color:var(--ink)">staging-platform</span>
+            <div style="height:8px; background:var(--g-100); position:relative;"><div style="position:absolute; left:0; top:0; bottom:0; width:62%; background:var(--zop-orange);"></div></div>
+            <span style="text-align:right; font-weight:700; color:var(--zop-orange)">62%</span>
+          </div>
+          <div style="display:grid; grid-template-columns:140px 1fr 50px; gap:14px; align-items:center; font-family:'JetBrains Mono', monospace; font-size:11px;">
+            <span style="color:var(--ink)">dev-sandbox</span>
+            <div style="height:8px; background:var(--g-100); position:relative;"><div style="position:absolute; left:0; top:0; bottom:0; width:34%; background:var(--zop-orange);"></div></div>
+            <span style="text-align:right; font-weight:700; color:var(--zop-orange)">34%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article class="fp-feature flip">
+    <div class="fp-copy">
+      <div class="fp-num">F.04 · Dependency map</div>
+      <h3>What touches what.</h3>
+      <p class="fp-lede">Click any resource. See every other resource that depends on it. Graph queries answer the questions invoices can't: "what blast radius if I terminate this?"</p>
+      <ul class="fp-bullets">
+        <li><strong>Three-deep</strong> · Default 3 hops; expand any node to widen.</li>
+        <li><strong>Time-aware</strong> · Walk the graph at any point in the last 90 days.</li>
+        <li><strong>Exportable</strong> · Cypher · GraphML · DOT · for your own analysis.</li>
+      </ul>
+    </div>
+    <div class="fp-visual">
+      <div style="width:100%; height:340px; padding:24px;">
+        <svg viewBox="0 0 400 280" style="width:100%; height:100%;" aria-hidden="true">
+          <line x1="200" y1="140" x2="100" y2="80"  stroke="currentColor" stroke-width="1" opacity=".4"/>
+          <line x1="200" y1="140" x2="100" y2="200" stroke="currentColor" stroke-width="1" opacity=".4"/>
+          <line x1="200" y1="140" x2="300" y2="80"  stroke="currentColor" stroke-width="1" opacity=".4"/>
+          <line x1="200" y1="140" x2="300" y2="200" stroke="currentColor" stroke-width="1" opacity=".4"/>
+          <line x1="100" y1="80"  x2="60"  y2="40"  stroke="currentColor" stroke-width="1" opacity=".25"/>
+          <line x1="300" y1="80"  x2="340" y2="40"  stroke="currentColor" stroke-width="1" opacity=".25"/>
+          <line x1="100" y1="200" x2="60"  y2="240" stroke="currentColor" stroke-width="1" opacity=".25"/>
+          <line x1="300" y1="200" x2="340" y2="240" stroke="currentColor" stroke-width="1" opacity=".25"/>
+          <circle cx="200" cy="140" r="14" fill="#F58549"/>
+          <text x="200" y="165" font-family="JetBrains Mono" font-size="9" text-anchor="middle" fill="currentColor">api-prod</text>
+          <circle cx="100" cy="80"  r="9" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="100" cy="200" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="300" cy="80"  r="9" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="300" cy="200" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="60"  cy="40"  r="6" fill="currentColor" opacity=".5"/>
+          <circle cx="340" cy="40"  r="6" fill="currentColor" opacity=".5"/>
+          <circle cx="60"  cy="240" r="6" fill="currentColor" opacity=".5"/>
+          <circle cx="340" cy="240" r="6" fill="currentColor" opacity=".5"/>
+          <text x="100" y="98"  font-family="JetBrains Mono" font-size="8" text-anchor="middle" fill="currentColor" opacity=".7">rds-1</text>
+          <text x="100" y="218" font-family="JetBrains Mono" font-size="8" text-anchor="middle" fill="currentColor" opacity=".7">cache-1</text>
+          <text x="300" y="98"  font-family="JetBrains Mono" font-size="8" text-anchor="middle" fill="currentColor" opacity=".7">queue-1</text>
+          <text x="300" y="218" font-family="JetBrains Mono" font-size="8" text-anchor="middle" fill="currentColor" opacity=".7">s3-data</text>
+        </svg>
+      </div>
+    </div>
+  </article>
+</section>
+
+<!-- ========================================================================
+     TRACK 02 · POSTURE
+     ======================================================================== -->
+<section class="fp-track" id="posture">
+  <div class="fp-track-head">
+    <div>
+      <div class="meta">Track 02</div>
+      <h2>Posture.</h2>
+    </div>
+    <p>A score that says where the cloud stands today, weighted across the three things that actually matter, cost, utilization, governance.</p>
+  </div>
+
+  <article class="fp-feature">
+    <div class="fp-copy">
+      <div class="fp-num">F.05 · Composite score</div>
+      <h3>A–F. Continuously.</h3>
+      <p class="fp-lede">0.4 cost × 0.4 utilization × 0.2 governance, scored every 30 seconds. Drops by 0.5 trigger a Slack ping. Tunable per organization.</p>
+      <ul class="fp-bullets">
+        <li><strong>Why a single letter</strong> · Engineers scan letters. They argue with numbers. Letters fix the conversation faster.</li>
+        <li><strong>Tunable weights</strong> · Compliance-heavy team? Push governance to 0.4. The math stays public.</li>
+        <li><strong>SLOs</strong> · Set a target letter; drops trigger remediation queues automatically.</li>
+      </ul>
+    </div>
+    <div class="fp-visual">
+      <div class="viz-posture">
+        <div class="grade">
+          <div class="grade-letter">B+</div>
+          <div class="grade-num">composite 84.3</div>
+        </div>
+        <div class="breakdown">
+          <div class="breakdown-row"><span class="br-label">cost</span><div class="br-bar"><div class="br-fill green" style="width:88%"></div></div><span class="br-num">88</span></div>
+          <div class="breakdown-row"><span class="br-label">util</span><div class="br-bar"><div class="br-fill orange" style="width:72%"></div></div><span class="br-num">72</span></div>
+          <div class="breakdown-row"><span class="br-label">gov</span><div class="br-bar"><div class="br-fill green" style="width:94%"></div></div><span class="br-num">94</span></div>
+          <div style="margin-top:14px; font-family:'JetBrains Mono', monospace; font-size:10px; color:var(--g-600);">utilization is the drag. 7 right-sizable instances queued.</div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article class="fp-feature flip">
+    <div class="fp-copy">
+      <div class="fp-num">F.06 · Anomaly detection</div>
+      <h3>Spend spikes, before the invoice.</h3>
+      <p class="fp-lede">Daily diff against the trailing 14-day baseline. Anomalies routed by service · grouped by likely root cause · flagged in the dashboard and Slack.</p>
+      <ul class="fp-bullets">
+        <li><strong>Per-service baselines</strong> · 3-sigma on log-scale daily spend, robust to weekend cycles.</li>
+        <li><strong>Grouped causes</strong> · "All these spikes are the same Glue job, fix once" instead of 12 separate alerts.</li>
+        <li><strong>Severity routing</strong> · S1 → page · S2 → Slack · S3 → digest. Per-team escalation policy.</li>
+      </ul>
+    </div>
+    <div class="fp-visual">
+      <div style="width:100%; height:340px; padding:24px;">
+        <svg viewBox="0 0 400 240" style="width:100%; height:100%;" aria-hidden="true">
+          <path d="M 0 180 L 30 175 L 60 178 L 90 168 L 120 172 L 150 165 L 180 170 L 210 175 L 240 70 L 270 90 L 300 95 L 330 88 L 360 92 L 400 90"
+                fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M 0 178 L 400 178" stroke="currentColor" stroke-width=".5" stroke-dasharray="3,3" opacity=".3"/>
+          <text x="395" y="175" font-family="JetBrains Mono" font-size="9" text-anchor="end" fill="currentColor" opacity=".5">baseline</text>
+          <circle cx="240" cy="70" r="6" fill="#F58549"/>
+          <line x1="240" y1="76" x2="240" y2="220" stroke="#F58549" stroke-width="1" stroke-dasharray="2,3"/>
+          <text x="246" y="74" font-family="JetBrains Mono" font-size="9" fill="#F58549" font-weight="700">+162% · GlueJob</text>
+        </svg>
+      </div>
+    </div>
+  </article>
+
+  <article class="fp-feature">
+    <div class="fp-copy">
+      <div class="fp-num">F.07 · Forecasting</div>
+      <h3>Where we end the month.</h3>
+      <p class="fp-lede">Run-rate trajectory across cost, utilization, scheduled non-prod hours. Confidence intervals visible · the band, not just the line.</p>
+      <ul class="fp-bullets">
+        <li><strong>Daily refresh</strong> · 7-day rolling LSTM with seasonal decomposition.</li>
+        <li><strong>Honest bands</strong> · 80% CI shown by default · 95% on hover · no hidden assumptions.</li>
+        <li><strong>What-if</strong> · Adjust schedules and remediations live; the forecast updates.</li>
+      </ul>
+    </div>
+    <div class="fp-visual">
+      <div style="width:100%; height:340px; padding:24px;">
+        <svg viewBox="0 0 400 240" style="width:100%; height:100%;" aria-hidden="true">
+          <path d="M 0 200 L 200 140 L 200 200 Z" fill="currentColor" opacity=".06"/>
+          <path d="M 200 140 L 400 60 L 400 220 L 200 200 Z" fill="#F58549" opacity=".08"/>
+          <path d="M 0 200 L 200 140 L 400 90" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M 200 140 L 400 90" stroke="#F58549" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <path d="M 200 130 L 400 60" stroke="currentColor" stroke-width=".5" opacity=".3"/>
+          <path d="M 200 150 L 400 130" stroke="currentColor" stroke-width=".5" opacity=".3"/>
+          <line x1="200" y1="20" x2="200" y2="220" stroke="currentColor" stroke-width=".5" stroke-dasharray="2,3" opacity=".3"/>
+          <text x="200" y="14" font-family="JetBrains Mono" font-size="9" text-anchor="middle" fill="currentColor" opacity=".7">today</text>
+          <text x="395" y="55" font-family="JetBrains Mono" font-size="10" text-anchor="end" fill="#F58549" font-weight="700">$612K</text>
+          <text x="395" y="100" font-family="JetBrains Mono" font-size="9" text-anchor="end" fill="currentColor" opacity=".5">ci 80% band</text>
+        </svg>
+      </div>
+    </div>
+  </article>
+</section>
+
+<!-- ========================================================================
+     TRACK 03 · SCHEDULE
+     ======================================================================== -->
+<section class="fp-track" id="schedule">
+  <div class="fp-track-head">
+    <div>
+      <div class="meta">Track 03</div>
+      <h2>Schedule.</h2>
+    </div>
+    <p>Compute that runs only when humans are using it. Non-prod environments matched to the team's working hours and timezone, with safe wake-up paths for on-call.</p>
+  </div>
+
+  <article class="fp-feature">
+    <div class="fp-copy">
+      <div class="fp-num">F.08 · Office-hours cron</div>
+      <h3>Dev online when dev is online.</h3>
+      <p class="fp-lede">Per-environment cron in the team's timezone. Weekdays only by default · overrides per team · every schedule reversible in one click.</p>
+      <ul class="fp-bullets">
+        <li><strong>What gets scheduled</strong> · EC2 · RDS · GKE/EKS node pools · Azure VMs · Cloud SQL.</li>
+        <li><strong>Stateful workloads</strong> · Graceful shutdown + snapshot restore. Zero data loss across the off-window.</li>
+        <li><strong>Production</strong> · Never scheduled unless explicitly opted in. Default policy locks production out.</li>
+      </ul>
+    </div>
+    <div class="fp-visual">
+      <div class="viz-schedule">
+        <div style="font-family:'JetBrains Mono', monospace; font-size:10px; letter-spacing:.14em; color:var(--g-600); margin-bottom:6px;">DEV-SANDBOX · UTC+5:30 · WEEKDAYS</div>
+        <div class="day-row"><span class="day-label">mon</span><div class="day-bar"><div class="day-on" style="left:37.5%; width:37.5%"></div></div></div>
+        <div class="day-row"><span class="day-label">tue</span><div class="day-bar"><div class="day-on" style="left:37.5%; width:37.5%"></div></div></div>
+        <div class="day-row"><span class="day-label">wed</span><div class="day-bar"><div class="day-on" style="left:37.5%; width:37.5%"></div></div></div>
+        <div class="day-row"><span class="day-label">thu</span><div class="day-bar"><div class="day-on" style="left:37.5%; width:37.5%"></div></div></div>
+        <div class="day-row"><span class="day-label">fri</span><div class="day-bar"><div class="day-on" style="left:37.5%; width:37.5%"></div></div></div>
+        <div class="day-row"><span class="day-label">sat</span><div class="day-bar"></div></div>
+        <div class="day-row"><span class="day-label">sun</span><div class="day-bar"></div></div>
+        <div style="font-family:'JetBrains Mono', monospace; font-size:10px; color:var(--zop-orange); font-weight:700; margin-top:8px;">running 45 of 168 hrs/wk · -73%</div>
+      </div>
+    </div>
+  </article>
+
+  <article class="fp-feature flip">
+    <div class="fp-copy">
+      <div class="fp-num">F.09 · On-call wake</div>
+      <h3>Sleeping resources, one Slack command away.</h3>
+      <p class="fp-lede">When a scheduled environment needs to come up out-of-window, on-call engineers run <code>/zopnight wake dev-sandbox</code>. Audit-logged, reversible.</p>
+      <ul class="fp-bullets">
+        <li><strong>RBAC-gated</strong> · Wake permissions tied to PagerDuty rosters or fixed user lists.</li>
+        <li><strong>Time-boxed</strong> · Default 4-hour wake window · re-extends with one command.</li>
+        <li><strong>Audit-trail</strong> · Every wake logged with actor, reason, duration, in the ZopNight audit feed and SIEM.</li>
+      </ul>
+    </div>
+    <div class="fp-visual dark">
+      <div style="width:100%; padding:24px; font-family:'JetBrains Mono', monospace; font-size:12px; color:#F0EBDB;">
+        <div style="font-size:10px; letter-spacing:.14em; color:#9C9588; margin-bottom:14px;">SLACK · #ops-oncall</div>
+        <div style="margin-bottom:10px;"><span style="color:#7FB236">@laura</span> · 02:14 UTC</div>
+        <div style="margin-bottom:14px; padding-left:14px; color:#F0EBDB;">/zopnight wake dev-sandbox</div>
+        <div style="margin-bottom:6px;"><span style="color:#9C9588">zopnight bot</span> · 02:14 UTC</div>
+        <div style="padding-left:14px; color:#F0EBDB; line-height:1.6;">
+          → resuming dev-sandbox<br/>
+          → 4 EC2 · 2 RDS · 1 EKS pool<br/>
+          → wake window: <span style="color:#F58549">4h until 06:14 UTC</span><br/>
+          → audit · zopdev.io/audit/W-8127
+        </div>
+      </div>
+    </div>
+  </article>
+</section>
+
+<!-- ========================================================================
+     TRACK 04 · REMEDIATE
+     ======================================================================== -->
+<section class="fp-track" id="remediate">
+  <div class="fp-track-head">
+    <div>
+      <div class="meta">Track 04</div>
+      <h2>Remediate.</h2>
+    </div>
+    <p>Findings that act on themselves. Right-size, terminate, enforce, with snapshot-before-apply rollback windows and one-click reversibility.</p>
+  </div>
+
+  <article class="fp-feature">
+    <div class="fp-copy">
+      <div class="fp-num">F.10 · One-click actions</div>
+      <h3>The button that does the thing.</h3>
+      <p class="fp-lede">Every finding has an action. Not a link to a ticket. Not a Terraform PR that sits two weeks. The action runs, the resource changes, the saving books.</p>
+      <ul class="fp-bullets">
+        <li><strong>Categories</strong> · Terminate idle · right-size over-provisioned · delete orphans · enforce tags · apply policies · roll back schedules.</li>
+        <li><strong>Reversibility</strong> · Snapshot-before-apply on every destructive action. 7-day rollback window. Rollback is also one click.</li>
+        <li><strong>Safety rails</strong> · Dry-run by default · policy-gated · separate opt-in IAM role per action type · full audit log.</li>
+      </ul>
+    </div>
+    <div class="fp-visual">
+      <div class="viz-remediate">
+        <div style="font-size:10px; letter-spacing:.14em; color:var(--g-600); font-weight:700; padding-bottom:10px; border-bottom:1px solid var(--line);">QUEUE · 12 PENDING · 3 DONE</div>
+        <div class="r-row"><span class="r-id"></span><span class="r-desc">i-0a3f · idle 21d · m6i.large</span><span class="r-amt">$184/mo</span><button class="r-btn">terminate</button></div>
+        <div class="r-row"><span class="r-id"></span><span class="r-desc">db-stage · over-provisioned · db.r6g.4xl → 2xl</span><span class="r-amt">$612/mo</span><button class="r-btn">resize</button></div>
+        <div class="r-row"><span class="r-id"></span><span class="r-desc">vol-7c2e · orphan 90d</span><span class="r-amt">$48/mo</span><button class="r-btn">delete</button></div>
+        <div class="r-row done"><span class="r-id"></span><span class="r-desc">i-9b2d · terminated · 02:14 UTC</span><span class="r-amt">$96/mo</span><button class="r-btn">undo</button></div>
+        <div class="r-row done"><span class="r-id"></span><span class="r-desc">cluster-eks · scaled 6 → 4</span><span class="r-amt">$418/mo</span><button class="r-btn">undo</button></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="fp-feature flip">
+    <div class="fp-copy">
+      <div class="fp-num">F.11 · Auto-apply</div>
+      <h3>Low-risk fixes that fix themselves.</h3>
+      <p class="fp-lede">Opt-in per category. Orphan cleanup, terminate-idle-&gt;21d, delete-snapshots-&gt;90d apply automatically after a 15-minute notice window. Higher-impact stays one-click.</p>
+      <ul class="fp-bullets">
+        <li><strong>Notice window</strong> · 15 min default · adjustable · channel-broadcast on pending auto-apply.</li>
+        <li><strong>Veto path</strong> · Anyone with veto perms can hold pending actions from Slack.</li>
+        <li><strong>Outcome stream</strong> · Every auto-apply action posts to the audit channel with savings + rollback link.</li>
+      </ul>
+    </div>
+    <div class="fp-visual dark">
+      <div style="width:100%; padding:24px; font-family:'JetBrains Mono', monospace; font-size:12px; color:#F0EBDB;">
+        <div style="font-size:10px; letter-spacing:.14em; color:#9C9588; margin-bottom:14px;">AUTO-APPLY · LAST 24H</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="padding:8px 12px; border-left:2px solid #7FB236; background:rgba(127,178,54,.04); display:flex; justify-content:space-between;">
+            <span>orphan-volume cleanup · 12 deleted</span><span style="color:#F58549">+$432/mo</span>
+          </div>
+          <div style="padding:8px 12px; border-left:2px solid #7FB236; background:rgba(127,178,54,.04); display:flex; justify-content:space-between;">
+            <span>idle-instance terminate · 6 stopped</span><span style="color:#F58549">+$1,108/mo</span>
+          </div>
+          <div style="padding:8px 12px; border-left:2px solid #7FB236; background:rgba(127,178,54,.04); display:flex; justify-content:space-between;">
+            <span>old-snapshot delete · 47 removed</span><span style="color:#F58549">+$94/mo</span>
+          </div>
+          <div style="padding:8px 12px; border-left:2px solid #2A4494; background:rgba(42,68,148,.06); display:flex; justify-content:space-between;">
+            <span>right-size · 3 pending · 14 min</span><span style="color:#9C9588">held</span>
+          </div>
+        </div>
+        <div style="margin-top:14px; font-size:10px; color:#9C9588;">recovery total today · $1,634/mo</div>
+      </div>
+    </div>
+  </article>
+
+  <article class="fp-feature">
+    <div class="fp-copy">
+      <div class="fp-num">F.12 · Policy gates</div>
+      <h3>Actions that only run if rules say yes.</h3>
+      <p class="fp-lede">Define policies in YAML or the visual builder. Tag-must-exist, environment-must-match, business-hours-only. No action escapes a gate.</p>
+      <ul class="fp-bullets">
+        <li><strong>Composable</strong> · Stack policies · all-of, any-of, none-of.</li>
+        <li><strong>Versioned</strong> · Policies live in git when you want them to. Apply via PR.</li>
+        <li><strong>Auditable</strong> · Each enforcement decision logs the policies hit.</li>
+      </ul>
+    </div>
+    <div class="fp-visual dark">
+      <div style="width:100%; padding:24px; font-family:'JetBrains Mono', monospace; font-size:11.5px; color:#F0EBDB; line-height:1.7;">
+        <span style="color:#9C9588"># policies/safe-terminate.yaml</span><br/>
+        <span style="color:#7FB6E8">policy</span>: safe-terminate<br/>
+        <span style="color:#7FB6E8">match</span>:<br/>
+        &nbsp;&nbsp;<span style="color:#B4CC85">action</span>: terminate-idle<br/>
+        <span style="color:#7FB6E8">requires</span>:<br/>
+        &nbsp;&nbsp;- <span style="color:#B4CC85">tag-exists</span>: owner<br/>
+        &nbsp;&nbsp;- <span style="color:#B4CC85">env-not-in</span>: [prod, staging]<br/>
+        &nbsp;&nbsp;- <span style="color:#B4CC85">idle-for</span>: <span style="color:#E8C87F">21d</span><br/>
+        &nbsp;&nbsp;- <span style="color:#B4CC85">approved-by</span>: <span style="color:#E8C87F">slack:@platform</span><br/>
+        <span style="color:#7FB6E8">on-violation</span>: <span style="color:#F58549">block</span>
+      </div>
+    </div>
+  </article>
+</section>
+
+<!-- ========================================================================
+     TRACK 05 · SHOWBACK
+     ======================================================================== -->
+<section class="fp-track" id="showback">
+  <div class="fp-track-head">
+    <div>
+      <div class="meta">Track 05</div>
+      <h2>Showback.</h2>
+    </div>
+    <p>Every dollar attributed to the team, environment, or feature that drove it. The boardroom report writes itself.</p>
+  </div>
+
+  <article class="fp-feature">
+    <div class="fp-copy">
+      <div class="fp-num">F.13 · Per-team attribution</div>
+      <h3>Who spent what, this month.</h3>
+      <p class="fp-lede">Tag-based by default · account-based for teams that don't tag · workload-based heuristics over resource + metric data · manual overrides per row.</p>
+      <ul class="fp-bullets">
+        <li><strong>Mix &amp; match</strong> · Every team can be on a different attribution method. Coverage stays full.</li>
+        <li><strong>Live</strong> · Updated every scan · not a monthly export job.</li>
+        <li><strong>Diffable</strong> · Compare any two months side by side.</li>
+      </ul>
+    </div>
+    <div class="fp-visual">
+      <div class="viz-showback">
+        <div style="font-family:'JetBrains Mono', monospace; font-size:10px; letter-spacing:.14em; color:var(--g-600); margin-bottom:6px;">PROD-PAYMENTS · OCTOBER · BY TEAM</div>
+        <div class="sb-team"><span class="sb-name">payments</span><div class="sb-bar"><div class="sb-fill" style="width:78%"></div></div><span class="sb-amt">$48.2K</span></div>
+        <div class="sb-team"><span class="sb-name">platform</span><div class="sb-bar"><div class="sb-fill" style="width:62%; background:var(--zop-blue)"></div></div><span class="sb-amt">$37.4K</span></div>
+        <div class="sb-team"><span class="sb-name">data</span><div class="sb-bar"><div class="sb-fill" style="width:48%; background:var(--zop-green)"></div></div><span class="sb-amt">$28.6K</span></div>
+        <div class="sb-team"><span class="sb-name">growth</span><div class="sb-bar"><div class="sb-fill" style="width:32%"></div></div><span class="sb-amt">$19.1K</span></div>
+        <div class="sb-team"><span class="sb-name">ml</span><div class="sb-bar"><div class="sb-fill" style="width:22%; background:var(--zop-blue)"></div></div><span class="sb-amt">$13.3K</span></div>
+        <div class="sb-team" style="border-top:1px solid var(--line); padding-top:10px; font-weight:700;"><span class="sb-name">total</span><span></span><span class="sb-amt">$146.6K</span></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="fp-feature flip">
+    <div class="fp-copy">
+      <div class="fp-num">F.14 · Boardroom export</div>
+      <h3>The PDF the CFO asks for.</h3>
+      <p class="fp-lede">A single page that leads with Spent · Wasted · Recoverable, then breaks down by team, with a 12-month trend, actions taken, and a signed audit line.</p>
+      <ul class="fp-bullets">
+        <li><strong>One page</strong> · Designed for boardroom use · no marketing sleeve.</li>
+        <li><strong>Signed</strong> · Cryptographically signed audit line at the bottom · attestation-ready.</li>
+        <li><strong>Per-month</strong> · Export any month in three clicks · same template, same layout.</li>
+      </ul>
+    </div>
+    <div class="fp-visual">
+      <div style="width:100%; height:340px; padding:24px;">
+        <div style="border:1px solid var(--line); padding:18px; background:var(--zop-white); height:100%; display:flex; flex-direction:column; gap:12px; font-family:'Space Grotesk', sans-serif;">
+          <div style="font-family:'JetBrains Mono', monospace; font-size:9px; letter-spacing:.14em; color:var(--g-600);">CLOUD COST REPORT · OCT 2026</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; padding:10px 0; border-bottom:1px solid var(--line);">
+            <div><div style="font-size:10px; color:var(--g-600); letter-spacing:.08em; text-transform:uppercase;">spent</div><div style="font-size:22px; font-weight:700; color:var(--ink); letter-spacing:-.02em;">$146.6K</div></div>
+            <div><div style="font-size:10px; color:var(--g-600); letter-spacing:.08em; text-transform:uppercase;">wasted</div><div style="font-size:22px; font-weight:700; color:var(--zop-orange); letter-spacing:-.02em;">$31.2K</div></div>
+            <div><div style="font-size:10px; color:var(--g-600); letter-spacing:.08em; text-transform:uppercase;">recovered</div><div style="font-size:22px; font-weight:700; color:var(--zop-green); letter-spacing:-.02em;">$24.8K</div></div>
+          </div>
+          <div style="font-size:11px; color:var(--g-700); line-height:1.55;">$24.8K of waste recovered through 184 auto-applied actions and 47 one-click remediations. $6.4K still pending. Run rate trajectory: $158K / month if no further action; $128K / month with current queue applied.</div>
+          <div style="margin-top:auto; padding-top:10px; border-top:1px dashed var(--line); font-family:'JetBrains Mono', monospace; font-size:9px; color:var(--g-600); letter-spacing:.04em;">signed · sha256:4f2a18b9... · 2026-11-01T00:00:00Z</div>
+        </div>
+      </div>
+    </div>
+  </article>
+</section>
+
+<!-- ========================================================================
+     TRACK 06 · GOVERN
+     ======================================================================== -->
+<section class="fp-track" id="govern">
+  <div class="fp-track-head">
+    <div>
+      <div class="meta">Track 06</div>
+      <h2>Govern.</h2>
+    </div>
+    <p>The rules that keep the cloud honest. Tag policies, IAM blast-radius, encryption baselines, audit feeds.</p>
+  </div>
+
+  <article class="fp-feature">
+    <div class="fp-copy">
+      <div class="fp-num">F.15 · IAM blast radius</div>
+      <h3>What this principal can actually do.</h3>
+      <p class="fp-lede">Policy union resolved across attached + group + assumed paths. The effective set, not the marketing brochure version. Findings ranked by exposure.</p>
+    </div>
+    <div class="fp-visual dark">
+      <div style="width:100%; padding:24px; font-family:'JetBrains Mono', monospace; font-size:11px; color:#F0EBDB;">
+        <div style="font-size:10px; letter-spacing:.14em; color:#9C9588; margin-bottom:14px;">PRINCIPAL · arn:aws:iam::042:role/devops</div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <div style="display:grid; grid-template-columns:1fr 60px; gap:14px;"><span>iam:* (incl. CreateUser, AssumeRole)</span><span style="color:#F58549; text-align:right;">CRITICAL</span></div>
+          <div style="display:grid; grid-template-columns:1fr 60px; gap:14px;"><span>kms:Decrypt (across 12 keys)</span><span style="color:#F58549; text-align:right;">HIGH</span></div>
+          <div style="display:grid; grid-template-columns:1fr 60px; gap:14px;"><span>ec2:TerminateInstances (org-wide)</span><span style="color:#F58549; text-align:right;">HIGH</span></div>
+          <div style="display:grid; grid-template-columns:1fr 60px; gap:14px;"><span>s3:GetObject (52 buckets)</span><span style="color:#E8C87F; text-align:right;">MED</span></div>
+          <div style="display:grid; grid-template-columns:1fr 60px; gap:14px;"><span>logs:* · cloudwatch:*</span><span style="color:#9C9588; text-align:right;">LOW</span></div>
+        </div>
+        <div style="margin-top:14px; padding-top:14px; border-top:1px dashed #2a2a30; color:#9C9588;">recommendation · split iam:* into 3 narrower roles. -84% blast radius.</div>
+      </div>
+    </div>
+  </article>
+
+  <article class="fp-feature flip">
+    <div class="fp-copy">
+      <div class="fp-num">F.16 · Encryption baseline</div>
+      <h3>What's encrypted, what isn't, what should be.</h3>
+      <p class="fp-lede">EBS · RDS · S3 · Cosmos · Cloud Storage. At-rest encryption status surfaced per resource. Bring-your-own-key support visible at a glance.</p>
+    </div>
+    <div class="fp-visual">
+      <div style="width:100%; padding:24px;">
+        <div style="font-family:'JetBrains Mono', monospace; font-size:10px; letter-spacing:.14em; color:var(--g-600); margin-bottom:14px;">ENCRYPTION COVERAGE</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:grid; grid-template-columns:80px 1fr 50px; gap:14px; align-items:center; font-family:'JetBrains Mono', monospace; font-size:11px;"><span style="color:var(--ink)">EBS</span><div style="height:8px; background:var(--g-100); position:relative;"><div style="position:absolute; left:0; top:0; bottom:0; width:100%; background:var(--zop-green);"></div></div><span style="text-align:right; font-weight:700; color:var(--ink)">100%</span></div>
+          <div style="display:grid; grid-template-columns:80px 1fr 50px; gap:14px; align-items:center; font-family:'JetBrains Mono', monospace; font-size:11px;"><span style="color:var(--ink)">RDS</span><div style="height:8px; background:var(--g-100); position:relative;"><div style="position:absolute; left:0; top:0; bottom:0; width:96%; background:var(--zop-green);"></div></div><span style="text-align:right; font-weight:700; color:var(--ink)">96%</span></div>
+          <div style="display:grid; grid-template-columns:80px 1fr 50px; gap:14px; align-items:center; font-family:'JetBrains Mono', monospace; font-size:11px;"><span style="color:var(--ink)">S3</span><div style="height:8px; background:var(--g-100); position:relative;"><div style="position:absolute; left:0; top:0; bottom:0; width:88%; background:var(--zop-orange);"></div></div><span style="text-align:right; font-weight:700; color:var(--zop-orange)">88%</span></div>
+          <div style="display:grid; grid-template-columns:80px 1fr 50px; gap:14px; align-items:center; font-family:'JetBrains Mono', monospace; font-size:11px;"><span style="color:var(--ink)">Cosmos</span><div style="height:8px; background:var(--g-100); position:relative;"><div style="position:absolute; left:0; top:0; bottom:0; width:100%; background:var(--zop-green);"></div></div><span style="text-align:right; font-weight:700; color:var(--ink)">100%</span></div>
+        </div>
+      </div>
+    </div>
+  </article>
+</section>
+
+<!-- ========================================================================
+     TRACK 07 · INTEGRATE
+     ======================================================================== -->
+<section class="fp-track" id="integrate">
+  <div class="fp-track-head">
+    <div>
+      <div class="meta">Track 07</div>
+      <h2>Integrate.</h2>
+    </div>
+    <p>Read-only IAM, webhook firehose, Slack ops, Terraform state, Datadog metrics, GitHub PRs. Wire ZopDev to the tools the team already uses.</p>
+  </div>
+
+  <div class="fp-integ-grid">
+    <a class="fp-integ" href="integrations.html"><span class="fp-integ-mark aws">aws</span>Amazon Web Services</a>
+    <a class="fp-integ" href="integrations.html"><span class="fp-integ-mark gcp">G</span>Google Cloud</a>
+    <a class="fp-integ" href="integrations.html"><span class="fp-integ-mark az">Az</span>Microsoft Azure</a>
+    <a class="fp-integ" href="integrations.html"><span class="fp-integ-mark k8s">K8s</span>Kubernetes</a>
+    <a class="fp-integ" href="integrations.html"><span class="fp-integ-mark tf">TF</span>Terraform Cloud</a>
+    <a class="fp-integ" href="integrations.html"><span class="fp-integ-mark gh">GH</span>GitHub</a>
+    <a class="fp-integ" href="integrations.html"><span class="fp-integ-mark slack">Sl</span>Slack</a>
+    <a class="fp-integ" href="integrations.html"><span class="fp-integ-mark dd">DD</span>Datadog</a>
+    <a class="fp-integ" href="integrations.html"><span class="fp-integ-mark jira">Ji</span>Atlassian Jira</a>
+    <a class="fp-integ" href="integrations.html"><span class="fp-integ-mark okta">Ok</span>Okta SSO</a>
+    <a class="fp-integ" href="integrations.html" style="grid-column:span 2; justify-content:space-between;"><span>+ 22 more · MCP server, webhook firehose, REST API</span><span style="color:var(--zop-orange); font-weight:700;">→ all integrations</span></a>
+  </div>
+</section>
+
+<!-- ========================================================================
+     FOOTER CTA
+     ======================================================================== -->
+<section class="fp-footer-cta">
+  <h2>27 features.<br/>One free trial.</h2>
+  <p>Read-only IAM, 4-minute scan cadence, full feature access. No credit card. Disconnect any time.</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="demo.html">Book a Demo <span class="arrow">→</span></a>
+    <a class="btn btn-secondary" href="signin.html">Start Free Trial</a>
+  </div>
+</section>
+
+<!-- Footer · slim, doesn't need full chrome here -->
+<!-- FINAL CTA · canonical homepage block, shared across marketing pages -->
+<section class="final">
+  <div class="container">
+    <a class="final-mark" href="/" aria-label="ZopDev">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#mark-zopdev"/></svg>
+    </a>
+    <div class="final-grid">
+      <div>
+        <div class="sec-meta" style="color:var(--zop-orange); margin-bottom:20px">end · ready when you are</div>
+        <h2>Stop watching the waste.<br/>Start cutting it.</h2>
+        <p class="final-tag">See. Find. Fix. Automatic.</p>
+        <p>Connect your first cloud account in under 5 minutes. See your first remediation in under 7. No credit card required.</p>
+        <div class="final-cta">
+          <a class="btn btn-primary" href="signin.html">Start Free →</a>
+          <a class="btn btn-secondary" href="demo.html">Book a Demo</a>
+        </div>
+      </div>
+      <div class="final-stats">
+        <div><strong>5 min</strong>connect time</div>
+        <div><strong>7 min</strong>first remediation</div>
+        <div><strong>42%</strong>avg. waste cut in 30 days</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRIDGE MARQUEE · cream slab between dark CTA and dark footer -->
+<section class="bridge-marquee" aria-label="ZopDev brand statement">
+  <div class="bridge-track">
+    <span>Multi-cloud automation</span><span class="acc">·</span>
+    <span>Production-ready in 30 min</span><span class="acc">·</span>
+    <span>SOC 2 · ISO 27001 · zero-trust</span><span class="acc">·</span>
+    <span>30% average cloud cost cut</span><span class="acc">·</span>
+    <span>4 platforms · 1 console</span><span class="acc">·</span>
+    <span>Multi-cloud automation</span><span class="acc">·</span>
+    <span>Production-ready in 30 min</span><span class="acc">·</span>
+    <span>SOC 2 · ISO 27001 · zero-trust</span><span class="acc">·</span>
+    <span>30% average cloud cost cut</span><span class="acc">·</span>
+    <span>4 platforms · 1 console</span><span class="acc">·</span>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="walkthrough.html">Product guide</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developers.html">Documentation</a></li>
+        <li><a href="developers.html">API reference</a></li>
+        <li><a href="developers.html">MCP server</a></li>
+        <li><a href="developers.html">SDK &amp; CLI</a></li>
+        <li><a href="developers.html">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-globe">
+      <div class="foot-globe-left">
+        <a href="/" class="foot-globe-mark" aria-label="ZopDev">
+          <svg class="foot-globe-logo" viewBox="0 0 715 276" aria-hidden="true">
+            <use href="#logo-zopdev"/>
+          </svg>
+        </a>
+      </div>
+      <div class="foot-globe-right">
+        <div class="foot-regions-v2" id="foot-regions-v2">
+          <canvas id="foot-regions-map"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom foot-bottom-3">
+      <div class="foot-copy">© <span data-year>2026</span> ZopDev · <a href="trust.html">privacy</a> · <a href="trust.html">terms</a></div>
+      <div class="foot-mid">made with <svg viewBox="0 0 7 6" aria-hidden="true"><rect x="1" y="0" width="1" height="1"/><rect x="2" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="0" y="1" width="7" height="1"/><rect x="0" y="2" width="7" height="1"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg> by <a href="https://zop.dev" target="_blank" rel="noopener">zop.dev</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="chrome-darkfold.js" defer></script>
+<script src="chrome-mobilenav.js" defer></script>
+<script src="chrome-footer.js" defer></script>
+</body>
+</html>

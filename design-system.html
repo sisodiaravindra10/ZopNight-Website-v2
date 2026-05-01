@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  ZopDev · design-system.html
+  ----------------------------------------------------------------------------
+  Live HTML companion to DESIGN.md. Every pattern from the spec rendered as
+  copy-pasteable, theme-aware reference. Devs use this page to verify the
+  visual contract of the brand on product surfaces before shipping.
+
+  This page intentionally uses ONLY tokens and classes from
+  `homepage-chrome.css` plus a small, scoped design-system stylesheet
+  (the .ds-* prefix). Anything you see here works the same way in product.
+
+  Source of truth · index.html. If a pattern here drifts from the homepage,
+  the homepage wins.
+  ============================================================================
+-->
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+
+<title>Design System · ZopDev</title>
+<meta name="description" content="ZopDev's living design system. Tokens, type, components, motion, and anti-patterns, for the developers building the product."/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="homepage-chrome.css"/>
+
+<style>
+/* no-italic-site-wide */ em,i,cite,dfn,var,address,blockquote{font-style:normal}
+
+/* ============================================================================
+   DESIGN-SYSTEM PAGE LAYOUT
+   ============================================================================
+   A two-column shell · sticky TOC on the left, scrolling reference on right.
+   Mobile collapses TOC into a horizontal scroller above the content.
+   ============================================================================ */
+
+.ds-shell{
+  max-width:1240px; margin:0 auto;
+  padding:80px 32px 120px;
+  display:grid;
+  grid-template-columns:240px 1fr;
+  gap:64px;
+  align-items:start;
+}
+@media (max-width:980px){
+  .ds-shell{ grid-template-columns:1fr; gap:32px; padding:48px 20px 80px; }
+}
+
+/* ─── PAGE HEAD ─── */
+.ds-pagehead{
+  grid-column:1 / -1;
+  border-bottom:1px solid var(--line);
+  padding-bottom:32px; margin-bottom:24px;
+}
+.ds-pagehead .meta{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--mono); font-size:11px; font-weight:600;
+  text-transform:uppercase; letter-spacing:.14em;
+  color:var(--zop-orange);
+  margin-bottom:18px;
+}
+.ds-pagehead .meta::before{
+  content:''; width:10px; height:10px; background:var(--zop-orange);
+}
+.ds-pagehead h1{
+  font-size:clamp(48px,5.6vw,80px);
+  font-weight:700; letter-spacing:-.045em; line-height:.96;
+  margin:0 0 14px;
+}
+.ds-pagehead .lede{
+  font-size:18px; color:var(--g-700);
+  max-width:720px; line-height:1.5; margin:0 0 22px;
+}
+html[data-theme="dark"] .ds-pagehead .lede{ color:var(--g-300); }
+.ds-pagehead .vbar{
+  display:flex; flex-wrap:wrap; gap:8px 14px;
+  font-family:var(--mono); font-size:11px;
+  color:var(--g-600); letter-spacing:.04em;
+}
+.ds-pagehead .vbar strong{ color:var(--ink); font-weight:600; }
+html[data-theme="dark"] .ds-pagehead .vbar{ color:var(--g-400); }
+html[data-theme="dark"] .ds-pagehead .vbar strong{ color:var(--g-50); }
+.ds-pagehead .vbar .vbar-sep{ color:var(--g-400); }
+
+/* ─── TOC ─── */
+.ds-toc{
+  position:sticky; top:96px;
+  font-family:var(--mono); font-size:12px; line-height:2;
+  border-left:1px solid var(--line); padding-left:18px;
+}
+.ds-toc-h{
+  font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--g-600); font-weight:700; margin-bottom:10px;
+  display:block;
+}
+html[data-theme="dark"] .ds-toc-h{ color:var(--g-400); }
+.ds-toc a{
+  display:block; color:var(--g-700); text-decoration:none;
+  letter-spacing:.02em;
+  transition:color .2s, transform .2s;
+}
+.ds-toc a:hover{ color:var(--ink); transform:translateX(3px); }
+html[data-theme="dark"] .ds-toc a{ color:var(--g-300); }
+html[data-theme="dark"] .ds-toc a:hover{ color:var(--g-50); }
+.ds-toc a.is-active{ color:var(--zop-orange); }
+
+@media (max-width:980px){
+  .ds-toc{
+    position:relative; top:0;
+    border-left:0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    padding:12px 0;
+    display:flex; gap:14px; overflow-x:auto; white-space:nowrap;
+    line-height:1.4;
+  }
+  .ds-toc-h{ display:none; }
+  .ds-toc a{ flex-shrink:0; }
+}
+
+/* ─── MAIN CONTENT ─── */
+.ds-main section{
+  padding:48px 0; border-bottom:1px solid var(--line);
+  scroll-margin-top:96px;
+}
+.ds-main section:first-of-type{ padding-top:0; }
+.ds-main section:last-of-type{ border-bottom:0; }
+
+.ds-h2{
+  font-family:var(--font);
+  font-size:14px; font-weight:600;
+  text-transform:uppercase; letter-spacing:.12em;
+  color:var(--g-600);
+  margin:0 0 6px;
+  display:flex; align-items:center; gap:10px;
+}
+.ds-h2::before{
+  content:''; width:6px; height:6px; background:var(--zop-orange); flex-shrink:0;
+}
+html[data-theme="dark"] .ds-h2{ color:var(--g-300); }
+
+.ds-section-title{
+  font-size:clamp(28px,3.2vw,44px);
+  font-weight:700; letter-spacing:-.03em; line-height:1.05;
+  margin:0 0 12px;
+}
+.ds-section-lede{
+  font-size:15px; color:var(--g-700); line-height:1.55;
+  max-width:680px; margin:0 0 32px;
+}
+html[data-theme="dark"] .ds-section-lede{ color:var(--g-300); }
+
+.ds-h3{
+  font-size:18px; font-weight:600; letter-spacing:-.01em;
+  margin:32px 0 12px;
+  color:var(--ink);
+}
+html[data-theme="dark"] .ds-h3{ color:var(--g-50); }
+
+.ds-h4{
+  font-family:var(--mono); font-size:11px; font-weight:600;
+  text-transform:uppercase; letter-spacing:.1em;
+  color:var(--g-600); margin:28px 0 8px;
+}
+html[data-theme="dark"] .ds-h4{ color:var(--g-400); }
+
+/* ─── DEMO + CODE PAIR ─── */
+.ds-pair{
+  display:grid; grid-template-columns:1fr; gap:0;
+  border:1px solid var(--line); margin:18px 0;
+}
+.ds-demo{
+  padding:28px; background:var(--paper);
+  display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:flex-start;
+}
+.ds-demo.ds-demo-block{ display:block; }
+.ds-demo.ds-demo-dark{ background:#0F0F12; color:#F0EBDB; }
+html[data-theme="dark"] .ds-demo{ background:#15151a; }
+html[data-theme="dark"] .ds-demo.ds-demo-dark{ background:#0a0a0f; }
+.ds-code{
+  border-top:1px solid var(--line);
+  background:#0F0F12; color:#F0EBDB;
+  padding:18px 22px;
+  font-family:var(--mono); font-size:12px; line-height:1.6;
+  overflow-x:auto;
+  white-space:pre;
+  position:relative;
+}
+.ds-code::before{
+  content:'HTML'; position:absolute; top:8px; right:14px;
+  font-size:9px; letter-spacing:.18em; font-weight:600;
+  color:rgba(240,235,219,.4);
+}
+.ds-code.ds-code-css::before{ content:'CSS'; }
+.ds-code .tag    { color:#7fb6e8; }
+.ds-code .attr   { color:#b4cc85; }
+.ds-code .str    { color:#e8c87f; }
+.ds-code .com    { color:#666c70; font-style:normal; }
+.ds-code .key    { color:#d99777; }
+.ds-code .num    { color:#e8c87f; }
+.ds-code .sel    { color:#b4cc85; }
+
+/* ─── COLOR SWATCH GRID ─── */
+.ds-swatches{
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));
+  gap:0; border:1px solid var(--line); margin:18px 0;
+}
+.ds-swatch{
+  display:flex; flex-direction:column;
+  border-right:1px solid var(--line); border-bottom:1px solid var(--line);
+}
+.ds-swatch-fill{
+  height:80px; border-bottom:1px solid var(--line);
+}
+.ds-swatch-meta{
+  padding:10px 12px; font-family:var(--mono); font-size:11px;
+  display:flex; flex-direction:column; gap:2px;
+  background:var(--paper);
+}
+html[data-theme="dark"] .ds-swatch-meta{ background:#15151a; }
+.ds-swatch-meta .tk{ color:var(--ink); font-weight:600; }
+html[data-theme="dark"] .ds-swatch-meta .tk{ color:var(--g-50); }
+.ds-swatch-meta .hx{ color:var(--g-600); letter-spacing:.04em; }
+html[data-theme="dark"] .ds-swatch-meta .hx{ color:var(--g-400); }
+.ds-swatch-meta .ratio{
+  font-size:10px; color:var(--g-600); letter-spacing:.06em;
+}
+.ds-swatch-meta .ratio.fail{ color:var(--zop-orange); font-weight:600; }
+html[data-theme="dark"] .ds-swatch-meta .ratio{ color:var(--g-400); }
+
+/* ─── TYPE SAMPLES ─── */
+.ds-type-row{
+  display:grid; grid-template-columns:120px 1fr;
+  gap:24px; align-items:baseline;
+  padding:18px 0; border-bottom:1px solid var(--line);
+}
+.ds-type-row:last-child{ border-bottom:0; }
+.ds-type-meta{
+  font-family:var(--mono); font-size:10px;
+  text-transform:uppercase; letter-spacing:.1em;
+  color:var(--g-600);
+  display:flex; flex-direction:column; gap:3px;
+}
+html[data-theme="dark"] .ds-type-meta{ color:var(--g-400); }
+.ds-type-meta strong{ color:var(--ink); font-weight:600; }
+html[data-theme="dark"] .ds-type-meta strong{ color:var(--g-50); }
+.ds-type-sample{
+  font-family:var(--font); color:var(--ink);
+  letter-spacing:-.02em;
+}
+html[data-theme="dark"] .ds-type-sample{ color:var(--g-50); }
+.ds-type-sample.s-hero    { font-size:clamp(48px,6.4vw,86px); font-weight:700; letter-spacing:-.045em; line-height:.96; }
+.ds-type-sample.s-h2      { font-size:clamp(28px,3.2vw,44px); font-weight:700; letter-spacing:-.03em; line-height:1.05; }
+.ds-type-sample.s-h3      { font-size:22px; font-weight:600; letter-spacing:-.015em; line-height:1.2; }
+.ds-type-sample.s-body    { font-size:15px; font-weight:400; letter-spacing:-.01em; line-height:1.55; }
+.ds-type-sample.s-caption { font-size:13px; color:var(--g-700); line-height:1.55; }
+.ds-type-sample.s-mono    { font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--g-600); }
+html[data-theme="dark"] .ds-type-sample.s-caption{ color:var(--g-300); }
+html[data-theme="dark"] .ds-type-sample.s-mono   { color:var(--g-400); }
+
+/* ─── SPACING SCALE ─── */
+.ds-spacing-row{
+  display:grid; grid-template-columns:80px 1fr;
+  gap:18px; align-items:center; padding:8px 0;
+}
+.ds-spacing-row .lbl{
+  font-family:var(--mono); font-size:11px; color:var(--g-700);
+}
+html[data-theme="dark"] .ds-spacing-row .lbl{ color:var(--g-300); }
+.ds-spacing-bar{ height:14px; background:var(--ink); }
+html[data-theme="dark"] .ds-spacing-bar{ background:var(--g-50); }
+
+/* ─── COMPONENT PREVIEW BOXES ─── */
+.ds-card-demo{
+  border:1px solid var(--line); padding:28px;
+  display:flex; flex-direction:column; gap:14px;
+  max-width:340px;
+  background:var(--paper);
+  position:relative;
+  transition:transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out);
+}
+.ds-card-demo:hover{
+  transform:translateY(-4px);
+  box-shadow:0 8px 0 -4px var(--ink);
+}
+.ds-card-demo .num{
+  font-family:var(--mono); font-size:10px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--g-600); font-weight:600;
+}
+.ds-card-demo h4{
+  font-size:18px; font-weight:600; letter-spacing:-.015em;
+  margin:0; line-height:1.25;
+}
+.ds-card-demo p{
+  font-size:14px; color:var(--g-700); line-height:1.55; margin:0;
+}
+html[data-theme="dark"] .ds-card-demo{ background:#15151a; }
+html[data-theme="dark"] .ds-card-demo p{ color:var(--g-300); }
+
+/* Pill / chip */
+.ds-chip{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:4px 10px;
+  border:1px solid var(--line);
+  font-family:var(--mono); font-size:10px; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink);
+}
+html[data-theme="dark"] .ds-chip{ color:var(--g-50); }
+.ds-chip::before{
+  content:''; width:6px; height:6px; background:var(--zop-orange);
+  flex-shrink:0;
+}
+.ds-chip.blue::before  { background:var(--zop-blue); }
+.ds-chip.green::before { background:var(--zop-green); }
+
+/* Form input */
+.ds-input{
+  width:100%; max-width:320px;
+  padding:11px 14px;
+  background:transparent; color:var(--ink);
+  border:1px solid var(--line);
+  font-family:var(--font); font-size:14px;
+  outline:none;
+  transition:border-color var(--dur-fast) var(--ease-out);
+}
+.ds-input:focus{ border-color:var(--zop-orange); }
+html[data-theme="dark"] .ds-input{ color:var(--g-50); border-color:#3a3a42; }
+
+.ds-label{
+  display:block; font-family:var(--mono); font-size:10px;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:var(--g-600); font-weight:600; margin-bottom:6px;
+}
+html[data-theme="dark"] .ds-label{ color:var(--g-400); }
+
+/* Section meta example block */
+.ds-sec-meta-demo{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--mono); font-size:11px; font-weight:600;
+  text-transform:uppercase; letter-spacing:.14em;
+  color:var(--zop-orange);
+}
+.ds-sec-meta-demo::before{
+  content:''; width:10px; height:10px; background:var(--zop-orange);
+}
+
+/* ─── EASING CURVES ─── */
+.ds-easing-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+  gap:16px;
+}
+.ds-easing-card{
+  border:1px solid var(--line); padding:18px;
+  display:flex; flex-direction:column; gap:10px;
+  background:var(--paper);
+}
+html[data-theme="dark"] .ds-easing-card{ background:#15151a; }
+.ds-easing-card .name{
+  font-family:var(--mono); font-size:11px; font-weight:600;
+  letter-spacing:.06em; color:var(--ink);
+}
+html[data-theme="dark"] .ds-easing-card .name{ color:var(--g-50); }
+.ds-easing-card .val{
+  font-family:var(--mono); font-size:10px; color:var(--g-600);
+  letter-spacing:.02em;
+}
+html[data-theme="dark"] .ds-easing-card .val{ color:var(--g-400); }
+.ds-easing-card .ball{
+  width:14px; height:14px; background:var(--zop-orange);
+  transform:translateX(0); will-change:transform;
+}
+.ds-easing-card.run .ball.eo  { animation:ds-ball 2.4s var(--ease-out) infinite; }
+.ds-easing-card.run .ball.eio { animation:ds-ball 2.4s var(--ease-in-out) infinite; }
+.ds-easing-card.run .ball.snap{ animation:ds-ball 2.4s var(--ease-snap) infinite; }
+.ds-easing-card.run .ball.spr { animation:ds-ball 2.4s var(--ease-spring, cubic-bezier(.2,.9,.3,1.05)) infinite; }
+@keyframes ds-ball{
+  0%   { transform:translateX(0); }
+  45%  { transform:translateX(180px); }
+  55%  { transform:translateX(180px); }
+  100% { transform:translateX(0); }
+}
+
+/* ─── BANNED / ANTI-PATTERN BLOCKS ─── */
+.ds-banned-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+  gap:0; border:1px solid var(--line);
+}
+.ds-banned{
+  border-right:1px solid var(--line); border-bottom:1px solid var(--line);
+  padding:16px; display:flex; flex-direction:column; gap:6px;
+}
+.ds-banned .lbl{
+  font-family:var(--mono); font-size:10px; letter-spacing:.12em;
+  text-transform:uppercase; font-weight:700; color:var(--zop-orange);
+}
+.ds-banned .lbl::before{ content:'× '; }
+.ds-banned p{
+  font-size:13px; color:var(--g-700); line-height:1.5; margin:0;
+}
+html[data-theme="dark"] .ds-banned p{ color:var(--g-300); }
+
+/* ─── BRAND MARKS GRID ─── */
+.ds-marks-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
+  gap:0; border:1px solid var(--line); margin:18px 0;
+}
+.ds-mark-cell{
+  padding:24px; border-right:1px solid var(--line); border-bottom:1px solid var(--line);
+  display:flex; flex-direction:column; align-items:center; gap:14px;
+  background:var(--paper);
+}
+html[data-theme="dark"] .ds-mark-cell{ background:#15151a; }
+.ds-mark-cell svg{ width:48px; height:48px; }
+.ds-mark-cell .label{
+  font-family:var(--mono); font-size:11px; font-weight:600;
+  letter-spacing:.08em; color:var(--ink);
+}
+html[data-theme="dark"] .ds-mark-cell .label{ color:var(--g-50); }
+</style>
+</head>
+<body>
+
+<!-- ========================================================================
+     SVG defs · canonical brand marks. Identical on every page.
+     ======================================================================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mark-zopdev" viewBox="0 0 32 32">
+      <rect x="0"  y="0"  width="16" height="16" fill="#2A4494"/>
+      <rect x="16" y="0"  width="16" height="16" fill="#F58549"/>
+      <rect x="16" y="16" width="16" height="16" fill="#7FB236"/>
+    </symbol>
+    <symbol id="mark-zopnight" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="32" height="32" fill="var(--logo-blue, #2A4494)"/>
+      <circle cx="16" cy="16" r="8" fill="#FFFFFF"/>
+    </symbol>
+    <symbol id="mark-zopday" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="32" height="32" fill="#F58549"/>
+      <circle cx="16" cy="16" r="8" fill="#FFFFFF"/>
+    </symbol>
+    <symbol id="mark-zopcloud" viewBox="0 0 32 32">
+      <!-- Pixel-cloud on family-blue container · matches homepage -->
+      <rect x="0" y="0" width="32" height="32" fill="#2A4494"/>
+      <rect x="12" y="8"  width="8"  height="6"  fill="#FFFFFF"/>
+      <rect x="6"  y="14" width="20" height="10" fill="#FFFFFF"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ========================================================================
+     CANONICAL NAV · keep slim · users land here from /dev or /design-system
+     ======================================================================== -->
+<!-- ============================================================
+     LIVE STATUS STRIP. Cloud-ops signal strip
+     ============================================================ -->
+<div class="live-strip" aria-live="polite">
+  <!-- Anchored pill: live market-open indicator + uptime & UTC clock. Stays
+       put on the right while the ticker runs under it. -->
+  <div class="ls-anchor">
+    <span class="ls-live"><span class="ls-livedot"></span>LIVE</span>
+    <span class="ls-sep"></span>
+    <span class="ls-kpi"><em>UPT</em><b>99.98%</b></span>
+    <span class="ls-sep"></span>
+    <span class="ls-kpi"><em>UTC</em><b id="live-clock">--:--:--</b></span>
+  </div>
+
+  <!-- Marquee track: two identical rails side-by-side create a seamless loop.
+       Each item reads as a plain-English headline with a change indicator. -->
+  <div class="ls-track" role="presentation" aria-hidden="true">
+    <div class="ls-rail">
+      <span class="lt-row"><b id="live-saved">$48,210</b> saved this month <span class="lt-chg up">▲ $812 today</span></span>
+      <span class="lt-row"><b id="live-resources">10,401</b> cloud resources monitored <span class="lt-chg up">▲ 42 new</span></span>
+      <span class="lt-row"><b id="live-remediations">17</b> issues fixed today <span class="lt-chg up">▲ 3 in last hour</span></span>
+      <span class="lt-row"><b>847</b> idle instances reclaimed <span class="lt-chg up">▲ 31 this week</span></span>
+      <span class="lt-row"><b>99.98%</b> uptime across <b>47</b> regions</span>
+      <span class="lt-row"><b>3</b> anomalies open <span class="lt-chg dn">▼ 1 auto-resolved</span></span>
+      <span class="lt-row"><b>142</b> schedules running <span class="lt-chg up">▲ 12 this week</span></span>
+      <span class="lt-row"><b>$2.8M</b> monthly run-rate <span class="lt-chg dn">▼ 8% vs last month</span></span>
+      <span class="lt-row"><b>67%</b> average utilization <span class="lt-chg up">▲ 2 pts</span></span>
+      <span class="lt-row"><b>4m 12s</b> mean time to remediate <span class="lt-chg dn">▼ 22s faster</span></span>
+      <span class="lt-row"><b>0</b> incidents · <b>5-day</b> clean streak</span>
+      <span class="lt-row"><b>23%</b> savings rate <span class="lt-chg up">▲ 5 pts QoQ</span></span>
+    </div>
+    <div class="ls-rail" aria-hidden="true">
+      <span class="lt-row"><b>$48,210</b> saved this month <span class="lt-chg up">▲ $812 today</span></span>
+      <span class="lt-row"><b>10,401</b> cloud resources monitored <span class="lt-chg up">▲ 42 new</span></span>
+      <span class="lt-row"><b>17</b> issues fixed today <span class="lt-chg up">▲ 3 in last hour</span></span>
+      <span class="lt-row"><b>847</b> idle instances reclaimed <span class="lt-chg up">▲ 31 this week</span></span>
+      <span class="lt-row"><b>99.98%</b> uptime across <b>47</b> regions</span>
+      <span class="lt-row"><b>3</b> anomalies open <span class="lt-chg dn">▼ 1 auto-resolved</span></span>
+      <span class="lt-row"><b>142</b> schedules running <span class="lt-chg up">▲ 12 this week</span></span>
+      <span class="lt-row"><b>$2.8M</b> monthly run-rate <span class="lt-chg dn">▼ 8% vs last month</span></span>
+      <span class="lt-row"><b>67%</b> average utilization <span class="lt-chg up">▲ 2 pts</span></span>
+      <span class="lt-row"><b>4m 12s</b> mean time to remediate <span class="lt-chg dn">▼ 22s faster</span></span>
+      <span class="lt-row"><b>0</b> incidents · <b>5-day</b> clean streak</span>
+      <span class="lt-row"><b>23%</b> savings rate <span class="lt-chg up">▲ 5 pts QoQ</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo-lockup sm" aria-label="ZopDev">
+      <svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <div class="nav-item" data-menu="product">
+        <a>Product <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <div class="nav-item" data-menu="resources">
+        <a>Resources <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="pricing.html">Pricing</a>
+      <div class="nav-item" data-menu="company">
+        <a>Company <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="community.html">Community</a>
+    </div>
+
+    <!-- Shared dropdown overlay. Content crossfades, panel slides left/right -->
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+      <div class="nav-panes" id="nav-panes">
+
+        <!-- ═══════ PRODUCT · 3 sub-products ═══════ -->
+        <div class="nav-pane" data-pane="product">
+          <!-- 3 equal cells. Inline grid-template-columns overrides the
+               default 1.3fr 1fr 1fr (which is built for a featured-hero
+               layout). All three products are equal here — no hero — so
+               no empty grid slots and no card stretches taller than its
+               siblings. -->
+          <div class="np-bento" style="grid-template-columns:1fr 1fr 1fr;">
+            <a class="np-cell" href="zopnight.html">
+              <span class="np-badge live">live</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopNight</h3>
+              <p class="np-cell-desc">Cloud cost optimization on autopilot. AWS, Azure, GCP.</p>
+            </a>
+            <a class="np-cell" href="zopday.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#F58549"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopDay</h3>
+              <p class="np-cell-desc">Deployment orchestration and release management.</p>
+            </a>
+            <a class="np-cell" href="zopcloud.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><rect x="12" y="8" width="8" height="6" fill="#FFFFFF"/><rect x="6" y="14" width="20" height="10" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopCloud</h3>
+              <p class="np-cell-desc">Multi-cloud resource graph and topology view.</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Live in Claude &amp; Codex</strong> · run ZopNight from your MCP client</span>
+            <a href="developers.html">Try MCP →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ RESOURCES · 9 cells in a 3×3 grid ═══════ -->
+        <div class="nav-pane" data-pane="resources">
+          <div class="np-bento np-bento--grid">
+            <a class="np-cell" href="blog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Blog</h3>
+              <p class="np-cell-desc">Engineering + cost optimization notes</p>
+            </a>
+            <a class="np-cell" href="free-ebooks.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 4h7v13H3zM10 4h7v13h-7z" stroke="currentColor" stroke-width="1.5"/><path d="M10 4v13" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Ebooks</h3>
+              <p class="np-cell-desc">Free playbooks · FinOps, K8s, CDCR</p>
+            </a>
+            <a class="np-cell" href="customers.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 16c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Case studies</h3>
+              <p class="np-cell-desc">42-67% cuts, real teams</p>
+            </a>
+            <a class="np-cell" href="solutions.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Use cases by industry</h3>
+              <p class="np-cell-desc">SaaS · fintech · retail · health</p>
+            </a>
+            <a class="np-cell" href="product-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M8 7l4 3-4 3z" fill="currentColor"/></svg>
+              </div>
+              <h3 class="np-cell-title">Product documentation</h3>
+              <p class="np-cell-desc">Walkthroughs · video tours</p>
+            </a>
+            <a class="np-cell" href="kubernetes-guide.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2l7 4v8l-7 4-7-4V6z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
+              </div>
+              <h3 class="np-cell-title">Kubernetes guide</h3>
+              <p class="np-cell-desc">From cluster basics to right-sizing</p>
+            </a>
+            <a class="np-cell" href="changelog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Changelog</h3>
+              <p class="np-cell-desc">What shipped this week</p>
+            </a>
+            <a class="np-cell" href="developer-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 6L3 10l4 4M13 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 class="np-cell-title">Developer documentation</h3>
+              <p class="np-cell-desc">REST API · SDKs · webhooks · MCP</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Weekly digest</strong> · waste signals, wins, war stories</span>
+            <a href="blog.html">Subscribe →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ COMPANY · 2 items ═══════ -->
+        <div class="nav-pane" data-pane="company">
+          <div class="np-bento" style="grid-template-columns:1fr 1fr;">
+            <a class="np-cell" href="about.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#0A0A0A"/><rect x="6" y="6" width="8" height="20" fill="#F0EBDB"/><rect x="18" y="12" width="8" height="14" fill="#F58549"/></svg>
+              </div>
+              <h3 class="np-cell-title">About</h3>
+              <p class="np-cell-desc">Founded 2024. The autopilot for multi-cloud cost.</p>
+            </a>
+            <a class="np-cell" href="careers.html">
+              <span class="np-badge">hiring</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="6" width="14" height="11" stroke="currentColor" stroke-width="1.5"/><path d="M7 6V4h6v2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Careers</h3>
+              <p class="np-cell-desc">Open roles · engineering, design, GTM</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>We're hiring</strong> · remote-first · 12 open roles</span>
+            <a href="careers.html">See roles →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="nav-cta">
+      <!-- Status pill · live dot · links to /status.html. Mirrors the
+           project's "always-on" identity (the live-ops strip above the
+           nav). Pulses green when all systems are operational. -->
+      <a class="nav-status" href="status.html" aria-label="System status">
+        <span class="nav-status-dot" aria-hidden="true"></span>
+        <span class="nav-status-text">Status</span>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" role="switch">
+        <span class="tt-opt tt-sun" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="8" cy="8" r="3" fill="currentColor" stroke="none"/>
+            <path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.9.9M11.7 11.7l.9.9M3.4 12.6l.9-.9M11.7 4.3l.9-.9"/>
+          </svg>
+        </span>
+        <span class="tt-opt tt-moon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M12.8 10.1a5.5 5.5 0 0 1-7-7 .5.5 0 0 0-.7-.6A6.5 6.5 0 1 0 13.4 10.8a.5.5 0 0 0-.6-.7z"/>
+          </svg>
+        </span>
+      </button>
+      <a class="chip-playground" href="playground.html"><span>Playground</span></a>
+      <a class="sign" href="signin.html">Sign In</a>
+      <a class="btn btn-accent" href="demo.html"><span>Book a Demo</span> <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<main class="ds-shell">
+
+  <header class="ds-pagehead">
+    <div class="meta">00 · design system</div>
+    <h1>The visual language<br/>of ZopDev.</h1>
+    <p class="lede">Every token, type ramp, component, and motion curve that builds the brand. Use this page to verify a product surface before shipping. The homepage is the source of truth, when in doubt, this page mirrors it.</p>
+    <div class="vbar">
+      <span><strong>Version</strong> 2026.04</span>
+      <span class="vbar-sep">·</span>
+      <span><strong>Updated</strong> 25 April 2026</span>
+      <span class="vbar-sep">·</span>
+      <span><strong>Spec</strong> <a href="DESIGN.md" style="color:inherit;text-decoration:underline">DESIGN.md</a></span>
+      <span class="vbar-sep">·</span>
+      <span><strong>Source</strong> <a href="index.html" style="color:inherit;text-decoration:underline">index.html</a></span>
+    </div>
+  </header>
+
+  <aside class="ds-toc" aria-label="Section navigation">
+    <span class="ds-toc-h">foundations</span>
+    <a href="#colors">Colors</a>
+    <a href="#typography">Typography</a>
+    <a href="#spacing">Spacing</a>
+    <a href="#breakpoints">Breakpoints</a>
+    <span class="ds-toc-h" style="margin-top:14px">components</span>
+    <a href="#buttons">Buttons</a>
+    <a href="#meta">Section meta</a>
+    <a href="#cards">Cards</a>
+    <a href="#chips">Chips &amp; pills</a>
+    <a href="#forms">Forms</a>
+    <a href="#tables">Tables</a>
+    <a href="#alerts">Alerts</a>
+    <a href="#tabs">Tabs &amp; segments</a>
+    <a href="#dropdowns">Dropdowns</a>
+    <a href="#states">Empty / loading</a>
+    <a href="#code">Code blocks</a>
+    <span class="ds-toc-h" style="margin-top:14px">brand</span>
+    <a href="#marks">Brand marks</a>
+    <a href="#subbrands">Sub-brands</a>
+    <span class="ds-toc-h" style="margin-top:14px">system</span>
+    <a href="#motion">Motion</a>
+    <a href="#banned">Banned</a>
+    <a href="#a11y">Accessibility</a>
+  </aside>
+
+  <div class="ds-main">
+
+    <!-- ──────────────────────────────────────────────────────────── COLORS -->
+    <section id="colors">
+      <p class="ds-h2">01 · foundations</p>
+      <h2 class="ds-section-title">Colors.</h2>
+      <p class="ds-section-lede">Three brand colors, eleven cream-tinted neutrals. Never use pure <code>#000</code> or <code>#fff</code>. Tint every neutral toward cream, it's what makes the brand feel like a single material.</p>
+
+      <h3 class="ds-h3">Brand colors · locked</h3>
+      <div class="ds-swatches">
+        <div class="ds-swatch">
+          <div class="ds-swatch-fill" style="background:#2A4494"></div>
+          <div class="ds-swatch-meta"><span class="tk">--zop-blue</span><span class="hx">#2A4494</span><span class="ratio">ZopNight · ~5%</span></div>
+        </div>
+        <div class="ds-swatch">
+          <div class="ds-swatch-fill" style="background:#F58549"></div>
+          <div class="ds-swatch-meta"><span class="tk">--zop-orange</span><span class="hx">#F58549</span><span class="ratio">ZopDay · ≤10%</span></div>
+        </div>
+        <div class="ds-swatch">
+          <div class="ds-swatch-fill" style="background:#7FB236"></div>
+          <div class="ds-swatch-meta"><span class="tk">--zop-green</span><span class="hx">#7FB236</span><span class="ratio">ZopCloud · dark surfaces</span></div>
+        </div>
+      </div>
+
+      <h3 class="ds-h3">Neutrals · cream-tinted</h3>
+      <div class="ds-swatches">
+        <div class="ds-swatch"><div class="ds-swatch-fill" style="background:#FAF7EC; border-bottom:1px solid var(--line)"></div><div class="ds-swatch-meta"><span class="tk">--paper</span><span class="hx">#FAF7EC</span></div></div>
+        <div class="ds-swatch"><div class="ds-swatch-fill" style="background:#F0EBDB"></div><div class="ds-swatch-meta"><span class="tk">--g-50</span><span class="hx">#F0EBDB</span></div></div>
+        <div class="ds-swatch"><div class="ds-swatch-fill" style="background:#ECE7D7"></div><div class="ds-swatch-meta"><span class="tk">--g-100</span><span class="hx">#ECE7D7</span></div></div>
+        <div class="ds-swatch"><div class="ds-swatch-fill" style="background:#E2DDCD"></div><div class="ds-swatch-meta"><span class="tk">--g-200</span><span class="hx">#E2DDCD</span></div></div>
+        <div class="ds-swatch"><div class="ds-swatch-fill" style="background:#D9D3BF"></div><div class="ds-swatch-meta"><span class="tk">--line</span><span class="hx">#D9D3BF</span></div></div>
+        <div class="ds-swatch"><div class="ds-swatch-fill" style="background:#C9C4B5"></div><div class="ds-swatch-meta"><span class="tk">--g-300</span><span class="hx">#C9C4B5</span></div></div>
+        <div class="ds-swatch"><div class="ds-swatch-fill" style="background:#A3A3A3"></div><div class="ds-swatch-meta"><span class="tk">--g-400</span><span class="hx">#A3A3A3</span><span class="ratio fail">2.6:1 · UI only</span></div></div>
+        <div class="ds-swatch"><div class="ds-swatch-fill" style="background:#707070"></div><div class="ds-swatch-meta"><span class="tk">--g-500</span><span class="hx">#707070</span><span class="ratio">5.0:1</span></div></div>
+        <div class="ds-swatch"><div class="ds-swatch-fill" style="background:#525252"></div><div class="ds-swatch-meta"><span class="tk">--g-600</span><span class="hx">#525252</span><span class="ratio">7.4:1</span></div></div>
+        <div class="ds-swatch"><div class="ds-swatch-fill" style="background:#2a2a2a"></div><div class="ds-swatch-meta"><span class="tk">--g-700</span><span class="hx">#2a2a2a</span><span class="ratio">13.5:1</span></div></div>
+        <div class="ds-swatch"><div class="ds-swatch-fill" style="background:#0A0A0A"></div><div class="ds-swatch-meta"><span class="tk">--ink</span><span class="hx">#0A0A0A</span><span class="ratio">19:1</span></div></div>
+      </div>
+
+      <p class="ds-h4">Color strategy</p>
+      <p class="ds-section-lede" style="margin-bottom:16px"><strong>Restrained</strong> (default · product) · neutrals + one accent ≤10%. <strong>Committed</strong> · one saturated color carries 30–60%. <strong>Drenched</strong> · the surface IS the color (heroes only). Pick before picking colors.</p>
+
+      <p class="ds-h4">WCAG AA</p>
+      <p class="ds-section-lede" style="margin-bottom:0">Body text needs 4.5:1 minimum on its background. Use <code>--g-600</code> or darker for 12–14px copy. <code>--g-500</code> only for labels 14px+. <code>--g-400</code> never as text on paper, it fails AA.</p>
+    </section>
+
+    <!-- ──────────────────────────────────────────────────────── TYPOGRAPHY -->
+    <section id="typography">
+      <p class="ds-h2">02 · type</p>
+      <h2 class="ds-section-title">Typography.</h2>
+      <p class="ds-section-lede">Two faces, Space Grotesk for body and headings, JetBrains Mono for labels and data. Hierarchy through scale and weight; never below 12px for prose; never wide letter-spacing on lowercase.</p>
+
+      <h3 class="ds-h3">Scale</h3>
+      <div class="ds-type-row">
+        <div class="ds-type-meta"><strong>Hero · h1</strong><span>clamp(48px, 6.4vw, 86px)</span><span>weight 700 · ls -.045em</span></div>
+        <div class="ds-type-sample s-hero">See everything.<br/>Fix what's wrong.</div>
+      </div>
+      <div class="ds-type-row">
+        <div class="ds-type-meta"><strong>Section · h2</strong><span>clamp(28px, 3.2vw, 44px)</span><span>weight 700 · ls -.03em</span></div>
+        <div class="ds-type-sample s-h2">Continuous Discovery.<br/>Continuous Remediation.</div>
+      </div>
+      <div class="ds-type-row">
+        <div class="ds-type-meta"><strong>Card · h3</strong><span>22px</span><span>weight 600 · ls -.015em</span></div>
+        <div class="ds-type-sample s-h3">Procurement that takes ten minutes, not twelve weeks.</div>
+      </div>
+      <div class="ds-type-row">
+        <div class="ds-type-meta"><strong>Body</strong><span>15px</span><span>weight 400 · lh 1.55</span></div>
+        <div class="ds-type-sample s-body">Most teams overspend by 30 to 60 percent without knowing it. ZopDev finds the waste, agrees the fix with you, and stops the bleed automatically. The number you see today is the number you'll see at month-end.</div>
+      </div>
+      <div class="ds-type-row">
+        <div class="ds-type-meta"><strong>Caption</strong><span>13px</span><span>color --g-700</span></div>
+        <div class="ds-type-sample s-caption">Average customer outcome · 42% monthly cloud spend reduction in 30 days.</div>
+      </div>
+      <div class="ds-type-row">
+        <div class="ds-type-meta"><strong>Mono label</strong><span>10–11px</span><span>uppercase · ls .1em</span></div>
+        <div class="ds-type-sample s-mono">04 · cdcr loop</div>
+      </div>
+
+      <h3 class="ds-h3">Multi-sentence headings</h3>
+      <p class="ds-section-lede" style="margin-bottom:18px">When a heading has more than one sentence, break each to its own line. Forces rhythm; reads with intention.</p>
+      <div class="ds-pair">
+        <div class="ds-demo ds-demo-block">
+          <h2 style="font-size:clamp(28px,3.2vw,44px); font-weight:700; letter-spacing:-.03em; line-height:1.05; margin:0">Stop guessing.<br/>Start cutting.</h2>
+        </div>
+<pre class="ds-code"><span class="tag">&lt;h2&gt;</span>Stop guessing.<span class="tag">&lt;br/&gt;</span>Start cutting.<span class="tag">&lt;/h2&gt;</span></pre>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────── SPACING -->
+    <section id="spacing">
+      <p class="ds-h2">03 · spacing</p>
+      <h2 class="ds-section-title">Spacing scale.</h2>
+      <p class="ds-section-lede">Multiples of 4px. Vary spacing for rhythm, same padding everywhere is monotony. Don't wrap everything in a container; most things don't need one.</p>
+      <div style="max-width:520px">
+        <div class="ds-spacing-row"><span class="lbl">4px</span><div class="ds-spacing-bar" style="width:4px"></div></div>
+        <div class="ds-spacing-row"><span class="lbl">8px</span><div class="ds-spacing-bar" style="width:8px"></div></div>
+        <div class="ds-spacing-row"><span class="lbl">12px</span><div class="ds-spacing-bar" style="width:12px"></div></div>
+        <div class="ds-spacing-row"><span class="lbl">16px</span><div class="ds-spacing-bar" style="width:16px"></div></div>
+        <div class="ds-spacing-row"><span class="lbl">24px</span><div class="ds-spacing-bar" style="width:24px"></div></div>
+        <div class="ds-spacing-row"><span class="lbl">32px</span><div class="ds-spacing-bar" style="width:32px"></div></div>
+        <div class="ds-spacing-row"><span class="lbl">48px</span><div class="ds-spacing-bar" style="width:48px"></div></div>
+        <div class="ds-spacing-row"><span class="lbl">64px</span><div class="ds-spacing-bar" style="width:64px"></div></div>
+        <div class="ds-spacing-row"><span class="lbl">96px</span><div class="ds-spacing-bar" style="width:96px"></div></div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────── BUTTONS -->
+    <section id="buttons">
+      <p class="ds-h2">04 · components</p>
+      <h2 class="ds-section-title">Buttons.</h2>
+      <p class="ds-section-lede">Three tiers, one geometry. Square corners. Universal hover · 4px lift + ink offset shadow. Orange variant for the signature CTA on a cream surface.</p>
+
+      <div class="ds-pair">
+        <div class="ds-demo">
+          <a class="btn btn-primary" href="#">Get Started <span class="arrow">→</span></a>
+          <a class="btn btn-secondary" href="#">View Pricing</a>
+          <a class="btn" href="#" style="background:var(--zop-orange); color:#0a0a0c; border-color:var(--zop-orange)">Talk to Us <span class="arrow">→</span></a>
+          <a href="#" style="font-family:var(--font); font-size:14px; font-weight:600; color:var(--ink); text-decoration:underline; text-underline-offset:4px">View changelog →</a>
+        </div>
+<pre class="ds-code"><span class="com">&lt;!-- Primary · ink fill --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">class</span>=<span class="str">"btn btn-primary"</span> <span class="attr">href</span>=<span class="str">"#"</span><span class="tag">&gt;</span>Get Started <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"arrow"</span><span class="tag">&gt;</span>→<span class="tag">&lt;/span&gt;&lt;/a&gt;</span>
+
+<span class="com">&lt;!-- Secondary · outline --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">class</span>=<span class="str">"btn btn-secondary"</span> <span class="attr">href</span>=<span class="str">"#"</span><span class="tag">&gt;</span>View Pricing<span class="tag">&lt;/a&gt;</span>
+
+<span class="com">&lt;!-- Accent · brand orange · use sparingly --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">class</span>=<span class="str">"btn btn-accent"</span> <span class="attr">href</span>=<span class="str">"#"</span><span class="tag">&gt;</span>Talk to Us<span class="tag">&lt;/a&gt;</span></pre>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────── SECTION META -->
+    <section id="meta">
+      <p class="ds-h2">05 · components</p>
+      <h2 class="ds-section-title">Section meta eyebrow.</h2>
+      <p class="ds-section-lede">The signature ZopDev visual element. Mono uppercase, with an orange 10×10 square preceding it. Never a circle or icon, single consistent accent.</p>
+      <div class="ds-pair">
+        <div class="ds-demo"><span class="ds-sec-meta-demo">04 · cdcr loop</span></div>
+<pre class="ds-code"><span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"sec-meta"</span><span class="tag">&gt;</span>04 · cdcr loop<span class="tag">&lt;/div&gt;</span>
+
+<span class="com">/* style */</span>
+<span class="sel">.sec-meta::before</span> {
+  <span class="key">content</span>:<span class="str">''</span>;
+  <span class="key">width</span>:<span class="num">10px</span>; <span class="key">height</span>:<span class="num">10px</span>;
+  <span class="key">background</span>:<span class="str">var(--zop-orange)</span>;
+}</pre>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────── CARDS -->
+    <section id="cards">
+      <p class="ds-h2">06 · components</p>
+      <h2 class="ds-section-title">Cards.</h2>
+      <p class="ds-section-lede">Cards are the lazy answer. Use them only when they're the right affordance. Never nest cards inside cards. Hover signature is the same as buttons, translateY(-4px) + ink offset shadow.</p>
+
+      <div class="ds-pair">
+        <div class="ds-demo">
+          <article class="ds-card-demo">
+            <span class="num">F.01</span>
+            <h4>One pane of glass.</h4>
+            <p>847 resources across four regions on three clouds, one filterable view. Click any row for provenance.</p>
+          </article>
+          <article class="ds-card-demo">
+            <span class="num">F.02</span>
+            <h4>Continuous remediation.</h4>
+            <p>The fix loop runs after your code ships. CI/CD for your cloud bill.</p>
+          </article>
+        </div>
+<pre class="ds-code"><span class="tag">&lt;article</span> <span class="attr">class</span>=<span class="str">"feature"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"num"</span><span class="tag">&gt;</span>F.01<span class="tag">&lt;/span&gt;</span>
+  <span class="tag">&lt;h4&gt;</span>One pane of glass.<span class="tag">&lt;/h4&gt;</span>
+  <span class="tag">&lt;p&gt;</span>847 resources across four regions...<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/article&gt;</span></pre>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────── CHIPS -->
+    <section id="chips">
+      <p class="ds-h2">07 · components</p>
+      <h2 class="ds-section-title">Pills &amp; chips.</h2>
+      <p class="ds-section-lede">Square corners (yes, even pills). Mono uppercase, 10–11px. Optional dot prefix in brand color marks lane.</p>
+      <div class="ds-pair">
+        <div class="ds-demo">
+          <span class="ds-chip">live · streaming</span>
+          <span class="ds-chip blue">zopnight</span>
+          <span class="ds-chip" style="--accent:var(--zop-orange)">zopday</span>
+          <span class="ds-chip green">zopcloud</span>
+        </div>
+<pre class="ds-code"><span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"chip blue"</span><span class="tag">&gt;</span>zopnight<span class="tag">&lt;/span&gt;</span></pre>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────── FORMS -->
+    <section id="forms">
+      <p class="ds-h2">08 · components</p>
+      <h2 class="ds-section-title">Forms.</h2>
+      <p class="ds-section-lede">1px line border. Square corners. Focus state · orange border, no glow. Labels above the input in mono uppercase.</p>
+      <div class="ds-pair">
+        <div class="ds-demo ds-demo-block" style="display:grid; grid-template-columns:1fr 1fr; gap:18px; max-width:560px">
+          <div>
+            <label class="ds-label" for="ds-email">Work email</label>
+            <input class="ds-input" type="email" id="ds-email" placeholder="you@company.com"/>
+          </div>
+          <div>
+            <label class="ds-label" for="ds-cloud">Primary cloud</label>
+            <input class="ds-input" type="text" id="ds-cloud" placeholder="AWS · Azure · GCP"/>
+          </div>
+        </div>
+<pre class="ds-code"><span class="tag">&lt;label</span> <span class="attr">class</span>=<span class="str">"label"</span> <span class="attr">for</span>=<span class="str">"email"</span><span class="tag">&gt;</span>Work email<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">class</span>=<span class="str">"input"</span> <span class="attr">type</span>=<span class="str">"email"</span> <span class="attr">id</span>=<span class="str">"email"</span> <span class="attr">placeholder</span>=<span class="str">"you@company.com"</span><span class="tag">/&gt;</span></pre>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────── CODE -->
+    <section id="code">
+      <p class="ds-h2">09 · components</p>
+      <h2 class="ds-section-title">Code &amp; terminal blocks.</h2>
+      <p class="ds-section-lede">Always dark. Always JetBrains Mono. Inline syntax highlighting via spans. Top-right tag identifies the language.</p>
+      <div class="ds-pair">
+        <div class="ds-demo ds-demo-block">
+<pre class="ds-code"><span class="com">$ ZopDev connect aws --profile prod</span>
+<span class="key">→</span> <span class="str">scanning 847 resources across us-east-1, us-west-2, eu-west-1</span>
+<span class="key">→</span> <span class="str">found 23 idle instances · estimated $4,180/mo waste</span>
+<span class="key">→</span> <span class="str">remediation plan ready · review at zopdev.io/r/Y2x</span>
+<span class="key">✓</span> <span class="attr">connected</span> · <span class="num">7m 12s</span></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────── BRAND MARKS -->
+    <section id="marks">
+      <p class="ds-h2">10 · brand</p>
+      <h2 class="ds-section-title">Brand marks.</h2>
+      <p class="ds-section-lede">SVG <code>&lt;symbol&gt;</code> defs at the top of every page. Reference via <code>&lt;use&gt;</code>. Don't recreate the marks elsewhere.</p>
+      <div class="ds-marks-grid">
+        <div class="ds-mark-cell">
+          <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#mark-zopdev"/></svg>
+          <span class="label">#mark-zopdev</span>
+        </div>
+        <div class="ds-mark-cell">
+          <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#mark-zopnight"/></svg>
+          <span class="label">#mark-zopnight</span>
+        </div>
+        <div class="ds-mark-cell">
+          <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#mark-zopday"/></svg>
+          <span class="label">#mark-zopday</span>
+        </div>
+        <div class="ds-mark-cell">
+          <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#mark-zopcloud"/></svg>
+          <span class="label">#mark-zopcloud</span>
+        </div>
+      </div>
+<pre class="ds-code"><span class="tag">&lt;svg</span> <span class="attr">viewBox</span>=<span class="str">"0 0 32 32"</span><span class="tag">&gt;&lt;use</span> <span class="attr">href</span>=<span class="str">"#mark-zopnight"</span><span class="tag">/&gt;&lt;/svg&gt;</span></pre>
+    </section>
+
+    <!-- ────────────────────────────────────────────────────────── MOTION -->
+    <section id="motion">
+      <p class="ds-h2">11 · motion</p>
+      <h2 class="ds-section-title">Motion.</h2>
+      <p class="ds-section-lede">Easing tokens are exponential ease-out variants. Never bounce, never elastic. Don't animate layout properties, use <code>transform</code> + <code>opacity</code>. Hover anywhere on a card to see the cards run.</p>
+
+      <div class="ds-easing-grid">
+        <div class="ds-easing-card run">
+          <div class="name">--ease-out</div>
+          <div class="ball eo"></div>
+          <div class="val">cubic-bezier(.22, 1, .36, 1)</div>
+        </div>
+        <div class="ds-easing-card run">
+          <div class="name">--ease-in-out</div>
+          <div class="ball eio"></div>
+          <div class="val">cubic-bezier(.65, 0, .35, 1)</div>
+        </div>
+        <div class="ds-easing-card run">
+          <div class="name">--ease-snap</div>
+          <div class="ball snap"></div>
+          <div class="val">cubic-bezier(.19, 1, .22, 1)</div>
+        </div>
+        <div class="ds-easing-card run">
+          <div class="name">--ease-spring</div>
+          <div class="ball spr"></div>
+          <div class="val">cubic-bezier(.2, .9, .3, 1.05)</div>
+        </div>
+      </div>
+
+      <p class="ds-h4">Durations</p>
+      <div class="ds-pair">
+        <div class="ds-demo">
+          <span class="ds-chip">--dur-fast · 160ms</span>
+          <span class="ds-chip">--dur-med · 250ms</span>
+          <span class="ds-chip">--dur-slow · 400ms</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────────────────────────────────────────────────────────── BANNED -->
+    <section id="banned">
+      <p class="ds-h2">12 · don't</p>
+      <h2 class="ds-section-title">Banned patterns.</h2>
+      <p class="ds-section-lede">If you write any of these, rewrite the element with different structure. These are the AI-slop tells that ZopDev refuses to wear.</p>
+      <div class="ds-banned-grid">
+        <div class="ds-banned"><span class="lbl">side-stripe borders</span><p>Coloured <code>border-left</code> &gt; 1px on cards or callouts. Use full borders, background tints, or a leading number.</p></div>
+        <div class="ds-banned"><span class="lbl">gradient text</span><p><code>background-clip: text</code> + gradient. Decorative, never meaningful. Use a single solid color.</p></div>
+        <div class="ds-banned"><span class="lbl">glassmorphism</span><p>Blurs and glass cards as default. Rare and purposeful, or nothing.</p></div>
+        <div class="ds-banned"><span class="lbl">hero-metric template</span><p>Big number + small label + supporting stats + gradient accent. SaaS cliché.</p></div>
+        <div class="ds-banned"><span class="lbl">identical card grids</span><p>Same-sized cards with icon + heading + text, repeated 5+. Vary sizes, asymmetric bento.</p></div>
+        <div class="ds-banned"><span class="lbl">modal as first thought</span><p>Modals are usually laziness. Exhaust inline / progressive alternatives first.</p></div>
+        <div class="ds-banned"><span class="lbl">em-dashes in copy</span><p><code>—</code> or <code>--</code>. Use commas, colons, periods, parentheses.</p></div>
+        <div class="ds-banned"><span class="lbl">bounce / elastic easing</span><p>Overshoot easing reads as gimmicky. Stick to exponential ease-out.</p></div>
+        <div class="ds-banned"><span class="lbl">pure #000 / #fff</span><p>Tint every neutral toward cream. <code>--paper</code> + <code>--ink</code>, never raw black or white.</p></div>
+        <div class="ds-banned"><span class="lbl">layout-property animation</span><p>Don't animate <code>width/height/padding/margin</code>. Use <code>transform</code> + <code>opacity</code>. For accordions, <code>grid-template-rows: 0fr → 1fr</code>.</p></div>
+        <div class="ds-banned"><span class="lbl">italic text</span><p>The brand reads upright. Inline <code>em</code> tags stay for semantics; site-wide CSS forces <code>font-style: normal</code>.</p></div>
+        <div class="ds-banned"><span class="lbl">round corners on cards</span><p>Square. Pills are 9999px only for genuine status indicators (badges).</p></div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────── BREAKPOINTS -->
+    <section id="breakpoints">
+      <p class="ds-h2">04 · foundations</p>
+      <h2 class="ds-section-title">Breakpoints &amp; layout.</h2>
+      <p class="ds-section-lede">Six breakpoints. Container max-width 1200px, gutters 32px desktop / 24px tablet / 20px phone.</p>
+      <div class="ds-pair">
+        <div class="ds-demo ds-demo-block">
+          <table style="width:100%; font-family:var(--mono); font-size:12px; border-collapse:collapse;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--line); text-align:left;">
+                <th style="padding:8px 12px; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">token</th>
+                <th style="padding:8px 12px; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">value</th>
+                <th style="padding:8px 12px; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px dashed var(--line);"><td style="padding:10px 12px;">--break-xs</td><td style="padding:10px 12px;">480px</td><td style="padding:10px 12px; color:var(--g-700);">phone landscape</td></tr>
+              <tr style="border-bottom:1px dashed var(--line);"><td style="padding:10px 12px;">--break-sm</td><td style="padding:10px 12px;">640px</td><td style="padding:10px 12px; color:var(--g-700);">small tablet</td></tr>
+              <tr style="border-bottom:1px dashed var(--line);"><td style="padding:10px 12px;">--break-md</td><td style="padding:10px 12px;">768px</td><td style="padding:10px 12px; color:var(--g-700);">tablet</td></tr>
+              <tr style="border-bottom:1px dashed var(--line);"><td style="padding:10px 12px;">--break-lg</td><td style="padding:10px 12px;">1024px</td><td style="padding:10px 12px; color:var(--g-700);">small laptop</td></tr>
+              <tr style="border-bottom:1px dashed var(--line);"><td style="padding:10px 12px;">--break-xl</td><td style="padding:10px 12px;">1280px</td><td style="padding:10px 12px; color:var(--g-700);">standard laptop</td></tr>
+              <tr><td style="padding:10px 12px;">--break-2xl</td><td style="padding:10px 12px;">1536px</td><td style="padding:10px 12px; color:var(--g-700);">large desktop</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────────────────────────────────── TABLES -->
+    <section id="tables">
+      <p class="ds-h2">09 · components</p>
+      <h2 class="ds-section-title">Tables.</h2>
+      <p class="ds-section-lede">Header in mono uppercase, body 14px, dashed bottom borders, monospace numerics, hover background tint, sortable headers carry a glyph.</p>
+      <div class="ds-pair">
+        <div class="ds-demo ds-demo-block">
+          <table style="width:100%; border-collapse:collapse;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--line);">
+                <th style="text-align:left; padding:12px 16px; font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">resource <span style="color:var(--ink); margin-left:4px;">↓</span></th>
+                <th style="text-align:left; padding:12px 16px; font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">region</th>
+                <th style="text-align:right; padding:12px 16px; font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">monthly <span style="color:var(--g-500); margin-left:4px;">↕</span></th>
+                <th style="text-align:right; padding:12px 16px; font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px dashed var(--line);"><td style="padding:14px 16px;">Idle m6i.large</td><td style="padding:14px 16px; color:var(--g-700);">us-east-1</td><td style="padding:14px 16px; text-align:right; font-family:'JetBrains Mono', monospace; font-variant-numeric:tabular-nums; font-weight:700;">$184</td><td style="padding:14px 16px; text-align:right;"><button style="font-family:var(--mono); font-size:10px; padding:5px 10px; background:var(--ink); color:var(--paper); border:1px solid var(--ink); letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">terminate</button></td></tr>
+              <tr style="border-bottom:1px dashed var(--line);"><td style="padding:14px 16px;">db.r6g.4xl over-provisioned</td><td style="padding:14px 16px; color:var(--g-700);">us-west-2</td><td style="padding:14px 16px; text-align:right; font-family:'JetBrains Mono', monospace; font-variant-numeric:tabular-nums; font-weight:700;">$612</td><td style="padding:14px 16px; text-align:right;"><button style="font-family:var(--mono); font-size:10px; padding:5px 10px; background:var(--ink); color:var(--paper); border:1px solid var(--ink); letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">resize</button></td></tr>
+              <tr><td style="padding:14px 16px;">Orphan EBS volume</td><td style="padding:14px 16px; color:var(--g-700);">eu-west-1</td><td style="padding:14px 16px; text-align:right; font-family:'JetBrains Mono', monospace; font-variant-numeric:tabular-nums; font-weight:700;">$48</td><td style="padding:14px 16px; text-align:right;"><button style="font-family:var(--mono); font-size:10px; padding:5px 10px; background:var(--ink); color:var(--paper); border:1px solid var(--ink); letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">delete</button></td></tr>
+            </tbody>
+            <tfoot>
+              <tr style="border-top:1px solid var(--line);">
+                <td colspan="4" style="padding:14px 16px; font-family:var(--mono); font-size:11px; color:var(--g-600); display:flex; justify-content:space-between; align-items:center;">
+                  <span>1–3 of 23 findings</span>
+                  <span style="color:var(--g-700);">‹‹ ‹ <strong style="color:var(--ink); margin:0 6px;">1</strong> 2 › ››</span>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ──────────────────────────────────────────────────────────── ALERTS -->
+    <section id="alerts">
+      <p class="ds-h2">10 · components</p>
+      <h2 class="ds-section-title">Alerts &amp; status.</h2>
+      <p class="ds-section-lede">Inline alerts with left-edge color tag and full-bleed tint. No red, orange handles error states; green is success.</p>
+      <div class="ds-pair">
+        <div class="ds-demo ds-demo-block" style="display:flex; flex-direction:column; gap:12px;">
+          <div style="display:grid; grid-template-columns:auto 1fr auto; gap:14px; padding:14px 18px; border:1px solid var(--zop-blue); border-left-width:4px; background:rgba(42,68,148,.06); align-items:start;">
+            <span style="color:var(--zop-blue); font-size:18px; line-height:1; margin-top:2px;">ⓘ</span>
+            <div><div style="font-weight:600; color:var(--ink); margin-bottom:2px;">Connect AWS to start scanning.</div><div style="font-size:13px; color:var(--g-700);">Read-only IAM role · 4-minute scan cadence · no credit card.</div></div>
+            <button style="background:transparent; border:0; color:var(--g-500); cursor:pointer; font-size:18px; line-height:1;">×</button>
+          </div>
+          <div style="display:grid; grid-template-columns:auto 1fr auto; gap:14px; padding:14px 18px; border:1px solid var(--zop-green); border-left-width:4px; background:rgba(127,178,54,.08); align-items:start;">
+            <span style="color:var(--zop-green); font-size:18px; line-height:1; margin-top:2px;">✓</span>
+            <div><div style="font-weight:600; color:var(--ink); margin-bottom:2px;">Connection healthy.</div><div style="font-size:13px; color:var(--g-700);">847 resources scanned · last sync 2 min ago.</div></div>
+            <button style="background:transparent; border:0; color:var(--g-500); cursor:pointer; font-size:18px; line-height:1;">×</button>
+          </div>
+          <div style="display:grid; grid-template-columns:auto 1fr auto; gap:14px; padding:14px 18px; border:1px solid var(--zop-orange); border-left-width:4px; background:rgba(245,133,73,.07); align-items:start;">
+            <span style="color:var(--zop-orange); font-size:18px; line-height:1; margin-top:2px;">!</span>
+            <div><div style="font-weight:600; color:var(--ink); margin-bottom:2px;">Tag coverage below 80%.</div><div style="font-size:13px; color:var(--g-700);">12 untagged resources won't appear in showback. <a href="#" style="color:var(--ink); text-decoration:underline;">Review →</a></div></div>
+            <button style="background:transparent; border:0; color:var(--g-500); cursor:pointer; font-size:18px; line-height:1;">×</button>
+          </div>
+          <div style="display:grid; grid-template-columns:auto 1fr auto; gap:14px; padding:14px 18px; border:1px solid var(--zop-orange); border-left-width:4px; background:rgba(245,133,73,.12); align-items:start;">
+            <span style="color:var(--zop-orange); font-size:18px; line-height:1; margin-top:2px;">⚠</span>
+            <div><div style="font-weight:600; color:var(--ink); margin-bottom:2px;">Couldn't reach AWS us-east-1.</div><div style="font-size:13px; color:var(--g-700);">Last successful scan: 47 min ago. <a href="#" style="color:var(--ink); text-decoration:underline;">Retry</a> · <a href="#" style="color:var(--ink); text-decoration:underline;">contact support</a>.</div></div>
+            <button style="background:transparent; border:0; color:var(--g-500); cursor:pointer; font-size:18px; line-height:1;">×</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────────────────────────────────────────────────────── TABS / SEGMENTED -->
+    <section id="tabs">
+      <p class="ds-h2">11 · components</p>
+      <h2 class="ds-section-title">Tabs &amp; segments.</h2>
+      <p class="ds-section-lede">Tabs for page-level navigation; segmented controls for inline 2–4 option toggles.</p>
+      <div class="ds-pair">
+        <div class="ds-demo ds-demo-block">
+          <div style="border-bottom:1px solid var(--line); display:flex; gap:0;">
+            <button style="padding:14px 22px; background:transparent; border:0; border-bottom:2px solid var(--ink); font-family:var(--mono); font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); cursor:pointer; margin-bottom:-1px;">findings</button>
+            <button style="padding:14px 22px; background:transparent; border:0; font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); cursor:pointer;">resources</button>
+            <button style="padding:14px 22px; background:transparent; border:0; font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); cursor:pointer;">audit log</button>
+            <button style="padding:14px 22px; background:transparent; border:0; font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); cursor:pointer;">policies</button>
+          </div>
+          <div style="margin-top:24px; display:inline-flex; border:1px solid var(--line);">
+            <button style="padding:9px 18px; background:var(--ink); color:var(--paper); border:0; font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">daily</button>
+            <button style="padding:9px 18px; background:transparent; color:var(--g-700); border:0; border-left:1px solid var(--line); font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">weekly</button>
+            <button style="padding:9px 18px; background:transparent; color:var(--g-700); border:0; border-left:1px solid var(--line); font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">monthly</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────────────────────────────────────────────────────────── DROPDOWNS -->
+    <section id="dropdowns">
+      <p class="ds-h2">12 · components</p>
+      <h2 class="ds-section-title">Dropdowns &amp; menus.</h2>
+      <p class="ds-section-lede">Square corners, line border, 36px tall items, hover background tint. Selected item gets a leading orange square.</p>
+      <div class="ds-pair">
+        <div class="ds-demo ds-demo-block" style="display:flex; gap:24px; align-items:flex-start;">
+          <div style="border:1px solid var(--line); padding:4px 0; min-width:240px; background:var(--paper);">
+            <div style="padding:8px 14px; font-family:var(--mono); font-size:14px; color:var(--ink); display:flex; align-items:center; gap:10px;"><span style="width:8px; height:8px; background:var(--zop-orange);"></span>Atlas</div>
+            <div style="padding:8px 14px; font-family:var(--mono); font-size:14px; color:var(--g-700);">Showback</div>
+            <div style="padding:8px 14px; font-family:var(--mono); font-size:14px; color:var(--g-700);">Schedule</div>
+            <div style="padding:8px 14px; font-family:var(--mono); font-size:14px; color:var(--g-700);">Recommendations</div>
+            <div style="height:1px; background:var(--line); margin:6px 0;"></div>
+            <div style="padding:8px 14px; font-family:var(--mono); font-size:14px; color:var(--g-700);">Audit log</div>
+            <div style="padding:8px 14px; font-family:var(--mono); font-size:14px; color:var(--g-700);">Settings</div>
+          </div>
+          <div style="font-family:var(--mono); font-size:11px; color:var(--g-600); padding-top:12px; max-width:300px; line-height:1.6;">36px tall items · 8px square accent for the active row · 1px solid <code>--line</code> separator between groups.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────────────────────────── EMPTY / LOADING / ERROR -->
+    <section id="states">
+      <p class="ds-h2">13 · components</p>
+      <h2 class="ds-section-title">Empty &amp; loading states.</h2>
+      <p class="ds-section-lede">Centered, restrained, never apologetic. One sentence statement, one sentence next step, one CTA.</p>
+      <div class="ds-pair">
+        <div class="ds-demo ds-demo-block" style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+          <div style="border:1px solid var(--line); padding:48px 32px; text-align:center; background:var(--paper);">
+            <div style="width:14px; height:14px; background:var(--zop-orange); margin:0 auto 24px;"></div>
+            <div style="font-size:18px; font-weight:600; color:var(--ink); margin-bottom:8px;">No findings yet.</div>
+            <div style="font-size:13px; color:var(--g-700); line-height:1.55; margin-bottom:24px;">Connect an account to start scanning your cloud.</div>
+            <a class="btn btn-primary" href="#" style="font-size:13px;">Connect AWS <span class="arrow">→</span></a>
+          </div>
+          <div style="border:1px solid var(--line); padding:48px 32px; background:var(--paper);">
+            <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); margin-bottom:18px;">scanning · 64%</div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <div style="height:14px; background:var(--g-100); border:1px solid var(--line);"></div>
+              <div style="height:14px; background:var(--g-100); border:1px solid var(--line); width:80%;"></div>
+              <div style="height:14px; background:var(--g-100); border:1px solid var(--line); width:60%;"></div>
+              <div style="height:14px; background:var(--g-100); border:1px solid var(--line); width:90%;"></div>
+              <div style="height:14px; background:var(--g-100); border:1px solid var(--line); width:45%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────── SUB-BRANDS -->
+    <section id="subbrands">
+      <p class="ds-h2">14 · brand</p>
+      <h2 class="ds-section-title">Sub-brands.</h2>
+      <p class="ds-section-lede">Each sub-brand owns one color from the locked palette. Never swap. ZopNight is never orange. ZopDay is never green.</p>
+      <div class="ds-pair">
+        <div class="ds-demo ds-demo-block" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0; border:1px solid var(--line);">
+          <div style="padding:32px 28px; border-right:1px solid var(--line);">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;"><svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><use href="#mark-zopnight"/></svg><strong style="font-size:18px; letter-spacing:-.015em;">ZopNight</strong></div>
+            <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--zop-blue); margin-bottom:8px;">--zop-blue · #2A4494</div>
+            <p style="font-size:13px; color:var(--g-700); line-height:1.55; margin:0;">Cloud cost, infrastructure, CDCR. The Discovery + Remediation engine.</p>
+          </div>
+          <div style="padding:32px 28px; border-right:1px solid var(--line);">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;"><svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><use href="#mark-zopday"/></svg><strong style="font-size:18px; letter-spacing:-.015em;">ZopDay</strong></div>
+            <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--zop-orange); margin-bottom:8px;">--zop-orange · #F58549</div>
+            <p style="font-size:13px; color:var(--g-700); line-height:1.55; margin:0;">Activation, signature accent, high-energy moments. CTAs and findings markers.</p>
+          </div>
+          <div style="padding:32px 28px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;"><svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><use href="#mark-zopcloud"/></svg><strong style="font-size:18px; letter-spacing:-.015em;">ZopCloud</strong></div>
+            <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--zop-green); margin-bottom:8px;">--zop-green · #7FB236</div>
+            <p style="font-size:13px; color:var(--g-700); line-height:1.55; margin:0;">Multi-cloud platform, financial outcomes, success states. Used on dark surfaces only when text is white.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────────────────────────────────────────────────────── ACCESSIBILITY -->
+    <section id="a11y">
+      <p class="ds-h2">13 · a11y</p>
+      <h2 class="ds-section-title">Accessibility checklist.</h2>
+      <p class="ds-section-lede">WCAG 2.1 AA minimum. Every interactive element has a focus state. Heading hierarchy never skips levels.</p>
+      <ul style="font-family:var(--mono); font-size:13px; line-height:2; color:var(--g-700); list-style:none; padding:0; margin:0; max-width:720px">
+        <li>· 4.5:1 contrast for body text · 3:1 for 18px+ or 14px-bold large text</li>
+        <li>· Focus-visible state · 2px orange outline + 2px offset</li>
+        <li>· No <code>h2 → h4</code> level skips</li>
+        <li>· Form inputs always paired with <code>&lt;label&gt;</code></li>
+        <li>· Decorative SVGs have <code>aria-hidden="true"</code></li>
+        <li>· Brand marks have <code>aria-label</code> or are inside a labeled link</li>
+        <li>· Every interactive element reachable via Tab</li>
+        <li>· <code>prefers-reduced-motion</code> · animations stop or fade only</li>
+        <li>· Test both <code>html[data-theme="dark|light"]</code></li>
+        <li>· Test breakpoints at 375, 768, 1024, 1440</li>
+      </ul>
+    </section>
+
+  </div><!-- /.ds-main -->
+</main>
+
+<!-- Footer · keep slim, doesn't need full chrome on this reference page -->
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="product-documentation.html">Product documentation</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developer-documentation.html">Documentation</a></li>
+        <li><a href="developer-documentation.html#endpoints">API reference</a></li>
+        <li><a href="developer-documentation.html#mcp-server">MCP server</a></li>
+        <li><a href="developer-documentation.html#sdks">SDK &amp; CLI</a></li>
+        <li><a href="developer-documentation.html#webhooks">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-bottom" style="padding-top:20px; border-top:1px solid var(--line);">
+      <div>© <span data-year>2026</span> ZopDev, Inc. · all rights reserved · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">privacy</a> · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">terms</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+/* Active TOC highlight · cheap IntersectionObserver */
+(function(){
+  const links = document.querySelectorAll('.ds-toc a');
+  const map = new Map();
+  links.forEach(a => map.set(a.getAttribute('href').slice(1), a));
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      const a = map.get(e.target.id);
+      if(!a) return;
+      if(e.isIntersecting && e.intersectionRatio > 0.25){
+        links.forEach(l => l.classList.remove('is-active'));
+        a.classList.add('is-active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -60% 0px', threshold: [0, 0.25, 0.5, 0.75] });
+  document.querySelectorAll('.ds-main section').forEach(s => io.observe(s));
+})();
+</script>
+
+<script src="chrome-darkfold.js" defer></script>
+<script src="chrome-mobilenav.js" defer></script>
+</body>
+</html>

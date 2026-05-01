@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feature-section layout variants · ZopDev</title>
+<meta name="description" content="Six interactive replacements for the bento, sequential stepper, continuous-loop diagram, hub-and-spoke radial, dual-pane explorer, scroll-snap stack, and connected node graph. Pick one to ship.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --zop-blue:#2A4494; --zop-orange:#F58549; --zop-green:#7FB236;
+  --paper:#FAF7EC; --ink:#0A0A0A;
+  --line:#D9D3BF; --g-50:#F0EBDB; --g-100:#ECE7D7; --g-200:#E2DDCD;
+  /* --g-400 bumped from #A3A3A3 (2.4:1) to #6F6F6F (4.9:1) for AA on cream */
+  --g-300:#C9C4B5; --g-400:#6F6F6F; --g-500:#707070; --g-600:#525252; --g-700:#2a2a2a;
+  --font:'Space Grotesk',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --max:1320px;
+  --ease-out:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box;border-radius:0;margin:0;padding:0}
+em,i{font-style:normal}
+body{
+  font-family:var(--font);background:var(--paper);color:var(--ink);
+  letter-spacing:-0.02em;line-height:1.55;font-size:15px;
+  -webkit-font-smoothing:antialiased;
+}
+*:focus-visible{outline:2px solid var(--zop-orange);outline-offset:2px}
+.container{max-width:var(--max);margin:0 auto;padding:0 32px}
+button{font-family:inherit;cursor:pointer;border:0;background:none;letter-spacing:inherit}
+
+/* PAGE HEAD */
+.fl-head{padding:80px 0 56px;border-bottom:1px solid var(--line)}
+.fl-head .meta{font-family:var(--mono);font-size:11px;color:var(--zop-orange);
+  letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px;margin-bottom:18px}
+.fl-head .meta::before{content:'';width:10px;height:10px;background:var(--zop-orange)}
+.fl-head h1{font-size:clamp(44px,5.5vw,76px);font-weight:700;line-height:1;letter-spacing:-0.045em;margin:0 0 22px;max-width:1100px}
+.fl-head h1 em{color:var(--zop-orange)}
+.fl-head p{font-size:18px;color:var(--g-600);max-width:760px;line-height:1.55;margin:0}
+
+/* TOC */
+.fl-toc{padding:24px 0;background:var(--g-50);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
+.fl-toc .container{display:flex;gap:24px;flex-wrap:wrap;align-items:center}
+.fl-toc-label{font-family:var(--mono);font-size:11px;color:var(--g-600);letter-spacing:.14em;text-transform:uppercase}
+.fl-toc a{font-family:var(--mono);font-size:11px;color:var(--ink);letter-spacing:.04em;
+  border-bottom:1px solid transparent;transition:border-color var(--dur-fast,160ms) var(--ease-out)}
+.fl-toc a:hover{border-color:var(--zop-orange)}
+
+/* SECTION FRAME */
+.variant{padding:96px 0;border-bottom:1px solid var(--line)}
+.variant:last-of-type{border-bottom:0}
+.variant-head{display:flex;flex-direction:column;gap:14px;margin:0 0 48px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.variant-meta{font-family:var(--mono);font-size:12px;color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
+.variant-meta::before{content:'';width:10px;height:10px;background:var(--zop-orange)}
+.variant h2{font-size:clamp(32px,4vw,52px);font-weight:700;letter-spacing:-0.04em;line-height:1.05;margin:0}
+.variant h2 em{color:var(--zop-orange)}
+.variant .sub{font-size:16px;color:var(--g-600);max-width:680px;margin:0;line-height:1.55}
+
+/* ============================================================
+   V1 · SEQUENTIAL STEPPER · numbered steps + content swap
+   ============================================================ */
+.v1{}
+.v1-stepper{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--line);background:#FAF7EC}
+@media(max-width:780px){.v1-stepper{grid-template-columns:repeat(3,1fr)}}
+.v1-step{padding:18px 16px;border-right:1px solid var(--line);
+  display:flex;flex-direction:column;gap:6px;cursor:pointer;
+  transition:background var(--dur-fast,160ms) var(--ease-out)}
+.v1-step:last-child{border-right:0}
+.v1-step:hover{background:var(--g-50)}
+.v1-step.active{background:var(--ink);color:var(--paper)}
+.v1-step.active .v1-step-num{color:var(--zop-orange)}
+.v1-step.active .v1-step-name{color:var(--paper)}
+.v1-step-num{font-family:var(--mono);font-size:11px;color:var(--g-500);letter-spacing:.06em}
+.v1-step-name{font-size:14px;font-weight:600;letter-spacing:-0.01em}
+.v1-stage{padding:48px 40px;background:#FAF7EC;border:1px solid var(--line);border-top:0;
+  display:grid;grid-template-columns:1.4fr 1fr;gap:48px;min-height:340px;align-items:center}
+@media(max-width:780px){.v1-stage{grid-template-columns:1fr;padding:32px 24px}}
+.v1-content h3{font-size:32px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;margin:0 0 14px}
+.v1-content p{font-size:15px;color:var(--g-600);line-height:1.6;margin:0 0 22px;max-width:520px}
+.v1-content .pillars{display:flex;gap:10px;flex-wrap:wrap}
+.v1-content .pillars span{font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  padding:5px 10px;border:1px solid var(--line);color:var(--g-700)}
+.v1-visual{display:flex;align-items:center;justify-content:center;min-height:260px}
+.v1-visual svg{display:block;width:100%;max-width:280px;height:auto}
+
+/* ============================================================
+   V2 · CONTINUOUS-LOOP DIAGRAM · clickable nodes around a circle
+   ============================================================ */
+.v2-loop{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+@media(max-width:780px){.v2-loop{grid-template-columns:1fr}}
+.v2-svg-wrap{aspect-ratio:1/1;max-width:520px;margin:0 auto;width:100%;position:relative}
+.v2-svg-wrap svg{width:100%;height:100%;display:block}
+.v2-node{cursor:pointer;transition:transform var(--dur-fast,160ms) var(--ease-out)}
+.v2-node circle{transition:fill var(--dur-fast,160ms) var(--ease-out),stroke var(--dur-fast,160ms) var(--ease-out)}
+.v2-node text{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;fill:var(--ink)}
+.v2-node.active circle{fill:var(--zop-orange);stroke:var(--zop-orange)}
+.v2-node.active text{fill:var(--zop-orange)}
+.v2-svg-wrap .center-mark{font-family:var(--font);font-weight:700;font-size:28px;letter-spacing:-0.025em;fill:var(--ink);text-anchor:middle}
+.v2-svg-wrap .center-sub{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;fill:var(--g-500);text-anchor:middle}
+.v2-svg-wrap .ring{fill:none;stroke:var(--line);stroke-width:1;stroke-dasharray:3 5}
+.v2-detail{padding:32px;border:1px solid var(--line);background:#FAF7EC;min-height:320px}
+.v2-detail .meta{font-family:var(--mono);font-size:11px;color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase;margin:0 0 12px}
+.v2-detail h3{font-size:28px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;margin:0 0 14px}
+.v2-detail p{font-size:15px;color:var(--g-600);line-height:1.6;margin:0 0 18px}
+.v2-detail .nav{display:flex;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--g-500);padding-top:18px;border-top:1px solid var(--line)}
+.v2-detail .nav button{color:var(--g-700);transition:color var(--dur-fast,160ms) var(--ease-out)}
+.v2-detail .nav button:hover{color:var(--zop-orange)}
+
+/* ============================================================
+   V3 · HUB-AND-SPOKE RADIAL · Atlas at centre, 5 capabilities orbit
+   ============================================================ */
+.v3{position:relative}
+.v3-stage{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:center}
+@media(max-width:780px){.v3-stage{grid-template-columns:1fr}}
+.v3-radial{aspect-ratio:1/1;max-width:540px;margin:0 auto;width:100%;position:relative}
+.v3-radial svg{width:100%;height:100%}
+.v3-radial line{stroke:var(--line);stroke-width:1;transition:stroke var(--dur-fast,160ms) var(--ease-out)}
+.v3-radial line.active{stroke:var(--zop-orange);stroke-width:1.5}
+.v3-spoke{cursor:pointer;transition:transform var(--dur-fast,160ms) var(--ease-out)}
+.v3-spoke rect{stroke:var(--line);stroke-width:1;fill:#FAF7EC;transition:all var(--dur-fast,160ms) var(--ease-out)}
+.v3-spoke text{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;fill:var(--ink);text-anchor:middle}
+.v3-spoke.active rect{fill:var(--ink);stroke:var(--ink)}
+.v3-spoke.active text{fill:var(--paper)}
+.v3-spoke:hover rect{stroke:var(--zop-orange)}
+.v3-hub rect{fill:var(--zop-blue);stroke:var(--zop-blue)}
+.v3-hub text{fill:var(--paper);font-size:11px;font-weight:600}
+.v3-card{padding:36px;background:#FAF7EC;border:1px solid var(--line);min-height:320px}
+.v3-card .meta{font-family:var(--mono);font-size:11px;color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase;margin:0 0 14px}
+.v3-card h3{font-size:30px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;margin:0 0 16px}
+.v3-card p{font-size:15px;color:var(--g-600);line-height:1.6;margin:0 0 20px}
+.v3-card .stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding-top:18px;border-top:1px solid var(--line)}
+.v3-card .stat-k{font-family:var(--mono);font-size:10px;color:var(--g-500);letter-spacing:.1em;text-transform:uppercase;margin:0 0 4px}
+.v3-card .stat-v{font-size:22px;font-weight:700;letter-spacing:-0.02em;font-family:var(--font);font-variant-numeric:tabular-nums}
+
+/* ============================================================
+   V4 · DUAL-PANE EXPLORER · left rail + right detail
+   ============================================================ */
+.v4-explorer{display:grid;grid-template-columns:300px 1fr;border:1px solid var(--line);background:#FAF7EC;min-height:480px}
+@media(max-width:780px){.v4-explorer{grid-template-columns:1fr}}
+.v4-rail{border-right:1px solid var(--line);padding:8px 0;background:var(--g-50)}
+@media(max-width:780px){.v4-rail{border-right:0;border-bottom:1px solid var(--line)}}
+.v4-rail-label{font-family:var(--mono);font-size:10px;color:var(--g-500);letter-spacing:.14em;text-transform:uppercase;padding:14px 24px 6px}
+.v4-rail-item{display:flex;align-items:center;gap:14px;padding:14px 24px;cursor:pointer;
+  border-left:3px solid transparent;transition:background var(--dur-fast,160ms) var(--ease-out),border-color var(--dur-fast,160ms) var(--ease-out)}
+.v4-rail-item:hover{background:var(--g-100)}
+.v4-rail-item.active{background:#FAF7EC;border-left-color:var(--zop-orange)}
+.v4-rail-item .num{font-family:var(--mono);font-size:11px;color:var(--g-500);letter-spacing:.06em;flex-shrink:0;width:18px}
+.v4-rail-item.active .num{color:var(--zop-orange)}
+.v4-rail-item .nm{font-size:14px;font-weight:600;color:var(--ink)}
+.v4-rail-item .arr{margin-left:auto;font-family:var(--mono);font-size:14px;color:var(--g-400);transition:transform var(--dur-fast,160ms) var(--ease-out)}
+.v4-rail-item.active .arr{color:var(--zop-orange);transform:translateX(3px)}
+.v4-detail{padding:48px;display:flex;flex-direction:column;gap:24px}
+.v4-detail .crumb{font-family:var(--mono);font-size:11px;color:var(--g-500);letter-spacing:.06em;text-transform:uppercase;margin:0}
+.v4-detail h3{font-size:36px;font-weight:700;letter-spacing:-0.03em;line-height:1.05;margin:0}
+.v4-detail .lede{font-size:17px;color:var(--g-600);line-height:1.6;margin:0;max-width:620px}
+.v4-detail .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding-top:18px;border-top:1px solid var(--line);margin-top:auto}
+.v4-detail .gridcell{display:flex;flex-direction:column;gap:4px}
+.v4-detail .gridcell .k{font-family:var(--mono);font-size:10px;color:var(--g-500);letter-spacing:.12em;text-transform:uppercase}
+.v4-detail .gridcell .v{font-size:14px;color:var(--g-700);line-height:1.5}
+
+/* ============================================================
+   V5 · SCROLL-SNAP STACK · vertical stations, full-width
+   ============================================================ */
+.v5-rail{display:flex;flex-direction:column;gap:0}
+.v5-station{display:grid;grid-template-columns:140px 1fr 1fr;gap:32px;padding:48px 0;
+  border-top:1px solid var(--line);align-items:center;
+  scroll-snap-align:start;scroll-margin-top:80px}
+.v5-station:first-child{border-top:0}
+@media(max-width:780px){.v5-station{grid-template-columns:1fr;gap:18px;padding:36px 0}}
+.v5-num{font-family:var(--mono);font-size:11px;color:var(--g-500);letter-spacing:.14em;text-transform:uppercase}
+.v5-num strong{display:block;font-family:var(--font);font-size:96px;font-weight:300;letter-spacing:-0.05em;color:var(--ink);line-height:1;margin-top:6px}
+.v5-body h3{font-size:32px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;margin:0 0 12px}
+.v5-body p{font-size:15px;color:var(--g-600);line-height:1.6;margin:0 0 18px;max-width:520px}
+.v5-body .keyline{font-size:14px;color:var(--ink);font-weight:500;padding-top:14px;border-top:1px dashed var(--line)}
+.v5-body .keyline em{color:var(--zop-orange)}
+.v5-vis{display:flex;align-items:center;justify-content:center;min-height:200px}
+.v5-vis svg{width:100%;max-width:300px;height:auto}
+
+/* ============================================================
+   V6 · CONNECTED GRAPH · nodes + edges, click to highlight links
+   ============================================================ */
+.v6{}
+.v6-stage{display:grid;grid-template-columns:1.3fr 1fr;gap:48px;align-items:start}
+@media(max-width:780px){.v6-stage{grid-template-columns:1fr}}
+.v6-graph{aspect-ratio:1.3/1;max-width:680px;width:100%;position:relative;background:var(--g-50);border:1px solid var(--line)}
+.v6-graph svg{width:100%;height:100%}
+.v6-edge{stroke:var(--line);stroke-width:1;stroke-dasharray:3 4;transition:stroke var(--dur-fast,160ms) var(--ease-out),stroke-width var(--dur-fast,160ms) var(--ease-out),stroke-dasharray var(--dur-fast,160ms) var(--ease-out)}
+.v6-edge.lit{stroke:var(--zop-orange);stroke-width:1.6;stroke-dasharray:0}
+.v6-pip{cursor:pointer;transition:transform var(--dur-fast,160ms) var(--ease-out)}
+.v6-pip rect{fill:#FAF7EC;stroke:var(--line);stroke-width:1;transition:fill var(--dur-fast,160ms) var(--ease-out),stroke var(--dur-fast,160ms) var(--ease-out)}
+.v6-pip text{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;fill:var(--ink);text-anchor:middle;pointer-events:none}
+.v6-pip:hover rect{stroke:var(--zop-orange)}
+.v6-pip.active rect{fill:var(--ink);stroke:var(--ink)}
+.v6-pip.active text{fill:var(--paper)}
+.v6-pip.connected rect{stroke:var(--zop-orange);stroke-width:1.5}
+.v6-info{padding:0 0 0 0;display:flex;flex-direction:column;gap:18px}
+.v6-info .meta{font-family:var(--mono);font-size:11px;color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase}
+.v6-info h3{font-size:30px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;margin:0}
+.v6-info p{font-size:15px;color:var(--g-600);line-height:1.6;margin:0;max-width:520px}
+.v6-info .conns{padding-top:18px;border-top:1px solid var(--line)}
+.v6-info .conns-label{font-family:var(--mono);font-size:10px;color:var(--g-500);letter-spacing:.14em;text-transform:uppercase;margin:0 0 8px}
+.v6-info .conns-list{display:flex;flex-wrap:wrap;gap:8px}
+.v6-info .conns-list span{font-family:var(--mono);font-size:11px;letter-spacing:.04em;padding:4px 10px;border:1px solid var(--line);color:var(--g-700);background:#FAF7EC}
+
+footer.fl-foot{padding:32px;border-top:1px solid var(--line);max-width:var(--max);margin:0 auto;
+  font-family:var(--mono);font-size:11px;color:var(--g-500);letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
+footer.fl-foot a{color:inherit;border-bottom:1px solid var(--line)}
+</style>
+</head>
+<body>
+
+<header class="fl-head">
+  <div class="container">
+    <div class="meta">// feature-section layout bench · 6 alternatives</div>
+    <h1>Six interactive replacements <em>for the bento</em>.</h1>
+    <p>Same six capabilities, Atlas, Recommendation &amp; Auto Remediation, Autoscaler, Scheduling, Event Readiness, Showback, laid out six different ways. Every layout is working. Click, hover, swap, scroll. Pick one to ship.</p>
+  </div>
+</header>
+
+<nav class="fl-toc">
+  <div class="container">
+    <span class="fl-toc-label">// jump</span>
+    <a href="#v1">V1 · stepper</a>
+    <a href="#v2">V2 · loop</a>
+    <a href="#v3">V3 · radial</a>
+    <a href="#v4">V4 · explorer</a>
+    <a href="#v5">V5 · stack</a>
+    <a href="#v6">V6 · graph</a>
+  </div>
+</nav>
+
+<!-- ============= V1 · SEQUENTIAL STEPPER ============= -->
+<section class="variant v1" id="v1">
+  <div class="container">
+    <div class="variant-head">
+      <div class="variant-meta">// V1 · sequential stepper</div>
+      <h2>Click <em>01</em> through <em>06</em>. The story unfolds.</h2>
+      <p class="sub">A horizontal numbered stepper at the top. Click any step or use the active one as a reading position. Most narrative-friendly, reads as "here's the loop, in order."</p>
+    </div>
+    <div class="v1-stepper" role="tablist" aria-label="Capabilities">
+      <button class="v1-step active" data-i="0" role="tab"><span class="v1-step-num">01</span><span class="v1-step-name">Atlas</span></button>
+      <button class="v1-step" data-i="1" role="tab"><span class="v1-step-num">02</span><span class="v1-step-name">Recommend</span></button>
+      <button class="v1-step" data-i="2" role="tab"><span class="v1-step-num">03</span><span class="v1-step-name">Autoscaler</span></button>
+      <button class="v1-step" data-i="3" role="tab"><span class="v1-step-num">04</span><span class="v1-step-name">Schedule</span></button>
+      <button class="v1-step" data-i="4" role="tab"><span class="v1-step-num">05</span><span class="v1-step-name">Event Ready</span></button>
+      <button class="v1-step" data-i="5" role="tab"><span class="v1-step-num">06</span><span class="v1-step-name">Showback</span></button>
+    </div>
+    <div class="v1-stage">
+      <div class="v1-content" id="v1-content"></div>
+      <div class="v1-visual" id="v1-visual"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= V2 · CONTINUOUS LOOP ============= -->
+<section class="variant v2" id="v2">
+  <div class="container">
+    <div class="variant-head">
+      <div class="variant-meta">// V2 · continuous loop</div>
+      <h2>Six nodes around <em>one loop</em>.</h2>
+      <p class="sub">The "one continuous loop" claim made literal. All 6 capabilities sit on a circular path; click any to expand its details on the right. The loop diagram stays visible so the systemic relationship reads.</p>
+    </div>
+    <div class="v2-loop">
+      <div class="v2-svg-wrap" id="v2-svg-wrap">
+        <svg viewBox="0 0 400 400" id="v2-svg">
+          <circle class="ring" cx="200" cy="200" r="150"/>
+          <text class="center-mark" x="200" y="195">ZopDev</text>
+          <text class="center-sub" x="200" y="220">// the loop</text>
+        </svg>
+      </div>
+      <div class="v2-detail" id="v2-detail"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= V3 · HUB-AND-SPOKE ============= -->
+<section class="variant v3" id="v3">
+  <div class="container">
+    <div class="variant-head">
+      <div class="variant-meta">// V3 · hub &amp; spoke</div>
+      <h2>Atlas is the <em>hub</em>. Five spokes.</h2>
+      <p class="sub">Atlas at the centre, every other capability runs on top of the topology Atlas provides. Click any spoke to expand its detail card. The hub stays put.</p>
+    </div>
+    <div class="v3-stage">
+      <div class="v3-radial">
+        <svg viewBox="0 0 400 400" id="v3-svg">
+          <line id="v3-l1" x1="200" y1="200" x2="" y2=""/>
+          <line id="v3-l2" x1="200" y1="200" x2="" y2=""/>
+          <line id="v3-l3" x1="200" y1="200" x2="" y2=""/>
+          <line id="v3-l4" x1="200" y1="200" x2="" y2=""/>
+          <line id="v3-l5" x1="200" y1="200" x2="" y2=""/>
+          <g class="v3-hub" transform="translate(200,200)">
+            <rect x="-44" y="-22" width="88" height="44"/>
+            <text x="0" y="-2" text-anchor="middle">ATLAS</text>
+            <text x="0" y="13" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.7)">// the hub</text>
+          </g>
+        </svg>
+      </div>
+      <div class="v3-card" id="v3-card"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= V4 · DUAL-PANE EXPLORER ============= -->
+<section class="variant v4" id="v4">
+  <div class="container">
+    <div class="variant-head">
+      <div class="variant-meta">// V4 · dual-pane explorer</div>
+      <h2>Like a <em>docs explorer</em>.</h2>
+      <p class="sub">Left rail of capabilities, right pane of deep content. Tap any item, the right side updates. Closest analogue to the Stripe / Vercel docs UI, best for prospects who want to scan-then-deep-read.</p>
+    </div>
+    <div class="v4-explorer">
+      <div class="v4-rail" role="tablist">
+        <div class="v4-rail-label">// capabilities</div>
+        <button class="v4-rail-item active" data-i="0"><span class="num">01</span><span class="nm">Atlas</span><span class="arr">→</span></button>
+        <button class="v4-rail-item" data-i="1"><span class="num">02</span><span class="nm">Recommend</span><span class="arr">→</span></button>
+        <button class="v4-rail-item" data-i="2"><span class="num">03</span><span class="nm">Autoscaler</span><span class="arr">→</span></button>
+        <button class="v4-rail-item" data-i="3"><span class="num">04</span><span class="nm">Schedule</span><span class="arr">→</span></button>
+        <button class="v4-rail-item" data-i="4"><span class="num">05</span><span class="nm">Event Ready</span><span class="arr">→</span></button>
+        <button class="v4-rail-item" data-i="5"><span class="num">06</span><span class="nm">Showback</span><span class="arr">→</span></button>
+      </div>
+      <div class="v4-detail" id="v4-detail"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= V5 · SCROLL-SNAP STACK ============= -->
+<section class="variant v5" id="v5">
+  <div class="container">
+    <div class="variant-head">
+      <div class="variant-meta">// V5 · scroll-snap stack</div>
+      <h2>One station per capability. <em>Scroll through.</em></h2>
+      <p class="sub">Each capability gets a wide horizontal station, number, copy, mini-visual. Vertical scroll-snap makes each one land cleanly. Most editorial-feeling option, no clicks required.</p>
+    </div>
+    <div class="v5-rail" id="v5-rail" style="scroll-snap-type:y proximity"></div>
+  </div>
+</section>
+
+<!-- ============= V6 · CONNECTED GRAPH ============= -->
+<section class="variant v6" id="v6">
+  <div class="container">
+    <div class="variant-head">
+      <div class="variant-meta">// V6 · connected graph</div>
+      <h2>A <em>graph</em>, not a list.</h2>
+      <p class="sub">Capabilities as nodes, real dependencies as edges. Click any node, its connections light up + the right panel shows the related capabilities by name. Most operator-grade view; reveals system relationships.</p>
+    </div>
+    <div class="v6-stage">
+      <div class="v6-graph">
+        <svg viewBox="0 0 600 400" id="v6-svg"></svg>
+      </div>
+      <div class="v6-info" id="v6-info"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="product-documentation.html">Product documentation</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developer-documentation.html">Documentation</a></li>
+        <li><a href="developer-documentation.html#endpoints">API reference</a></li>
+        <li><a href="developer-documentation.html#mcp-server">MCP server</a></li>
+        <li><a href="developer-documentation.html#sdks">SDK &amp; CLI</a></li>
+        <li><a href="developer-documentation.html#webhooks">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-bottom" style="padding-top:20px; border-top:1px solid var(--line);">
+      <div>© <span data-year>2026</span> ZopDev, Inc. · all rights reserved · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">privacy</a> · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">terms</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+/* ============================================================
+   SHARED DATA · the 6 capabilities, used by all variants
+   ============================================================ */
+const CAPS = [
+  {
+    id:'atlas', num:'01', name:'Atlas',
+    full:'Multi-Cloud Atlas',
+    lede:'Every resource, every region, every account, live, in one view.',
+    body:'A read-only IAM role per account · scans every 4 minutes · zero agents, zero sidecars. Across AWS, Azure, GCP, OCI.',
+    pillars:['AWS','Azure','GCP','OCI','no agents'],
+    stat:[{k:'resources',v:'847'},{k:'regions',v:'12'}],
+    edges:['recommend','autoscaler','schedule','eventready','showback'],
+    icon:`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="32" r="28" fill="none" stroke="#0A0A0A" stroke-width="1"/>
+      <ellipse cx="32" cy="32" rx="28" ry="11" fill="none" stroke="#0A0A0A" stroke-width="1"/>
+      <ellipse cx="32" cy="32" rx="11" ry="28" fill="none" stroke="#0A0A0A" stroke-width="1"/>
+      <circle cx="20" cy="22" r="2.5" fill="#F58549"/>
+      <circle cx="44" cy="32" r="2.5" fill="#2A4494"/>
+      <circle cx="32" cy="46" r="2.5" fill="#7FB236"/>
+    </svg>`
+  },
+  {
+    id:'recommend', num:'02', name:'Recommend',
+    full:'Recommendation & Auto Remediation',
+    lede:'Recommend, fix, and prove it, one-click or auto-applied.',
+    body:'Every finding has a button that does the thing, terminate idle, right-size, enforce tags, snapshot. Reversible for 7 days.',
+    pillars:['1-click','auto-apply','reversible'],
+    stat:[{k:'findings',v:'132'},{k:'fixed/wk',v:'+87'}],
+    edges:['atlas','eventready'],
+    icon:`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6" y="14" width="52" height="6" fill="none" stroke="#0A0A0A" stroke-width="1"/>
+      <rect x="10" y="15" width="20" height="4" fill="#F58549"/>
+      <rect x="6" y="26" width="52" height="6" fill="none" stroke="#0A0A0A" stroke-width="1"/>
+      <rect x="10" y="27" width="34" height="4" fill="#7FB236"/>
+      <rect x="6" y="38" width="52" height="6" fill="none" stroke="#0A0A0A" stroke-width="1"/>
+      <rect x="10" y="39" width="14" height="4" fill="#F58549"/>
+      <path d="M 50 32 L 54 36 L 60 28" fill="none" stroke="#7FB236" stroke-width="1.5"/>
+    </svg>`
+  },
+  {
+    id:'autoscaler', num:'03', name:'Autoscaler',
+    full:'Predictive Autoscaler',
+    lede:'Capacity that follows demand, diurnal, weekly, event, one elastic plan.',
+    body:'Layers hour-of-day · day-of-week · launch spikes · queue pressure into one capacity plan per workload. Auto-rollback on SLO regression.',
+    pillars:['EKS','GKE','AKS','ASG','Cloud Run'],
+    stat:[{k:'cost cut',v:'27%'},{k:'SLO regress',v:'0'}],
+    edges:['atlas','schedule','showback'],
+    icon:`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <rect x="8" y="44" width="10" height="14" fill="#2A4494"/>
+      <rect x="22" y="34" width="10" height="24" fill="#F58549"/>
+      <rect x="36" y="22" width="10" height="36" fill="#7FB236"/>
+      <rect x="50" y="10" width="6" height="48" fill="#0A0A0A"/>
+      <path d="M 4 42 L 60 6" stroke="#0A0A0A" stroke-width="1" stroke-dasharray="2 3" fill="none"/>
+    </svg>`
+  },
+  {
+    id:'schedule', num:'04', name:'Schedule',
+    full:'Automated Scheduling',
+    lede:'Dev online when dev is online. Off when they\'re not.',
+    body:'Per-environment cron in the team\'s timezone. Stateful workloads use graceful shutdown + snapshot restore.',
+    pillars:['EC2','RDS','GKE','VMs'],
+    stat:[{k:'non-prod cut',v:'62%'},{k:'monthly $',v:'38k'}],
+    edges:['atlas','autoscaler'],
+    icon:`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="32" r="26" fill="none" stroke="#0A0A0A" stroke-width="1.2"/>
+      <line x1="32" y1="32" x2="32" y2="14" stroke="#F58549" stroke-width="2"/>
+      <line x1="32" y1="32" x2="46" y2="38" stroke="#0A0A0A" stroke-width="1.5"/>
+      <circle cx="32" cy="32" r="2.5" fill="#0A0A0A"/>
+      <line x1="32" y1="6" x2="32" y2="10"  stroke="#0A0A0A" stroke-width="1"/>
+      <line x1="32" y1="54" x2="32" y2="58" stroke="#0A0A0A" stroke-width="1"/>
+      <line x1="6"  y1="32" x2="10" y2="32" stroke="#0A0A0A" stroke-width="1"/>
+      <line x1="54" y1="32" x2="58" y2="32" stroke="#0A0A0A" stroke-width="1"/>
+    </svg>`
+  },
+  {
+    id:'eventready', num:'05', name:'Event Ready',
+    full:'Event Readiness',
+    lede:'Pre-flight your launch. Every lock checked before the doors open.',
+    body:'Capacity headroom · DB connection limits · cache hit-rate · IAM blast radius · TLS · snapshot freshness · dependency health.',
+    pillars:['PagerDuty','Slack','Jira','Linear','Datadog'],
+    stat:[{k:'checks',v:'42'},{k:'green',v:'38'}],
+    edges:['atlas','recommend','autoscaler'],
+    icon:`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 32 6 L 56 14 L 56 32 C 56 46 32 58 32 58 C 32 58 8 46 8 32 L 8 14 Z" fill="none" stroke="#0A0A0A" stroke-width="1.4"/>
+      <path d="M 32 16 L 48 22 L 48 32 C 48 42 32 50 32 50 C 32 50 16 42 16 32 L 16 22 Z" fill="#0A0A0A"/>
+      <path d="M 24 32 L 30 38 L 42 26" fill="none" stroke="#F0EBDB" stroke-width="2"/>
+    </svg>`
+  },
+  {
+    id:'showback', num:'06', name:'Showback',
+    full:'Showback & Cost Attribution',
+    lede:'Every dollar tagged to the team that drove it. Boardroom-ready.',
+    body:'Tag-based · account-based · workload-based attribution. PDF / CSV / Slack / email exports. Runs daily.',
+    pillars:['PDF','CSV','Slack','Webhook'],
+    stat:[{k:'attributed',v:'94%'},{k:'untagged',v:'6%'}],
+    edges:['atlas','autoscaler'],
+    icon:`<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6" y="6" width="52" height="52" fill="none" stroke="#0A0A0A" stroke-width="1"/>
+      <rect x="6" y="6" width="32" height="32" fill="#F58549"/>
+      <rect x="38" y="6" width="20" height="20" fill="#2A4494"/>
+      <rect x="38" y="26" width="20" height="20" fill="#7FB236"/>
+      <rect x="6" y="38" width="20" height="20" fill="#0A0A0A"/>
+      <rect x="26" y="38" width="12" height="20" fill="#F58549"/>
+    </svg>`
+  }
+];
+
+/* ============================================================
+   V1 · STEPPER · click step → swap content
+   ============================================================ */
+(function(){
+  const steps = document.querySelectorAll('.v1-step');
+  const content = document.getElementById('v1-content');
+  const visual = document.getElementById('v1-visual');
+  function render(i){
+    const c = CAPS[i];
+    steps.forEach((s, idx) => s.classList.toggle('active', idx === i));
+    content.innerHTML = `
+      <h3>${c.full}</h3>
+      <p>${c.lede} ${c.body}</p>
+      <div class="pillars">${c.pillars.map(p => `<span>${p}</span>`).join('')}</div>`;
+    visual.innerHTML = c.icon;
+  }
+  steps.forEach((s, idx) => s.addEventListener('click', () => render(idx)));
+  render(0);
+})();
+
+/* ============================================================
+   V2 · CONTINUOUS LOOP · circular nodes · click expand
+   ============================================================ */
+(function(){
+  const svg = document.getElementById('v2-svg');
+  const detail = document.getElementById('v2-detail');
+  const cx = 200, cy = 200, r = 150;
+  let active = 0;
+
+  CAPS.forEach((c, i) => {
+    const ang = (i / CAPS.length) * Math.PI * 2 - Math.PI / 2;
+    const nx = cx + Math.cos(ang) * r;
+    const ny = cy + Math.sin(ang) * r;
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('class', 'v2-node');
+    g.setAttribute('data-i', i);
+    g.setAttribute('transform', `translate(${nx},${ny})`);
+    g.innerHTML = `
+      <circle r="22" fill="#FAF7EC" stroke="#0A0A0A" stroke-width="1"/>
+      <text y="3" text-anchor="middle">${c.num}</text>
+      <text y="38" text-anchor="middle" fill="#525252" font-size="10">${c.name.toUpperCase()}</text>`;
+    g.addEventListener('click', () => render(i));
+    svg.appendChild(g);
+  });
+
+  function render(i){
+    active = i;
+    const c = CAPS[i];
+    svg.querySelectorAll('.v2-node').forEach((n, idx) => n.classList.toggle('active', idx === i));
+    detail.innerHTML = `
+      <div class="meta">// ${c.num} · ${c.name.toLowerCase()}</div>
+      <h3>${c.full}</h3>
+      <p>${c.lede}</p>
+      <p>${c.body}</p>
+      <div class="nav">
+        <button onclick="window.__v2nav(-1)">← prev</button>
+        <span>${(i+1).toString().padStart(2,'0')} / 06</span>
+        <button onclick="window.__v2nav(1)" style="margin-left:auto">next →</button>
+      </div>`;
+  }
+  window.__v2nav = (d) => render((active + d + CAPS.length) % CAPS.length);
+  render(0);
+})();
+
+/* ============================================================
+   V3 · HUB-AND-SPOKE · 5 spokes around Atlas
+   ============================================================ */
+(function(){
+  const svg = document.getElementById('v3-svg');
+  const card = document.getElementById('v3-card');
+  const cx = 200, cy = 200, r = 145;
+  const spokes = CAPS.slice(1); // atlas is the hub
+  let active = 0;
+
+  spokes.forEach((c, i) => {
+    const ang = (i / spokes.length) * Math.PI * 2 - Math.PI / 2;
+    const nx = cx + Math.cos(ang) * r;
+    const ny = cy + Math.sin(ang) * r;
+
+    const line = svg.querySelector(`#v3-l${i+1}`);
+    if(line){
+      line.setAttribute('x2', nx.toFixed(1));
+      line.setAttribute('y2', ny.toFixed(1));
+    }
+
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('class', 'v3-spoke');
+    g.setAttribute('data-i', i);
+    g.setAttribute('transform', `translate(${nx},${ny})`);
+    g.innerHTML = `
+      <rect x="-38" y="-18" width="76" height="36"/>
+      <text y="-1">${c.num}</text>
+      <text y="11">${c.name.toUpperCase()}</text>`;
+    g.addEventListener('click', () => render(i));
+    svg.appendChild(g);
+  });
+
+  function render(i){
+    active = i;
+    const c = spokes[i];
+    svg.querySelectorAll('.v3-spoke').forEach((n, idx) => n.classList.toggle('active', idx === i));
+    svg.querySelectorAll('line').forEach((l, idx) => l.classList.toggle('active', idx === i));
+    card.innerHTML = `
+      <div class="meta">// ${c.num} · runs on top of atlas</div>
+      <h3>${c.full}</h3>
+      <p>${c.body}</p>
+      <div class="stats">
+        ${c.stat.map(s => `<div><div class="stat-k">${s.k}</div><div class="stat-v">${s.v}</div></div>`).join('')}
+      </div>`;
+  }
+  render(0);
+})();
+
+/* ============================================================
+   V4 · DUAL-PANE EXPLORER · rail + detail
+   ============================================================ */
+(function(){
+  const items = document.querySelectorAll('.v4-rail-item');
+  const detail = document.getElementById('v4-detail');
+  function render(i){
+    const c = CAPS[i];
+    items.forEach((it, idx) => it.classList.toggle('active', idx === i));
+    detail.innerHTML = `
+      <div class="crumb">/ capabilities / ${c.id}</div>
+      <h3>${c.full}</h3>
+      <p class="lede">${c.lede}</p>
+      <p>${c.body}</p>
+      <div class="grid">
+        ${c.pillars.map(p => `<div class="gridcell"><div class="k">supports</div><div class="v">${p}</div></div>`).join('').slice(0, 4 * 200)}
+      </div>`;
+  }
+  items.forEach((it, idx) => it.addEventListener('click', () => render(idx)));
+  render(0);
+})();
+
+/* ============================================================
+   V5 · SCROLL-SNAP STACK · build stations
+   ============================================================ */
+(function(){
+  const rail = document.getElementById('v5-rail');
+  rail.innerHTML = CAPS.map(c => `
+    <article class="v5-station">
+      <div class="v5-num">capability<strong>${c.num}</strong></div>
+      <div class="v5-body">
+        <h3>${c.full}</h3>
+        <p>${c.body}</p>
+        <div class="keyline">"${c.lede}" <em>·</em> ${c.pillars.slice(0,3).join(' · ')}</div>
+      </div>
+      <div class="v5-vis">${c.icon}</div>
+    </article>
+  `).join('');
+})();
+
+/* ============================================================
+   V6 · CONNECTED GRAPH · nodes + edges
+   ============================================================ */
+(function(){
+  const svg = document.getElementById('v6-svg');
+  const info = document.getElementById('v6-info');
+  // Position the nodes manually for a balanced graph
+  const layout = {
+    atlas:      [300, 200],
+    recommend:  [120, 90],
+    autoscaler: [490, 100],
+    schedule:   [80, 290],
+    eventready: [310, 350],
+    showback:   [510, 290]
+  };
+
+  // Build edges (deduped pairs) from CAPS data
+  const edges = new Set();
+  CAPS.forEach(c => c.edges.forEach(o => {
+    const k = [c.id, o].sort().join('::');
+    edges.add(k);
+  }));
+
+  // Render edges first (so nodes draw on top)
+  edges.forEach(k => {
+    const [a, b] = k.split('::');
+    const [ax, ay] = layout[a], [bx, by] = layout[b];
+    const ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    ln.setAttribute('class', 'v6-edge');
+    ln.setAttribute('data-edge', k);
+    ln.setAttribute('x1', ax); ln.setAttribute('y1', ay);
+    ln.setAttribute('x2', bx); ln.setAttribute('y2', by);
+    svg.appendChild(ln);
+  });
+
+  // Render nodes
+  CAPS.forEach((c, i) => {
+    const [x, y] = layout[c.id];
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('class', 'v6-pip');
+    g.setAttribute('data-i', i);
+    g.setAttribute('data-id', c.id);
+    g.setAttribute('transform', `translate(${x},${y})`);
+    g.innerHTML = `
+      <rect x="-44" y="-22" width="88" height="44"/>
+      <text y="-2">${c.num}</text>
+      <text y="13">${c.name.toUpperCase()}</text>`;
+    g.addEventListener('click', () => render(i));
+    svg.appendChild(g);
+  });
+
+  function render(i){
+    const c = CAPS[i];
+    svg.querySelectorAll('.v6-pip').forEach((n, idx) => {
+      n.classList.toggle('active', idx === i);
+      const otherId = n.getAttribute('data-id');
+      n.classList.toggle('connected', idx !== i && c.edges.includes(otherId));
+    });
+    svg.querySelectorAll('.v6-edge').forEach(e => {
+      const k = e.getAttribute('data-edge');
+      const [a, b] = k.split('::');
+      const lit = (a === c.id || b === c.id);
+      e.classList.toggle('lit', lit);
+    });
+    const connNames = c.edges.map(id => CAPS.find(x => x.id === id).name);
+    info.innerHTML = `
+      <div class="meta">// ${c.num} · selected node</div>
+      <h3>${c.full}</h3>
+      <p>${c.lede}</p>
+      <p>${c.body}</p>
+      <div class="conns">
+        <div class="conns-label">// connected to · ${connNames.length} edges</div>
+        <div class="conns-list">${connNames.map(n => `<span>${n}</span>`).join('')}</div>
+      </div>`;
+  }
+  render(0);
+})();
+</script>
+
+</body>
+</html>
