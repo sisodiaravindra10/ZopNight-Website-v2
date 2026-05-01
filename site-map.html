@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site map · ZopDev</title>
+<meta name="description" content="Sorted index of every page, asset, and document in the ZopDev site repo. Production marketing pages, brand system, launch readiness, explorations, and utility pages, all categorized.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="homepage-chrome.css">
+<link rel="stylesheet" href="chrome-footer.css">
+<script src="chrome-darkfold.js" defer></script>
+
+<style>
+em,i,cite,dfn,var,address,blockquote{font-style:normal}
+
+/* a11y · focus rings */
+*:focus{outline:none}
+*:focus-visible{outline:2px solid var(--zop-orange);outline-offset:2px}
+a:focus-visible,button:focus-visible{outline-offset:3px}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition-duration:.01ms !important;animation-duration:.01ms !important}
+}
+
+.minav{padding:18px 0;border-bottom:1px solid var(--line);background:var(--paper);position:sticky;top:0;z-index:50}
+.minav .container{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.minav .wm{font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--ink)}
+.minav .wm span{color:var(--zop-orange)}
+.minav .right{font-family:var(--mono);font-size:11px;color:var(--g-500);letter-spacing:.14em;text-transform:uppercase}
+.minav .right a{color:var(--g-600);border-bottom:1px solid transparent;transition:border-color var(--dur-fast),color var(--dur-fast)}
+.minav .right a:hover{color:var(--zop-orange);border-color:var(--zop-orange)}
+
+.page-head{padding:64px 0 56px;border-bottom:1px solid var(--line)}
+.page-head .container{display:flex;flex-direction:column;gap:18px}
+.page-head .meta{font-family:var(--mono);font-size:11px;color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
+.page-head .meta::before{content:'';width:10px;height:10px;background:var(--zop-orange);flex-shrink:0}
+.page-head h1{font-size:clamp(40px,5.5vw,72px);font-weight:700;line-height:1;letter-spacing:-0.045em;margin:0;max-width:1100px}
+.page-head h1 em{font-style:normal;color:var(--zop-orange)}
+.page-head .lede{font-size:18px;color:var(--g-600);max-width:760px;line-height:1.55;margin:0}
+
+.status-strip{background:var(--ink);color:var(--zop-cream);border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.status-strip .container{display:grid;grid-template-columns:repeat(5,1fr);gap:0}
+@media(max-width:880px){.status-strip .container{grid-template-columns:repeat(2,1fr)}}
+.ss-cell{padding:28px 24px;border-right:1px solid #2a2a2a}
+.ss-cell:last-child{border-right:0}
+.ss-key{font-family:var(--mono);font-size:11px;color:#8a8378;letter-spacing:.14em;text-transform:uppercase;margin:0 0 8px}
+.ss-val{font-size:32px;line-height:1;font-weight:700;letter-spacing:-0.025em;color:var(--zop-cream);font-variant-numeric:tabular-nums}
+.ss-val em{font-style:normal;color:var(--zop-orange)}
+
+.jumps{padding:32px 0;border-bottom:1px solid var(--line);background:var(--g-50)}
+.jumps .container{display:flex;flex-wrap:wrap;gap:0;align-items:stretch;border:1px solid var(--line);background:var(--paper)}
+.jump{flex:1;min-width:160px;padding:14px 18px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px;transition:background var(--dur-fast)}
+.jump:last-child{border-right:0}
+.jump:hover{background:var(--g-100)}
+.jump-num{font-family:var(--mono);font-size:11px;color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase}
+.jump-title{font-size:14px;font-weight:600;color:var(--ink)}
+.jump-count{font-family:var(--mono);font-size:10px;color:var(--g-500);letter-spacing:.04em}
+
+section.cat{padding:56px 0;border-bottom:1px solid var(--line)}
+section.cat:last-of-type{border-bottom:0}
+.cat-head{display:flex;flex-direction:column;gap:14px;margin:0 0 32px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.cat-meta{font-family:var(--mono);font-size:11px;color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
+.cat-meta::before{content:'';width:10px;height:10px;background:var(--zop-orange);flex-shrink:0}
+.cat-row{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.cat h2{font-size:clamp(28px,3.4vw,44px);letter-spacing:-0.04em;font-weight:700;margin:0;line-height:1}
+.cat h2 em{font-style:normal;color:var(--zop-orange)}
+.cat .cat-sub{font-size:15px;color:var(--g-600);max-width:520px;line-height:1.55;margin:0}
+
+.files{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);background:var(--paper)}
+@media(max-width:980px){.files{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.files{grid-template-columns:1fr}}
+.file{padding:16px 20px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:4px;transition:background var(--dur-fast),color var(--dur-fast)}
+.file:nth-child(3n){border-right:0}
+.file:hover{background:var(--g-100)}
+.file:hover .file-name{color:var(--zop-orange)}
+@media(max-width:980px){.file{border-right:0}.file:nth-child(2n-1){border-right:1px solid var(--line)}.file:nth-child(2n){border-right:0}}
+@media(max-width:600px){.file{border-right:0}.file:nth-child(2n-1){border-right:0}}
+.file-path{font-family:var(--mono);font-size:10px;color:var(--g-500);letter-spacing:.04em}
+.file-name{font-size:14px;font-weight:600;color:var(--ink);line-height:1.4}
+.file-desc{font-size:12px;color:var(--g-500);line-height:1.4;margin-top:2px}
+
+.routes{margin-top:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);background:var(--paper)}
+@media(max-width:780px){.routes{grid-template-columns:1fr 1fr}}
+.route{padding:10px 14px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--g-700);letter-spacing:.02em;display:flex;align-items:center;gap:8px;transition:background var(--dur-fast),color var(--dur-fast)}
+.route:nth-child(4n){border-right:0}
+.route:hover{background:var(--g-100);color:var(--zop-orange)}
+.route::before{content:'/';color:var(--zop-orange);font-weight:700}
+@media(max-width:780px){.route{border-right:0}.route:nth-child(2n-1){border-right:1px solid var(--line)}.route:nth-child(4n){border-right:0}}
+
+.tree{font-family:var(--mono);font-size:13px;line-height:1.7;background:var(--zop-black);color:var(--zop-cream);padding:24px 28px;margin-top:32px;border:1px solid var(--ink);overflow-x:auto}
+.tree b{color:var(--zop-orange);font-weight:600}
+.tree .c{color:#7c7c7c}
+.tree a{color:inherit;border-bottom:1px solid transparent;transition:color var(--dur-fast),border-color var(--dur-fast)}
+.tree a:hover{color:var(--zop-orange);border-color:var(--zop-orange)}
+
+.cta{padding:80px 0;background:var(--ink);color:var(--zop-cream)}
+.cta .container{max-width:880px;text-align:center}
+.cta h2{font-size:clamp(32px,4vw,52px);letter-spacing:-0.04em;font-weight:700;margin:0 0 18px;line-height:1.05}
+.cta h2 em{font-style:normal;color:var(--zop-orange)}
+.cta p{font-size:16px;color:#a8a195;max-width:560px;margin:0 auto 28px;line-height:1.55}
+.cta .btn-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.cta .btn{display:inline-block;padding:14px 22px;font-family:var(--font);font-size:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;transition:transform var(--dur-fast),box-shadow var(--dur-fast)}
+.cta .btn-primary{background:var(--zop-orange);color:var(--ink);border:1px solid var(--zop-orange)}
+.cta .btn-primary:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 0 var(--zop-cream)}
+.cta .btn-ghost{background:transparent;color:var(--zop-cream);border:1px solid #2a2a34}
+.cta .btn-ghost:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 0 var(--zop-orange);border-color:var(--zop-orange)}
+</style>
+</head>
+<body>
+
+<nav class="minav">
+  <div class="container">
+    <a href="index.html" class="wm">Zop<span>Dev</span></a>
+    <span class="right">// site map · <a href="brand-launch.html">brand launch readiness</a></span>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="container">
+    <div class="meta">// site map · sorted</div>
+    <h1>Every file, <em>every page</em>, every asset.<br>In one place.</h1>
+    <p class="lede">A sorted, categorized map of the ZopDev site repository. Production pages, brand system, launch-readiness artifacts, error pages, and design explorations, grouped by purpose, not by filesystem order.</p>
+  </div>
+</header>
+
+<section class="status-strip">
+  <div class="container">
+    <div class="ss-cell"><div class="ss-key">Production pages</div><div class="ss-val">~80</div></div>
+    <div class="ss-cell"><div class="ss-key">Subdirectories</div><div class="ss-val">15</div></div>
+    <div class="ss-cell"><div class="ss-key">Launch artifacts</div><div class="ss-val"><em>38</em></div></div>
+    <div class="ss-cell"><div class="ss-key">Brand assets</div><div class="ss-val">12</div></div>
+    <div class="ss-cell"><div class="ss-key">Explorations</div><div class="ss-val">11</div></div>
+  </div>
+</section>
+
+<section class="jumps">
+  <div class="container">
+    <a href="#core" class="jump"><div class="jump-num">01</div><div class="jump-title">Core marketing</div><div class="jump-count">Homepage and primary site</div></a>
+    <a href="#solutions" class="jump"><div class="jump-num">02</div><div class="jump-title">Solutions &amp; compare</div><div class="jump-count">Per-cloud, per-role, vs-others</div></a>
+    <a href="#developers" class="jump"><div class="jump-num">03</div><div class="jump-title">Developers</div><div class="jump-count">Docs, SDK, CLI, MCP</div></a>
+    <a href="#trust" class="jump"><div class="jump-num">04</div><div class="jump-title">Trust &amp; legal</div><div class="jump-count">Compliance, DPA, SLA</div></a>
+    <a href="#resources" class="jump"><div class="jump-num">05</div><div class="jump-title">Resources</div><div class="jump-count">Blog, ebooks, glossary</div></a>
+    <a href="#brand" class="jump"><div class="jump-num">06</div><div class="jump-title">Brand system</div><div class="jump-count">Tokens, kit, guidelines</div></a>
+    <a href="#launch" class="jump"><div class="jump-num">07</div><div class="jump-title">Brand launch</div><div class="jump-count">38 readiness artifacts</div></a>
+    <a href="#utility" class="jump"><div class="jump-num">08</div><div class="jump-title">Utility</div><div class="jump-count">Errors, sign-in, status</div></a>
+  </div>
+</section>
+
+<!-- 01 CORE -->
+<section class="cat" id="core">
+  <div class="container">
+    <div class="cat-head">
+      <div class="cat-meta">// 01 · core marketing site</div>
+      <div class="cat-row">
+        <h2>The pages a visitor <em>actually lands on</em>.</h2>
+        <p class="cat-sub">Homepage, capability and product pages, customers, pricing, resources hub. The everyday surfaces of zop.dev.</p>
+      </div>
+    </div>
+    <div class="files">
+      <a class="file" href="index.html"><div class="file-path">/index.html</div><div class="file-name">Homepage</div><div class="file-desc">Hero globe, capability loop, customers, CTA</div></a>
+      <a class="file" href="about.html"><div class="file-path">/about.html</div><div class="file-name">About</div><div class="file-desc">Founder, mission, story, team, numbers</div></a>
+      <a class="file" href="customers.html"><div class="file-path">/customers.html</div><div class="file-name">Customers</div><div class="file-desc">Zopping, Linarc, Flexflow, ZopSmart, Pragmatic Leaders</div></a>
+      <a class="file" href="pricing.html"><div class="file-path">/pricing.html</div><div class="file-name">Pricing</div><div class="file-desc">Tiers, FAQ, comparison</div></a>
+      <a class="file" href="features.html"><div class="file-path">/features.html</div><div class="file-name">Features</div><div class="file-desc">Atlas, Posture, Schedule, Remediate, Showback</div></a>
+      <a class="file" href="product.html"><div class="file-path">/product.html</div><div class="file-name">Product overview</div><div class="file-desc">Loop diagram + capability deep-dives</div></a>
+      <a class="file" href="services.html"><div class="file-path">/services.html</div><div class="file-name">Services</div><div class="file-desc">Implementation, support, professional services</div></a>
+      <a class="file" href="integrations.html"><div class="file-path">/integrations.html</div><div class="file-name">Integrations</div><div class="file-desc">AWS, Azure, GCP, OCI, Slack, Datadog, Terraform</div></a>
+      <a class="file" href="partners.html"><div class="file-path">/partners.html</div><div class="file-name">Partners</div><div class="file-desc">Hyperscaler programs and channel</div></a>
+      <a class="file" href="demo.html"><div class="file-path">/demo.html</div><div class="file-name">Demo</div><div class="file-desc">Book a 30-min walkthrough</div></a>
+      <a class="file" href="contact.html"><div class="file-path">/contact.html</div><div class="file-name">Contact</div><div class="file-desc">Sales, support, press, general</div></a>
+      <a class="file" href="changelog.html"><div class="file-path">/changelog.html</div><div class="file-name">Changelog</div><div class="file-desc">Releases by date</div></a>
+      <a class="file" href="roadmap.html"><div class="file-path">/roadmap.html</div><div class="file-name">Roadmap</div><div class="file-desc">What's shipping next</div></a>
+      <a class="file" href="status.html"><div class="file-path">/status.html</div><div class="file-name">Status</div><div class="file-desc">Live system status</div></a>
+      <a class="file" href="playground.html"><div class="file-path">/playground.html</div><div class="file-name">Playground</div><div class="file-desc">Live scanner, no login</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- 02 SOLUTIONS -->
+<section class="cat" id="solutions">
+  <div class="container">
+    <div class="cat-head">
+      <div class="cat-meta">// 02 · solutions and compare</div>
+      <div class="cat-row">
+        <h2>Per-cloud, per-role, <em>vs the others</em>.</h2>
+        <p class="cat-sub">Solutions structured by cloud and by buyer role, plus head-to-head comparison pages with named competitors.</p>
+      </div>
+    </div>
+    <div class="files">
+      <a class="file" href="solutions.html"><div class="file-path">/solutions.html</div><div class="file-name">Solutions overview</div><div class="file-desc">Index of all solution pages</div></a>
+      <a class="file" href="solutions/aws.html"><div class="file-path">/solutions/aws.html</div><div class="file-name">AWS</div><div class="file-desc">Cost optimisation, posture, multi-account</div></a>
+      <a class="file" href="solutions/kubernetes.html"><div class="file-path">/solutions/kubernetes.html</div><div class="file-name">Kubernetes</div><div class="file-desc">Cluster cost, posture, scheduling</div></a>
+      <a class="file" href="solutions/devops.html"><div class="file-path">/solutions/devops.html</div><div class="file-name">DevOps</div><div class="file-desc">For platform / SRE leaders</div></a>
+      <a class="file" href="solutions/finops.html"><div class="file-path">/solutions/finops.html</div><div class="file-name">FinOps</div><div class="file-desc">Showback, allocation, anomaly detection</div></a>
+      <a class="file" href="solutions/cfo.html"><div class="file-path">/solutions/cfo.html</div><div class="file-name">For CFO</div><div class="file-desc">Cost discipline at scale</div></a>
+      <a class="file" href="solutions/anomaly-detection.html"><div class="file-path">/solutions/anomaly-detection.html</div><div class="file-name">Anomaly detection</div><div class="file-desc">Cost spike detection</div></a>
+      <a class="file" href="solutions/rightsizing.html"><div class="file-path">/solutions/rightsizing.html</div><div class="file-name">Rightsizing</div><div class="file-desc">Compute and storage rightsize</div></a>
+      <a class="file" href="compare/zopdev-vs-cloudhealth.html"><div class="file-path">/compare/cloudhealth</div><div class="file-name">vs CloudHealth</div><div class="file-desc">Direct comparison</div></a>
+      <a class="file" href="compare/zopdev-vs-castai.html"><div class="file-path">/compare/castai</div><div class="file-name">vs CAST AI</div><div class="file-desc">Direct comparison</div></a>
+      <a class="file" href="compare/zopdev-vs-spotio.html"><div class="file-path">/compare/spotio</div><div class="file-name">vs Spot.io</div><div class="file-desc">Direct comparison</div></a>
+      <a class="file" href="devops-hub.html"><div class="file-path">/devops-hub.html</div><div class="file-name">DevOps hub</div><div class="file-desc">Topic page + content cluster</div></a>
+      <a class="file" href="platform-engineering-hub.html"><div class="file-path">/platform-engineering-hub.html</div><div class="file-name">Platform engineering hub</div><div class="file-desc">Topic page + content cluster</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- 03 DEVELOPERS -->
+<section class="cat" id="developers">
+  <div class="container">
+    <div class="cat-head">
+      <div class="cat-meta">// 03 · developers</div>
+      <div class="cat-row">
+        <h2>Docs, SDK, CLI, MCP.</h2>
+        <p class="cat-sub">Everything an engineer needs to integrate with ZopDev.</p>
+      </div>
+    </div>
+    <div class="files">
+      <a class="file" href="developers.html"><div class="file-path">/developers.html</div><div class="file-name">Developers hub</div><div class="file-desc">Index for the dev surface</div></a>
+      <a class="file" href="developers/quickstart.html"><div class="file-path">/developers/quickstart.html</div><div class="file-name">Quickstart</div><div class="file-desc">First 30 minutes</div></a>
+      <a class="file" href="developers/sdk.html"><div class="file-path">/developers/sdk.html</div><div class="file-name">SDK</div><div class="file-desc">Official client libraries</div></a>
+      <a class="file" href="developers/webhooks.html"><div class="file-path">/developers/webhooks.html</div><div class="file-name">Webhooks</div><div class="file-desc">Event payload reference</div></a>
+      <a class="file" href="developers.html"><div class="file-path">/developers/mcp.html</div><div class="file-name">MCP server</div><div class="file-desc">Anthropic Model Context Protocol</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- 04 TRUST -->
+<section class="cat" id="trust">
+  <div class="container">
+    <div class="cat-head">
+      <div class="cat-meta">// 04 · trust and legal</div>
+      <div class="cat-row">
+        <h2>Compliance, contracts, <em>fine print</em>.</h2>
+        <p class="cat-sub">Public Trust Center, sub-processors, DPA, SLA, AI policy, legal pages.</p>
+      </div>
+    </div>
+    <div class="files">
+      <a class="file" href="trust.html"><div class="file-path">/trust.html</div><div class="file-name">Trust Center</div><div class="file-desc">SOC 2, ISO 27001, GDPR posture</div></a>
+      <a class="file" href="trust/subprocessors.html"><div class="file-path">/trust/subprocessors.html</div><div class="file-name">Sub-processors</div><div class="file-desc">Third parties handling customer data</div></a>
+      <a class="file" href="trust/dpa.html"><div class="file-path">/trust/dpa.html</div><div class="file-name">DPA</div><div class="file-desc">Data Processing Addendum</div></a>
+      <a class="file" href="trust/sla.html"><div class="file-path">/trust/sla.html</div><div class="file-name">SLA</div><div class="file-desc">Service Level Agreement</div></a>
+      <a class="file" href="trust/ai-policy.html"><div class="file-path">/trust/ai-policy.html</div><div class="file-name">AI policy</div><div class="file-desc">How we handle customer data with AI</div></a>
+      <a class="file" href="legal/privacy.html"><div class="file-path">/legal/privacy.html</div><div class="file-name">Privacy policy</div><div class="file-desc">Public legal text</div></a>
+      <a class="file" href="legal/terms.html"><div class="file-path">/legal/terms.html</div><div class="file-name">Terms of service</div><div class="file-desc">Public legal text</div></a>
+      <a class="file" href="legal/cookies.html"><div class="file-path">/legal/cookies.html</div><div class="file-name">Cookies</div><div class="file-desc">Cookie policy</div></a>
+      <a class="file" href="accessibility.html"><div class="file-path">/accessibility.html</div><div class="file-name">Accessibility</div><div class="file-desc">WCAG statement and contact</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- 05 RESOURCES -->
+<section class="cat" id="resources">
+  <div class="container">
+    <div class="cat-head">
+      <div class="cat-meta">// 05 · resources, blog, ebooks</div>
+      <div class="cat-row">
+        <h2>Long-form content. <em>Earned attention</em>.</h2>
+        <p class="cat-sub">Blog, ebooks, glossary, benchmarks, presentations, free guides.</p>
+      </div>
+    </div>
+    <div class="files">
+      <a class="file" href="resources.html"><div class="file-path">/resources.html</div><div class="file-name">Resources</div><div class="file-desc">Hub for blog + ebooks + benchmarks</div></a>
+      <a class="file" href="resources/blog.html"><div class="file-path">/resources/blog.html</div><div class="file-name">Blog landing</div><div class="file-desc">Index page</div></a>
+      <a class="file" href="resources/glossary.html"><div class="file-path">/resources/glossary.html</div><div class="file-name">Glossary</div><div class="file-desc">DevOps / cloud terms</div></a>
+      <a class="file" href="resources/benchmarks.html"><div class="file-path">/resources/benchmarks.html</div><div class="file-name">Benchmarks</div><div class="file-desc">Performance / cost data</div></a>
+      <a class="file" href="blog/index.html"><div class="file-path">/blog/index.html</div><div class="file-name">Blog (full archive)</div><div class="file-desc">14 in-depth posts</div></a>
+      <a class="file" href="ebooks/index.html"><div class="file-path">/ebooks/index.html</div><div class="file-name">Ebooks</div><div class="file-desc">5 long-form guides</div></a>
+      <a class="file" href="free-ebooks.html"><div class="file-path">/free-ebooks.html</div><div class="file-name">Free ebooks gate</div><div class="file-desc">Lead capture for ebooks</div></a>
+      <a class="file" href="presentations/index.html"><div class="file-path">/presentations/</div><div class="file-name">Presentations</div><div class="file-desc">Decks for talks &amp; events</div></a>
+      <a class="file" href="ci-cd-best-practices.html"><div class="file-path">/ci-cd-best-practices.html</div><div class="file-name">CI/CD best practices</div><div class="file-desc">Pillar topic page</div></a>
+      <a class="file" href="kubernetes-guide.html"><div class="file-path">/kubernetes-guide.html</div><div class="file-name">Kubernetes guide</div><div class="file-desc">Pillar topic page</div></a>
+      <a class="file" href="what-is-devops.html"><div class="file-path">/what-is-devops.html</div><div class="file-name">What is DevOps</div><div class="file-desc">Pillar topic page</div></a>
+    </div>
+
+    <h3 style="margin:32px 0 14px;font-size:14px;font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Blog posts</h3>
+    <div class="routes">
+      <a class="route" href="blog/aws-cost-anomaly-detection">aws-cost-anomaly-detection</a>
+      <a class="route" href="blog/azure-reserved-instances-vs-savings-plans">azure-ri-vs-savings</a>
+      <a class="route" href="blog/building-an-internal-developer-platform">internal-developer-platform</a>
+      <a class="route" href="blog/building-ci-cd-pipelines">building-ci-cd</a>
+      <a class="route" href="blog/cloud-governance-policy-as-code">cloud-governance</a>
+      <a class="route" href="blog/databricks-cluster-cost-optimization">databricks-cost</a>
+      <a class="route" href="blog/finops-maturity-model">finops-maturity</a>
+      <a class="route" href="blog/gcp-committed-use-discounts">gcp-cuds</a>
+      <a class="route" href="blog/getting-started-with-devops">devops-getting-started</a>
+      <a class="route" href="blog/infrastructure-as-code-terraform">iac-terraform</a>
+      <a class="route" href="blog/introduction-to-kubernetes">k8s-intro</a>
+      <a class="route" href="blog/resilience-patterns-for-cloud-architects">resilience-patterns</a>
+      <a class="route" href="blog/three-pillars-of-observability">observability-pillars</a>
+      <a class="route" href="blog/zero-trust-security-cloud">zero-trust-cloud</a>
+    </div>
+
+    <h3 style="margin:32px 0 14px;font-size:14px;font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Ebooks</h3>
+    <div class="routes">
+      <a class="route" href="ebooks/cloud-native-patterns">cloud-native-patterns</a>
+      <a class="route" href="ebooks/devops-guide">devops-guide</a>
+      <a class="route" href="ebooks/kubernetes-deep-dive">k8s-deep-dive</a>
+      <a class="route" href="ebooks/observability-guide">observability-guide</a>
+      <a class="route" href="ebooks/platform-engineering-101">platform-eng-101</a>
+    </div>
+  </div>
+</section>
+
+<!-- 06 BRAND -->
+<section class="cat" id="brand">
+  <div class="container">
+    <div class="cat-head">
+      <div class="cat-meta">// 06 · brand system</div>
+      <div class="cat-row">
+        <h2>Tokens, components, <em>kit</em>.</h2>
+        <p class="cat-sub">The design-system surface, guidelines, kit, styleguide, design tokens, motion library.</p>
+      </div>
+    </div>
+    <div class="files">
+      <a class="file" href="brand-guidelines.html"><div class="file-path">/brand-guidelines.html</div><div class="file-name">Brand guidelines</div><div class="file-desc">Public-facing brand spec</div></a>
+      <a class="file" href="brand-kit.html"><div class="file-path">/brand-kit.html</div><div class="file-name">Brand kit</div><div class="file-desc">Logos, templates, downloads</div></a>
+      <a class="file" href="design-system.html"><div class="file-path">/design-system.html</div><div class="file-name">Design system</div><div class="file-desc">Full system documentation</div></a>
+      <a class="file" href="styleguide.html"><div class="file-path">/styleguide.html</div><div class="file-name">Styleguide</div><div class="file-desc">Component patterns</div></a>
+      <a class="file" href="icons.html"><div class="file-path">/icons.html</div><div class="file-name">Icons</div><div class="file-desc">Icon set library</div></a>
+      <a class="file" href="motion.html"><div class="file-path">/motion.html</div><div class="file-name">Motion</div><div class="file-desc">Animation tokens + examples</div></a>
+      <a class="file" href="copy.html"><div class="file-path">/copy.html</div><div class="file-name">Copy patterns</div><div class="file-desc">Voice samples</div></a>
+      <a class="file" href="data-viz.html"><div class="file-path">/data-viz.html</div><div class="file-name">Data viz</div><div class="file-desc">Chart palette &amp; types</div></a>
+      <a class="file" href="states.html"><div class="file-path">/states.html</div><div class="file-name">States</div><div class="file-desc">Empty / loading / error states</div></a>
+      <a class="file" href="og.html"><div class="file-path">/og.html</div><div class="file-name">OG images</div><div class="file-desc">Open Graph templates</div></a>
+      <a class="file" href="assets.html"><div class="file-path">/assets.html</div><div class="file-name">Press assets</div><div class="file-desc">Logo pack + screenshots</div></a>
+      <a class="file" href="sub-brands.html"><div class="file-path">/sub-brands.html</div><div class="file-name">Sub-brands</div><div class="file-desc">ZopCloud, ZopNight, ZopSmart, etc.</div></a>
+    </div>
+    <h3 style="margin:32px 0 14px;font-size:14px;font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Shared assets</h3>
+    <div class="routes">
+      <a class="route" href="tokens.css">tokens.css</a>
+      <a class="route" href="homepage-chrome.css">homepage-chrome.css</a>
+      <a class="route" href="chrome.css">chrome.css</a>
+      <a class="route" href="chrome-darkfold.js">chrome-darkfold.js</a>
+    </div>
+  </div>
+</section>
+
+<!-- 07 LAUNCH -->
+<section class="cat" id="launch">
+  <div class="container">
+    <div class="cat-head">
+      <div class="cat-meta">// 07 · brand launch readiness</div>
+      <div class="cat-row">
+        <h2>The 38 launch artifacts. <em>One folder</em>.</h2>
+        <p class="cat-sub">Everything needed to ship the new ZopDev brand, runbooks, comms, sales enablement, brand guidelines, legal-ops, SEO, trust, product rebrand, launch-day, post-launch.</p>
+      </div>
+    </div>
+    <div class="files">
+      <a class="file" href="brand-launch.html" style="grid-column:span 3"><div class="file-path">/brand-launch.html</div><div class="file-name">→ Open the brand-launch readiness index</div><div class="file-desc">All 38 artifacts in one navigable page · with pending real-world tasks · open this for full launch context</div></a>
+    </div>
+
+    <div class="tree">
+<b>brand-launch/</b>
+├── <a href="brand-launch/README.html">README.html</a>                              <span class="c"># context, owners, timeline</span>
+├── <b>00-runbook/</b>                              <span class="c"># launch-day playbook</span>
+│   ├── <a href="brand-launch/00-runbook/LAUNCH-DAY-RUNBOOK.html">LAUNCH-DAY-RUNBOOK.html</a>
+│   ├── <a href="brand-launch/00-runbook/PRE-LAUNCH-CHECKLIST.html">PRE-LAUNCH-CHECKLIST.html</a>
+│   ├── <a href="brand-launch/00-runbook/GO-NO-GO-CRITERIA.html">GO-NO-GO-CRITERIA.html</a>
+│   └── <a href="brand-launch/00-runbook/ROLLBACK-PLAN.html">ROLLBACK-PLAN.html</a>
+├── <b>01-comms/</b>                                <span class="c"># 9 communications artifacts</span>
+│   ├── <a href="brand-launch/01-comms/blog-launch-post.html">blog-launch-post.html</a>
+│   ├── <a href="brand-launch/01-comms/customer-email.html">customer-email.html</a>
+│   ├── <a href="brand-launch/01-comms/press-release.html">press-release.html</a>
+│   ├── <a href="brand-launch/01-comms/twitter-thread.html">twitter-thread.html</a>
+│   ├── <a href="brand-launch/01-comms/linkedin-post.html">linkedin-post.html</a>
+│   ├── <a href="brand-launch/01-comms/internal-allhands.html">internal-allhands.html</a>
+│   ├── <a href="brand-launch/01-comms/faq-rebrand.html">faq-rebrand.html</a>
+│   └── <a href="brand-launch/01-comms/scheduled-posts.html">scheduled-posts.html</a>
+├── <b>02-sales-enablement/</b>                     <span class="c"># sales kit</span>
+│   ├── <a href="brand-launch/02-sales-enablement/one-pager.html">one-pager.html</a>
+│   ├── <a href="brand-launch/02-sales-enablement/battlecards.html">battlecards.html</a>
+│   ├── <a href="brand-launch/02-sales-enablement/sales-deck-outline.html">sales-deck-outline.html</a>
+│   ├── <a href="brand-launch/02-sales-enablement/objection-handling.html">objection-handling.html</a>
+│   └── <a href="brand-launch/02-sales-enablement/email-signature.html">email-signature.html</a>
+├── <b>03-brand-guidelines/</b>
+│   ├── <a href="brand-launch/03-brand-guidelines/BRAND-GUIDELINES.html">BRAND-GUIDELINES.html</a>
+│   ├── <a href="brand-launch/03-brand-guidelines/voice-and-tone.html">voice-and-tone.html</a>
+│   └── <a href="brand-launch/03-brand-guidelines/logo-usage.html">logo-usage.html</a>
+├── <b>04-legal-ops/</b>
+│   ├── <a href="brand-launch/04-legal-ops/dns-cutover.html">dns-cutover.html</a>
+│   ├── <a href="brand-launch/04-legal-ops/trademark-checklist.html">trademark-checklist.html</a>
+│   └── <a href="brand-launch/04-legal-ops/entity-update-checklist.html">entity-update-checklist.html</a>
+├── <b>05-seo-redirects/</b>
+│   ├── <a href="brand-launch/05-seo-redirects/301-redirect-map.html">301-redirect-map.html</a>
+│   └── <a href="brand-launch/05-seo-redirects/seo-meta-template.html">seo-meta-template.html</a>
+├── <b>06-trust-center/</b>
+│   ├── <a href="brand-launch/06-trust-center/trust-center-copy.html">trust-center-copy.html</a>
+│   └── <a href="brand-launch/06-trust-center/security-whitepaper.html">security-whitepaper.html</a>
+├── <b>07-product-rebrand/</b>
+│   ├── <a href="brand-launch/07-product-rebrand/product-rebrand-checklist.html">product-rebrand-checklist.html</a>
+│   └── <b>transactional-emails/</b>
+│       ├── <a href="brand-launch/07-product-rebrand/transactional-emails/welcome.html">welcome.html</a>
+│       ├── <a href="brand-launch/07-product-rebrand/transactional-emails/invite.html">invite.html</a>
+│       └── <a href="brand-launch/07-product-rebrand/transactional-emails/password-reset.html">password-reset.html</a>
+├── <b>08-launch-day/</b>
+│   ├── <a href="brand-launch/08-launch-day/monitoring-checklist.html">monitoring-checklist.html</a>
+│   └── <a href="brand-launch/08-launch-day/incident-response.html">incident-response.html</a>
+└── <b>09-post-launch/</b>
+    ├── <a href="brand-launch/09-post-launch/week1-checklist.html">week1-checklist.html</a>
+    ├── <a href="brand-launch/09-post-launch/retro-template.html">retro-template.html</a>
+    └── <a href="brand-launch/09-post-launch/metrics-dashboard.html">metrics-dashboard.html</a>
+    </div>
+  </div>
+</section>
+
+<!-- 08 UTILITY -->
+<section class="cat" id="utility">
+  <div class="container">
+    <div class="cat-head">
+      <div class="cat-meta">// 08 · utility &amp; explorations</div>
+      <div class="cat-row">
+        <h2>Errors, sign-in, <em>variants we didn't pick</em>.</h2>
+        <p class="cat-sub">Error pages, sign-in / sign-up, plus the unselected design exploration files we keep around for reference.</p>
+      </div>
+    </div>
+
+    <h3 style="margin:0 0 14px;font-size:14px;font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Auth + company</h3>
+    <div class="files">
+      <a class="file" href="signin.html"><div class="file-path">/signin.html</div><div class="file-name">Sign in</div><div class="file-desc">Login form</div></a>
+      <a class="file" href="careers.html"><div class="file-path">/careers.html</div><div class="file-name">Careers</div><div class="file-desc">Open roles + culture</div></a>
+      <a class="file" href="company/leadership.html"><div class="file-path">/company/leadership.html</div><div class="file-name">Leadership</div><div class="file-desc">Founder + team bios</div></a>
+      <a class="file" href="company/press.html"><div class="file-path">/company/press.html</div><div class="file-name">Press</div><div class="file-desc">Media kit + inquiries</div></a>
+    </div>
+
+    <h3 style="margin:32px 0 14px;font-size:14px;font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Error / status</h3>
+    <div class="files">
+      <a class="file" href="403.html"><div class="file-path">/403.html</div><div class="file-name">403 forbidden</div><div class="file-desc">Access denied</div></a>
+      <a class="file" href="404.html"><div class="file-path">/404.html</div><div class="file-name">404 not found</div><div class="file-desc">Branded miss page</div></a>
+      <a class="file" href="500.html"><div class="file-path">/500.html</div><div class="file-name">500 server error</div><div class="file-desc">Internal error</div></a>
+      <a class="file" href="maintenance.html"><div class="file-path">/maintenance.html</div><div class="file-name">Maintenance</div><div class="file-desc">Scheduled downtime</div></a>
+      <a class="file" href="offline.html"><div class="file-path">/offline.html</div><div class="file-name">Offline</div><div class="file-desc">PWA offline state</div></a>
+    </div>
+
+    <h3 style="margin:32px 0 14px;font-size:14px;font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Design explorations <span style="font-weight:400;color:var(--g-500)">– variants kept for reference, not shipped</span></h3>
+    <div class="files">
+      <a class="file" href="footer-variants.html"><div class="file-path">/footer-variants.html</div><div class="file-name">Footer · 10 variants</div><div class="file-desc">F1–F10 layout explorations</div></a>
+      <a class="file" href="footer-wordmark-variants.html"><div class="file-path">/footer-wordmark-variants.html</div><div class="file-name">Footer · wordmark + marquee</div><div class="file-desc">M1–M6 wordmark/marquee</div></a>
+      <a class="file" href="footer-final-variants.html"><div class="file-path">/footer-final-variants.html</div><div class="file-name">Footer · final 6</div><div class="file-desc">FF1–FF6 merged variants</div></a>
+      <a class="file" href="feature-grid-variants.html"><div class="file-path">/feature-grid-variants.html</div><div class="file-name">Feature grid · v1</div><div class="file-desc">10 layout variants</div></a>
+      <a class="file" href="feature-grid-variants-v2.html"><div class="file-path">/feature-grid-variants-v2.html</div><div class="file-name">Feature grid · v2</div><div class="file-desc">7 visual-rich variants</div></a>
+      <a class="file" href="feature-bento-styles.html"><div class="file-path">/feature-bento-styles.html</div><div class="file-name">Bento styles · 6</div><div class="file-desc">B0–B5 visual style explorations</div></a>
+      <a class="file" href="feature-visuals.html"><div class="file-path">/feature-visuals.html</div><div class="file-name">Feature visuals · 25</div><div class="file-desc">5 visuals × 5 features</div></a>
+      <a class="file" href="feature-visuals-premium.html"><div class="file-path">/feature-visuals-premium.html</div><div class="file-name">Premium visuals · 30</div><div class="file-desc">6 visuals × 5 features (light mode)</div></a>
+      <a class="file" href="playground-ideas.html"><div class="file-path">/playground-ideas.html</div><div class="file-name">Playground ideas</div><div class="file-desc">Sketches for live scanner</div></a>
+      <a class="file" href="index-blueprint.html"><div class="file-path">/index-blueprint.html</div><div class="file-name">Homepage blueprint</div><div class="file-desc">Early structural draft</div></a>
+      <a class="file" href="index-blueprint-v2.archived.html"><div class="file-path">/index-blueprint-v2.archived.html</div><div class="file-name">Homepage blueprint v2</div><div class="file-desc">Archived</div></a>
+      <a class="file" href="experiment.html"><div class="file-path">/experiment.html</div><div class="file-name">Experiment sandbox</div><div class="file-desc">Internal scratch</div></a>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container">
+    <h2>Open <em>where it matters</em>.</h2>
+    <p>The homepage is the front door. The brand-launch index is the launch cockpit. Pick one.</p>
+    <div class="btn-row">
+      <a href="index.html" class="btn btn-primary">Open the Homepage</a>
+      <a href="brand-launch.html" class="btn btn-ghost">Brand-launch readiness</a>
+    </div>
+  </div>
+</section>
+
+<script src="chrome-footer.js" defer></script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="logo-zopdev" viewBox="0 0 715 276">
+      <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+      <rect x="537" width="89" height="89" fill="#2A4494"/>
+      <rect x="626" width="89" height="89" fill="#F58549"/>
+      <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+    </symbol>
+  </defs>
+</svg>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="walkthrough.html">Product guide</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developers.html">Documentation</a></li>
+        <li><a href="developers.html">API reference</a></li>
+        <li><a href="developers.html">MCP server</a></li>
+        <li><a href="developers.html">SDK &amp; CLI</a></li>
+        <li><a href="developers.html">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-globe">
+      <div class="foot-globe-left">
+        <a href="/" class="foot-globe-mark" aria-label="ZopDev">
+          <svg class="foot-globe-logo" viewBox="0 0 715 276" aria-hidden="true">
+            <use href="#logo-zopdev"/>
+          </svg>
+        </a>
+      </div>
+      <div class="foot-globe-right">
+        <div class="foot-regions-v2" id="foot-regions-v2">
+          <canvas id="foot-regions-map"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom foot-bottom-3">
+      <div class="foot-copy">© <span data-year>2026</span> ZopDev · <a href="trust.html">privacy</a> · <a href="trust.html">terms</a></div>
+      <div class="foot-mid">made with <svg viewBox="0 0 7 6" aria-hidden="true"><rect x="1" y="0" width="1" height="1"/><rect x="2" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="0" y="1" width="7" height="1"/><rect x="0" y="2" width="7" height="1"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg> by <a href="https://zop.dev" target="_blank" rel="noopener">zop.dev</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

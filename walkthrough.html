@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full site walkthrough · ZopDev</title>
+<meta name="description" content="Scroll through every page of the ZopDev site, end to end. Built from the v2 sitemap, 13 sections, ~180 pages.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="homepage-chrome.css">
+<link rel="stylesheet" href="chrome-footer.css">
+<script src="chrome-darkfold.js" defer></script>
+<script src="chrome-mobilenav.js" defer></script>
+<script src="chrome-footer.js" defer></script>
+
+<style>
+em,i,cite,dfn,var,address,blockquote{font-style:normal}
+*:focus-visible{outline:2px solid var(--zop-orange);outline-offset:2px}
+
+/* PAGE HEAD */
+.wt-head{padding:80px 0 64px;border-bottom:1px solid var(--line);position:relative}
+.wt-head .container{display:flex;flex-direction:column;gap:22px;max-width:var(--max);margin:0 auto;padding:0 var(--gutter,32px)}
+.wt-head .meta{font-family:var(--mono);font-size:11px;color:var(--zop-orange);
+  letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
+.wt-head .meta::before{content:'';width:10px;height:10px;background:var(--zop-orange)}
+.wt-head h1{font-size:clamp(48px,6.5vw,96px);font-weight:700;line-height:.96;
+  letter-spacing:-0.05em;margin:0;max-width:1100px}
+.wt-head h1 em{font-style:normal;color:var(--zop-orange)}
+.wt-head .lede{font-size:19px;color:var(--g-600);max-width:760px;line-height:1.55;margin:0}
+
+/* STATS BAND */
+.wt-stats{background:var(--ink);color:var(--zop-cream);border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.wt-stats .container{display:grid;grid-template-columns:repeat(4,1fr);max-width:var(--max);margin:0 auto}
+@media(max-width:780px){.wt-stats .container{grid-template-columns:1fr 1fr}}
+.wt-stat{padding:32px 28px;border-right:1px solid #2a2a30}
+.wt-stat:last-child{border-right:0}
+.wt-stat .k{font-family:var(--mono);font-size:11px;color:#8a8378;letter-spacing:.14em;text-transform:uppercase;margin:0 0 10px}
+.wt-stat .v{font-size:48px;line-height:1;font-weight:700;letter-spacing:-0.025em;color:var(--zop-cream);font-variant-numeric:tabular-nums}
+.wt-stat .v em{font-style:normal;color:var(--zop-orange)}
+
+/* TOC · sticky table-of-contents that follows scroll. Solid paper bg per
+   token rules — no backdrop-filter blur outside the homepage nav. */
+.wt-toc{position:sticky;top:0;z-index:40;background:var(--paper);
+  border-bottom:1px solid var(--line);padding:14px 0}
+.wt-toc .inner{max-width:var(--max);margin:0 auto;padding:0 var(--gutter,32px);
+  display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none}
+.wt-toc .inner::-webkit-scrollbar{display:none}
+.wt-toc a{font-family:var(--mono);font-size:11px;color:var(--g-600);
+  letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;
+  white-space:nowrap;flex-shrink:0;
+  transition:color var(--dur-fast),background var(--dur-fast)}
+.wt-toc a:hover{color:var(--ink);background:var(--g-100)}
+.wt-toc a.is-current{color:var(--zop-orange)}
+
+/* SECTION FRAME */
+.wt-sec{padding:80px 0;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+.wt-sec:last-child{border-bottom:0}
+.wt-sec .container{max-width:var(--max);margin:0 auto;padding:0 var(--gutter,32px)}
+.wt-sec-head{display:flex;flex-direction:column;gap:14px;margin:0 0 40px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.wt-sec-meta{font-family:var(--mono);font-size:12px;color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
+.wt-sec-meta::before{content:'';width:10px;height:10px;background:var(--zop-orange);flex-shrink:0}
+.wt-sec h2{font-size:clamp(32px,4vw,56px);font-weight:700;letter-spacing:-0.04em;line-height:1.05;margin:0}
+.wt-sec h2 em{font-style:normal;color:var(--zop-orange)}
+.wt-sec .lede{font-size:17px;color:var(--g-600);max-width:760px;line-height:1.55;margin:0}
+
+/* SUB-SECTION */
+.wt-sub{margin:48px 0 0}
+.wt-sub:first-child{margin-top:0}
+.wt-sub h3{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin:0 0 8px;display:flex;align-items:center;gap:14px}
+.wt-sub h3 .num{font-family:var(--mono);font-size:13px;color:var(--g-500);letter-spacing:.06em;font-weight:500}
+.wt-sub p.sub-lede{font-size:14px;color:var(--g-600);margin:0 0 22px;line-height:1.55;max-width:680px}
+
+/* PAGE GRID · cards listing every page in the section */
+.wt-pages{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);background:var(--paper)}
+@media(max-width:980px){.wt-pages{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.wt-pages{grid-template-columns:1fr}}
+.wt-page{padding:18px 22px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);
+  display:flex;flex-direction:column;gap:6px;
+  transition:background var(--dur-fast),color var(--dur-fast)}
+.wt-page:nth-child(3n){border-right:0}
+.wt-page:hover{background:var(--g-100)}
+.wt-page:hover .wt-page-name{color:var(--zop-orange)}
+@media(max-width:980px){
+  .wt-page{border-right:0}
+  .wt-page:nth-child(2n-1){border-right:1px solid var(--line)}
+  .wt-page:nth-child(2n){border-right:0}
+}
+@media(max-width:600px){
+  .wt-page{border-right:0}
+  .wt-page:nth-child(2n-1){border-right:0}
+}
+.wt-page .path{font-family:var(--mono);font-size:11px;color:var(--g-500);letter-spacing:.04em}
+.wt-page-name{font-size:15px;font-weight:600;color:var(--ink);line-height:1.3}
+.wt-page-name .new{display:inline-block;font-family:var(--mono);font-size:9px;
+  background:var(--zop-orange);color:var(--paper);padding:2px 6px;letter-spacing:.08em;text-transform:uppercase;margin-left:8px;font-weight:600;vertical-align:middle}
+.wt-page-desc{font-size:12px;color:var(--g-500);line-height:1.5;margin-top:2px}
+
+/* CALLOUT TILE, for hero section / homepage block */
+.wt-hero-tile{background:var(--ink);color:var(--paper);padding:48px;display:grid;grid-template-columns:1.6fr 1fr;gap:48px;align-items:center;margin-top:8px}
+@media(max-width:780px){.wt-hero-tile{grid-template-columns:1fr;padding:32px}}
+.wt-hero-tile h3{font-size:clamp(28px,3vw,40px);font-weight:700;letter-spacing:-0.02em;line-height:1.1;margin:0 0 12px;color:var(--paper)}
+.wt-hero-tile p{font-size:15px;color:rgba(245,242,232,.7);line-height:1.55;margin:0 0 24px}
+.wt-hero-tile a{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--paper);
+  letter-spacing:.06em;text-transform:uppercase;padding:11px 18px;background:var(--zop-orange);
+  transition:transform var(--dur-fast),box-shadow var(--dur-fast)}
+.wt-hero-tile a:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 0 var(--paper)}
+.wt-hero-tile-meta{display:flex;flex-direction:column;gap:14px;font-family:var(--mono);font-size:12px;color:rgba(245,242,232,.55);letter-spacing:.04em}
+.wt-hero-tile-meta strong{color:var(--paper);font-weight:500}
+
+/* GLOBAL FOOTER */
+.wt-foot{background:#0A0A0A;padding:48px 32px;color:#9C9588;font-family:var(--mono);font-size:12px;letter-spacing:.04em;border-top:1px solid #1c1c20}
+.wt-foot .inner{max-width:var(--max);margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px}
+.wt-foot a{color:#D4CDB5}
+.wt-foot a:hover{color:#F0EBDB}
+.wt-foot .wm{font-family:var(--font);font-weight:700;font-size:18px;letter-spacing:-0.025em;color:#F0EBDB}
+.wt-foot .wm em{font-style:normal;color:var(--zop-orange)}
+</style>
+</head>
+<body>
+
+<!-- SVG defs · canonical brand symbols (mark-zopdev for the .final CTA) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mark-zopdev" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="16" height="16" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="16" y="0" width="16" height="16" fill="#F58549"/>
+      <rect x="16" y="16" width="16" height="16" fill="#7FB236"/>
+      <rect x="0" y="16" width="16" height="16" fill="#0A0A0A"/>
+    </symbol>
+    <symbol id="logo-zopdev" viewBox="0 0 715 276">
+      <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+      <rect x="537" width="89" height="89" fill="#2A4494"/>
+      <rect x="626" width="89" height="89" fill="#F58549"/>
+      <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ============ HEAD ============ -->
+<header class="wt-head" id="top">
+  <div class="container">
+    <div class="meta">// site walkthrough · sitemap v2</div>
+    <h1>Every page. <em>One scroll.</em><br>The full ZopDev site.</h1>
+    <p class="lede">A linear walkthrough of the v2 sitemap, 13 sections, ~180 pages, every link reachable. Built so anyone can audit the full information architecture in one pass without clicking through 12 levels of navigation.</p>
+  </div>
+</header>
+
+<section class="wt-stats">
+  <div class="container">
+    <div class="wt-stat"><div class="k">Sections</div><div class="v">13</div></div>
+    <div class="wt-stat"><div class="k">Total pages</div><div class="v"><em>~180</em></div></div>
+    <div class="wt-stat"><div class="k">Top-nav items</div><div class="v">6</div></div>
+    <div class="wt-stat"><div class="k">Phases to ship</div><div class="v">3</div></div>
+  </div>
+</section>
+
+<!-- ============ STICKY TOC ============ -->
+<nav class="wt-toc" aria-label="Walkthrough navigation">
+  <div class="inner">
+    <a href="#s0">// 00 nav</a>
+    <a href="#s1">01 home</a>
+    <a href="#s2">02 product</a>
+    <a href="#s3">03 solutions</a>
+    <a href="#s4">04 customers</a>
+    <a href="#s5">05 pricing</a>
+    <a href="#s6">06 resources</a>
+    <a href="#s7">07 developers</a>
+    <a href="#s8">08 trust</a>
+    <a href="#s9">09 partners</a>
+    <a href="#s10">10 company</a>
+    <a href="#s11">11 get started</a>
+    <a href="#s12">12 global</a>
+    <a href="#s13">13 standalone</a>
+  </div>
+</nav>
+
+<!-- ============ 00 · NAVIGATION ============ -->
+<section class="wt-sec" id="s0">
+  <div class="container">
+    <div class="wt-sec-head">
+      <div class="wt-sec-meta">// 00 · primary navigation</div>
+      <h2>Top bar, <em>6 items, 2 CTAs</em>.</h2>
+      <p class="lede">Trimmed from 9 → 6 nav items. Security &amp; Compliance moves into Trust Center (footer). Community moves into Resources. Get Started becomes the right-side CTAs. Company collapses to footer + an About link.</p>
+    </div>
+    <div class="wt-pages">
+      <a class="wt-page" href="zopnight.html"><div class="path">Product</div><div class="wt-page-name">Product mega-menu</div><div class="wt-page-desc">ZopDay · ZopNight · Platform · Roadmap &amp; What's New</div></a>
+      <a class="wt-page" href="solutions.html"><div class="path">Solutions</div><div class="wt-page-name">Solutions mega-menu</div><div class="wt-page-desc">By stage · industry · role · cloud · use case · deployment</div></a>
+      <a class="wt-page" href="customers.html"><div class="path">Customers</div><div class="wt-page-name">Customers</div><div class="wt-page-desc">Promoted to top-nav · #1 conversion driver for enterprise</div></a>
+      <a class="wt-page" href="pricing.html"><div class="path">Pricing</div><div class="wt-page-name">Pricing</div><div class="wt-page-desc">Tiers · marketplaces · feature matrix · vs competitors</div></a>
+      <a class="wt-page" href="blog.html"><div class="path">Resources</div><div class="wt-page-name">Resources mega-menu</div><div class="wt-page-desc">Blog · benchmarks · videos · templates · glossary · university</div></a>
+      <a class="wt-page" href="developers.html"><div class="path">Developers</div><div class="wt-page-name">Developers hub</div><div class="wt-page-desc">API · SDKs · CLI · Terraform · MCP · webhooks · tutorials</div></a>
+    </div>
+
+    <div class="wt-hero-tile">
+      <div>
+        <h3>Right-side CTAs</h3>
+        <p>Sign in · Book a Demo · Playground chip with live announcement-bar status. Persistent across every page via the shared chrome.</p>
+        <a href="signin.html">→ Sign in</a>
+      </div>
+      <div class="wt-hero-tile-meta">
+        <div>// <strong>announcement bar</strong> · MCP live in Claude &amp; Codex</div>
+        <div>// <strong>cmd-k</strong> · site-wide search overlay</div>
+        <div>// <strong>theme</strong> · auto dark / light scroll-driven</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 01 · HOMEPAGE ============ -->
+<section class="wt-sec" id="s1">
+  <div class="container">
+    <div class="wt-sec-head">
+      <div class="wt-sec-meta">// 01 · homepage</div>
+      <h2>Homepage <em>, </em> the front door.</h2>
+      <p class="lede">Existing homepage preserved · enhanced with live impact stats, interactive globe, CD/CR loop, deployment band, savings calculator, testimonials carousel, regions strip, and a trust band above footer.</p>
+    </div>
+    <div class="wt-pages">
+      <a class="wt-page" href="index.html"><div class="path">/</div><div class="wt-page-name">Homepage</div><div class="wt-page-desc">Hero globe · 6-capability bento · CDCR loop · pricing · cases · final CTA</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 · PRODUCT ============ -->
+<section class="wt-sec" id="s2">
+  <div class="container">
+    <div class="wt-sec-head">
+      <div class="wt-sec-meta">// 02 · product</div>
+      <h2>Product <em>, </em> two products + platform + roadmap.</h2>
+      <p class="lede">ZopDay (cloud governance) · ZopNight (cost optimisation) · Platform (cross-product) · Roadmap &amp; What's New. Each product gets dedicated feature pages, no more "everything on the homepage".</p>
+    </div>
+
+    <div class="wt-sub">
+      <h3><span class="num">2.1</span> ZopDay <span style="color:var(--g-500);font-weight:400">– cloud governance</span></h3>
+      <div class="wt-pages">
+        <a class="wt-page" href="zopday.html"><div class="path">/zopday</div><div class="wt-page-name">ZopDay overview</div><div class="wt-page-desc">Existing product homepage</div></a>
+        <a class="wt-page" href="/product/zopday/unified-dashboard.html"><div class="path">/product/zopday/unified-dashboard</div><div class="wt-page-name">Unified Dashboard <span class="new">new</span></div></a>
+        <a class="wt-page" href="/product/zopday/automation.html"><div class="path">/product/zopday/automation</div><div class="wt-page-name">Automation &amp; IaC <span class="new">new</span></div></a>
+        <a class="wt-page" href="/product/zopday/observability.html"><div class="path">/product/zopday/observability</div><div class="wt-page-name">Observability <span class="new">new</span></div></a>
+        <a class="wt-page" href="/product/zopday/cost-analytics.html"><div class="path">/product/zopday/cost-analytics</div><div class="wt-page-name">AI Cost Analytics <span class="new">new</span></div></a>
+        <a class="wt-page" href="/product/zopday/compliance.html"><div class="path">/product/zopday/compliance</div><div class="wt-page-name">Continuous Compliance <span class="new">new</span></div></a>
+        <a class="wt-page" href="/product/zopday/budgets-secrets.html"><div class="path">/product/zopday/budgets-secrets</div><div class="wt-page-name">Budgets &amp; Secrets <span class="new">new</span></div></a>
+      </div>
+    </div>
+
+    <div class="wt-sub">
+      <h3><span class="num">2.2</span> ZopNight <span style="color:var(--g-500);font-weight:400">– cost optimisation</span></h3>
+      <div class="wt-pages">
+        <a class="wt-page" href="zopnight.html"><div class="path">/zopnight</div><div class="wt-page-name">ZopNight overview</div><div class="wt-page-desc">Existing product homepage</div></a>
+        <a class="wt-page" href="/product/zopnight/atlas.html"><div class="path">/product/zopnight/atlas</div><div class="wt-page-name">Multi-Cloud Atlas <span class="new">new</span></div></a>
+        <a class="wt-page" href="/product/zopnight/mcp.html"><div class="path">/product/zopnight/mcp</div><div class="wt-page-name">MCP Server <span class="new">new</span></div></a>
+        <a class="wt-page" href="/product/zopnight/recommendation.html"><div class="path">/product/zopnight/recommendation</div><div class="wt-page-name">Recommendations <span class="new">new</span></div></a>
+        <a class="wt-page" href="/product/zopnight/schedule.html"><div class="path">/product/zopnight/schedule</div><div class="wt-page-name">Smart Scheduling <span class="new">new</span></div></a>
+        <a class="wt-page" href="/product/zopnight/showback.html"><div class="path">/product/zopnight/showback</div><div class="wt-page-name">Showback &amp; Chargeback <span class="new">new</span></div></a>
+      </div>
+    </div>
+
+    <div class="wt-sub">
+      <h3><span class="num">2.3</span> Platform <span style="color:var(--g-500);font-weight:400">– cross-product</span></h3>
+      <div class="wt-pages">
+        <a class="wt-page" href="integrations.html"><div class="path">/integrations</div><div class="wt-page-name">Integrations Hub <span class="new">new</span></div><div class="wt-page-desc">Searchable, filterable by cloud / category</div></a>
+        <a class="wt-page" href="/product/mcp-server.html"><div class="path">/product/mcp-server</div><div class="wt-page-name">MCP Server <span class="new">new</span></div><div class="wt-page-desc">Live in Claude &amp; Codex</div></a>
+        <a class="wt-page" href="playground.html"><div class="path">/playground</div><div class="wt-page-name">Live Playground <span class="new">new</span></div><div class="wt-page-desc">Real product, dummy data, no signup</div></a>
+        <a class="wt-page" href="/product/ai.html"><div class="path">/product/ai</div><div class="wt-page-name">ZopDev AI <span class="new">new</span></div><div class="wt-page-desc">Anomaly · forecasting · agentic remediation</div></a>
+      </div>
+    </div>
+
+    <div class="wt-sub">
+      <h3><span class="num">2.4</span> Roadmap &amp; What's New</h3>
+      <div class="wt-pages">
+        <a class="wt-page" href="changelog.html"><div class="path">/changelog</div><div class="wt-page-name">Changelog <span class="new">new</span></div><div class="wt-page-desc">Live, stack-style</div></a>
+        <a class="wt-page" href="roadmap.html"><div class="path">/roadmap</div><div class="wt-page-name">Public Roadmap <span class="new">new</span></div><div class="wt-page-desc">Now / Next / Later</div></a>
+        <a class="wt-page" href="whats-new.html"><div class="path">/whats-new</div><div class="wt-page-name">What's New <span class="new">new</span></div><div class="wt-page-desc">Quarterly feature rollups</div></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 · SOLUTIONS ============ -->
+<section class="wt-sec" id="s3">
+  <div class="container">
+    <div class="wt-sec-head">
+      <div class="wt-sec-meta">// 03 · solutions</div>
+      <h2>Solutions <em>, </em> by stage, role, cloud, use case.</h2>
+      <p class="lede">Procurement maps a specific pain to a specific page. The matrix below is the SEO + buyer-journey gold of the v2 sitemap.</p>
+    </div>
+
+    <div class="wt-sub">
+      <h3><span class="num">3.1</span> By Stage</h3>
+      <div class="wt-pages">
+        <a class="wt-page" href="/solutions/startups.html"><div class="path">/solutions/startups</div><div class="wt-page-name">Startups</div></a>
+        <a class="wt-page" href="/solutions/smb.html"><div class="path">/solutions/smb</div><div class="wt-page-name">SMB &amp; Mid-Market</div></a>
+        <a class="wt-page" href="/solutions/enterprise.html"><div class="path">/solutions/enterprise</div><div class="wt-page-name">Enterprise</div></a>
+      </div>
+    </div>
+
+    <div class="wt-sub">
+      <h3><span class="num">3.2</span> By Industry</h3>
+      <div class="wt-pages">
+        <a class="wt-page" href="/solutions/finance.html"><div class="path">/solutions/finance</div><div class="wt-page-name">Finance</div></a>
+        <a class="wt-page" href="/solutions/retail.html"><div class="path">/solutions/retail</div><div class="wt-page-name">Retail &amp; eCommerce</div></a>
+        <a class="wt-page" href="/solutions/saas.html"><div class="path">/solutions/saas</div><div class="wt-page-name">SaaS &amp; Tech</div></a>
+        <a class="wt-page" href="/solutions/healthcare.html"><div class="path">/solutions/healthcare</div><div class="wt-page-name">Healthcare <span class="new">new</span></div></a>
+        <a class="wt-page" href="/solutions/media.html"><div class="path">/solutions/media</div><div class="wt-page-name">Media &amp; Entertainment <span class="new">new</span></div></a>
+        <a class="wt-page" href="/solutions/gaming.html"><div class="path">/solutions/gaming</div><div class="wt-page-name">Gaming <span class="new">new</span></div></a>
+        <a class="wt-page" href="/solutions/public-sector.html"><div class="path">/solutions/public-sector</div><div class="wt-page-name">Public Sector <span class="new">new</span></div></a>
+        <a class="wt-page" href="/solutions/education.html"><div class="path">/solutions/education</div><div class="wt-page-name">Education <span class="new">new</span></div></a>
+      </div>
+    </div>
+
+    <div class="wt-sub">
+      <h3><span class="num">3.3</span> By Role <span class="new">new</span></h3>
+      <div class="wt-pages">
+        <a class="wt-page" href="/solutions/finops.html"><div class="path">/solutions/finops</div><div class="wt-page-name">FinOps</div></a>
+        <a class="wt-page" href="/solutions/devops.html"><div class="path">/solutions/devops</div><div class="wt-page-name">DevOps &amp; Platform</div></a>
+        <a class="wt-page" href="/solutions/sre.html"><div class="path">/solutions/sre</div><div class="wt-page-name">SREs</div></a>
+        <a class="wt-page" href="/solutions/developer.html"><div class="path">/solutions/developer</div><div class="wt-page-name">Developers</div></a>
+        <a class="wt-page" href="/solutions/cfo.html"><div class="path">/solutions/cfo</div><div class="wt-page-name">CFOs / Finance</div></a>
+        <a class="wt-page" href="/solutions/cto.html"><div class="path">/solutions/cto</div><div class="wt-page-name">CTOs / CIOs</div></a>
+        <a class="wt-page" href="/solutions/security.html"><div class="path">/solutions/security</div><div class="wt-page-name">Security &amp; GRC</div></a>
+      </div>
+    </div>
+
+    <div class="wt-sub">
+      <h3><span class="num">3.4</span> By Cloud <span class="new">new</span></h3>
+      <div class="wt-pages">
+        <a class="wt-page" href="/solutions/aws.html"><div class="path">/solutions/aws</div><div class="wt-page-name">AWS</div></a>
+        <a class="wt-page" href="/solutions/azure.html"><div class="path">/solutions/azure</div><div class="wt-page-name">Azure</div></a>
+        <a class="wt-page" href="/solutions/gcp.html"><div class="path">/solutions/gcp</div><div class="wt-page-name">GCP</div></a>
+        <a class="wt-page" href="/solutions/oci.html"><div class="path">/solutions/oci</div><div class="wt-page-name">OCI</div></a>
+        <a class="wt-page" href="/solutions/kubernetes.html"><div class="path">/solutions/kubernetes</div><div class="wt-page-name">Kubernetes</div></a>
+        <a class="wt-page" href="/solutions/multicloud.html"><div class="path">/solutions/multicloud</div><div class="wt-page-name">Multi-cloud &amp; Hybrid</div></a>
+      </div>
+    </div>
+
+    <div class="wt-sub">
+      <h3><span class="num">3.5</span> By Use Case <span class="new">new, SEO gold</span></h3>
+      <div class="wt-pages">
+        <a class="wt-page" href="/solutions/non-prod-savings.html"><div class="path">/solutions/non-prod-savings</div><div class="wt-page-name">Non-prod scheduling</div></a>
+        <a class="wt-page" href="/solutions/rightsizing.html"><div class="path">/solutions/rightsizing</div><div class="wt-page-name">Rightsizing</div></a>
+        <a class="wt-page" href="/solutions/commitment-management.html"><div class="path">/solutions/commitment-management</div><div class="wt-page-name">Commitment Management</div></a>
+        <a class="wt-page" href="/solutions/anomaly-detection.html"><div class="path">/solutions/anomaly-detection</div><div class="wt-page-name">Anomaly Detection</div></a>
+        <a class="wt-page" href="/solutions/showback-chargeback.html"><div class="path">/solutions/showback-chargeback</div><div class="wt-page-name">Showback / Chargeback</div></a>
+        <a class="wt-page" href="/solutions/budget-enforcement.html"><div class="path">/solutions/budget-enforcement</div><div class="wt-page-name">Budget Enforcement</div></a>
+        <a class="wt-page" href="/solutions/unit-economics.html"><div class="path">/solutions/unit-economics</div><div class="wt-page-name">Unit Economics</div></a>
+        <a class="wt-page" href="/solutions/kubernetes-cost.html"><div class="path">/solutions/kubernetes-cost</div><div class="wt-page-name">Kubernetes Cost</div></a>
+        <a class="wt-page" href="/solutions/ai-ml-cost.html"><div class="path">/solutions/ai-ml-cost</div><div class="wt-page-name">AI/ML Workload Cost <span class="new">new</span></div></a>
+        <a class="wt-page" href="/solutions/sustainability.html"><div class="path">/solutions/sustainability</div><div class="wt-page-name">Sustainability / Carbon <span class="new">new</span></div></a>
+        <a class="wt-page" href="/solutions/data-workload-cost.html"><div class="path">/solutions/data-workload-cost</div><div class="wt-page-name">Data Workload Cost</div></a>
+      </div>
+    </div>
+
+    <div class="wt-sub">
+      <h3><span class="num">3.6</span> By Deployment <span class="new">new</span></h3>
+      <div class="wt-pages">
+        <a class="wt-page" href="/solutions/saas-deployment.html"><div class="path">/solutions/saas-deployment</div><div class="wt-page-name">SaaS</div></a>
+        <a class="wt-page" href="/solutions/self-hosted.html"><div class="path">/solutions/self-hosted</div><div class="wt-page-name">Self-Hosted</div></a>
+        <a class="wt-page" href="/solutions/aws-marketplace.html"><div class="path">/solutions/aws-marketplace</div><div class="wt-page-name">AWS Marketplace</div></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 · CUSTOMERS ============ -->
+<section class="wt-sec" id="s4">
+  <div class="container">
+    <div class="wt-sec-head">
+      <div class="wt-sec-meta">// 04 · customers · new top-nav</div>
+      <h2>Customers <em>, </em> the conversion driver.</h2>
+      <p class="lede">Promoted from "buried in Resources" to its own top-nav item. Logo wall · case studies · stories · testimonials · spotlight · benchmarks · ROI report.</p>
+    </div>
+    <div class="wt-pages">
+      <a class="wt-page" href="customers.html"><div class="path">/customers</div><div class="wt-page-name">Customers index</div><div class="wt-page-desc">Logo wall + filter (industry / size / cloud / use case)</div></a>
+      <a class="wt-page" href="/customers/case-studies.html"><div class="path">/customers/case-studies</div><div class="wt-page-name">Case studies</div></a>
+      <a class="wt-page" href="/customers/stories.html"><div class="path">/customers/stories/:slug</div><div class="wt-page-name">Individual stories</div></a>
+      <a class="wt-page" href="/customers/testimonials.html"><div class="path">/customers/testimonials</div><div class="wt-page-name">Testimonials gallery</div></a>
+      <a class="wt-page" href="/customers/spotlight.html"><div class="path">/customers/spotlight</div><div class="wt-page-name">Customer spotlight</div></a>
+      <a class="wt-page" href="/customers/benchmarks.html"><div class="path">/customers/benchmarks</div><div class="wt-page-name">ROI benchmarks</div></a>
+      <a class="wt-page" href="/customers/roi-report.html"><div class="path">/customers/roi-report</div><div class="wt-page-name">Annual ROI report <span class="new">gated</span></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 · PRICING ============ -->
+<section class="wt-sec" id="s5">
+  <div class="container">
+    <div class="wt-sec-head">
+      <div class="wt-sec-meta">// 05 · pricing</div>
+      <h2>Pricing <em>, </em> tiers, marketplaces, vs competitors.</h2>
+      <p class="lede">Tier cards · per-product plans · add-ons · marketplace listings · feature comparison matrix · vs-competitor pages · FAQ.</p>
+    </div>
+
+    <div class="wt-pages">
+      <a class="wt-page" href="pricing.html"><div class="path">/pricing</div><div class="wt-page-name">Pricing</div><div class="wt-page-desc">Tiers + per-product plans + add-ons + matrix + FAQ</div></a>
+    </div>
+
+    <div class="wt-sub">
+      <h3><span class="num">5.6</span> Compare vs Competitors <span class="new">new, SEO + conversion</span></h3>
+      <div class="wt-pages">
+        <a class="wt-page" href="/compare/zopdev-vs-cloudhealth.html"><div class="path">/compare/zopdev-vs-cloudhealth</div><div class="wt-page-name">vs CloudHealth</div></a>
+        <a class="wt-page" href="/compare/zopdev-vs-spot.html"><div class="path">/compare/zopdev-vs-spot</div><div class="wt-page-name">vs Spot.io</div></a>
+        <a class="wt-page" href="/compare/zopdev-vs-castai.html"><div class="path">/compare/zopdev-vs-castai</div><div class="wt-page-name">vs Cast.ai</div></a>
+        <a class="wt-page" href="/compare/zopdev-vs-zesty.html"><div class="path">/compare/zopdev-vs-zesty</div><div class="wt-page-name">vs Zesty</div></a>
+        <a class="wt-page" href="/compare/zopdev-vs-apptio.html"><div class="path">/compare/zopdev-vs-apptio</div><div class="wt-page-name">vs Apptio (Cloudability)</div></a>
+        <a class="wt-page" href="/compare/zopdev-vs-cloudzero.html"><div class="path">/compare/zopdev-vs-cloudzero</div><div class="wt-page-name">vs CloudZero</div></a>
+        <a class="wt-page" href="/compare/zopdev-vs-densify.html"><div class="path">/compare/zopdev-vs-densify</div><div class="wt-page-name">vs Densify</div></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 · RESOURCES ============ -->
+<section class="wt-sec" id="s6">
+  <div class="container">
+    <div class="wt-sec-head">
+      <div class="wt-sec-meta">// 06 · resources</div>
+      <h2>Resources <em>, </em> long-form content + community.</h2>
+      <p class="lede">Blog · best practices · whitepapers · FAQs · persona guides · webinars · benchmarks · reports · videos · templates · glossary · migration · newsletter · university · FOCUS · community library. Calculators expanded. Customer stories moved to Customers; API docs moved to Developers.</p>
+    </div>
+
+    <div class="wt-pages">
+      <a class="wt-page" href="blog.html"><div class="path">/resources</div><div class="wt-page-name">Resources hub</div></a>
+      <a class="wt-page" href="/resources/blog.html"><div class="path">/resources/blog</div><div class="wt-page-name">Blog</div></a>
+      <a class="wt-page" href="/resources/architecture.html"><div class="path">/resources/architecture</div><div class="wt-page-name">Architecture &amp; Best Practices</div></a>
+      <a class="wt-page" href="/resources/whitepapers.html"><div class="path">/resources/whitepapers</div><div class="wt-page-name">Compliance &amp; Security Whitepapers</div></a>
+      <a class="wt-page" href="/resources/faqs.html"><div class="path">/resources/faqs</div><div class="wt-page-name">FAQs &amp; Troubleshooting</div></a>
+      <a class="wt-page" href="/resources/persona-guides.html"><div class="path">/resources/persona-guides</div><div class="wt-page-name">Persona Guides</div></a>
+      <a class="wt-page" href="/resources/webinars.html"><div class="path">/resources/webinars</div><div class="wt-page-name">Webinars &amp; Podcast</div></a>
+      <a class="wt-page" href="/resources/calculators.html"><div class="path">/resources/calculators</div><div class="wt-page-name">Tools &amp; Calculators</div></a>
+      <a class="wt-page" href="/resources/benchmarks.html"><div class="path">/resources/benchmarks</div><div class="wt-page-name">State of Cloud Waste <span class="new">new</span></div><div class="wt-page-desc">Annual + quarterly benchmarks</div></a>
+      <a class="wt-page" href="/resources/reports.html"><div class="path">/resources/reports</div><div class="wt-page-name">Analyst Reports <span class="new">new</span></div></a>
+      <a class="wt-page" href="/resources/videos.html"><div class="path">/resources/videos</div><div class="wt-page-name">Video Library <span class="new">new</span></div></a>
+      <a class="wt-page" href="/resources/templates.html"><div class="path">/resources/templates</div><div class="wt-page-name">Templates &amp; Playbooks <span class="new">new</span></div></a>
+      <a class="wt-page" href="/resources/glossary.html"><div class="path">/resources/glossary</div><div class="wt-page-name">Glossary <span class="new">new</span></div></a>
+      <a class="wt-page" href="/resources/migration-guides.html"><div class="path">/resources/migration-guides</div><div class="wt-page-name">Migration Guides <span class="new">new</span></div><div class="wt-page-desc">Switching from competitors</div></a>
+      <a class="wt-page" href="/resources/newsletter.html"><div class="path">/resources/newsletter</div><div class="wt-page-name">Newsletter <span class="new">new</span></div></a>
+      <a class="wt-page" href="/resources/university.html"><div class="path">/resources/university</div><div class="wt-page-name">ZopDev University <span class="new">new</span></div></a>
+      <a class="wt-page" href="/resources/finops-framework.html"><div class="path">/resources/finops-framework</div><div class="wt-page-name">FinOps Framework <span class="new">new</span></div></a>
+      <a class="wt-page" href="/resources/focus-spec.html"><div class="path">/resources/focus-spec</div><div class="wt-page-name">FOCUS Spec Support <span class="new">new</span></div></a>
+      <a class="wt-page" href="/resources/community-library.html"><div class="path">/resources/community-library</div><div class="wt-page-name">Community Library <span class="new">new</span></div></a>
+    </div>
+
+    <div class="wt-sub">
+      <h3><span class="num">6.1</span> Calculators</h3>
+      <div class="wt-pages">
+        <a class="wt-page" href="/resources/calculators/cost-estimator.html"><div class="path">/calculators/cost-estimator</div><div class="wt-page-name">Cloud Cost Estimator</div></a>
+        <a class="wt-page" href="/resources/calculators/automation-roi.html"><div class="path">/calculators/automation-roi</div><div class="wt-page-name">Automation ROI <span class="new">new</span></div></a>
+        <a class="wt-page" href="/resources/calculators/non-prod-savings.html"><div class="path">/calculators/non-prod-savings</div><div class="wt-page-name">Non-Prod Savings <span class="new">new</span></div></a>
+        <a class="wt-page" href="/resources/calculators/kubernetes-cost.html"><div class="path">/calculators/kubernetes-cost</div><div class="wt-page-name">Kubernetes Cost <span class="new">new</span></div></a>
+        <a class="wt-page" href="/resources/calculators/carbon.html"><div class="path">/calculators/carbon</div><div class="wt-page-name">Carbon Footprint <span class="new">new</span></div></a>
+        <a class="wt-page" href="/resources/calculators/commitment.html"><div class="path">/calculators/commitment</div><div class="wt-page-name">Commitment Optimisation <span class="new">new</span></div></a>
+      </div>
+    </div>
+
+    <div class="wt-sub">
+      <h3><span class="num">6.2</span> Community <span style="color:var(--g-500);font-weight:400">– moved from top-nav</span></h3>
+      <div class="wt-pages">
+        <a class="wt-page" href="/resources/community.html"><div class="path">/resources/community</div><div class="wt-page-name">Community hub</div></a>
+        <a class="wt-page" href="/resources/forum.html"><div class="path">/resources/forum</div><div class="wt-page-name">Forum / Slack / Discord</div></a>
+        <a class="wt-page" href="/resources/open-source.html"><div class="path">/resources/open-source</div><div class="wt-page-name">Open-source &amp; contributions</div></a>
+        <a class="wt-page" href="/resources/events.html"><div class="path">/resources/events</div><div class="wt-page-name">Events &amp; Meetups</div></a>
+        <a class="wt-page" href="/resources/ambassadors.html"><div class="path">/resources/ambassadors</div><div class="wt-page-name">Ambassador Program <span class="new">new</span></div></a>
+        <a class="wt-page" href="/resources/user-groups.html"><div class="path">/resources/user-groups</div><div class="wt-page-name">User Groups <span class="new">new</span></div></a>
+        <a class="wt-page" href="/resources/hackathons.html"><div class="path">/resources/hackathons</div><div class="wt-page-name">Awards &amp; Hackathons <span class="new">new</span></div></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 · DEVELOPERS ============ -->
+<section class="wt-sec" id="s7">
+  <div class="container">
+    <div class="wt-sec-head">
+      <div class="wt-sec-meta">// 07 · developers · new dedicated hub</div>
+      <h2>Developers <em>, </em> Stripe-grade portal.</h2>
+      <p class="lede">Pulled out of Resources. API + GraphQL · SDKs · CLI · Terraform · MCP server · GitHub / GitLab CI · webhooks · tutorials · cookbook · changelog · status · support.</p>
+    </div>
+    <div class="wt-pages">
+      <a class="wt-page" href="developers.html"><div class="path">/developers</div><div class="wt-page-name">Developer hub landing</div></a>
+      <a class="wt-page" href="/developers/api-reference.html"><div class="path">/developers/api-reference</div><div class="wt-page-name">API Reference</div></a>
+      <a class="wt-page" href="/developers/quickstart.html"><div class="path">/developers/quickstart</div><div class="wt-page-name">Quickstart</div></a>
+      <a class="wt-page" href="/developers/sdks.html"><div class="path">/developers/sdks</div><div class="wt-page-name">SDKs</div></a>
+      <a class="wt-page" href="/developers/cli.html"><div class="path">/developers/cli</div><div class="wt-page-name">CLI <span class="new">new</span></div></a>
+      <a class="wt-page" href="/developers/terraform.html"><div class="path">/developers/terraform</div><div class="wt-page-name">Terraform Provider <span class="new">new</span></div></a>
+      <a class="wt-page" href="developers.html"><div class="path">/developers/mcp</div><div class="wt-page-name">MCP Server <span class="new">flagship</span></div></a>
+      <a class="wt-page" href="/developers/github-actions.html"><div class="path">/developers/github-actions</div><div class="wt-page-name">GitHub Actions <span class="new">new</span></div></a>
+      <a class="wt-page" href="/developers/gitlab-ci.html"><div class="path">/developers/gitlab-ci</div><div class="wt-page-name">GitLab CI <span class="new">new</span></div></a>
+      <a class="wt-page" href="developers.html"><div class="path">/developers/webhooks</div><div class="wt-page-name">Webhooks</div></a>
+      <a class="wt-page" href="/developers/tutorials.html"><div class="path">/developers/tutorials</div><div class="wt-page-name">Tutorials</div></a>
+      <a class="wt-page" href="/developers/recipes.html"><div class="path">/developers/recipes</div><div class="wt-page-name">Recipes / Cookbook</div></a>
+      <a class="wt-page" href="/developers/changelog-api.html"><div class="path">/developers/changelog-api</div><div class="wt-page-name">API Changelog</div></a>
+      <a class="wt-page" href="/developers/status.html"><div class="path">/developers/status</div><div class="wt-page-name">Status Page</div></a>
+      <a class="wt-page" href="/developers/support.html"><div class="path">/developers/support</div><div class="wt-page-name">Developer Support</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08 · TRUST CENTER ============ -->
+<section class="wt-sec" id="s8">
+  <div class="container">
+    <div class="wt-sec-head">
+      <div class="wt-sec-meta">// 08 · trust center · was security &amp; compliance</div>
+      <h2>Trust Center <em>, </em> 12 procurement questions answered.</h2>
+      <p class="lede">Consolidated security · compliance programs · subprocessors · DPA · data residency · privacy · SLA · shared responsibility · incident response · vulnerability disclosure · AI policy · audit reports · architecture · status · FedRAMP roadmap.</p>
+    </div>
+    <div class="wt-pages">
+      <a class="wt-page" href="trust.html"><div class="path">/trust</div><div class="wt-page-name">Trust Center landing</div></a>
+      <a class="wt-page" href="/trust/compliance.html"><div class="path">/trust/compliance</div><div class="wt-page-name">Compliance Programs <span class="new">new</span></div></a>
+      <a class="wt-page" href="/trust/subprocessors.html"><div class="path">/trust/subprocessors</div><div class="wt-page-name">Subprocessors <span class="new">new</span></div></a>
+      <a class="wt-page" href="/trust/dpa.html"><div class="path">/trust/dpa</div><div class="wt-page-name">DPA <span class="new">new</span></div></a>
+      <a class="wt-page" href="/trust/data-residency.html"><div class="path">/trust/data-residency</div><div class="wt-page-name">Data Residency <span class="new">new</span></div></a>
+      <a class="wt-page" href="/trust/privacy-center.html"><div class="path">/trust/privacy-center</div><div class="wt-page-name">Privacy Center <span class="new">new</span></div></a>
+      <a class="wt-page" href="/trust/sla.html"><div class="path">/trust/sla</div><div class="wt-page-name">SLA <span class="new">new</span></div></a>
+      <a class="wt-page" href="/trust/shared-responsibility.html"><div class="path">/trust/shared-responsibility</div><div class="wt-page-name">Shared Responsibility <span class="new">new</span></div></a>
+      <a class="wt-page" href="/trust/incident-response.html"><div class="path">/trust/incident-response</div><div class="wt-page-name">Incident Response <span class="new">new</span></div></a>
+      <a class="wt-page" href="/trust/vulnerability-disclosure.html"><div class="path">/trust/vulnerability-disclosure</div><div class="wt-page-name">Vuln Disclosure <span class="new">new</span></div></a>
+      <a class="wt-page" href="/trust/ai-policy.html"><div class="path">/trust/ai-policy</div><div class="wt-page-name">AI Policy <span class="new">new</span></div></a>
+      <a class="wt-page" href="/trust/reports.html"><div class="path">/trust/reports</div><div class="wt-page-name">Audit &amp; Pentest Reports <span class="new">new, gated</span></div></a>
+      <a class="wt-page" href="/trust/architecture.html"><div class="path">/trust/architecture</div><div class="wt-page-name">Security Architecture <span class="new">new</span></div></a>
+      <a class="wt-page" href="/trust/status.html"><div class="path">/trust/status</div><div class="wt-page-name">Live Status</div></a>
+      <a class="wt-page" href="/trust/fedramp.html"><div class="path">/trust/fedramp</div><div class="wt-page-name">FedRAMP Roadmap <span class="new">new</span></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 09 · PARTNERS ============ -->
+<section class="wt-sec" id="s9">
+  <div class="container">
+    <div class="wt-sec-head">
+      <div class="wt-sec-meta">// 09 · partners · expanded into a program</div>
+      <h2>Partners <em>, </em> cloud, tech, channel, MSP, consulting.</h2>
+      <p class="lede">Existing cloud + technology partners · plus reseller, MSP, consulting tiers · partner portal · directory · become-a-partner application.</p>
+    </div>
+    <div class="wt-pages">
+      <a class="wt-page" href="partners.html"><div class="path">/partners</div><div class="wt-page-name">Partners hub</div></a>
+      <a class="wt-page" href="/partners/cloud.html"><div class="path">/partners/cloud</div><div class="wt-page-name">Cloud Partners</div></a>
+      <a class="wt-page" href="/partners/technology.html"><div class="path">/partners/technology</div><div class="wt-page-name">Technology Integrations</div></a>
+      <a class="wt-page" href="/partners/resellers.html"><div class="path">/partners/resellers</div><div class="wt-page-name">Resellers <span class="new">new</span></div></a>
+      <a class="wt-page" href="/partners/msp.html"><div class="path">/partners/msp</div><div class="wt-page-name">MSP Program <span class="new">new</span></div></a>
+      <a class="wt-page" href="/partners/consulting.html"><div class="path">/partners/consulting</div><div class="wt-page-name">Consulting / SI <span class="new">new</span></div></a>
+      <a class="wt-page" href="/partners/become-a-partner.html"><div class="path">/partners/become-a-partner</div><div class="wt-page-name">Become a Partner <span class="new">new</span></div></a>
+      <a class="wt-page" href="/partners/portal.html"><div class="path">/partners/portal</div><div class="wt-page-name">Partner Portal <span class="new">new, gated</span></div></a>
+      <a class="wt-page" href="/partners/directory.html"><div class="path">/partners/directory</div><div class="wt-page-name">Partner Directory <span class="new">new</span></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10 · COMPANY ============ -->
+<section class="wt-sec" id="s10">
+  <div class="container">
+    <div class="wt-sec-head">
+      <div class="wt-sec-meta">// 10 · company</div>
+      <h2>Company <em>, </em> footer + about.</h2>
+      <p class="lede">About · careers · press · leadership · investors · advisors · brand kit · sustainability · responsible AI · accessibility · contact · global offices · expanded legal.</p>
+    </div>
+    <div class="wt-pages">
+      <a class="wt-page" href="about.html"><div class="path">/about</div><div class="wt-page-name">About</div></a>
+      <a class="wt-page" href="careers.html"><div class="path">/careers</div><div class="wt-page-name">Careers &amp; Culture</div></a>
+      <a class="wt-page" href="brand-kit.html"><div class="path">/company/press</div><div class="wt-page-name">Press &amp; News</div></a>
+      <a class="wt-page" href="/company/leadership.html"><div class="path">/company/leadership</div><div class="wt-page-name">Leadership <span class="new">new</span></div></a>
+      <a class="wt-page" href="/company/investors.html"><div class="path">/company/investors</div><div class="wt-page-name">Investors <span class="new">new</span></div></a>
+      <a class="wt-page" href="/company/advisors.html"><div class="path">/company/advisors</div><div class="wt-page-name">Advisory Board <span class="new">new</span></div></a>
+      <a class="wt-page" href="/company/brand.html"><div class="path">/company/brand</div><div class="wt-page-name">Brand / Press Kit <span class="new">new</span></div></a>
+      <a class="wt-page" href="/company/sustainability.html"><div class="path">/company/sustainability</div><div class="wt-page-name">Sustainability / ESG <span class="new">new</span></div></a>
+      <a class="wt-page" href="/company/responsible-ai.html"><div class="path">/company/responsible-ai</div><div class="wt-page-name">Responsible AI <span class="new">new</span></div></a>
+      <a class="wt-page" href="/company/accessibility.html"><div class="path">/company/accessibility</div><div class="wt-page-name">Accessibility <span class="new">new</span></div></a>
+      <a class="wt-page" href="contact.html"><div class="path">/company/contact</div><div class="wt-page-name">Contact</div></a>
+      <a class="wt-page" href="/company/offices.html"><div class="path">/company/offices</div><div class="wt-page-name">Offices <span class="new">new</span></div></a>
+    </div>
+
+    <div class="wt-sub">
+      <h3><span class="num">10.1</span> Legal</h3>
+      <div class="wt-pages">
+        <a class="wt-page" href="trust.html"><div class="path">/legal/privacy</div><div class="wt-page-name">Privacy Policy</div></a>
+        <a class="wt-page" href="trust.html"><div class="path">/legal/terms</div><div class="wt-page-name">Terms of Service</div></a>
+        <a class="wt-page" href="/legal/cookies.html"><div class="path">/legal/cookies</div><div class="wt-page-name">Cookie Policy</div></a>
+        <a class="wt-page" href="/legal/aup.html"><div class="path">/legal/aup</div><div class="wt-page-name">Acceptable Use <span class="new">new</span></div></a>
+        <a class="wt-page" href="/legal/dmca.html"><div class="path">/legal/dmca</div><div class="wt-page-name">DMCA <span class="new">new</span></div></a>
+        <a class="wt-page" href="/legal/anti-slavery.html"><div class="path">/legal/anti-slavery</div><div class="wt-page-name">Anti-Modern-Slavery <span class="new">new</span></div></a>
+        <a class="wt-page" href="/legal/supplier-code.html"><div class="path">/legal/supplier-code</div><div class="wt-page-name">Supplier Code <span class="new">new</span></div></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11 · GET STARTED ============ -->
+<section class="wt-sec" id="s11">
+  <div class="container">
+    <div class="wt-sec-head">
+      <div class="wt-sec-meta">// 11 · get started · conversion hub</div>
+      <h2>Get Started <em>, </em> on-ramps, not nav.</h2>
+      <p class="lede">No longer a top-nav item. Free trial · demo · sandbox · regional contacts · 30-day onboarding · migration support · implementation packages · procurement-friendly paths.</p>
+    </div>
+    <div class="wt-pages">
+      <a class="wt-page" href="get-started.html"><div class="path">/get-started</div><div class="wt-page-name">Get Started hub</div></a>
+      <a class="wt-page" href="/get-started/trial.html"><div class="path">/get-started/trial</div><div class="wt-page-name">Free Trial</div></a>
+      <a class="wt-page" href="demo.html"><div class="path">/demo</div><div class="wt-page-name">Request a Demo</div></a>
+      <a class="wt-page" href="playground.html"><div class="path">/playground</div><div class="wt-page-name">Interactive Sandbox</div></a>
+      <a class="wt-page" href="/get-started/contact.html"><div class="path">/get-started/contact</div><div class="wt-page-name">Regional Sales Contacts</div></a>
+      <a class="wt-page" href="/get-started/onboarding.html"><div class="path">/get-started/onboarding</div><div class="wt-page-name">First 30 days <span class="new">new</span></div></a>
+      <a class="wt-page" href="/get-started/migration.html"><div class="path">/get-started/migration</div><div class="wt-page-name">Migration Support <span class="new">new</span></div></a>
+      <a class="wt-page" href="/get-started/implementation-packages.html"><div class="path">/get-started/implementation-packages</div><div class="wt-page-name">Implementation Packages <span class="new">new</span></div></a>
+      <a class="wt-page" href="/get-started/partner-procurement.html"><div class="path">/get-started/partner-procurement</div><div class="wt-page-name">Procurement Paths <span class="new">new</span></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 12 · GLOBAL ELEMENTS ============ -->
+<section class="wt-sec" id="s12">
+  <div class="container">
+    <div class="wt-sec-head">
+      <div class="wt-sec-meta">// 12 · global elements</div>
+      <h2>Header, footer, utility.</h2>
+      <p class="lede">Site-wide chrome that appears on every page · plus utility / system pages.</p>
+    </div>
+
+    <div class="wt-sub">
+      <h3><span class="num">12.1</span> Header</h3>
+      <div class="wt-pages">
+        <a class="wt-page" href="#s0"><div class="path">// header</div><div class="wt-page-name">Sticky top nav</div><div class="wt-page-desc">Mega-menus · announcement strip · book demo + playground CTAs</div></a>
+        <a class="wt-page" href="#"><div class="path">// search</div><div class="wt-page-name">Site-wide search <span class="new">new</span></div></a>
+        <a class="wt-page" href="#"><div class="path">// cmd-k</div><div class="wt-page-name">Command-K overlay <span class="new">new</span></div></a>
+      </div>
+    </div>
+
+    <div class="wt-sub">
+      <h3><span class="num">12.2</span> Footer</h3>
+      <div class="wt-pages">
+        <a class="wt-page" href="#"><div class="path">// footer</div><div class="wt-page-name">Quick links · connect · legal</div></a>
+        <a class="wt-page" href="#"><div class="path">// trust badges</div><div class="wt-page-name">SOC 2 · ISO 27001 · HIPAA · GDPR <span class="new">new</span></div></a>
+        <a class="wt-page" href="status.html"><div class="path">// status</div><div class="wt-page-name">Live status indicator <span class="new">new</span></div></a>
+      </div>
+    </div>
+
+    <div class="wt-sub">
+      <h3><span class="num">12.3</span> Utility / system pages <span class="new">new</span></h3>
+      <div class="wt-pages">
+        <a class="wt-page" href="/404.html"><div class="path">/404</div><div class="wt-page-name">404 not found</div></a>
+        <a class="wt-page" href="/500.html"><div class="path">/500</div><div class="wt-page-name">500 server error</div></a>
+        <a class="wt-page" href="maintenance.html"><div class="path">/maintenance</div><div class="wt-page-name">Maintenance</div></a>
+        <a class="wt-page" href="/sitemap.xml"><div class="path">/sitemap.xml</div><div class="wt-page-name">Machine-readable sitemap</div></a>
+        <a class="wt-page" href="/robots.txt"><div class="path">/robots.txt</div><div class="wt-page-name">Crawler directives</div></a>
+        <a class="wt-page" href="/.well-known/security.txt"><div class="path">/.well-known/security.txt</div><div class="wt-page-name">Security contact</div></a>
+        <a class="wt-page" href="/rss.xml"><div class="path">/rss</div><div class="wt-page-name">RSS feeds</div></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 13 · STANDALONE ============ -->
+<section class="wt-sec" id="s13">
+  <div class="container">
+    <div class="wt-sec-head">
+      <div class="wt-sec-meta">// 13 · standalone / full-screen</div>
+      <h2>Stand-alone surfaces.</h2>
+      <p class="lede">Full-screen pages that live outside the nav system but are linked from header / footer / chrome elements.</p>
+    </div>
+    <div class="wt-pages">
+      <a class="wt-page" href="status.html"><div class="path">/status</div><div class="wt-page-name">Status Page</div><div class="wt-page-desc">Live · existing · integrated</div></a>
+      <a class="wt-page" href="playground.html"><div class="path">/playground</div><div class="wt-page-name">Interactive Sandbox</div></a>
+      <a class="wt-page" href="changelog.html"><div class="path">/changelog</div><div class="wt-page-name">Live Changelog</div></a>
+      <a class="wt-page" href="roadmap.html"><div class="path">/roadmap</div><div class="wt-page-name">Public Roadmap</div></a>
+      <a class="wt-page" href="https://app.zopdev.com"><div class="path">/app</div><div class="wt-page-name">Login redirect (external)</div></a>
+      <a class="wt-page" href="docs.html"><div class="path">/docs</div><div class="wt-page-name">Product Docs</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<!-- FINAL CTA · canonical homepage block, shared across marketing pages -->
+<section class="final">
+  <div class="container">
+    <a class="final-mark" href="/" aria-label="ZopDev">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#mark-zopdev"/></svg>
+    </a>
+    <div class="final-grid">
+      <div>
+        <div class="sec-meta" style="color:var(--zop-orange); margin-bottom:20px">end · ready when you are</div>
+        <h2>Stop watching the waste.<br/>Start cutting it.</h2>
+        <p class="final-tag">See. Find. Fix. Automatic.</p>
+        <p>Connect your first cloud account in under 5 minutes. See your first remediation in under 7. No credit card required.</p>
+        <div class="final-cta">
+          <a class="btn btn-primary" href="signin.html">Start Free →</a>
+          <a class="btn btn-secondary" href="demo.html">Book a Demo</a>
+        </div>
+      </div>
+      <div class="final-stats">
+        <div><strong>5 min</strong>connect time</div>
+        <div><strong>7 min</strong>first remediation</div>
+        <div><strong>42%</strong>avg. waste cut in 30 days</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRIDGE MARQUEE · cream slab between dark CTA and dark footer -->
+<section class="bridge-marquee" aria-label="ZopDev brand statement">
+  <div class="bridge-track">
+    <span>Multi-cloud automation</span><span class="acc">·</span>
+    <span>Production-ready in 30 min</span><span class="acc">·</span>
+    <span>SOC 2 · ISO 27001 · zero-trust</span><span class="acc">·</span>
+    <span>30% average cloud cost cut</span><span class="acc">·</span>
+    <span>4 platforms · 1 console</span><span class="acc">·</span>
+    <span>Multi-cloud automation</span><span class="acc">·</span>
+    <span>Production-ready in 30 min</span><span class="acc">·</span>
+    <span>SOC 2 · ISO 27001 · zero-trust</span><span class="acc">·</span>
+    <span>30% average cloud cost cut</span><span class="acc">·</span>
+    <span>4 platforms · 1 console</span><span class="acc">·</span>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="walkthrough.html">Product guide</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developers.html">Documentation</a></li>
+        <li><a href="developers.html">API reference</a></li>
+        <li><a href="developers.html">MCP server</a></li>
+        <li><a href="developers.html">SDK &amp; CLI</a></li>
+        <li><a href="developers.html">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-globe">
+      <div class="foot-globe-left">
+        <a href="/" class="foot-globe-mark" aria-label="ZopDev">
+          <svg class="foot-globe-logo" viewBox="0 0 715 276" aria-hidden="true">
+            <use href="#logo-zopdev"/>
+          </svg>
+        </a>
+      </div>
+      <div class="foot-globe-right">
+        <div class="foot-regions-v2" id="foot-regions-v2">
+          <canvas id="foot-regions-map"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom foot-bottom-3">
+      <div class="foot-copy">© <span data-year>2026</span> ZopDev · <a href="trust.html">privacy</a> · <a href="trust.html">terms</a></div>
+      <div class="foot-mid">made with <svg viewBox="0 0 7 6" aria-hidden="true"><rect x="1" y="0" width="1" height="1"/><rect x="2" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="0" y="1" width="7" height="1"/><rect x="0" y="2" width="7" height="1"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg> by <a href="https://zop.dev" target="_blank" rel="noopener">zop.dev</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+/* TOC scroll-spy · highlights the active section in the sticky nav */
+(function(){
+  var links = document.querySelectorAll('.wt-toc a');
+  var sections = Array.from(document.querySelectorAll('.wt-sec, .wt-head'));
+  if(!('IntersectionObserver' in window)) return;
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var id = e.target.id;
+      links.forEach(function(a){
+        a.classList.toggle('is-current', a.getAttribute('href') === '#'+id);
+      });
+    });
+  }, {rootMargin:'-30% 0px -65% 0px'});
+  sections.forEach(function(s){ obs.observe(s); });
+})();
+</script>
+
+</body>
+</html>

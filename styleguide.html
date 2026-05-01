@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<title>ZopDev · Styleguide · component library</title>
+<meta name="description" content="Living component library for the ZopDev design system, every pattern used on zop.dev in isolation, with tokens and code."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css"/>
+<style>
+/* no-italic-site-wide */ em,i,cite,dfn,var,address,blockquote{font-style:normal}
+/* =================================================================
+   Styleguide-specific layout (not a component).
+   Everything component-shaped lives inside a .spec card and mirrors
+   the production styling from index.html so designers/engineers can
+   copy-paste from here.
+   ================================================================= */
+
+/* ---- top bar (styleguide only) ---- */
+.top{ background:#0A0A0A; border-bottom:1px solid var(--line); font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); position:sticky; top:0; z-index:var(--z-nav); }
+.top-inner{ max-width:var(--max); margin:0 auto; padding:var(--sp-2) var(--gutter); display:flex; gap:var(--sp-6); flex-wrap:wrap; align-items:center; }
+.top .k{ color:var(--ink-5); text-transform:uppercase; letter-spacing:var(--ls-meta); }
+.top .v{ color:var(--ink); }
+.top .dot{ width:6px; height:6px; background:var(--ok); border-radius:var(--r-pill); animation:blink 2s infinite; }
+@keyframes blink{ 0%,100%{opacity:1} 50%{opacity:.4} }
+.top-right{ margin-left:auto; display:flex; gap:var(--sp-5); }
+.top a{ color:var(--ink-3); }
+.top a:hover{ color:var(--ink); }
+
+/* ---- page header ---- */
+.page-head{ border-bottom:1px solid var(--line); padding:var(--sp-12) 0 var(--sp-8); }
+.crumb{ font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); text-transform:uppercase; letter-spacing:var(--ls-meta); margin-bottom:var(--sp-5); }
+.page-head h1{ font-size:clamp(44px, 6vw, 80px); font-weight:var(--fw-bold); letter-spacing:var(--ls-display); line-height:var(--lh-display); max-width:1100px; }
+.page-head h1 em{ font-style:normal; color:var(--zop-orange); }
+.page-head p.lede{ font-size:var(--t-17); color:var(--ink-3); max-width:780px; margin:var(--sp-6) 0 0; line-height:var(--lh-body); }
+.page-head p.lede strong{ color:var(--ink); font-weight:var(--fw-medium); }
+
+/* ---- on-this-page TOC (sidebar) ---- */
+.layout{ max-width:var(--max); margin:0 auto; padding:var(--sp-12) var(--gutter) 120px; display:grid; grid-template-columns:220px 1fr; gap:var(--sp-12); }
+.toc{ position:sticky; top:56px; align-self:start; font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); letter-spacing:var(--ls-meta-tight); }
+.toc h4{ font-size:var(--t-10); letter-spacing:var(--ls-meta); text-transform:uppercase; color:var(--ink-5); margin:0 0 var(--sp-4); font-weight:var(--fw-medium); }
+.toc ul{ list-style:none; padding:0; margin:0 0 var(--sp-6); border-left:1px solid var(--line); }
+.toc li a{ display:block; padding:var(--sp-2) var(--sp-4); color:var(--ink-3); border-left:2px solid transparent; margin-left:-1px; }
+.toc li a:hover{ color:var(--ink); border-left-color:var(--zop-orange); }
+
+/* ---- section + spec-card shell ---- */
+section.spec-sec{ padding:var(--sp-12) 0 var(--sp-16); border-bottom:1px solid var(--line); }
+section.spec-sec:last-child{ border-bottom:0; }
+section.spec-sec > h2{ font-size:var(--t-36); font-weight:var(--fw-bold); letter-spacing:var(--ls-heading); margin-bottom:var(--sp-3); }
+section.spec-sec > .meta{ font-family:var(--mono); font-size:var(--t-11); color:var(--zop-orange); letter-spacing:var(--ls-meta); text-transform:uppercase; margin-bottom:var(--sp-3); }
+section.spec-sec > p.lead{ font-size:var(--t-15); color:var(--ink-3); max-width:720px; margin:0 0 var(--sp-10); line-height:var(--lh-body); }
+
+.spec{ border:1px solid var(--line-2); background:var(--bg-1); margin-bottom:var(--sp-6); }
+.spec-head{ padding:var(--sp-3) var(--sp-5); background:#0A0A0A; border-bottom:1px solid var(--line-2); display:flex; justify-content:space-between; align-items:center; font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); letter-spacing:var(--ls-meta-tight); }
+.spec-head strong{ color:var(--ink-2); font-weight:var(--fw-medium); letter-spacing:var(--ls-meta-tight); }
+.spec-head .tag{ padding:2px var(--sp-2); background:var(--bg-3); color:var(--ink-3); font-size:var(--t-10); letter-spacing:var(--ls-meta); text-transform:uppercase; }
+.spec-body{ padding:var(--sp-8); background:var(--bg-0); }
+.spec-foot{ padding:var(--sp-4) var(--sp-5); background:#0A0A0A; border-top:1px solid var(--line); font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); line-height:var(--lh-loose); }
+.spec-foot strong{ color:var(--ink-2); font-weight:var(--fw-medium); }
+.spec-code{ margin:0; padding:var(--sp-4) var(--sp-5); background:#0A0A0A; border-top:1px solid var(--line); font-family:var(--mono); font-size:var(--t-11); color:var(--ink-3); overflow-x:auto; line-height:1.6; white-space:pre; }
+.spec-code .k{ color:var(--zop-orange); }
+.spec-code .v{ color:var(--ink); }
+.spec-code .c{ color:var(--ink-5); }
+
+/* ---- color swatch grid ---- */
+.swatches{ display:grid; grid-template-columns:repeat(5,1fr); gap:var(--sp-4); }
+.swatch{ border:1px solid var(--line-2); background:var(--bg-1); cursor:pointer; transition:transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out); }
+.swatch:hover{ transform:translateY(-3px); box-shadow:var(--shadow-hover-orange); }
+.swatch .chip{ height:140px; }
+.swatch .meta{ padding:var(--sp-4); font-family:var(--mono); font-size:var(--t-11); color:var(--ink-3); }
+.swatch .meta .name{ color:var(--ink); font-size:var(--t-13); font-family:var(--font); font-weight:var(--fw-semibold); letter-spacing:var(--ls-body); margin-bottom:var(--sp-2); display:block; }
+.swatch .hex{ color:var(--ink); font-size:var(--t-12); }
+.swatch .role{ color:var(--ink-4); font-size:var(--t-10); letter-spacing:var(--ls-meta); text-transform:uppercase; margin-top:var(--sp-2); display:block; }
+.swatches.small{ grid-template-columns:repeat(8,1fr); }
+.swatches.small .chip{ height:80px; }
+.swatches.small .meta{ padding:var(--sp-3); }
+
+/* ---- type-scale table ---- */
+.typerow{ display:grid; grid-template-columns:80px 80px 80px 1fr; gap:var(--sp-6); align-items:baseline; padding:var(--sp-4) 0; border-bottom:1px dashed var(--line); }
+.typerow:last-child{ border-bottom:0; }
+.typerow .s{ font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); letter-spacing:var(--ls-meta-tight); }
+.typerow .tok{ font-family:var(--mono); font-size:var(--t-11); color:var(--ink-3); letter-spacing:var(--ls-meta-tight); }
+.typerow .sample{ color:var(--ink); letter-spacing:var(--ls-heading); }
+
+/* ---- mark-variant gallery ----
+   Default --logo-blue on dark cells = #4A66D4 (lifted for contrast).
+   Paper cells override back to the canonical brand hex #2A4494. */
+.mark-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:var(--sp-4); }
+.mark-cell{ --logo-blue:#4A66D4; border:1px solid var(--line-2); background:var(--bg-1); padding:var(--sp-10) var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-4); align-items:center; justify-content:center; min-height:180px; transition:transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out); }
+.mark-cell:hover{ transform:translateY(-3px); box-shadow:var(--shadow-hover-orange); }
+.mark-cell.on-paper{ --logo-blue:#2A4494; background:var(--ink); }
+.mark-cell .label{ font-family:var(--mono); font-size:var(--t-10); color:var(--ink-4); letter-spacing:var(--ls-meta); text-transform:uppercase; }
+.mark-cell.on-paper .label{ color:#4a463e; }
+
+/* shared mark component, reused from index.html */
+.mk{ position:relative; }
+.mk.sz-s{ width:24px; height:24px; }
+.mk.sz-m{ width:48px; height:48px; }
+.mk.sz-l{ width:88px; height:88px; }
+.mk span{ position:absolute; width:50%; height:50%; }
+.mk .a{ top:0; left:0; background:var(--zop-blue); }
+.mk .b{ top:0; right:0; background:var(--zop-orange); }
+.mk .c{ bottom:0; right:0; background:var(--zop-green); }
+.mk.mono .a, .mk.mono .b, .mk.mono .c{ background:var(--ink); }
+.mk.ink .a, .mk.ink .b, .mk.ink .c{ background:var(--zop-black); }
+
+/* ---- lockup · SVG-based · wordmark left · mark off-aligned top-right ---- */
+.lockup{ color:var(--ink); display:inline-block; }
+.lockup svg{ width:auto; height:42px; color:currentColor; display:block; }
+.lockup.sz-s svg{ height:28px; }
+.lockup.sz-l svg{ height:64px; }
+.mark-cell.on-paper .lockup{ color:var(--zop-black); }
+
+/* ---- button playground · card-lift signature on every variant ---- */
+.btn{
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+  padding:13px 22px;
+  font-weight:var(--fw-semibold); font-size:var(--t-14);
+  letter-spacing:var(--ls-body);
+  border:1px solid; cursor:pointer;
+  font-family:var(--font);
+  position:relative;
+  transition:
+    transform var(--dur-med) var(--ease-out),
+    border-color var(--dur-med) var(--ease-out),
+    box-shadow var(--dur-med) var(--ease-out);
+}
+.btn-primary{ background:var(--ink); color:var(--bg-0); border-color:var(--ink); }
+.btn-primary:hover{ transform:translateY(-4px); border-color:var(--ink); box-shadow:var(--shadow-hover-orange); }
+.btn-accent{ background:var(--zop-orange); color:var(--bg-0); border-color:var(--zop-orange); font-weight:var(--fw-bold); }
+.btn-accent:hover{ transform:translateY(-4px); border-color:var(--zop-orange); box-shadow:0 8px 0 -4px var(--ink); }
+.btn-secondary{ background:transparent; color:var(--ink); border-color:var(--line-b); }
+.btn-secondary:hover{ transform:translateY(-4px); border-color:var(--ink); box-shadow:var(--shadow-hover-orange); }
+.btn .arrow{ transition:transform var(--dur-med) var(--ease-out); display:inline-block; }
+.btn:hover .arrow{ transform:translateX(4px); }
+
+.btn-row{ display:flex; gap:var(--sp-3); flex-wrap:wrap; }
+
+/* ---- sample card (scenario / trust / case) ---- */
+.sample-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:var(--sp-4); }
+.sample-grid.two{ grid-template-columns:repeat(2, 1fr); }
+
+/* scenario */
+.scenario{ padding:var(--sp-5) var(--sp-6); background:var(--bg-2); border:1px solid var(--line-2); border-left:3px solid var(--zop-orange); display:flex; gap:var(--sp-5); align-items:flex-start; transition:transform var(--dur-med) var(--ease-out), border-color var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out), border-left-color var(--dur-med) var(--ease-out); position:relative; }
+.scenario::after{ content:''; position:absolute; top:0; left:0; width:4px; height:0; background:var(--zop-orange); transition:height var(--dur-med) var(--ease-out); }
+.scenario:hover{ transform:translateY(-4px); border-color:var(--ink); box-shadow:var(--shadow-hover-orange); border-left-color:transparent; }
+.scenario:hover::after{ height:100%; }
+.scenario .n{ font-family:var(--mono); font-size:var(--t-11); color:var(--zop-orange); letter-spacing:var(--ls-meta); flex-shrink:0; padding-top:2px; }
+.scenario .q{ font-size:var(--t-15); color:var(--ink); line-height:1.5; font-weight:var(--fw-medium); letter-spacing:var(--ls-body); }
+.scenario .a{ font-family:var(--mono); font-size:var(--t-11); color:var(--ink-3); letter-spacing:var(--ls-meta-tight); margin-top:var(--sp-2); line-height:var(--lh-body); }
+
+/* case-study card */
+.case{ background:var(--bg-2); border:1px solid var(--line-2); padding:var(--sp-8); display:flex; flex-direction:column; gap:var(--sp-4); min-height:340px; transition:transform var(--dur-med) var(--ease-out), border-color var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out); position:relative; }
+.case::after{ content:''; position:absolute; top:0; left:0; width:4px; height:0; background:var(--zop-orange); transition:height var(--dur-med) var(--ease-out); }
+.case:hover{ transform:translateY(-4px); border-color:var(--ink); box-shadow:var(--shadow-hover-orange); }
+.case:hover::after{ height:100%; }
+.case .ind{ font-family:var(--mono); font-size:var(--t-10); letter-spacing:var(--ls-meta); text-transform:uppercase; color:var(--ink-4); display:flex; align-items:center; gap:var(--sp-3); }
+.case .ind::before{ content:''; width:8px; height:8px; background:var(--zop-blue); }
+.case.b .ind::before{ background:var(--zop-blue); }
+.case.o .ind::before{ background:var(--zop-orange); }
+.case.g .ind::before{ background:var(--zop-green); }
+.case .metric{ font-size:var(--t-64); font-weight:var(--fw-bold); letter-spacing:var(--ls-display); line-height:0.95; margin:var(--sp-2) 0; }
+.case.b .metric{ color:var(--zop-blue); }
+.case.o .metric{ color:var(--zop-orange); }
+.case.g .metric{ color:var(--zop-green); }
+.case h3{ font-size:var(--t-15); font-weight:var(--fw-medium); color:var(--ink-2); letter-spacing:var(--ls-body); line-height:1.4; }
+.case .cite{ font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); letter-spacing:var(--ls-meta-tight); padding-top:var(--sp-4); border-top:1px solid var(--line); margin-top:auto; }
+
+/* three-numbers */
+.three-nums{ display:grid; grid-template-columns:repeat(3,1fr); border:1px solid var(--line-2); background:var(--bg-1); }
+.three-nums .n{ padding:var(--sp-8) var(--sp-7); border-right:1px solid var(--line-2); position:relative; min-height:180px; display:flex; flex-direction:column; gap:var(--sp-2); }
+.three-nums .n:last-child{ border-right:0; }
+.three-nums .n::before{ content:''; position:absolute; top:0; left:0; width:100%; height:3px; }
+.three-nums .spent::before{ background:var(--zop-blue); }
+.three-nums .wasted::before{ background:var(--zop-orange); }
+.three-nums .recoverable::before{ background:var(--zop-green); }
+.three-nums .label{ font-family:var(--mono); font-size:var(--t-10); color:var(--ink-4); letter-spacing:var(--ls-meta); text-transform:uppercase; display:flex; align-items:center; gap:var(--sp-2); }
+.three-nums .label .dot{ width:8px; height:8px; }
+.three-nums .spent .label .dot{ background:var(--zop-blue); }
+.three-nums .wasted .label .dot{ background:var(--zop-orange); }
+.three-nums .recoverable .label .dot{ background:var(--zop-green); }
+.three-nums .big{ font-size:var(--t-64); font-weight:var(--fw-bold); letter-spacing:-0.04em; line-height:1; font-variant-numeric:tabular-nums; }
+.three-nums .spent .big{ color:var(--ink); }
+.three-nums .wasted .big{ color:var(--zop-orange); }
+.three-nums .recoverable .big{ color:var(--zop-green); }
+.three-nums .sub{ font-size:var(--t-12); color:var(--ink-4); font-family:var(--mono); letter-spacing:var(--ls-meta-tight); margin-top:auto; }
+
+/* trust card */
+.trust-card{ padding:var(--sp-7) var(--sp-6); background:var(--bg-2); border:1px solid var(--line-2); min-height:200px; display:flex; flex-direction:column; gap:var(--sp-3); transition:transform var(--dur-med) var(--ease-out), border-color var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out); position:relative; }
+.trust-card::after{ content:''; position:absolute; top:0; left:0; width:4px; height:0; background:var(--zop-orange); transition:height var(--dur-med) var(--ease-out); }
+.trust-card:hover{ transform:translateY(-4px); border-color:var(--ink); box-shadow:var(--shadow-hover-orange); }
+.trust-card:hover::after{ height:100%; }
+.trust-card .ico{ width:44px; height:44px; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-weight:var(--fw-bold); font-size:var(--t-13); color:var(--bg-0); margin-bottom:var(--sp-2); }
+.trust-card.b .ico{ background:var(--zop-blue); color:var(--ink); }
+.trust-card.o .ico{ background:var(--zop-orange); }
+.trust-card.g .ico{ background:var(--zop-green); }
+.trust-card.k .ico{ background:var(--ink); color:var(--bg-0); }
+.trust-card h4{ font-size:var(--t-15); font-weight:var(--fw-bold); letter-spacing:var(--ls-body); }
+.trust-card p{ font-size:var(--t-13); color:var(--ink-3); line-height:var(--lh-body); margin:0; }
+
+/* badges + pills */
+.pills{ display:flex; gap:var(--sp-2); flex-wrap:wrap; align-items:center; }
+.badge{ display:inline-flex; align-items:center; gap:var(--sp-2); font-size:var(--t-10); font-family:var(--mono); letter-spacing:var(--ls-meta-tight); }
+.badge::before{ content:''; width:6px; height:6px; }
+.badge.run{ color:var(--ok); } .badge.run::before{ background:var(--ok); }
+.badge.idle{ color:var(--zop-orange); } .badge.idle::before{ background:var(--zop-orange); }
+.badge.sch{ color:var(--zop-blue); } .badge.sch::before{ background:var(--zop-blue); }
+.pill{ display:inline-flex; align-items:center; gap:var(--sp-2); padding:4px 10px; background:var(--bg-3); border:1px solid var(--line-2); font-family:var(--mono); font-size:var(--t-10); color:var(--ink-2); letter-spacing:var(--ls-meta-tight); border-radius:var(--r-pill); }
+.pill .dot{ width:6px; height:6px; border-radius:var(--r-pill); }
+.pill.ok .dot{ background:var(--ok); animation:pulse 2.4s infinite; }
+.pill.b .dot{ background:var(--zop-blue); }
+.pill.o .dot{ background:var(--zop-orange); }
+@keyframes pulse{ 0%{box-shadow:0 0 0 0 rgba(52,211,153,.5)} 70%{box-shadow:0 0 0 5px rgba(52,211,153,0)} 100%{box-shadow:0 0 0 0 rgba(52,211,153,0)} }
+
+/* motion-principle grid */
+.motion-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--sp-4); }
+.motion-cell{ background:var(--bg-2); border:1px solid var(--line-2); padding:var(--sp-5); display:flex; flex-direction:column; gap:var(--sp-3); min-height:160px; cursor:pointer; transition:all var(--dur-med) var(--ease-out); position:relative; }
+.motion-cell::after{ content:''; position:absolute; top:0; left:0; width:4px; height:0; background:var(--zop-orange); transition:height var(--dur-med) var(--ease-out); }
+.motion-cell:hover{ transform:translateY(-4px); border-color:var(--ink); box-shadow:var(--shadow-hover-orange); }
+.motion-cell:hover::after{ height:100%; }
+.motion-cell .t{ font-family:var(--mono); font-size:var(--t-10); color:var(--ink-4); letter-spacing:var(--ls-meta); text-transform:uppercase; }
+.motion-cell h4{ font-size:var(--t-17); font-weight:var(--fw-bold); letter-spacing:var(--ls-body); }
+.motion-cell p{ font-size:var(--t-12); color:var(--ink-3); line-height:var(--lh-body); margin:0; font-family:var(--mono); }
+.motion-cell code{ font-family:var(--mono); font-size:var(--t-11); color:var(--zop-orange); }
+
+/* do/don't grid */
+.dd{ display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--line-2); }
+.dd > div{ padding:var(--sp-7); }
+.dd .do{ border-right:1px solid var(--line-2); }
+.dd h5{ font-family:var(--mono); font-size:var(--t-11); letter-spacing:var(--ls-meta); text-transform:uppercase; margin:0 0 var(--sp-4); display:flex; align-items:center; gap:var(--sp-2); }
+.dd .do h5{ color:var(--ok); } .dd .do h5::before{ content:'✓'; font-weight:var(--fw-bold); font-size:var(--t-14); }
+.dd .dont h5{ color:var(--err); } .dd .dont h5::before{ content:'×'; font-weight:var(--fw-bold); font-size:var(--t-15); }
+.dd ul{ list-style:none; padding:0; margin:0; }
+.dd li{ padding:var(--sp-2) 0; border-bottom:1px dashed var(--line-2); color:var(--ink-2); font-size:var(--t-13); letter-spacing:var(--ls-body); }
+.dd li:last-child{ border-bottom:0; }
+.dd .dont li{ color:var(--ink-4); text-decoration:line-through; text-decoration-color:var(--line-b); }
+
+/* accordion-like table */
+.table{ width:100%; border-collapse:collapse; font-family:var(--mono); font-size:var(--t-12); border:1px solid var(--line-2); }
+.table th, .table td{ text-align:left; padding:var(--sp-3) var(--sp-4); border-bottom:1px solid var(--line); vertical-align:top; letter-spacing:var(--ls-meta-tight); }
+.table th{ background:#0A0A0A; color:var(--ink-4); font-weight:var(--fw-medium); text-transform:uppercase; font-size:var(--t-10); letter-spacing:var(--ls-meta); }
+.table td{ color:var(--ink-2); }
+.table td.hi{ color:var(--ink); }
+.table td .tag{ display:inline-block; padding:1px 6px; font-size:var(--t-10); letter-spacing:var(--ls-meta); background:var(--bg-3); color:var(--ink-3); text-transform:uppercase; }
+
+/* footer */
+footer{ border-top:1px solid var(--line); padding:var(--sp-8) 0; background:#0A0A0A; font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); letter-spacing:var(--ls-meta-tight); }
+footer .inner{ max-width:var(--max); margin:0 auto; padding:0 var(--gutter); display:flex; justify-content:space-between; gap:var(--sp-5); flex-wrap:wrap; }
+
+@media (max-width: 960px){
+  .layout{ grid-template-columns:1fr; gap:var(--sp-8); }
+  .toc{ position:static; }
+  .swatches{ grid-template-columns:repeat(2,1fr); }
+  .swatches.small{ grid-template-columns:repeat(3,1fr); }
+  .mark-grid{ grid-template-columns:1fr 1fr; }
+  .motion-grid, .sample-grid, .sample-grid.two{ grid-template-columns:1fr; }
+  .dd{ grid-template-columns:1fr; }
+  .dd .do{ border-right:0; border-bottom:1px solid var(--line-2); }
+  .three-nums{ grid-template-columns:1fr; }
+  .three-nums .n{ border-right:0; border-bottom:1px solid var(--line-2); }
+  .three-nums .n:last-child{ border-bottom:0; }
+}
+</style>
+<link rel="stylesheet" href="homepage-chrome.css"/>
+</head>
+<body>
+
+<!-- ========================================================
+     Canonical logo symbols, same defs as index.html.
+     #logo-zopdev    · primary lockup (wordmark + off-aligned mark)
+     #mark-zopdev    · standalone three-tile mark
+     ======================================================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mark-zopdev" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="16" height="16" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="16" y="0" width="16" height="16" fill="#F58549"/>
+      <rect x="16" y="16" width="16" height="16" fill="#7FB236"/>
+    </symbol>
+    <symbol id="logo-zopdev" viewBox="0 0 715 276">
+      <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+      <rect x="537" width="89" height="89" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="626" width="89" height="89" fill="#F58549"/>
+      <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ============================================================
+     LIVE STATUS STRIP. Cloud-ops signal strip
+     ============================================================ -->
+<div class="live-strip" aria-live="polite">
+  <!-- Anchored pill: live market-open indicator + uptime & UTC clock. Stays
+       put on the right while the ticker runs under it. -->
+  <div class="ls-anchor">
+    <span class="ls-live"><span class="ls-livedot"></span>LIVE</span>
+    <span class="ls-sep"></span>
+    <span class="ls-kpi"><em>UPT</em><b>99.98%</b></span>
+    <span class="ls-sep"></span>
+    <span class="ls-kpi"><em>UTC</em><b id="live-clock">--:--:--</b></span>
+  </div>
+
+  <!-- Marquee track: two identical rails side-by-side create a seamless loop.
+       Each item reads as a plain-English headline with a change indicator. -->
+  <div class="ls-track" role="presentation" aria-hidden="true">
+    <div class="ls-rail">
+      <span class="lt-row"><b id="live-saved">$48,210</b> saved this month <span class="lt-chg up">▲ $812 today</span></span>
+      <span class="lt-row"><b id="live-resources">10,401</b> cloud resources monitored <span class="lt-chg up">▲ 42 new</span></span>
+      <span class="lt-row"><b id="live-remediations">17</b> issues fixed today <span class="lt-chg up">▲ 3 in last hour</span></span>
+      <span class="lt-row"><b>847</b> idle instances reclaimed <span class="lt-chg up">▲ 31 this week</span></span>
+      <span class="lt-row"><b>99.98%</b> uptime across <b>47</b> regions</span>
+      <span class="lt-row"><b>3</b> anomalies open <span class="lt-chg dn">▼ 1 auto-resolved</span></span>
+      <span class="lt-row"><b>142</b> schedules running <span class="lt-chg up">▲ 12 this week</span></span>
+      <span class="lt-row"><b>$2.8M</b> monthly run-rate <span class="lt-chg dn">▼ 8% vs last month</span></span>
+      <span class="lt-row"><b>67%</b> average utilization <span class="lt-chg up">▲ 2 pts</span></span>
+      <span class="lt-row"><b>4m 12s</b> mean time to remediate <span class="lt-chg dn">▼ 22s faster</span></span>
+      <span class="lt-row"><b>0</b> incidents · <b>5-day</b> clean streak</span>
+      <span class="lt-row"><b>23%</b> savings rate <span class="lt-chg up">▲ 5 pts QoQ</span></span>
+    </div>
+    <div class="ls-rail" aria-hidden="true">
+      <span class="lt-row"><b>$48,210</b> saved this month <span class="lt-chg up">▲ $812 today</span></span>
+      <span class="lt-row"><b>10,401</b> cloud resources monitored <span class="lt-chg up">▲ 42 new</span></span>
+      <span class="lt-row"><b>17</b> issues fixed today <span class="lt-chg up">▲ 3 in last hour</span></span>
+      <span class="lt-row"><b>847</b> idle instances reclaimed <span class="lt-chg up">▲ 31 this week</span></span>
+      <span class="lt-row"><b>99.98%</b> uptime across <b>47</b> regions</span>
+      <span class="lt-row"><b>3</b> anomalies open <span class="lt-chg dn">▼ 1 auto-resolved</span></span>
+      <span class="lt-row"><b>142</b> schedules running <span class="lt-chg up">▲ 12 this week</span></span>
+      <span class="lt-row"><b>$2.8M</b> monthly run-rate <span class="lt-chg dn">▼ 8% vs last month</span></span>
+      <span class="lt-row"><b>67%</b> average utilization <span class="lt-chg up">▲ 2 pts</span></span>
+      <span class="lt-row"><b>4m 12s</b> mean time to remediate <span class="lt-chg dn">▼ 22s faster</span></span>
+      <span class="lt-row"><b>0</b> incidents · <b>5-day</b> clean streak</span>
+      <span class="lt-row"><b>23%</b> savings rate <span class="lt-chg up">▲ 5 pts QoQ</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo-lockup sm" aria-label="ZopDev">
+      <svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <div class="nav-item" data-menu="product">
+        <a>Product <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <div class="nav-item" data-menu="resources">
+        <a>Resources <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="pricing.html">Pricing</a>
+      <div class="nav-item" data-menu="company">
+        <a>Company <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="community.html">Community</a>
+    </div>
+
+    <!-- Shared dropdown overlay. Content crossfades, panel slides left/right -->
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+      <div class="nav-panes" id="nav-panes">
+
+        <!-- ═══════ PRODUCT · 3 sub-products ═══════ -->
+        <div class="nav-pane" data-pane="product">
+          <!-- 3 equal cells. Inline grid-template-columns overrides the
+               default 1.3fr 1fr 1fr (which is built for a featured-hero
+               layout). All three products are equal here — no hero — so
+               no empty grid slots and no card stretches taller than its
+               siblings. -->
+          <div class="np-bento" style="grid-template-columns:1fr 1fr 1fr;">
+            <a class="np-cell" href="zopnight.html">
+              <span class="np-badge live">live</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopNight</h3>
+              <p class="np-cell-desc">Cloud cost optimization on autopilot. AWS, Azure, GCP.</p>
+            </a>
+            <a class="np-cell" href="zopday.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#F58549"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopDay</h3>
+              <p class="np-cell-desc">Deployment orchestration and release management.</p>
+            </a>
+            <a class="np-cell" href="zopcloud.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><rect x="12" y="8" width="8" height="6" fill="#FFFFFF"/><rect x="6" y="14" width="20" height="10" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopCloud</h3>
+              <p class="np-cell-desc">Multi-cloud resource graph and topology view.</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Live in Claude &amp; Codex</strong> · run ZopNight from your MCP client</span>
+            <a href="developers.html">Try MCP →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ RESOURCES · 9 cells in a 3×3 grid ═══════ -->
+        <div class="nav-pane" data-pane="resources">
+          <div class="np-bento np-bento--grid">
+            <a class="np-cell" href="blog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Blog</h3>
+              <p class="np-cell-desc">Engineering + cost optimization notes</p>
+            </a>
+            <a class="np-cell" href="free-ebooks.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 4h7v13H3zM10 4h7v13h-7z" stroke="currentColor" stroke-width="1.5"/><path d="M10 4v13" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Ebooks</h3>
+              <p class="np-cell-desc">Free playbooks · FinOps, K8s, CDCR</p>
+            </a>
+            <a class="np-cell" href="customers.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 16c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Case studies</h3>
+              <p class="np-cell-desc">42-67% cuts, real teams</p>
+            </a>
+            <a class="np-cell" href="solutions.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Use cases by industry</h3>
+              <p class="np-cell-desc">SaaS · fintech · retail · health</p>
+            </a>
+            <a class="np-cell" href="product-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M8 7l4 3-4 3z" fill="currentColor"/></svg>
+              </div>
+              <h3 class="np-cell-title">Product documentation</h3>
+              <p class="np-cell-desc">Walkthroughs · video tours</p>
+            </a>
+            <a class="np-cell" href="kubernetes-guide.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2l7 4v8l-7 4-7-4V6z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
+              </div>
+              <h3 class="np-cell-title">Kubernetes guide</h3>
+              <p class="np-cell-desc">From cluster basics to right-sizing</p>
+            </a>
+            <a class="np-cell" href="changelog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Changelog</h3>
+              <p class="np-cell-desc">What shipped this week</p>
+            </a>
+            <a class="np-cell" href="developer-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 6L3 10l4 4M13 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 class="np-cell-title">Developer documentation</h3>
+              <p class="np-cell-desc">REST API · SDKs · webhooks · MCP</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Weekly digest</strong> · waste signals, wins, war stories</span>
+            <a href="blog.html">Subscribe →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ COMPANY · 2 items ═══════ -->
+        <div class="nav-pane" data-pane="company">
+          <div class="np-bento" style="grid-template-columns:1fr 1fr;">
+            <a class="np-cell" href="about.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#0A0A0A"/><rect x="6" y="6" width="8" height="20" fill="#F0EBDB"/><rect x="18" y="12" width="8" height="14" fill="#F58549"/></svg>
+              </div>
+              <h3 class="np-cell-title">About</h3>
+              <p class="np-cell-desc">Founded 2024. The autopilot for multi-cloud cost.</p>
+            </a>
+            <a class="np-cell" href="careers.html">
+              <span class="np-badge">hiring</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="6" width="14" height="11" stroke="currentColor" stroke-width="1.5"/><path d="M7 6V4h6v2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Careers</h3>
+              <p class="np-cell-desc">Open roles · engineering, design, GTM</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>We're hiring</strong> · remote-first · 12 open roles</span>
+            <a href="careers.html">See roles →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="nav-cta">
+      <!-- Status pill · live dot · links to /status.html. Mirrors the
+           project's "always-on" identity (the live-ops strip above the
+           nav). Pulses green when all systems are operational. -->
+      <a class="nav-status" href="status.html" aria-label="System status">
+        <span class="nav-status-dot" aria-hidden="true"></span>
+        <span class="nav-status-text">Status</span>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" role="switch">
+        <span class="tt-opt tt-sun" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="8" cy="8" r="3" fill="currentColor" stroke="none"/>
+            <path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.9.9M11.7 11.7l.9.9M3.4 12.6l.9-.9M11.7 4.3l.9-.9"/>
+          </svg>
+        </span>
+        <span class="tt-opt tt-moon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M12.8 10.1a5.5 5.5 0 0 1-7-7 .5.5 0 0 0-.7-.6A6.5 6.5 0 1 0 13.4 10.8a.5.5 0 0 0-.6-.7z"/>
+          </svg>
+        </span>
+      </button>
+      <a class="chip-playground" href="playground.html"><span>Playground</span></a>
+      <a class="sign" href="signin.html">Sign In</a>
+      <a class="btn btn-accent" href="demo.html"><span>Book a Demo</span> <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ========== top bar ========== -->
+<div class="top">
+  <div class="top-inner">
+    <span class="dot"></span>
+    <span><span class="k">doc</span> <span class="v">styleguide.html</span></span>
+    <span><span class="k">tokens</span> <span class="v">tokens.css</span></span>
+    <span><span class="k">spec</span> <span class="v">/brand-guidelines.html</span></span>
+    <div class="top-right">
+      <a href="index.html">← homepage</a>
+      <a href="brand-guidelines.html">brand guidelines →</a>
+    </div>
+  </div>
+</div>
+
+<header class="page-head">
+  <div class="container">
+    <div class="crumb">ZopDev / styleguide · component library · v1.0</div>
+    <h1>Every pattern on <em>zop.dev</em>, in isolation, with tokens.</h1>
+    <p class="lede">This is the living component library. Every element here matches the production homepage exactly and reuses <strong>tokens.css</strong>. If a component exists on the site, it has a spec card here with code, tokens, and usage rules. If a pattern isn't here, it isn't sanctioned, add a spec card before shipping it.</p>
+  </div>
+</header>
+
+<div class="layout">
+
+<!-- ========== on-this-page nav ========== -->
+<aside class="toc">
+  <h4>on this page</h4>
+  <ul>
+    <li><a href="#color">01 · Color</a></li>
+    <li><a href="#type">02 · Typography</a></li>
+    <li><a href="#motion">03 · Motion</a></li>
+    <li><a href="#mark">04 · The mark</a></li>
+    <li><a href="#buttons">05 · Buttons</a></li>
+    <li><a href="#pills">06 · Pills & badges</a></li>
+    <li><a href="#three-nums">07 · Three-numbers</a></li>
+    <li><a href="#cards">08 · Cards</a></li>
+    <li><a href="#tables">09 · Tables</a></li>
+    <li><a href="#dodont">10 · Do / Don't</a></li>
+  </ul>
+</aside>
+
+<!-- ========== main ========== -->
+<main>
+
+<!-- ========== 01 · COLOR ========== -->
+<section class="spec-sec" id="color">
+  <div class="meta">01 · color</div>
+  <h2>Color tokens</h2>
+  <p class="lead">Five brand colors. Five elevation surfaces. Five text tints. Three status colors. Click any swatch to copy its hex.</p>
+
+  <div class="spec">
+    <div class="spec-head"><strong>Brand palette</strong><span class="tag">locked · do not extend</span></div>
+    <div class="spec-body">
+      <div class="swatches">
+        <div class="swatch" onclick="copyHex(this, '#2A4494')"><div class="chip" style="background:#2A4494"></div><div class="meta"><span class="name">Zop Blue</span><span class="hex">#2A4494</span><span class="role">Secure · "spent" · trust</span></div></div>
+        <div class="swatch" onclick="copyHex(this, '#F58549')"><div class="chip" style="background:#F58549"></div><div class="meta"><span class="name">Zop Orange</span><span class="hex">#F58549</span><span class="role">Speed · accent · "wasted"</span></div></div>
+        <div class="swatch" onclick="copyHex(this, '#7FB236')"><div class="chip" style="background:#7FB236"></div><div class="meta"><span class="name">Zop Green</span><span class="hex">#7FB236</span><span class="role">Savings · "recoverable"</span></div></div>
+        <div class="swatch" onclick="copyHex(this, '#0A0A0A')"><div class="chip" style="background:#0A0A0A; border-right:1px solid var(--line)"></div><div class="meta"><span class="name">Zop Black</span><span class="hex">#0A0A0A</span><span class="role">Ink · anchor · print</span></div></div>
+        <div class="swatch" onclick="copyHex(this, '#F0EBDB')"><div class="chip" style="background:#F0EBDB"></div><div class="meta"><span class="name">Zop Cream</span><span class="hex">#F0EBDB</span><span class="role">Paper · display on dark</span></div></div>
+      </div>
+    </div>
+    <pre class="spec-code"><span class="c">/* tokens.css, brand palette */</span>
+<span class="k">--zop-blue</span>:   <span class="v">#2A4494</span>;
+<span class="k">--zop-orange</span>: <span class="v">#F58549</span>;
+<span class="k">--zop-green</span>:  <span class="v">#7FB236</span>;
+<span class="k">--zop-black</span>:  <span class="v">#0A0A0A</span>;
+<span class="k">--zop-cream</span>:  <span class="v">#F0EBDB</span>;</pre>
+  </div>
+
+  <div class="spec">
+    <div class="spec-head"><strong>Dark canvas · elevation ladder</strong><span class="tag">--bg-0 → --bg-4</span></div>
+    <div class="spec-body">
+      <div class="swatches small">
+        <div class="swatch" onclick="copyHex(this, '#060608')"><div class="chip" style="background:#060608"></div><div class="meta"><span class="hex">#060608</span><span class="role">bg-0</span></div></div>
+        <div class="swatch" onclick="copyHex(this, '#0E0E12')"><div class="chip" style="background:#0E0E12"></div><div class="meta"><span class="hex">#0E0E12</span><span class="role">bg-1</span></div></div>
+        <div class="swatch" onclick="copyHex(this, '#15151A')"><div class="chip" style="background:#15151A"></div><div class="meta"><span class="hex">#15151A</span><span class="role">bg-2</span></div></div>
+        <div class="swatch" onclick="copyHex(this, '#1C1C24')"><div class="chip" style="background:#1C1C24"></div><div class="meta"><span class="hex">#1C1C24</span><span class="role">bg-3</span></div></div>
+        <div class="swatch" onclick="copyHex(this, '#252530')"><div class="chip" style="background:#252530"></div><div class="meta"><span class="hex">#252530</span><span class="role">bg-4</span></div></div>
+        <div class="swatch" onclick="copyHex(this, '#2A2A34')"><div class="chip" style="background:#2A2A34"></div><div class="meta"><span class="hex">#2A2A34</span><span class="role">line</span></div></div>
+        <div class="swatch" onclick="copyHex(this, '#3A3A46')"><div class="chip" style="background:#3A3A46"></div><div class="meta"><span class="hex">#3A3A46</span><span class="role">line-2</span></div></div>
+        <div class="swatch" onclick="copyHex(this, '#55555E')"><div class="chip" style="background:#55555E"></div><div class="meta"><span class="hex">#55555E</span><span class="role">line-b</span></div></div>
+      </div>
+    </div>
+    <div class="spec-foot"><strong>Rule:</strong> adjacent surfaces step by exactly one rung. Never mix <code style="background:#0A0A0A; padding:1px 4px">bg-0</code> next to <code style="background:#0A0A0A; padding:1px 4px">bg-3</code>, elevation must feel continuous.</div>
+  </div>
+
+  <div class="spec">
+    <div class="spec-head"><strong>Text tints</strong><span class="tag">--ink → --ink-5</span></div>
+    <div class="spec-body">
+      <div class="swatches small">
+        <div class="swatch" onclick="copyHex(this, '#F0EBDB')"><div class="chip" style="background:#F0EBDB"></div><div class="meta"><span class="hex">#F0EBDB</span><span class="role">ink · primary</span></div></div>
+        <div class="swatch" onclick="copyHex(this, '#D4CDB5')"><div class="chip" style="background:#D4CDB5"></div><div class="meta"><span class="hex">#D4CDB5</span><span class="role">ink-2</span></div></div>
+        <div class="swatch" onclick="copyHex(this, '#A8A195')"><div class="chip" style="background:#A8A195"></div><div class="meta"><span class="hex">#A8A195</span><span class="role">ink-3 · body</span></div></div>
+        <div class="swatch" onclick="copyHex(this, '#8A8378')"><div class="chip" style="background:#8A8378"></div><div class="meta"><span class="hex">#8A8378</span><span class="role">ink-4 · meta</span></div></div>
+        <div class="swatch" onclick="copyHex(this, '#5A5A62')"><div class="chip" style="background:#5A5A62"></div><div class="meta"><span class="hex">#5A5A62</span><span class="role">ink-5 · rare</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="spec-head"><strong>Status</strong><span class="tag">system, not brand</span></div>
+    <div class="spec-body">
+      <div class="swatches small">
+        <div class="swatch" onclick="copyHex(this, '#34d399')"><div class="chip" style="background:#34d399"></div><div class="meta"><span class="hex">#34d399</span><span class="role">ok · live · applied</span></div></div>
+        <div class="swatch" onclick="copyHex(this, '#FBBF24')"><div class="chip" style="background:#FBBF24"></div><div class="meta"><span class="hex">#FBBF24</span><span class="role">warn · pending</span></div></div>
+        <div class="swatch" onclick="copyHex(this, '#F87171')"><div class="chip" style="background:#F87171"></div><div class="meta"><span class="hex">#F87171</span><span class="role">err · boundary</span></div></div>
+      </div>
+    </div>
+    <div class="spec-foot"><strong>Rule:</strong> status colors are <em>system semantics</em>, never use them in marketing copy or hero visuals. Brand pillars (orange, blue, green) carry emotional meaning; status is purely functional.</div>
+  </div>
+</section>
+
+
+<!-- ========== 02 · TYPE ========== -->
+<section class="spec-sec" id="type">
+  <div class="meta">02 · typography</div>
+  <h2>Type scale</h2>
+  <p class="lead">Two faces. Eleven sizes. Every figure uses tabular-nums automatically via the base reset. Display ≥ 64px tightens to <code style="background:#0A0A0A; padding:1px 4px">letter-spacing:-0.05em</code>.</p>
+
+  <div class="spec">
+    <div class="spec-head"><strong>Scale ladder</strong><span class="tag">Space Grotesk, primary</span></div>
+    <div class="spec-body" style="padding:var(--sp-5) var(--sp-8)">
+      <div class="typerow"><span class="s">96px</span><span class="tok">t-96 / 700</span><span class="tok">-0.05em</span><span class="sample" style="font-size:96px; font-weight:700; letter-spacing:-0.05em; line-height:0.95">See everything.</span></div>
+      <div class="typerow"><span class="s">72px</span><span class="tok">t-72 / 700</span><span class="tok">-0.04em</span><span class="sample" style="font-size:72px; font-weight:700; letter-spacing:-0.04em; line-height:1">$182K</span></div>
+      <div class="typerow"><span class="s">60px</span><span class="tok">t-60 / 700</span><span class="tok">-0.04em</span><span class="sample" style="font-size:60px; font-weight:700; letter-spacing:-0.04em; line-height:1.05">Section heading.</span></div>
+      <div class="typerow"><span class="s">48px</span><span class="tok">t-48 / 700</span><span class="tok">-0.04em</span><span class="sample" style="font-size:48px; font-weight:700; letter-spacing:-0.04em; line-height:1">42%</span></div>
+      <div class="typerow"><span class="s">36px</span><span class="tok">t-36 / 700</span><span class="tok">-0.03em</span><span class="sample" style="font-size:36px; font-weight:700; letter-spacing:-0.03em; line-height:1.1">Subsection</span></div>
+      <div class="typerow"><span class="s">28px</span><span class="tok">t-28 / 600</span><span class="tok">-0.03em</span><span class="sample" style="font-size:28px; font-weight:600; letter-spacing:-0.03em">Card headline</span></div>
+      <div class="typerow"><span class="s">22px</span><span class="tok">t-22 / 700</span><span class="tok">-0.02em</span><span class="sample" style="font-size:22px; font-weight:700">Small heading</span></div>
+      <div class="typerow"><span class="s">20px</span><span class="tok">t-20 / 400</span><span class="tok">-0.02em</span><span class="sample" style="font-size:20px; font-weight:400; color:var(--ink-3)">Hero lead, ≤ 720px width · line-height 1.45</span></div>
+      <div class="typerow"><span class="s">17px</span><span class="tok">t-17 / 400</span><span class="tok">-0.02em</span><span class="sample" style="font-size:17px; font-weight:400; color:var(--ink-3)">Section lede</span></div>
+      <div class="typerow"><span class="s">15px</span><span class="tok">t-15 / 400</span><span class="tok">-0.02em</span><span class="sample" style="font-size:15px; color:var(--ink-2)">Body text, the default reading size</span></div>
+      <div class="typerow"><span class="s">13px</span><span class="tok">t-13 / 500</span><span class="tok">-0.02em</span><span class="sample" style="font-size:13px; color:var(--ink-3)">UI default · buttons · nav links</span></div>
+      <div class="typerow"><span class="s">11px</span><span class="tok">t-11 / mono</span><span class="tok">0.14em UP</span><span class="sample mono" style="font-family:var(--mono); font-size:11px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase">meta · captions · labels</span></div>
+    </div>
+    <pre class="spec-code"><span class="c">/* tokens.css, type */</span>
+<span class="k">--font</span>: <span class="v">'Space Grotesk'</span>, system-ui, sans-serif;
+<span class="k">--mono</span>: <span class="v">'JetBrains Mono'</span>, ui-monospace, monospace;
+
+<span class="c">/* scale */</span>
+<span class="k">--t-10</span> … <span class="k">--t-96</span>;  <span class="c">eleven steps</span>
+
+<span class="c">/* ls baseline -0.02em · ls-display -0.05em at ≥64px */</span></pre>
+  </div>
+</section>
+
+
+<!-- ========== 03 · MOTION ========== -->
+<section class="spec-sec" id="motion">
+  <div class="meta">03 · motion</div>
+  <h2>Motion tokens</h2>
+  <p class="lead">Four durations. Four eases. One signature: <strong>translateY(-4px) + 0 8px 0 -4px orange</strong>. Hover any card below to feel it. Respects <code style="background:#0A0A0A; padding:1px 4px">prefers-reduced-motion</code>.</p>
+
+  <div class="motion-grid">
+    <div class="motion-cell"><span class="t">01 · card hover lift</span><h4>The signature.</h4><p>250ms · ease-out · translateY(-4px) + offset-block shadow in orange + ::after bar grows top-to-bottom.</p><code>transition: transform var(--dur-med) var(--ease-out)</code></div>
+    <div class="motion-cell"><span class="t">02 · cta fill-slide</span><h4>Orange CTA.</h4><p>Background fills from left on hover. 250ms ease-out. Trailing arrow slides 4px right in sync.</p><code>transform: translateX(-100%) → 0</code></div>
+    <div class="motion-cell"><span class="t">03 · section reveal</span><h4>On viewport enter.</h4><p>Each section fades + rises from 32px below on intersection. Threshold 0.08 · rootMargin -60px.</p><code>transition: 520ms var(--ease-out)</code></div>
+    <div class="motion-cell"><span class="t">04 · count-up</span><h4>Three-numbers.</h4><p>Three hero figures stagger-reveal on load: 0ms · 120ms · 240ms. Then gently drift every 3.5s.</p><code>transition-delay: 0/120/240ms</code></div>
+    <div class="motion-cell"><span class="t">05 · applied-toast</span><h4>Bottom-right loop.</h4><p>8-second cycle · slides in from right · dwells 5s · exits right. Content rotates through real events.</p><code>animation: toast-loop 8s infinite</code></div>
+    <div class="motion-cell"><span class="t">06 · mark pulse</span><h4>The green tile.</h4><p>Only the green tile of the 2×2 mark pulses (opacity 1 → 0.55 → 1). 2.8s loop. Nothing else moves.</p><code>animation: mark-pulse 2.8s</code></div>
+  </div>
+
+  <div class="spec" style="margin-top:var(--sp-6)">
+    <div class="spec-head"><strong>Duration ladder + ease set</strong><span class="tag">four · four · no more</span></div>
+    <pre class="spec-code"><span class="k">--dur-fast</span>:  <span class="v">160ms</span>;   <span class="c">/* hover state · arrow slide */</span>
+<span class="k">--dur-med</span>:   <span class="v">250ms</span>;   <span class="c">/* card lift · border brighten */</span>
+<span class="k">--dur-slow</span>:  <span class="v">400ms</span>;   <span class="c">/* count-up · reveal-in */</span>
+<span class="k">--dur-xslow</span>: <span class="v">520ms</span>;   <span class="c">/* section enter on scroll */</span>
+
+<span class="k">--ease-out</span>:     <span class="v">cubic-bezier(.22, 1, .36, 1)</span>;
+<span class="k">--ease-in-out</span>:  <span class="v">cubic-bezier(.65, 0, .35, 1)</span>;
+<span class="k">--ease-spring</span>:  <span class="v">cubic-bezier(.175, .885, .32, 1.275)</span>;
+<span class="k">--ease-snap</span>:    <span class="v">cubic-bezier(.19, 1, .22, 1)</span>;</pre>
+  </div>
+</section>
+
+
+<!-- ========== 04 · MARK ========== -->
+<section class="spec-sec" id="mark">
+  <div class="meta">04 · the mark</div>
+  <h2>The 2×2 mark</h2>
+  <p class="lead">Three tiles: Blue top-left (Secure). Orange top-right (Speed). Green bottom-right (Savings). The empty bottom-left corner is the void the product fills. Sharp corners always. Never rotate. Never round. Never add a fourth tile.</p>
+
+  <div class="mark-grid">
+    <div class="mark-cell"><div class="lockup"><svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg></div><span class="label">primary lockup · dark</span></div>
+    <div class="mark-cell on-paper"><div class="lockup"><svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg></div><span class="label">primary lockup · paper</span></div>
+    <div class="mark-cell"><div class="lockup sz-s"><svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg></div><span class="label">small · 28px · nav scale</span></div>
+    <div class="mark-cell"><div class="lockup sz-l"><svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg></div><span class="label">large · 64px · display</span></div>
+    <div class="mark-cell"><svg style="height:88px; width:88px" viewBox="0 0 32 32"><use href="#mark-zopdev"/></svg><span class="label">standalone mark · 88px</span></div>
+    <div class="mark-cell"><svg style="height:48px; width:48px" viewBox="0 0 32 32"><use href="#mark-zopdev"/></svg><span class="label">standalone mark · 48px</span></div>
+    <div class="mark-cell"><svg style="height:32px; width:32px" viewBox="0 0 32 32"><use href="#mark-zopdev"/></svg><span class="label">standalone · 32px · favicon</span></div>
+    <div class="mark-cell on-paper"><svg style="height:48px; width:48px; color:var(--zop-black)" viewBox="0 0 32 32"><rect x="0" y="0" width="16" height="16" fill="currentColor"/><rect x="16" y="0" width="16" height="16" fill="currentColor"/><rect x="16" y="16" width="16" height="16" fill="currentColor"/></svg><span class="label">mono mark on paper</span></div>
+  </div>
+
+  <div class="spec" style="margin-top:var(--sp-6)">
+    <div class="spec-head"><strong>Clear space + min size</strong><span class="tag">protect the mark</span></div>
+    <div class="spec-body">
+      <p style="color:var(--ink-3); margin:0 0 var(--sp-4); font-size:var(--t-13)"><strong style="color:var(--ink); font-weight:500">Clear space</strong>, equal to one tile on every side. <strong style="color:var(--ink); font-weight:500">Min size</strong>, 16px (mono) · 20px (color). Below 16px the empty bottom-left tile becomes ambiguous, switch to monochrome.</p>
+    </div>
+    <pre class="spec-code"><span class="c">/* Primary lockup, wordmark + off-aligned mark.
+   Wordmark fills the left; three-tile mark sits at the top-right
+   of the lockup, forming an L-shape (empty bottom-left).
+   Single SVG symbol, do NOT compose from DOM tiles. */</span>
+<span class="k">&lt;svg viewBox=</span><span class="v">"0 0 715 276"</span><span class="k">&gt;</span>
+  <span class="k">&lt;use href=</span><span class="v">"#logo-zopdev"</span><span class="k">/&gt;</span>
+<span class="k">&lt;/svg&gt;</span>
+
+<span class="c">/* Standalone mark, favicon / avatar use only.
+   Never pair this with a DOM wordmark, use #logo-zopdev instead. */</span>
+<span class="k">&lt;svg viewBox=</span><span class="v">"0 0 32 32"</span><span class="k">&gt;&lt;use href=</span><span class="v">"#mark-zopdev"</span><span class="k">/&gt;&lt;/svg&gt;</span></pre>
+  </div>
+</section>
+
+
+<!-- ========== 05 · BUTTONS ========== -->
+<section class="spec-sec" id="buttons">
+  <div class="meta">05 · buttons</div>
+  <h2>Buttons</h2>
+  <p class="lead">Three variants. The accent (orange) is reserved for the primary CTA, never more than one per view. Hover lifts 4px with a hard offset block: cream for accent, orange for primary and secondary. Arrows slide 4px in sync.</p>
+
+  <div class="spec">
+    <div class="spec-head"><strong>Variants</strong><span class="tag">hover to see the signature</span></div>
+    <div class="spec-body">
+      <div class="btn-row">
+        <a class="btn btn-accent"><span>Start Free · 5 min to connect</span> <span class="arrow">→</span></a>
+        <a class="btn btn-primary"><span>Sign In</span> <span class="arrow">→</span></a>
+        <a class="btn btn-secondary"><span>See the Loop</span></a>
+      </div>
+    </div>
+    <pre class="spec-code"><span class="c">/* Accent, the primary CTA · use once per view */</span>
+<span class="k">&lt;a class=</span><span class="v">"btn btn-accent"</span><span class="k">&gt;</span>
+  <span class="k">&lt;span&gt;</span>Start free<span class="k">&lt;/span&gt;</span> <span class="k">&lt;span class=</span><span class="v">"arrow"</span><span class="k">&gt;</span>→<span class="k">&lt;/span&gt;</span>
+<span class="k">&lt;/a&gt;</span></pre>
+  </div>
+</section>
+
+
+<!-- ========== 06 · PILLS ========== -->
+<section class="spec-sec" id="pills">
+  <div class="meta">06 · pills &amp; badges</div>
+  <h2>Pills &amp; badges</h2>
+  <p class="lead">The only place in the system where <code style="background:#0A0A0A; padding:1px 4px">border-radius: 9999px</code> is permitted. Use for live-state tickers and row badges in tables, never for buttons.</p>
+
+  <div class="spec">
+    <div class="spec-head"><strong>Live pills</strong><span class="tag">status + count</span></div>
+    <div class="spec-body">
+      <div class="pills">
+        <span class="pill ok"><span class="dot"></span> All regions healthy</span>
+        <span class="pill b"><span class="dot"></span> 3,247 resources monitored</span>
+        <span class="pill o"><span class="dot"></span> 12 remediations · last 24h</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="spec-head"><strong>Row badges</strong><span class="tag">inside tables, not buttons</span></div>
+    <div class="spec-body">
+      <div class="pills">
+        <span class="badge run">running</span>
+        <span class="badge idle">idle 14d</span>
+        <span class="badge sch">scheduled</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== 07 · THREE-NUMBERS ========== -->
+<section class="spec-sec" id="three-nums">
+  <div class="meta">07 · three-numbers</div>
+  <h2>The three-numbers dashboard</h2>
+  <p class="lead">The signature hero composition. Every product surface, every marketing page, every investor slide opens with these three numbers in this order: <strong>Spent · Wasted · Recoverable</strong>. Top bar is a 3px pillar-colored strip. Figures tabular-nums.</p>
+
+  <div class="three-nums">
+    <div class="n spent">
+      <span class="label"><span class="dot"></span>01 · SPENT · this month</span>
+      <div class="big">$182K</div>
+      <span class="sub">total run-rate · live · aws + azure + gcp</span>
+    </div>
+    <div class="n wasted">
+      <span class="label"><span class="dot"></span>02 · WASTED · right now</span>
+      <div class="big">$47K</div>
+      <span class="sub">the portion you can cut today · no code change</span>
+    </div>
+    <div class="n recoverable">
+      <span class="label"><span class="dot"></span>03 · RECOVERABLE · one click</span>
+      <div class="big">$38K</div>
+      <span class="sub">click Apply · done · CDCR loop verifies</span>
+    </div>
+  </div>
+
+  <div class="spec" style="margin-top:var(--sp-6)">
+    <div class="spec-head"><strong>Rules</strong><span class="tag">non-negotiable</span></div>
+    <div class="spec-foot" style="background:var(--bg-1)">
+      <strong>01.</strong> Always three columns in this order.<br>
+      <strong>02.</strong> Spent always in <code style="color:var(--ink); background:#0A0A0A; padding:1px 4px">--ink</code>. Wasted always in <code style="color:var(--zop-orange); background:#0A0A0A; padding:1px 4px">--zop-orange</code>. Recoverable always in <code style="color:var(--zop-green); background:#0A0A0A; padding:1px 4px">--zop-green</code>.<br>
+      <strong>03.</strong> The top 3px pillar bar is mandatory, it is the component's tell.<br>
+      <strong>04.</strong> Values always tabular-nums · figure size 48–72px depending on container.<br>
+      <strong>05.</strong> Never add a fourth number. Never reorder.
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== 08 · CARDS ========== -->
+<section class="spec-sec" id="cards">
+  <div class="meta">08 · cards</div>
+  <h2>Card family</h2>
+  <p class="lead">Four shapes, scenario, case, trust, proof. All share the hover-lift signature. All have an empty ::after bar that grows top-to-bottom in orange on hover. All maintain the same border-radius (sharp) and border weight (1px).</p>
+
+  <div class="spec">
+    <div class="spec-head"><strong>Scenario, trigger block / questions</strong><span class="tag">orange left-bar · transforms on hover</span></div>
+    <div class="spec-body">
+      <div style="display:flex; flex-direction:column; gap:var(--sp-3)">
+        <div class="scenario"><span class="n">01</span><div><div class="q">"The CFO just asked why AWS grew 28% last quarter."</div><div class="a">one click · Showback report · exact $ · exact owner · <strong style="color:var(--zop-orange); font-weight:500">under 60 seconds</strong></div></div></div>
+        <div class="scenario"><span class="n">02</span><div><div class="q">"Board review on Friday. Deck needs cloud-spend defensibility."</div><div class="a">auto-PDF · 3 numbers · 12-mo trend · <strong style="color:var(--zop-orange); font-weight:500">zero manual prep</strong></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="spec-head"><strong>Case study, metric dominant</strong><span class="tag">pillar-tinted metric · cite at base</span></div>
+    <div class="spec-body">
+      <div class="sample-grid">
+        <div class="case b"><div class="ind">enterprise · healthcare</div><div class="metric">42%</div><h3>"We were spending $180K/mo on cloud we couldn't explain to the board. Now the CFO gets a weekly defensible report, auto-generated."</h3><div class="cite">cto · global healthcare platform · hipaa-regulated</div></div>
+        <div class="case o"><div class="ind">growth · retail saas</div><div class="metric">$38K<span style="font-size:20px; color:var(--ink-4)">/mo</span></div><h3>"Dev environments running 24/7 for a team that works 8 hours. ZopDev caught it in Week 1."</h3><div class="cite">head of infra · retail saas · series b</div></div>
+        <div class="case g"><div class="ind">global · fmcg</div><div class="metric">11→1</div><h3>"11 AWS accounts. Nobody knew what ran where. 15 minutes in we had a unified view."</h3><div class="cite">platform lead · fmcg · multi-cloud</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="spec-head"><strong>Trust card, icon-led</strong><span class="tag">pillar-rotating icon color</span></div>
+    <div class="spec-body">
+      <div class="sample-grid">
+        <div class="trust-card b"><div class="ico">R</div><h4>Read-only by default</h4><p>Discovery role has zero write permissions. Remediation runs in a separate, opt-in role scoped per action type.</p></div>
+        <div class="trust-card o"><div class="ico">↻</div><h4>Reversible always</h4><p>7-day rollback on every action. Pre-state snapshots automatic. Terminations → snapshot first, always.</p></div>
+        <div class="trust-card g"><div class="ico">Ø</div><h4>Zero data storage</h4><p>Your cloud metadata stays in your account. We don't replicate. Queries run on demand.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== 09 · TABLES ========== -->
+<section class="spec-sec" id="tables">
+  <div class="meta">09 · data</div>
+  <h2>Data rows</h2>
+  <p class="lead">All tables and row-lists use the same grammar: mono font · 10px uppercase headers · 12px body · inline badge pills. Tabular-nums on every column that contains money or counts.</p>
+
+  <div class="spec">
+    <div class="spec-head"><strong>Resource table, Atlas</strong><span class="tag">mono · tabular-nums · inline badges</span></div>
+    <div class="spec-body" style="padding:0">
+      <table class="table">
+        <thead><tr><th>resource</th><th>cloud</th><th>region</th><th>state</th><th>$ / mo</th></tr></thead>
+        <tbody>
+          <tr><td class="hi">i-0abc1234 · web-prod</td><td>aws</td><td>us-east-1</td><td><span class="badge run">running</span></td><td class="hi">$842</td></tr>
+          <tr><td class="hi">db-primary · pg-14</td><td>azure</td><td>eu-west-2</td><td><span class="badge run">running</span></td><td class="hi">$1,204</td></tr>
+          <tr><td class="hi">worker-pool-7</td><td>gcp</td><td>ap-south-1</td><td><span class="badge idle">idle 14d</span></td><td class="hi">$318</td></tr>
+          <tr><td class="hi">analytics-rds</td><td>aws</td><td>us-west-2</td><td><span class="badge sch">scheduled</span></td><td class="hi">$580</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== 10 · DO/DON'T ========== -->
+<section class="spec-sec" id="dodont">
+  <div class="meta">10 · enforcement</div>
+  <h2>Do · Don't</h2>
+  <p class="lead">The standing rules, made visible. Any violation fails code review.</p>
+
+  <div class="dd">
+    <div class="do">
+      <h5>DO</h5>
+      <ul>
+        <li>Solid fills · pillar-tinted rgba for subtle surfaces</li>
+        <li>Hard offset shadows: <code style="background:#0A0A0A; padding:1px 4px">0 8px 0 -4px var(--zop-orange)</code></li>
+        <li>Hairline 1px borders · sharp corners</li>
+        <li>One accent (orange) per viewport · reserved for primary CTA</li>
+        <li>Mono meta · Sans display · tabular-nums on figures</li>
+        <li>translateY(-4px) on card hover · 250ms ease-out</li>
+        <li>Respect <code style="background:#0A0A0A; padding:1px 4px">prefers-reduced-motion</code></li>
+      </ul>
+    </div>
+    <div class="dont">
+      <h5>DON'T</h5>
+      <ul>
+        <li>No linear-gradient · radial-gradient · conic-gradient</li>
+        <li>No filter:blur · no backdrop-filter · no blur-blobs</li>
+        <li>No drop-shadow with blur radius</li>
+        <li>No rounded corners except status pills (9999px)</li>
+        <li>No two pillar colors on the same CTA</li>
+        <li>No figures without tabular-nums</li>
+        <li>No fourth tile on the mark · no rotation · no gradient fills</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="product-documentation.html">Product documentation</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developer-documentation.html">Documentation</a></li>
+        <li><a href="developer-documentation.html#endpoints">API reference</a></li>
+        <li><a href="developer-documentation.html#mcp-server">MCP server</a></li>
+        <li><a href="developer-documentation.html#sdks">SDK &amp; CLI</a></li>
+        <li><a href="developer-documentation.html#webhooks">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-bottom" style="padding-top:20px; border-top:1px solid var(--line);">
+      <div>© <span data-year>2026</span> ZopDev, Inc. · all rights reserved · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">privacy</a> · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">terms</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+/* click-to-copy hex on swatches */
+function copyHex(el, hex){
+  navigator.clipboard?.writeText(hex);
+  const prev = el.querySelector('.hex')?.textContent;
+  if(!prev) return;
+  el.querySelector('.hex').textContent = 'copied ✓';
+  el.querySelector('.hex').style.color = 'var(--ok)';
+  setTimeout(() => {
+    el.querySelector('.hex').textContent = prev;
+    el.querySelector('.hex').style.color = '';
+  }, 900);
+}
+
+/* smooth scroll for TOC */
+document.querySelectorAll('.toc a').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href');
+    if(id && id.startsWith('#')){
+      e.preventDefault();
+      const el = document.querySelector(id);
+      if(el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+    }
+  });
+});
+</script>
+
+<script src="chrome-darkfold.js" defer></script>
+<script src="chrome-mobilenav.js" defer></script>
+</body>
+</html>

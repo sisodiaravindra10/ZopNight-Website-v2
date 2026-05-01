@@ -1,0 +1,126 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(css|js|svg|woff2?|ttf|otf|eot|png|jpg|jpeg|gif|webp|avif|ico)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    }
+  ],
+  "redirects": [
+    { "source": "/product/zopnight",      "destination": "/product/zopnight/atlas",  "permanent": false },
+    { "source": "/product/zopnight.html", "destination": "/product/zopnight/atlas",  "permanent": false },
+    { "source": "/product/zopday",        "destination": "/product",                 "permanent": false },
+    { "source": "/product/zopday.html",   "destination": "/product",                 "permanent": false },
+    { "source": "/product/zopday/:slug*", "destination": "/product",                 "permanent": false },
+    { "source": "/product/zopcloud",      "destination": "/product",                 "permanent": false },
+    { "source": "/product/zopcloud.html", "destination": "/product",                 "permanent": false },
+    { "source": "/product/ai.html",       "destination": "/product",                 "permanent": false },
+    { "source": "/product/ai",            "destination": "/product",                 "permanent": false },
+    { "source": "/product/mcp-server",    "destination": "/developers/mcp",          "permanent": false },
+    { "source": "/product/mcp-server.html","destination": "/developers/mcp",         "permanent": false },
+
+    { "source": "/customers/:slug*",      "destination": "/customers",               "permanent": false },
+
+    { "source": "/solutions/azure",       "destination": "/solutions/aws",           "permanent": false },
+    { "source": "/solutions/azure.html",  "destination": "/solutions/aws",           "permanent": false },
+    { "source": "/solutions/gcp",         "destination": "/solutions/aws",           "permanent": false },
+    { "source": "/solutions/gcp.html",    "destination": "/solutions/aws",           "permanent": false },
+    { "source": "/solutions/oci",         "destination": "/solutions/aws",           "permanent": false },
+    { "source": "/solutions/oci.html",    "destination": "/solutions/aws",           "permanent": false },
+    { "source": "/solutions/engineering", "destination": "/solutions/devops",        "permanent": false },
+    { "source": "/solutions/engineering.html", "destination": "/solutions/devops",   "permanent": false },
+    { "source": "/solutions/platform",    "destination": "/platform-engineering-hub","permanent": false },
+    { "source": "/solutions/platform.html","destination":"/platform-engineering-hub","permanent": false },
+    { "source": "/solutions/kubernetes-cost", "destination": "/solutions/kubernetes","permanent": false },
+    { "source": "/solutions/kubernetes-cost.html", "destination": "/solutions/kubernetes", "permanent": false },
+    { "source": "/solutions/non-prod-savings", "destination": "/solutions/rightsizing","permanent": false },
+    { "source": "/solutions/non-prod-savings.html", "destination": "/solutions/rightsizing", "permanent": false },
+    { "source": "/solutions/:slug*",      "destination": "/solutions",               "permanent": false },
+
+    { "source": "/developers/sdks",       "destination": "/developers/sdk",          "permanent": false },
+    { "source": "/developers/sdks.html",  "destination": "/developers/sdk",          "permanent": false },
+    { "source": "/developers/api-reference", "destination": "/developers",           "permanent": false },
+    { "source": "/developers/api-reference.html", "destination": "/developers",      "permanent": false },
+    { "source": "/developers/cli",        "destination": "/developers/sdk",          "permanent": false },
+    { "source": "/developers/cli.html",   "destination": "/developers/sdk",          "permanent": false },
+    { "source": "/developers/terraform",  "destination": "/developers/sdk",          "permanent": false },
+    { "source": "/developers/terraform.html", "destination": "/developers/sdk",      "permanent": false },
+    { "source": "/developers/github-actions", "destination": "/developers/quickstart","permanent": false },
+    { "source": "/developers/github-actions.html", "destination": "/developers/quickstart", "permanent": false },
+    { "source": "/developers/gitlab-ci",  "destination": "/developers/quickstart",   "permanent": false },
+    { "source": "/developers/gitlab-ci.html", "destination": "/developers/quickstart","permanent": false },
+    { "source": "/developers/changelog-api", "destination": "/changelog",            "permanent": false },
+    { "source": "/developers/changelog-api.html", "destination": "/changelog",       "permanent": false },
+    { "source": "/developers/status",     "destination": "/trust",                   "permanent": false },
+    { "source": "/developers/status.html","destination": "/trust",                   "permanent": false },
+    { "source": "/developers/support",    "destination": "/contact",                 "permanent": false },
+    { "source": "/developers/support.html","destination": "/contact",                "permanent": false },
+    { "source": "/developers/recipes",    "destination": "/developers/quickstart",   "permanent": false },
+    { "source": "/developers/recipes.html","destination": "/developers/quickstart",  "permanent": false },
+    { "source": "/developers/tutorials",  "destination": "/developers/quickstart",   "permanent": false },
+    { "source": "/developers/tutorials.html","destination": "/developers/quickstart","permanent": false },
+
+    { "source": "/resources/calculators", "destination": "/pricing",                 "permanent": false },
+    { "source": "/resources/calculators.html", "destination": "/pricing",            "permanent": false },
+    { "source": "/resources/calculators/:slug*", "destination": "/pricing",          "permanent": false },
+    { "source": "/resources/newsletter",  "destination": "/resources",               "permanent": false },
+    { "source": "/resources/newsletter.html", "destination": "/resources",           "permanent": false },
+    { "source": "/resources/whitepapers", "destination": "/resources",               "permanent": false },
+    { "source": "/resources/reports",     "destination": "/resources",               "permanent": false },
+    { "source": "/resources/webinars",    "destination": "/resources",               "permanent": false },
+    { "source": "/resources/community",   "destination": "/resources",               "permanent": false },
+    { "source": "/resources/events",      "destination": "/resources",               "permanent": false },
+    { "source": "/resources/faqs",        "destination": "/resources",               "permanent": false },
+    { "source": "/resources/forum",       "destination": "/resources",               "permanent": false },
+    { "source": "/resources/templates",   "destination": "/resources",               "permanent": false },
+    { "source": "/resources/videos",      "destination": "/resources",               "permanent": false },
+    { "source": "/resources/university",  "destination": "/resources",               "permanent": false },
+    { "source": "/resources/architecture","destination": "/resources",               "permanent": false },
+    { "source": "/resources/open-source", "destination": "/developers",              "permanent": false },
+    { "source": "/resources/finops-framework","destination": "/solutions/finops",    "permanent": false },
+    { "source": "/resources/focus-spec",  "destination": "/solutions/finops",        "permanent": false },
+
+    { "source": "/get-started",           "destination": "/demo",                    "permanent": false },
+    { "source": "/get-started.html",      "destination": "/demo",                    "permanent": false },
+    { "source": "/get-started/contact",   "destination": "/contact",                 "permanent": false },
+    { "source": "/get-started/contact.html","destination": "/contact",               "permanent": false },
+    { "source": "/get-started/:slug*",    "destination": "/demo",                    "permanent": false },
+
+    { "source": "/trust/:slug*",          "destination": "/trust",                   "permanent": false },
+    { "source": "/company/:slug*",        "destination": "/about",                   "permanent": false },
+    { "source": "/partners/:slug*",       "destination": "/partners",                "permanent": false },
+    { "source": "/legal/:slug*",          "destination": "/trust",                   "permanent": false },
+
+    { "source": "/docs",                  "destination": "/developers",              "permanent": false },
+    { "source": "/docs.html",             "destination": "/developers",              "permanent": false },
+    { "source": "/whats-new",             "destination": "/changelog",               "permanent": false },
+    { "source": "/whats-new.html",        "destination": "/changelog",               "permanent": false },
+    { "source": "/index-blueprint",       "destination": "/",                        "permanent": false },
+    { "source": "/index-blueprint.html",  "destination": "/",                        "permanent": false },
+
+    { "source": "/compare/zopdev-vs-apptio.html",   "destination": "/compare/zopdev-vs-cloudhealth", "permanent": false },
+    { "source": "/compare/zopdev-vs-cloudzero.html","destination": "/compare/zopdev-vs-cloudhealth", "permanent": false },
+    { "source": "/compare/zopdev-vs-densify.html",  "destination": "/compare/zopdev-vs-cloudhealth", "permanent": false },
+    { "source": "/compare/zopdev-vs-spot.html",     "destination": "/compare/zopdev-vs-spotio",      "permanent": false },
+    { "source": "/compare/zopdev-vs-zesty.html",    "destination": "/compare/zopdev-vs-cloudhealth", "permanent": false }
+  ]
+}

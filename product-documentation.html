@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<!--
+  ========================================================================
+  ZopDev · _shell.html
+  ------------------------------------------------------------------------
+  PAGE TEMPLATE, not a real page. The underscore prefix signals that.
+
+  Copy this file when starting any new page. The canonical nav, footer,
+  live-ops strip, and SVG symbols are already wired. Only edit the three
+  clearly-marked TEMPLATE blocks:
+
+     1 · <title> + meta-description in <head>
+     2 · .nav-links, mark the active tab
+     3 · <main class="page"> content between nav and footer
+
+  Everything else, tokens, chrome styles, logo symbols, reduced-motion
+  gate, comes from tokens.css + chrome.css. Do not redefine locally.
+  ========================================================================
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+
+<title>Product documentation · ZopNight · ZopDev</title>
+<meta name="description" content="ZopNight product documentation — autonomous cloud governance and FinOps automation across AWS, GCP, Azure, and Kubernetes. Cut cloud spend up to 60%."/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="chrome.css"/>
+<link rel="stylesheet" href="chrome-footer.css">
+
+<style>
+/* no-italic-site-wide */ em,i,cite,dfn,var,address,blockquote{font-style:normal}
+/* ======================================================================
+   Page-specific CSS goes here.
+   Rules of engagement:
+     · tokens only (no hex literals except brand exceptions)
+     · no gradients · no blurs · no backdrop-filter
+     · sharp corners (border-radius: 0), pills (9999px) for status only
+     · hard offset shadows: 0 8px 0 -4px <color>
+   ====================================================================== */
+
+/* section rhythm */
+.page{ padding:0; }
+.page > section{ padding:var(--sec-pad) 0; border-bottom:1px solid var(--line); }
+.page > section:last-child{ border-bottom:0; }
+
+/* breadcrumb, used at the top of every subpage */
+.crumb{
+  padding:var(--sp-7) 0 var(--sp-4);
+  max-width:var(--max); margin:0 auto;
+  padding-left:var(--gutter); padding-right:var(--gutter);
+  font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4);
+  letter-spacing:var(--ls-meta-tight); text-transform:uppercase;
+}
+.crumb a{ color:var(--ink-3); }
+.crumb a:hover{ color:var(--ink); }
+.crumb .sep{ color:var(--ink-5); margin:0 var(--sp-2); }
+
+/* page heading, shared across subpages */
+.page-head{
+  padding:var(--sp-10) 0 var(--sp-12);
+  max-width:var(--max); margin:0 auto;
+  padding-left:var(--gutter); padding-right:var(--gutter);
+  border-bottom:1px solid var(--line);
+}
+.page-head .meta{
+  font-family:var(--mono); font-size:var(--t-11);
+  color:var(--zop-orange); letter-spacing:var(--ls-meta);
+  text-transform:uppercase; margin-bottom:var(--sp-4);
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+}
+.page-head .meta::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
+.page-head h1{
+  font-size:clamp(48px, 6vw, 88px);
+  font-weight:var(--fw-bold); letter-spacing:var(--ls-display);
+  line-height:var(--lh-display);
+  max-width:1000px; margin:0 0 var(--sp-5);
+}
+.page-head h1 em{ font-style:normal; color:var(--zop-orange); }
+.page-head p.lede{
+  font-size:var(--t-20); color:var(--ink-3);
+  max-width:720px; line-height:1.45; margin:0;
+}
+.page-head p.lede strong{ color:var(--ink); font-weight:var(--fw-medium); }
+
+@media (max-width:768px){
+  .page > section{ padding:var(--sec-pad-sm) 0; }
+}
+
+/* ======================================================================
+   PRODUCT DOCUMENTATION · two-column layout
+   --------------------------------------------------------------------
+   Left: sticky table of contents (sections + sub-sections).
+   Right: long-form content blocks, each anchored for deep-linking.
+   Drops to single-column below 960px (TOC moves above content).
+   ====================================================================== */
+.docs-layout{
+  display:grid; grid-template-columns:260px 1fr;
+  gap:var(--sp-12);
+  max-width:var(--max); margin:0 auto;
+  padding:var(--sp-10) var(--gutter) var(--sp-14);
+}
+.docs-toc{
+  position:sticky; top:84px; align-self:start;
+  font-family:var(--mono); font-size:var(--t-12);
+  max-height:calc(100vh - 100px); overflow-y:auto;
+  padding-right:var(--sp-3);
+  border-right:1px solid var(--line);
+}
+.docs-toc h4{
+  font-size:var(--t-10); color:var(--ink-4);
+  letter-spacing:var(--ls-meta); text-transform:uppercase;
+  font-weight:var(--fw-medium); margin:0 0 var(--sp-3);
+}
+.docs-toc ol{ list-style:none; padding:0; margin:0; counter-reset:doc; }
+.docs-toc ol > li{ counter-increment:doc; margin:var(--sp-1) 0; }
+.docs-toc ol > li > a{
+  display:flex; gap:var(--sp-2);
+  color:var(--ink-3); padding:6px 0; line-height:1.4;
+  transition:color .14s;
+  border-left:2px solid transparent; padding-left:var(--sp-3); margin-left:calc(var(--sp-3) * -1);
+}
+.docs-toc ol > li > a::before{
+  content:counter(doc, decimal-leading-zero);
+  color:var(--ink-5); font-size:var(--t-10);
+  flex-shrink:0; padding-top:1px;
+}
+.docs-toc ol > li > a:hover{ color:var(--ink); border-left-color:var(--zop-orange); }
+.docs-toc ol > li > a.active{ color:var(--zop-orange); border-left-color:var(--zop-orange); }
+
+.docs-body{ min-width:0; }
+.docs-section{
+  padding:var(--sp-10) 0;
+  border-bottom:1px solid var(--line);
+  scroll-margin-top:80px;
+}
+.docs-section:first-child{ padding-top:0; }
+.docs-section:last-child{ border-bottom:0; padding-bottom:0; }
+.docs-section .num{
+  font-family:var(--mono); font-size:var(--t-11);
+  color:var(--zop-orange); letter-spacing:var(--ls-meta);
+  text-transform:uppercase; margin:0 0 var(--sp-3);
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+}
+.docs-section .num::before{ content:''; width:8px; height:8px; background:var(--zop-orange); }
+.docs-section h2{
+  font-size:clamp(28px, 3.6vw, 44px);
+  letter-spacing:var(--ls-heading); line-height:1.1;
+  margin:0 0 var(--sp-5); max-width:780px;
+}
+.docs-section h2 em{ color:var(--zop-orange); font-style:normal; }
+.docs-section h3{
+  font-size:var(--t-22); margin:var(--sp-8) 0 var(--sp-3);
+  letter-spacing:var(--ls-heading); line-height:1.25;
+  scroll-margin-top:80px;
+}
+.docs-section h4{
+  font-size:var(--t-15); margin:var(--sp-6) 0 var(--sp-2);
+  font-weight:var(--fw-semi); letter-spacing:var(--ls-heading);
+}
+.docs-section p{
+  font-size:var(--t-15); color:var(--ink-2);
+  line-height:1.7; margin:0 0 var(--sp-4); max-width:760px;
+}
+.docs-section p strong{ color:var(--ink); font-weight:var(--fw-medium); }
+.docs-section ul, .docs-section ol{
+  font-size:var(--t-15); color:var(--ink-2);
+  line-height:1.7; margin:0 0 var(--sp-4); padding-left:var(--sp-5);
+  max-width:760px;
+}
+.docs-section li{ margin:var(--sp-2) 0; }
+.docs-section li strong{ color:var(--ink); font-weight:var(--fw-medium); }
+.docs-section code{
+  font-family:var(--mono); font-size:0.9em;
+  background:var(--bg-2); padding:2px 6px;
+  border:1px solid var(--line);
+}
+
+/* Reference table · clean borders, monospace data */
+.docs-table{
+  width:100%; max-width:none;
+  border-collapse:collapse; border:1px solid var(--line);
+  margin:var(--sp-4) 0 var(--sp-6); font-size:var(--t-13);
+}
+.docs-table th, .docs-table td{
+  text-align:left; padding:var(--sp-3) var(--sp-4);
+  border-bottom:1px solid var(--line); vertical-align:top;
+  line-height:1.5; color:var(--ink-2);
+}
+.docs-table th{
+  background:var(--bg-2); color:var(--ink-4);
+  font-family:var(--mono); font-size:var(--t-10);
+  letter-spacing:var(--ls-meta); text-transform:uppercase;
+  font-weight:var(--fw-medium);
+}
+.docs-table tr:last-child td{ border-bottom:0; }
+.docs-table td:first-child{ font-family:var(--mono); font-size:var(--t-12); color:var(--ink); white-space:nowrap; }
+.docs-table code{ background:transparent; border:0; padding:0; }
+
+/* Callout · highlighted advisory boxes */
+.docs-callout{
+  border-left:3px solid var(--zop-orange);
+  padding:var(--sp-4) var(--sp-5);
+  background:var(--bg-2);
+  margin:var(--sp-5) 0;
+  max-width:760px;
+}
+.docs-callout strong{ color:var(--ink); display:block; margin-bottom:var(--sp-1); font-weight:var(--fw-medium); }
+.docs-callout p{ margin:0; font-size:var(--t-14); }
+
+@media (max-width:960px){
+  .docs-layout{ grid-template-columns:1fr; gap:var(--sp-6); }
+  .docs-toc{ position:static; max-height:none; border-right:0; border-bottom:1px solid var(--line); padding:0 0 var(--sp-5); }
+}
+</style>
+<script src="chrome-mobilenav.js" defer></script>
+<script src="chrome-footer.js" defer></script>
+</head>
+<body>
+
+<!-- ========================================================================
+     SVG defs, the canonical logo + marks. Identical on every page.
+     ======================================================================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mark-zopdev" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="16" height="16" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="16" y="0" width="16" height="16" fill="#F58549"/>
+      <rect x="16" y="16" width="16" height="16" fill="#7FB236"/>
+    </symbol>
+    <symbol id="mark-zopnight" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="32" height="32" fill="var(--logo-blue, #2A4494)"/>
+      <circle cx="16" cy="16" r="8" fill="#FFFFFF"/>
+    </symbol>
+    <symbol id="mark-zopday" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="32" height="32" fill="#F58549"/>
+      <circle cx="16" cy="16" r="8" fill="#FFFFFF"/>
+    </symbol>
+    <symbol id="mark-zopcloud" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="10" height="10" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="11" y="0" width="10" height="10" fill="#F58549"/>
+      <rect x="22" y="11" width="10" height="10" fill="#7FB236"/>
+      <rect x="11" y="11" width="10" height="10" fill="#0A0A0A"/>
+      <rect x="0" y="22" width="10" height="10" fill="#7FB236"/>
+      <rect x="11" y="22" width="10" height="10" fill="var(--logo-blue, #2A4494)"/>
+    </symbol>
+    <symbol id="logo-zopdev" viewBox="0 0 715 276">
+      <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+      <rect x="537" width="89" height="89" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="626" width="89" height="89" fill="#F58549"/>
+      <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+    </symbol>
+  </defs>
+</svg>
+
+
+<!-- ========================================================================
+     ANNOUNCEMENT BAR, product news · above nav · dismissable
+     ======================================================================== -->
+<div class="ann-bar" id="ann-bar">
+  <div class="ann-inner">
+    <a href="/developers.html" class="ann-chip">
+      <span class="ann-dot"></span>
+      <strong>MCP Server</strong>, live in Claude &amp; Codex
+      <span class="ann-arrow">→</span>
+    </a>
+    <a href="/changelog.html" class="ann-link">Changelog →</a>
+    <button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button>
+  </div>
+</div>
+
+
+<!-- ========================================================================
+     LIVE-OPS STRIP, identical on every page
+     ======================================================================== -->
+<!-- ============================================================
+     SAVINGS CALCULATOR STRIP. Single CTA, links to the calculator.
+     ============================================================ -->
+<a class="live-strip live-strip-cta" href="#calculator" aria-label="Open the savings calculator">
+  <span class="ls-cta-anchor">
+    <span class="ls-live"><span class="ls-livedot"></span>Calculator</span>
+  </span>
+  <span class="ls-cta-msg">See how much your cloud is wasting right now.</span>
+  <span class="ls-cta-arrow">Try it <span class="ls-arrow">&rarr;</span></span>
+</a>
+
+
+<!-- ========================================================================
+     NAV, identical on every page · CANONICAL.
+     If you change this block, run the chrome sweep so every subpage
+     stays in sync. Driven by data-menu/data-pane attributes — chrome.css
+     and chrome-mobilenav.js wire the dropdown overlay.
+     ======================================================================== -->
+<link rel="stylesheet" href="homepage-chrome.css"/>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo-lockup sm" aria-label="ZopDev">
+      <svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <div class="nav-item" data-menu="product">
+        <a>Product <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <div class="nav-item" data-menu="resources">
+        <a>Resources <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="pricing.html">Pricing</a>
+      <div class="nav-item" data-menu="company">
+        <a>Company <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="community.html">Community</a>
+    </div>
+
+    <!-- Shared dropdown overlay. Content crossfades, panel slides left/right -->
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+      <div class="nav-panes" id="nav-panes">
+
+        <!-- ═══════ PRODUCT · 3 sub-products ═══════ -->
+        <div class="nav-pane" data-pane="product">
+          <!-- 3 equal cells. Inline grid-template-columns overrides the
+               default 1.3fr 1fr 1fr (which is built for a featured-hero
+               layout). All three products are equal here — no hero — so
+               no empty grid slots and no card stretches taller than its
+               siblings. -->
+          <div class="np-bento" style="grid-template-columns:1fr 1fr 1fr;">
+            <a class="np-cell" href="zopnight.html">
+              <span class="np-badge live">live</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopNight</h3>
+              <p class="np-cell-desc">Cloud cost optimization on autopilot. AWS, Azure, GCP.</p>
+            </a>
+            <a class="np-cell" href="zopday.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#F58549"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopDay</h3>
+              <p class="np-cell-desc">Deployment orchestration and release management.</p>
+            </a>
+            <a class="np-cell" href="zopcloud.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><rect x="12" y="8" width="8" height="6" fill="#FFFFFF"/><rect x="6" y="14" width="20" height="10" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopCloud</h3>
+              <p class="np-cell-desc">Multi-cloud resource graph and topology view.</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Live in Claude &amp; Codex</strong> · run ZopNight from your MCP client</span>
+            <a href="developers.html">Try MCP →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ RESOURCES · 9 cells in a 3×3 grid ═══════ -->
+        <div class="nav-pane" data-pane="resources">
+          <div class="np-bento np-bento--grid">
+            <a class="np-cell" href="blog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Blog</h3>
+              <p class="np-cell-desc">Engineering + cost optimization notes</p>
+            </a>
+            <a class="np-cell" href="free-ebooks.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 4h7v13H3zM10 4h7v13h-7z" stroke="currentColor" stroke-width="1.5"/><path d="M10 4v13" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Ebooks</h3>
+              <p class="np-cell-desc">Free playbooks · FinOps, K8s, CDCR</p>
+            </a>
+            <a class="np-cell" href="customers.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 16c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Case studies</h3>
+              <p class="np-cell-desc">42-67% cuts, real teams</p>
+            </a>
+            <a class="np-cell" href="solutions.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Use cases by industry</h3>
+              <p class="np-cell-desc">SaaS · fintech · retail · health</p>
+            </a>
+            <a class="np-cell" href="product-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M8 7l4 3-4 3z" fill="currentColor"/></svg>
+              </div>
+              <h3 class="np-cell-title">Product documentation</h3>
+              <p class="np-cell-desc">Walkthroughs · video tours</p>
+            </a>
+            <a class="np-cell" href="kubernetes-guide.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2l7 4v8l-7 4-7-4V6z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
+              </div>
+              <h3 class="np-cell-title">Kubernetes guide</h3>
+              <p class="np-cell-desc">From cluster basics to right-sizing</p>
+            </a>
+            <a class="np-cell" href="changelog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Changelog</h3>
+              <p class="np-cell-desc">What shipped this week</p>
+            </a>
+            <a class="np-cell" href="developer-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 6L3 10l4 4M13 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 class="np-cell-title">Developer documentation</h3>
+              <p class="np-cell-desc">REST API · SDKs · webhooks · MCP</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Weekly digest</strong> · waste signals, wins, war stories</span>
+            <a href="blog.html">Subscribe →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ COMPANY · 2 items ═══════ -->
+        <div class="nav-pane" data-pane="company">
+          <div class="np-bento" style="grid-template-columns:1fr 1fr;">
+            <a class="np-cell" href="about.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#0A0A0A"/><rect x="6" y="6" width="8" height="20" fill="#F0EBDB"/><rect x="18" y="12" width="8" height="14" fill="#F58549"/></svg>
+              </div>
+              <h3 class="np-cell-title">About</h3>
+              <p class="np-cell-desc">Founded 2024. The autopilot for multi-cloud cost.</p>
+            </a>
+            <a class="np-cell" href="careers.html">
+              <span class="np-badge">hiring</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="6" width="14" height="11" stroke="currentColor" stroke-width="1.5"/><path d="M7 6V4h6v2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Careers</h3>
+              <p class="np-cell-desc">Open roles · engineering, design, GTM</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>We're hiring</strong> · remote-first · 12 open roles</span>
+            <a href="careers.html">See roles →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="nav-cta">
+      <!-- Status pill · live dot · links to /status.html. Mirrors the
+           project's "always-on" identity (the live-ops strip above the
+           nav). Pulses green when all systems are operational. -->
+      <a class="nav-status" href="status.html" aria-label="System status">
+        <span class="nav-status-dot" aria-hidden="true"></span>
+        <span class="nav-status-text">Status</span>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" role="switch">
+        <span class="tt-opt tt-sun" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="8" cy="8" r="3" fill="currentColor" stroke="none"/>
+            <path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.9.9M11.7 11.7l.9.9M3.4 12.6l.9-.9M11.7 4.3l.9-.9"/>
+          </svg>
+        </span>
+        <span class="tt-opt tt-moon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M12.8 10.1a5.5 5.5 0 0 1-7-7 .5.5 0 0 0-.7-.6A6.5 6.5 0 1 0 13.4 10.8a.5.5 0 0 0-.6-.7z"/>
+          </svg>
+        </span>
+      </button>
+      <a class="chip-playground" href="playground.html"><span>Playground</span></a>
+      <a class="sign" href="signin.html">Sign In</a>
+      <a class="btn btn-accent" href="demo.html"><span>Book a Demo</span> <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ========================================================================
+     TEMPLATE BLOCK 3 · page content between nav and footer
+     ======================================================================== -->
+<main class="page">
+
+  <div class="crumb"><a href="/">home</a> <span class="sep">/</span> <a href="blog.html">resources</a> <span class="sep">/</span> product documentation</div>
+
+  <header class="page-head">
+    <div class="meta">resources · zopnight</div>
+    <h1>Product <em>documentation.</em></h1>
+    <p class="lede">ZopNight is an autonomous cloud governance platform that enforces cost discipline through policy-driven remediation. <strong>Cron-based start/stop schedules, 337+ audit rules, dependency-aware orchestration</strong> across AWS, GCP, Azure, and Kubernetes. Cuts cloud spend up to 60%.</p>
+  </header>
+
+  <div class="docs-layout">
+
+    <!-- Sticky table of contents -->
+    <aside class="docs-toc" aria-label="Documentation table of contents">
+      <h4>// contents</h4>
+      <ol>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#getting-started">Getting started</a></li>
+        <li><a href="#scheduling">Scheduling &amp; automation</a></li>
+        <li><a href="#intelligence">Intelligence &amp; optimization</a></li>
+        <li><a href="#cost-management">Cost management</a></li>
+        <li><a href="#dashboards">Dashboards &amp; reports</a></li>
+        <li><a href="#notifications">Notifications</a></li>
+        <li><a href="#discovery">Resource discovery</a></li>
+        <li><a href="#cloud-accounts">Cloud account management</a></li>
+        <li><a href="#cloud-support">Cloud support matrix</a></li>
+        <li><a href="#security">Security &amp; access control</a></li>
+        <li><a href="#provisioning">Provisioning (ZopDay)</a></li>
+        <li><a href="#mcp-server">MCP server (AI integration)</a></li>
+        <li><a href="#api">API overview</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#appendix">Appendix</a></li>
+      </ol>
+    </aside>
+
+    <!-- Documentation sections -->
+    <article class="docs-body">
+
+      <section class="docs-section" id="introduction">
+        <div class="num">01 · introduction</div>
+        <h2>Autonomous cloud governance &amp; <em>FinOps automation.</em></h2>
+        <p>ZopNight is an autonomous cloud governance platform that enforces cost discipline through policy-driven remediation, enabling engineering teams to move fast while maintaining financial control.</p>
+        <p>Built by ZopDev, ZopNight moves beyond traditional FinOps dashboards. Where legacy tools surface insights after the damage is done, ZopNight prevents waste at its source through automated scheduling, dependency-aware resource orchestration, and 337+ audit rules across AWS, GCP, Azure, and Kubernetes.</p>
+
+        <h3>What ZopNight does</h3>
+        <ul>
+          <li><strong>Enforces cost discipline automatically</strong> through cron-based start/stop schedules that power down non-production resources during idle hours, verified to reduce cloud spend by up to 60%.</li>
+          <li><strong>Detects and remediates waste</strong> with idle resource detection, right-sizing recommendations, orphan cleanup, and discount opportunity identification across all three major cloud providers.</li>
+          <li><strong>Orchestrates infrastructure safely</strong> with dependency-aware execution ordering, production-safe overrides, and full audit trails for every state transition.</li>
+          <li><strong>Scales infrastructure proactively</strong> with VM autoscaling policies, event readiness pre-scaling, and cost anomaly detection that catches budget deviations before they compound.</li>
+          <li><strong>Provisions multi-cloud infrastructure end-to-end</strong> via ZopDay, with single-wizard deployment of Kubernetes clusters, datastores, networking, and add-ons across AWS, GCP, and Azure.</li>
+        </ul>
+
+        <h3>Architecture overview</h3>
+        <p>ZopNight follows a discover-schedule-execute pattern. All API requests pass through a gateway that handles JWT validation and org context injection, routing to five backend services:</p>
+        <ul>
+          <li><strong>Config:</strong> Schedules, resource groups, overrides, cloud accounts, autoscaler policies, event readiness definitions.</li>
+          <li><strong>Discoverer:</strong> Multi-cloud resource discovery, metrics collection, activity log sync.</li>
+          <li><strong>Executor:</strong> Start/stop execution, state history, autoscaler and event readiness action fulfillment.</li>
+          <li><strong>Aggregator:</strong> Cost reports, trends, budgets, showback, billing sync, anomaly detection.</li>
+          <li><strong>Recommender:</strong> 337+ audit rules, optimization recommendations, auto-tagging predictions.</li>
+        </ul>
+
+        <div class="docs-callout">
+          <strong>Production-safe by design</strong>
+          <p>ZopNight performs start and stop operations only. It never deletes resources. Production environments receive automatic protection flags, and every action is logged with full attribution for audit readiness.</p>
+        </div>
+
+        <h3>Who this document is for</h3>
+        <p>Engineering leaders evaluating ZopNight, platform teams onboarding their cloud accounts, and FinOps practitioners building cost governance programs. Covers every capability in depth, from five-minute quick-start to advanced autoscaling policies and API integration patterns.</p>
+      </section>
+
+      <section class="docs-section" id="getting-started">
+        <div class="num">02 · getting started</div>
+        <h2>Five minutes to <em>first value.</em></h2>
+        <p>ZopNight is designed for a five-minute path to first value. Connect a cloud account, discover resources, attach a schedule, and start enforcing cost discipline immediately.</p>
+
+        <h3>Prerequisites</h3>
+        <ul>
+          <li>A ZopNight organization (created during signup via Google, GitHub, or SAML SSO).</li>
+          <li>Cloud provider credentials with appropriate permissions (read-only for discovery, read-write for start/stop enforcement).</li>
+          <li>At least one non-production environment (dev, staging, QA) with running resources.</li>
+        </ul>
+
+        <h3>Quick-start workflow</h3>
+        <ol>
+          <li><strong>Connect a cloud account.</strong> Add AWS, GCP, or Azure credentials. ZopNight supports static keys, assume-role (AWS), service account JSON (GCP), service principal or Workload Identity Federation (Azure).</li>
+          <li><strong>Discover resources.</strong> ZopNight scans all regions and surfaces inventory by provider, account, region, and resource type. Discovery runs on a six-hour cycle and supports on-demand refresh.</li>
+          <li><strong>Create a schedule.</strong> Define a cron-based schedule with timezone support. Common patterns: weekday business hours, night shutdown, weekend shutdown.</li>
+          <li><strong>Attach resources.</strong> Assign individual resources or entire resource groups. Dependency-aware ordering ensures databases start before application servers.</li>
+          <li><strong>Verify and enforce.</strong> Monitor execution via the scheduler events log, notification channels (Slack, Teams, Google Chat, email), and the cost dashboard for real-time savings tracking.</li>
+        </ol>
+
+        <div class="docs-callout">
+          <strong>AWS one-click setup</strong>
+          <p>For AWS accounts, ZopNight provides a CloudFormation template that provisions the required IAM role with least-privilege permissions in a single click. No manual policy configuration required.</p>
+        </div>
+
+        <h3>Permission model</h3>
+        <p>Each cloud account connection specifies a permission level that governs what ZopNight can do:</p>
+        <table class="docs-table">
+          <thead><tr><th>Level</th><th>Capabilities</th></tr></thead>
+          <tbody>
+            <tr><td>read_only</td><td>Resource discovery, cost tracking, recommendations, scheduling (without enforcement).</td></tr>
+            <tr><td>read_write</td><td>Full access: discovery, scheduling enforcement (start/stop), autoscaler policy application, provisioning.</td></tr>
+          </tbody>
+        </table>
+        <p>Permission visibility is built in. During discovery, ZopNight classifies and records any permission errors per provider type and region, surfacing them in a dedicated permissions drawer on each cloud account card with Granted, Denied, and Unknown status badges.</p>
+      </section>
+
+      <section class="docs-section" id="scheduling">
+        <div class="num">03 · scheduling &amp; automation</div>
+        <h2>The scheduling <em>engine.</em></h2>
+        <p>The scheduling engine is the foundation of ZopNight's cost governance. It evaluates cron expressions every minute, queuing start and stop intents against cloud provider APIs with dependency-aware execution ordering and idempotent operation guarantees.</p>
+
+        <h3>Schedule configuration</h3>
+        <p>Each schedule is defined by a name, description, IANA timezone, and one or more cron entries. Standard five-field cron expressions control when resources start and stop. A single schedule can carry multiple cron entries to handle complex patterns like weekday business hours combined with extended hours on specific days.</p>
+
+        <table class="docs-table">
+          <thead><tr><th>Pattern</th><th>Cron expression</th><th>Use case</th></tr></thead>
+          <tbody>
+            <tr><td>Weekday business hours</td><td><code>0 9 * * 1-5</code> / <code>0 18 * * 1-5</code></td><td>Dev and staging active during work hours only</td></tr>
+            <tr><td>Night shutdown</td><td><code>0 20 * * *</code> / <code>0 7 * * 1-5</code></td><td>Power down all non-production after 8 PM</td></tr>
+            <tr><td>Weekend shutdown</td><td><code>0 18 * * 5</code> / <code>0 9 * * 1</code></td><td>Full weekend shutdown for QA and staging</td></tr>
+            <tr><td>Extended sprint hours</td><td><code>0 7 * * 1-5</code> / <code>0 22 * * 1-5</code></td><td>Longer uptime during sprint cycles</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Resource groups and dependency ordering</h3>
+        <p>Resource groups enable coordinated lifecycle management for resources that depend on each other. Exclusive membership is enforced: one resource belongs to one group, one scheduling source per resource.</p>
+        <p>Within a group, execution ordering is defined through tiers and per-tier sequencing. ZopNight supports both automatic ordering (storage first, compute second, applications third) and custom user-defined sequences with configurable start/stop delays per resource.</p>
+        <ul>
+          <li><strong>Tiered execution:</strong> Tier 1 resources complete before Tier 2 begins. Within each tier, resources execute in defined sequence order.</li>
+          <li><strong>Dependency example:</strong> A typical web application group starts the RDS database (Tier 1), then the EC2 application servers (Tier 2), then the load balancer health checks register (Tier 3). Stop order reverses automatically.</li>
+          <li><strong>Bulk operations:</strong> Start or stop all resources in a group with a single action. A worker pool of four parallel executors handles concurrent operations while respecting tier ordering.</li>
+        </ul>
+
+        <h3>Override system</h3>
+        <p>Overrides provide temporary exceptions to active schedules for production incidents, maintenance windows, demos, or ad-hoc testing.</p>
+        <table class="docs-table">
+          <thead><tr><th>Type</th><th>Behavior</th><th>Use case</th></tr></thead>
+          <tbody>
+            <tr><td>force_on</td><td>Keep resource running, ignore all stop schedules</td><td>Production incident requiring staging environment for debugging</td></tr>
+            <tr><td>force_off</td><td>Keep resource stopped, ignore all start schedules</td><td>Maintenance window, security patching</td></tr>
+          </tbody>
+        </table>
+        <p>Overrides accept ISO 8601 expiry timestamps with timezone support. A maximum override duration policy prevents indefinite overrides from accumulating. Every override is logged with creator email, timestamp, reason, and expiry for full audit trail compliance. Overrides can be applied at both individual resource and group level.</p>
+
+        <h3>Actions and execution</h3>
+        <p>Every state transition is recorded as an action with full attribution. Actions can be triggered by schedules (cron evaluation), manual operations (API or UI), overrides, or autoscaler policies.</p>
+        <ul>
+          <li><strong>Manual actions:</strong> <code>POST /actions</code> triggers immediate start or stop on individual resources.</li>
+          <li><strong>Bulk actions:</strong> <code>POST /actions/bulk</code> operates across entire resource groups with dependency-aware ordering.</li>
+          <li><strong>Idempotent operations:</strong> Starting an already-running resource or stopping an already-stopped resource succeeds without side effects.</li>
+          <li><strong>State tracking:</strong> Every transition (ON to OFF, OFF to ON) is recorded with timestamp, trigger source, and actor identity. The <code>resource_state_history</code> table provides the authoritative record for cost calculation and compliance auditing.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="intelligence">
+        <div class="num">04 · intelligence &amp; optimization</div>
+        <h2>337+ rules. <em>Per-resource savings.</em></h2>
+        <p>ZopNight's intelligence layer pre-computes recommendations via cron, analyzes 14 days of cloud metrics, and surfaces actionable remediation with per-resource savings estimates. The system evaluates 337 audit rules across AWS (155), GCP (75), and Azure (107).</p>
+
+        <h3>Recommendations engine</h3>
+        <p>Recommendations are organized into seven categories:</p>
+        <table class="docs-table">
+          <thead><tr><th>Category</th><th>Description</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Idle</td><td>Running but not utilized</td><td>EC2 stopped for 30+ days, zero-connection database</td></tr>
+            <tr><td>Rightsizing</td><td>Over-provisioned, ready for downsize</td><td>CPU consistently below 5%, gp2 volumes eligible for gp3</td></tr>
+            <tr><td>Schedule</td><td>Would benefit from start/stop automation</td><td>Dev instances running 24/7 with no weekend activity</td></tr>
+            <tr><td>Orphan</td><td>Detached or abandoned, accruing cost</td><td>Unattached EBS volumes, orphan snapshots, unused Elastic IPs</td></tr>
+            <tr><td>Compliance</td><td>Configuration gaps vs. best practices</td><td>Missing encryption, public S3 access, absent backup policy</td></tr>
+            <tr><td>Discount</td><td>Commitment-based pricing opportunities</td><td>RI / Savings Plan coverage gaps, Spot eligibility</td></tr>
+            <tr><td>Governance</td><td>Missing tags or labels for cost attribution</td><td>Resources without environment, team, or cost-center labels</td></tr>
+          </tbody>
+        </table>
+
+        <h4>Severity levels</h4>
+        <table class="docs-table">
+          <thead><tr><th>Severity</th><th>Criteria</th><th>Action timeline</th></tr></thead>
+          <tbody>
+            <tr><td>Critical</td><td>Security risk or significant cost waste</td><td>Immediate (today)</td></tr>
+            <tr><td>High</td><td>Meaningful cost or compliance gap</td><td>This week</td></tr>
+            <tr><td>Medium</td><td>Worth addressing in normal workflow</td><td>This sprint</td></tr>
+            <tr><td>Low</td><td>Minor optimization opportunity</td><td>Backlog</td></tr>
+            <tr><td>Info</td><td>Informational, no direct cost impact</td><td>No action required</td></tr>
+          </tbody>
+        </table>
+        <p>Each recommendation includes a title, description, current monthly cost, optimized cost, potential savings, evidence JSON (the cloud monitoring values that triggered the rule), and an action type with payload for one-click remediation where supported.</p>
+
+        <h3>Auto-tagging</h3>
+        <p>ZopNight's auto-tagger predicts environment classifications (prod, staging, dev) and operational flags (noStop) using deterministic, rule-based logic across naming patterns, existing tags, and instance configuration. No machine learning &mdash; predictions are transparent and reproducible.</p>
+        <ul>
+          <li><strong>Confidence scoring:</strong> 1&ndash;100. High (80&ndash;100) is bulk-acceptable; medium (50&ndash;79) warrants individual review; low (below 50) is hidden by default.</li>
+          <li><strong>Non-destructive workflow:</strong> All predictions require explicit accept or reject before tags are merged. Accepted tags can optionally sync back to the cloud provider.</li>
+          <li><strong>Filtering:</strong> By provider, resource type, confidence band, acceptance status.</li>
+        </ul>
+
+        <h3>VM autoscaling</h3>
+        <p>ZopNight's autoscaler manages capacity across AWS Auto Scaling Groups, AWS ECS services, GCP Managed Instance Groups, and Azure Virtual Machine Scale Sets with a progressive adoption model.</p>
+        <h4>Operating modes</h4>
+        <table class="docs-table">
+          <thead><tr><th>Mode</th><th>Behavior</th><th>Use case</th></tr></thead>
+          <tbody>
+            <tr><td>Monitor</td><td>Collect metrics, publish what-if recommendations</td><td>Evaluate potential savings before committing</td></tr>
+            <tr><td>Recommend</td><td>Generate recommendations with one-click apply</td><td>Controlled optimization with manual approval</td></tr>
+            <tr><td>Autopilot</td><td>Apply changes automatically within configured bounds</td><td>Hands-off capacity management within min/max/cooldown guardrails</td></tr>
+          </tbody>
+        </table>
+        <p>Policy configuration includes minimum and maximum capacity, target CPU percentage, cooldown seconds between scaling actions, and cloud account scoping. Smart defaults are derived from 14-day historical analysis using Welford-based online statistics (P95 CPU, peak instance counts) to suggest optimal values. Schedule triggers support business-hours, peak-hours, and weekend-scale-down presets.</p>
+
+        <h4>Adopt-or-replace for existing policies</h4>
+        <p>ZopNight never silently overwrites existing cloud-side scaling configurations. When the create wizard detects pre-existing policies on a target, the user explicitly chooses between adopting the existing configuration (zero-mutation observation) or replacing it with a ZopNight-managed policy. The full pre-existing configuration is captured for byte-accurate restoration on removal.</p>
+
+        <h3>Event readiness</h3>
+        <p>Event Readiness enables proactive infrastructure pre-scaling for planned traffic spikes such as product launches, sales events, or seasonal peaks.</p>
+        <ul>
+          <li><strong>Capacity engine:</strong> Configure a traffic multiplier (e.g., 3&times; baseline) or expected request volume. ZopNight calculates per-target scaled min/max/desired capacity with admin override.</li>
+          <li><strong>Cloud-native scheduling:</strong> Pre-scale actions use native cloud scheduled actions (AWS PutScheduledUpdateGroupAction, Azure FixedDate profiles, GCP scalingSchedules) for reliable execution without polling.</li>
+          <li><strong>Lifecycle management:</strong> draft &rarr; scheduling &rarr; scheduled &rarr; scaling_up &rarr; active &rarr; scaling_down &rarr; completed. Cancellation is safe at any stage.</li>
+          <li><strong>Automatic rollback:</strong> Original min/max/desired values are snapshotted at scheduling time and restored on completion or cancellation.</li>
+          <li><strong>Supported targets:</strong> AWS ASG, AWS ECS services, GCP MIG, Azure VMSS. Databases can be attached as monitor-only targets with sizing recommendations.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="cost-management">
+        <div class="num">05 · cost management &amp; visibility</div>
+        <h2>Dual-source cost <em>tracking.</em></h2>
+        <p>ZopNight provides dual-source cost tracking, anomaly detection, team budgets, and cost attribution for predictable, audit-ready financial governance.</p>
+
+        <h3>Dual-source cost tracking</h3>
+        <ul>
+          <li><strong>Rack rate (calculated):</strong> Computed from cloud provider pricing APIs (AWS Pricing, Azure Retail Prices). Always available for every discovered resource, providing a baseline cost view.</li>
+          <li><strong>Billing cost (actual):</strong> Sourced from cloud billing APIs (AWS Cost Explorer, Azure Cost Management, GCP BigQuery). Available when billing sync is configured. Azure uses amortized cost to correctly distribute reservation and savings-plan purchases across the term.</li>
+        </ul>
+        <p>When all cloud accounts in an organization have successful billing sync, ZopNight automatically switches all aggregate queries to billing cost. Any account missing billing data triggers a fallback to rack rate across the entire organization for consistency. The active cost source is clearly labeled in every dashboard and report.</p>
+
+        <h3>Cost anomaly detection</h3>
+        <p>The anomaly detection engine runs daily, evaluating cost deviations across five dimensions: organization, cloud account, resource group, individual resource, and team.</p>
+        <table class="docs-table">
+          <thead><tr><th>Severity</th><th>Deviation</th><th>Response</th></tr></thead>
+          <tbody>
+            <tr><td>Warning</td><td>30&ndash;150% above rolling average</td><td>Investigation recommended</td></tr>
+            <tr><td>Critical</td><td>150&ndash;500% above rolling average</td><td>Immediate review required</td></tr>
+            <tr><td>Emergency</td><td>&gt;500% deviation or new resource type</td><td>Escalation triggered</td></tr>
+          </tbody>
+        </table>
+        <p>Each anomaly includes root cause attribution, identifying instance resizes, new resource creation, reservation expirations, schedule execution failures, and unscheduled usage increases. False positive guards include a minimum four data-point requirement, a $1/day cost threshold, and standard deviation exceeding 10% of the mean. Team redistribution suppression prevents false alerts when costs shift between teams with net change below 20%. A seven-day cooldown on identical anomaly keys and a top-10 resource cap per organization limit notification noise.</p>
+
+        <h3>Team budgets</h3>
+        <p>Budgets can be set per resource, resource group, or team. Current spend is calculated from cost records using the active cost source (billing or rack rate). Budget status: green (on track), yellow (at threshold), or red (over budget) with configurable alert thresholds.</p>
+
+        <h3>Cost attribution (showback)</h3>
+        <ul>
+          <li><strong>Team attribution:</strong> Cost is split equally across owning teams for shared resources. Unattributed resources are tracked separately. Endpoints provide team list, team detail (by provider and resource type), team resources (paginated), and trends.</li>
+          <li><strong>Tag attribution:</strong> Cost is allocated by cloud resource tags (AWS tags, GCP labels, Azure tags) and accepted auto-tags. Each tag key-value pair receives the full resource cost. Tag origin is tracked as "cloud" or "auto."</li>
+        </ul>
+
+        <h3>Cost flow visualization</h3>
+        <p>The Cost Reports page includes a Sankey diagram view that renders spend as a four-column flow. Layout presets include Provider, Account, Type, and Team with configurable column ordering. Clicking any node or link filters the chart and writes a breadcrumb chip for interactive drill-down. A savings overlay highlights reclaimable spend with deep-links to the recommendations page filtered to the relevant subset.</p>
+      </section>
+
+      <section class="docs-section" id="dashboards">
+        <div class="num">06 · dashboards &amp; reports</div>
+        <h2>Four presets. <em>Twelve report types.</em></h2>
+        <p>The dashboard system provides org-shared, role-gated views composed from a curated widget library. Four system presets serve common personas; admins can create up to 50 custom dashboards with up to 50 widgets each.</p>
+
+        <h3>Preset dashboards</h3>
+        <table class="docs-table">
+          <thead><tr><th>Dashboard</th><th>Audience</th><th>Focus</th></tr></thead>
+          <tbody>
+            <tr><td>Executive</td><td>Leadership and FinOps leads</td><td>High-level cost trends, budget health, top-line savings</td></tr>
+            <tr><td>Engineering</td><td>Platform and SRE teams</td><td>Schedule execution, upcoming actions, resource status</td></tr>
+            <tr><td>FinOps</td><td>Finance partners</td><td>Cost attribution, showback, anomaly detection</td></tr>
+            <tr><td>All Widgets</td><td>Evaluation and onboarding</td><td>Every available widget for comprehensive overview</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Widget library</h3>
+        <table class="docs-table">
+          <thead><tr><th>Widget</th><th>Function</th></tr></thead>
+          <tbody>
+            <tr><td>stat_cards</td><td>Compact key-metric tiles showing costs, savings, resource counts</td></tr>
+            <tr><td>cost_trend</td><td>Daily, weekly, or monthly cost trendline with period comparison</td></tr>
+            <tr><td>cloud_spend</td><td>Per-provider spend breakdown across connected accounts</td></tr>
+            <tr><td>top_costly</td><td>Top N resources by cost for rapid waste identification</td></tr>
+            <tr><td>recommendations</td><td>Open recommendation count with aggregate savings potential</td></tr>
+            <tr><td>quick_insights</td><td>Idle, orphan, and anomaly callouts requiring attention</td></tr>
+            <tr><td>budget_health</td><td>Team budget status with green/yellow/red indicators</td></tr>
+            <tr><td>showback</td><td>Cost attribution by team or tag for internal chargeback</td></tr>
+            <tr><td>schedule_execution</td><td>Recent scheduler events with success/failure status</td></tr>
+            <tr><td>upcoming_actions</td><td>Next 24 hours of scheduled start/stop actions</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Reports</h3>
+        <p>Twelve report types covering every angle of cloud cost and operational analysis:</p>
+        <ul>
+          <li>Dashboard Summary with org-wide KPIs</li>
+          <li>Cost Flow (Sankey diagrams with interactive drill-down)</li>
+          <li>Cost Breakdown with GROUP BY queries across multiple dimensions</li>
+          <li>Cost Anomalies with root-cause attribution</li>
+          <li>Cost Trends (daily, weekly, monthly granularity)</li>
+          <li>Resource Costs with per-resource lifetime cost tracking</li>
+          <li>Provider Summary with per-account resource counts</li>
+          <li>Resource Summary with type and region breakdown</li>
+          <li>Team Cost Attribution (Showback) with team and tag dimensions</li>
+          <li>Tag-Based Attribution with key-value pair cost allocation</li>
+          <li>Monthly Snapshots for historical analysis and month-over-month comparison</li>
+          <li>Scheduler Events Log with execution success/failure tracking</li>
+        </ul>
+
+        <h4>Export options</h4>
+        <ul>
+          <li>CSV exports of cost breakdown rows and flow data</li>
+          <li>PNG exports of charts and diagrams</li>
+          <li>Shareable URLs that reproduce the exact view state (preset, drill chain, overlays)</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="notifications">
+        <div class="num">07 · notifications</div>
+        <h2>Four channels. <em>Granular subscriptions.</em></h2>
+
+        <h3>Supported channels</h3>
+        <table class="docs-table">
+          <thead><tr><th>Channel</th><th>Configuration</th></tr></thead>
+          <tbody>
+            <tr><td>Slack</td><td>Incoming webhook URL</td></tr>
+            <tr><td>Microsoft Teams</td><td>Incoming webhook URL</td></tr>
+            <tr><td>Google Chat</td><td>Incoming webhook URL</td></tr>
+            <tr><td>Email</td><td>Recipient email address</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Event types</h3>
+        <table class="docs-table">
+          <thead><tr><th>Event</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>resource.started</td><td>Resource successfully started by schedule or manual action</td></tr>
+            <tr><td>resource.stopped</td><td>Resource successfully stopped by schedule or manual action</td></tr>
+            <tr><td>resource.failed</td><td>Start or stop operation failed with error details</td></tr>
+            <tr><td>resource.override</td><td>Override applied or cleared on a resource</td></tr>
+            <tr><td>resource.retry_exhausted</td><td>All retry attempts exhausted for a failed operation</td></tr>
+            <tr><td>budget.warning</td><td>Team budget approaching configured threshold</td></tr>
+            <tr><td>budget.exceeded</td><td>Team budget exceeded configured limit</td></tr>
+            <tr><td>cost.anomaly.*</td><td>Cost anomaly detected (per dimension and severity)</td></tr>
+          </tbody>
+        </table>
+        <p>Subscriptions can be scoped to organization, cloud account, resource group, or individual resource level. Per-event-type opt-in and opt-out is supported for each user. Bulk subscription create and update operations handle large team configurations efficiently. Recommendations can be shared directly to notification channels for team awareness.</p>
+      </section>
+
+      <section class="docs-section" id="discovery">
+        <div class="num">08 · resource discovery</div>
+        <h2>Multi-region. <em>Real-time sync.</em></h2>
+        <p>ZopNight's discovery engine scans all regions across connected cloud accounts, building a comprehensive inventory with parent-child relationships, provider-native tags, and real-time sync status.</p>
+
+        <h3>Discovery methods by provider</h3>
+        <table class="docs-table">
+          <thead><tr><th>Provider</th><th>Source</th><th>Resource types</th></tr></thead>
+          <tbody>
+            <tr><td>AWS</td><td>Resource Explorer 2 (RE2) + per-service providers</td><td>191 unique types (204 RE2 keys), 30 start/stop supported</td></tr>
+            <tr><td>GCP</td><td>Cloud Asset Inventory</td><td>88 types, 9 start/stop supported</td></tr>
+            <tr><td>Azure</td><td>Resource Graph</td><td>101 types, 15 start/stop supported</td></tr>
+            <tr><td>Kubernetes</td><td>EKS / GKE / AKS workload discovery</td><td>Deployments, StatefulSets, DaemonSets, Jobs, CronJobs, ReplicaSets</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Hierarchy and navigation</h3>
+        <p>Resources are organized in up to three levels of parent-child hierarchy (cluster &rarr; nodegroup &rarr; VMs). The default view shows parent resources with child count badges. Clicking into children provides a scoped view with breadcrumb navigation and filters relevant to that level. Topology graph visualization renders resources organized by provider, account, region, and network hierarchy with 13 distinct visual shapes for different resource categories.</p>
+
+        <h3>Kubernetes discovery</h3>
+        <ul>
+          <li><strong>Workload types:</strong> Deployments, StatefulSets, DaemonSets, Jobs, CronJobs, ReplicaSets.</li>
+          <li><strong>Cluster detail pages</strong> with namespace filtering, pod and workload CPU/memory metrics.</li>
+          <li><strong>Start/stop support</strong> for Deployments (scale replicas), StatefulSets (scale replicas), and CronJobs (suspend/resume).</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="cloud-accounts">
+        <div class="num">09 · cloud account management</div>
+        <h2>Multiple auth methods. <em>Per provider.</em></h2>
+        <p>ZopNight supports multiple authentication methods per cloud provider, each with credential rotation detection, real-time sync visibility, and billing access configuration.</p>
+
+        <h3>AWS authentication</h3>
+        <ul>
+          <li><strong>Static access keys:</strong> IAM access key and secret key pair for straightforward connectivity.</li>
+          <li><strong>Assume role:</strong> Cross-account STS role assumption for organizations managing multiple AWS accounts with a central control plane.</li>
+          <li><strong>Temporary credentials:</strong> Short-lived STS tokens for ephemeral or tightly controlled access patterns.</li>
+          <li><strong>CloudFormation template:</strong> One-click IAM role provisioning with least-privilege permissions.</li>
+        </ul>
+
+        <h3>GCP authentication</h3>
+        <ul>
+          <li><strong>Service account JSON:</strong> Standard service account key file for programmatic access.</li>
+          <li><strong>OAuth 2.0:</strong> Three-step flow with encrypted token exchange for user-delegated access.</li>
+        </ul>
+
+        <h3>Azure authentication</h3>
+        <ul>
+          <li><strong>Service principal:</strong> Application registration with client secret or certificate.</li>
+          <li><strong>Workload identity federation:</strong> Federated OIDC authentication with no stored secrets. ZopNight provides OIDC discovery endpoints for Azure WIF configuration.</li>
+        </ul>
+
+        <h3>Security posture</h3>
+        <ul>
+          <li>AES-256-GCM encryption for all stored tokens and credentials</li>
+          <li>No plaintext secret exposure in any API response or log output</li>
+          <li>Async credential verification with status polling</li>
+          <li>Credential rotation detection with proactive alerts</li>
+          <li>Billing access gap detection for cost tracking completeness</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="cloud-support">
+        <div class="num">10 · cloud support matrix</div>
+        <h2>AWS · GCP · Azure · <em>Kubernetes.</em></h2>
+        <p>ZopNight supports resource discovery, scheduling, and cost governance across four cloud platforms with deep service-level integration.</p>
+
+        <h3>AWS services</h3>
+        <table class="docs-table">
+          <thead><tr><th>Category</th><th>Services</th></tr></thead>
+          <tbody>
+            <tr><td>Compute</td><td>EC2, Auto Scaling Groups, EKS, ECS, Lambda, EMR, App Runner, Beanstalk, SageMaker Notebooks</td></tr>
+            <tr><td>Database</td><td>RDS, ElastiCache, Redshift</td></tr>
+            <tr><td>ML / Analytics</td><td>SageMaker Endpoints, SageMaker Notebooks, OpenSearch, EMR Serverless</td></tr>
+            <tr><td>Storage / Network</td><td>S3, EBS, Snapshots, VPC, NAT Gateways, Load Balancers</td></tr>
+            <tr><td>Kubernetes Workloads</td><td>EKS Deployments, EKS StatefulSets, EKS CronJobs</td></tr>
+          </tbody>
+        </table>
+
+        <h3>GCP services</h3>
+        <table class="docs-table">
+          <thead><tr><th>Category</th><th>Services</th></tr></thead>
+          <tbody>
+            <tr><td>Compute</td><td>Compute Engine, GKE Clusters, Cloud Run</td></tr>
+            <tr><td>Database</td><td>Cloud SQL, Memorystore, BigQuery</td></tr>
+            <tr><td>Storage / Network</td><td>Cloud Storage, Persistent Disks, VPCs</td></tr>
+            <tr><td>Kubernetes Workloads</td><td>GKE Deployments, GKE StatefulSets, GKE CronJobs</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Azure services</h3>
+        <table class="docs-table">
+          <thead><tr><th>Category</th><th>Services</th></tr></thead>
+          <tbody>
+            <tr><td>Compute</td><td>Virtual Machines, VM Scale Sets, AKS, Container Apps, Function Apps</td></tr>
+            <tr><td>Database</td><td>SQL Database, MySQL Flexible, PostgreSQL Flexible, Data Explorer</td></tr>
+            <tr><td>ML / Analytics</td><td>ML Compute, Databricks (Workspace, Clusters, Instance Pools, SQL Warehouses), Synapse SQL Pools</td></tr>
+            <tr><td>Storage / Network</td><td>Storage Accounts, Managed Disks, VNets</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Kubernetes resources</h3>
+        <p>Across all managed Kubernetes providers (EKS, GKE, AKS), ZopNight discovers and manages workloads including Deployments, StatefulSets, DaemonSets, Jobs, CronJobs, ReplicaSets, Namespaces, Nodes, Pods, Services, and configuration objects. Node pool scaling and StatefulSet replica management are fully supported.</p>
+      </section>
+
+      <section class="docs-section" id="security">
+        <div class="num">11 · security &amp; access control</div>
+        <h2>RBAC at the <em>gateway.</em></h2>
+        <p>ZopNight enforces role-based access control at the API gateway level, ensuring every endpoint requires appropriate authorization. The RBAC model supports three system roles and unlimited custom roles with resource-scoped permissions.</p>
+
+        <h3>System roles</h3>
+        <table class="docs-table">
+          <thead><tr><th>Role</th><th>Permissions</th><th>Scope</th></tr></thead>
+          <tbody>
+            <tr><td>Admin</td><td>All policies, all operations</td><td>All resources (organization-wide)</td></tr>
+            <tr><td>Editor</td><td>CRUD on resources, schedules, groups; view-only on admin functions</td><td>All resources or scoped to specific resource IDs</td></tr>
+            <tr><td>Viewer</td><td>Read-only across all features</td><td>All resources or scoped to specific resource IDs</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Custom roles and resource scoping</h3>
+        <p>Custom roles support per-policy resource scoping. Each policy (resource, schedule, resource-group, override, cloud-account, notification, team, role, user, organisation, assignment, state-history, report, audit-log, recommendation, dashboard) can be granted with either all-resources access or scoped to specific resource UIDs. Team-scoped access allows team members to inherit their role's policies scoped to the team's assigned resource UIDs, enabling multi-tenant access patterns within a single organization.</p>
+
+        <h3>Authentication</h3>
+        <ul>
+          <li><strong>SSO integration:</strong> Google OAuth, GitHub OAuth, and SAML/SSO for enterprise identity providers (Azure AD and others).</li>
+          <li><strong>Personal access tokens:</strong> API authentication via PAT tokens (prefixed <code>zn_pat_*</code>) for CI/CD integration and MCP server access.</li>
+          <li><strong>SAML configuration:</strong> Internal admin operations for managing customer SAML IdP configurations per email domain.</li>
+        </ul>
+
+        <h3>Audit trail</h3>
+        <p>Every mutating API request (POST, PUT, PATCH, DELETE) is logged to per-org Redis Streams, capturing both request and response bodies. The aggregator syncs to persistent storage every minute. The audit log is accessible via API and frontend with server-side filtering by method, resource, status, and user.</p>
+      </section>
+
+      <section class="docs-section" id="provisioning">
+        <div class="num">12 · provisioning (zopday)</div>
+        <h2>Single-wizard <em>multi-cloud.</em></h2>
+        <p>ZopDay provides end-to-end multi-cloud infrastructure deployment through a single wizard interface. It discovers existing networking resources automatically, provides estimated monthly cost previews, and integrates with cloud-native secret managers.</p>
+
+        <h3>Provisionable resources</h3>
+        <table class="docs-table">
+          <thead><tr><th>Category</th><th>Resources</th></tr></thead>
+          <tbody>
+            <tr><td>Kubernetes</td><td>EKS, GKE, AKS clusters with full configuration</td></tr>
+            <tr><td>Datastores</td><td>RDS, Cloud SQL, Azure Database (MySQL/Postgres), Redis caches</td></tr>
+            <tr><td>Networking</td><td>VPC/VNet, Subnets, DNS zones, VPC peering</td></tr>
+            <tr><td>In-cluster add-ons</td><td>Helm-based ingress controllers, observability stacks, operational add-ons</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Deployment spaces</h3>
+        <p>Deployment Spaces scope provisioning to a cloud account and region combination, assigned to specific teams. RBAC policies govern space, provisioning, service, and deployment operations independently with view, create, update, and delete permissions.</p>
+
+        <h3>Architecture canvas</h3>
+        <p>The architecture canvas provides VPC peering visualization across provisioned infrastructure, giving platform teams a clear view of network topology and inter-service connectivity.</p>
+      </section>
+
+      <section class="docs-section" id="mcp-server">
+        <div class="num">13 · mcp server</div>
+        <h2>43 read-only tools. <em>Five assistants.</em></h2>
+        <p>ZopNight exposes a Model Context Protocol (MCP) server that enables AI assistants to query cloud infrastructure, costs, schedules, and recommendations via natural language. Streamable HTTP transport (JSON-RPC 2.0 over HTTP POST) with 43 read-only tools.</p>
+
+        <h3>Tool coverage</h3>
+        <ul>
+          <li>Resources and cloud accounts (list, filter, status)</li>
+          <li>Costs and billing data (trends, breakdowns, anomalies)</li>
+          <li>Schedules and execution history</li>
+          <li>Recommendations with savings estimates</li>
+          <li>Budgets and team metrics</li>
+          <li>Audit logs and notification subscriptions</li>
+        </ul>
+
+        <h3>Supported AI assistants</h3>
+        <table class="docs-table">
+          <thead><tr><th>Assistant</th><th>Integration</th></tr></thead>
+          <tbody>
+            <tr><td>Claude Code</td><td>MCP server configuration in <code>claude_desktop_config.json</code></td></tr>
+            <tr><td>Cursor</td><td>MCP server configuration in IDE settings</td></tr>
+            <tr><td>Codex</td><td>MCP server configuration via CLI</td></tr>
+            <tr><td>Windsurf</td><td>MCP server configuration in IDE settings</td></tr>
+            <tr><td>Antigravity</td><td>MCP server configuration via CLI</td></tr>
+          </tbody>
+        </table>
+
+        <div class="docs-callout">
+          <strong>Read-only by design</strong>
+          <p>The MCP server enforces read-only access. All write operations (schedule creation, resource modifications, override application) are restricted to the web UI and direct API. AI assistants can query and analyze without risk of unintended state changes.</p>
+        </div>
+
+        <p>Authentication requires an Admin or Editor role with a Personal Access Token. RBAC is enforced at the gateway level; the MCP server itself is a stateless proxy. In-memory TTL caching (2&ndash;30 minute windows) optimizes expensive aggregation queries.</p>
+      </section>
+
+      <section class="docs-section" id="api">
+        <div class="num">14 · api overview</div>
+        <h2>80+ endpoints. <em>13 groups.</em></h2>
+        <p>ZopNight is API-first with 80+ REST endpoints organized into 13 endpoint groups. Every feature accessible in the web UI is available programmatically for CI/CD integration, custom automation, and third-party connectivity.</p>
+
+        <h3>Endpoint groups</h3>
+        <table class="docs-table">
+          <thead><tr><th>Group</th><th>Operations</th></tr></thead>
+          <tbody>
+            <tr><td>Authentication</td><td>Login, signup, token management, email verification, password reset, SAML SSO, org creation</td></tr>
+            <tr><td>Cloud Accounts</td><td>Connect, list, update, delete cloud accounts; GCP OAuth flow</td></tr>
+            <tr><td>Resources</td><td>Discover, list, filter, refresh resources with parent-child navigation</td></tr>
+            <tr><td>Schedules</td><td>CRUD operations plus attach/detach resources and groups</td></tr>
+            <tr><td>Resource Groups</td><td>Organize resources with execution sequencing and tiered ordering</td></tr>
+            <tr><td>Overrides</td><td>Temporary schedule exceptions with expiry and audit trail</td></tr>
+            <tr><td>Actions &amp; Execution</td><td>Manual and bulk start/stop with state history tracking</td></tr>
+            <tr><td>Reports &amp; Analytics</td><td>Cost trends, summaries, budgets, showback, anomalies, scheduler events</td></tr>
+            <tr><td>Recommendations</td><td>Suggestions, auto-tagging proposals, rule-based audit results</td></tr>
+            <tr><td>Notifications</td><td>Channel management, subscriptions, event routing</td></tr>
+            <tr><td>Users &amp; Teams</td><td>User management, team creation, resource assignments</td></tr>
+            <tr><td>Roles &amp; Permissions</td><td>Custom role and permission policy management</td></tr>
+            <tr><td>Organizations &amp; Audit</td><td>Org management, settings, audit log access</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Authentication</h3>
+        <p>API authentication uses bearer tokens obtained via the login endpoint or Personal Access Tokens (PAT) for service-to-service and MCP integration. PAT tokens are prefixed with <code>zn_pat_</code> and validated at the gateway. All tokens use AES-256-GCM encryption at rest.</p>
+
+        <h3>Common patterns</h3>
+        <ul>
+          <li><strong>Pagination:</strong> All list endpoints support <code>limit</code>, <code>offset</code>, <code>sort_by</code>, and <code>sort_order</code> parameters.</li>
+          <li><strong>Filtering:</strong> Resource endpoints support <code>provider</code>, <code>status</code>, <code>region</code>, <code>type</code>, <code>cloud_account_id</code>, and <code>search</code> filters. Comma-separated values are supported for multi-select.</li>
+          <li><strong>Cascade filtering:</strong> Selecting a provider narrows downstream filter options dynamically via filter-fields endpoints.</li>
+          <li><strong>Idempotency:</strong> Start and stop operations are idempotent. Repeated requests succeed without side effects.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="faq">
+        <div class="num">15 · faq</div>
+        <h2>Frequently asked <em>questions.</em></h2>
+
+        <h3>Does ZopNight work with Auto Scaling Groups?</h3>
+        <p>Yes. ZopNight sets desired capacity to zero during off-hours and restores it when the schedule fires. Your ASG configuration, scaling policies, and launch templates remain untouched.</p>
+
+        <h3>Can I protect production environments?</h3>
+        <p>ZopNight includes production safeguards enforced via RBAC. You can restrict which environments and resources can be scheduled, and auto-tagging predicts production vs. non-production labels to prevent accidental shutdowns.</p>
+
+        <h3>What permissions does ZopNight require?</h3>
+        <p>Stop and start capabilities only. ZopNight never requires delete permissions on any resource. You can start with read-only access for discovery and cost visibility, then upgrade to read-write when ready to enforce schedules.</p>
+
+        <h3>Does it support Kubernetes workloads?</h3>
+        <p>Yes. ZopNight supports EKS, GKE, and AKS clusters. It can scale node pools, manage Deployment and StatefulSet replicas, and suspend/resume CronJobs while respecting dependency ordering.</p>
+
+        <h3>What if I need a resource running outside the schedule?</h3>
+        <p>Create a one-time override via the dashboard, API, or notification channel. Overrides carry automatic expiry timestamps and take precedence over all active schedules until they expire or are manually removed. Every override is logged with creator, reason, and timestamp.</p>
+
+        <h3>How is ZopNight different from a FinOps dashboard?</h3>
+        <p>Dashboards surface the problem after the fact. ZopNight enforces the solution through policy-driven automation. Rather than reporting on idle resources, ZopNight automatically stops them on schedule and restarts them when needed. The cost reports then track verified savings from that automation.</p>
+
+        <h3>Can I integrate ZopNight with CI/CD pipelines?</h3>
+        <p>Yes. The full REST API (80+ endpoints) supports integration with any CI/CD system. Common patterns include triggering resource starts before test suites, stopping environments after deployment validation, and managing staging infrastructure programmatically.</p>
+      </section>
+
+      <section class="docs-section" id="appendix">
+        <div class="num">16 · appendix</div>
+        <h2>Reference <em>tables.</em></h2>
+
+        <h3>Recommendation rule coverage</h3>
+        <table class="docs-table">
+          <thead><tr><th>Provider</th><th>Rule count</th><th>Categories covered</th></tr></thead>
+          <tbody>
+            <tr><td>AWS</td><td>155 rules</td><td>Idle, Rightsizing, Schedule, Orphan, Compliance, Discount, Governance</td></tr>
+            <tr><td>GCP</td><td>75 rules</td><td>Idle, Rightsizing, Schedule, Orphan, Compliance, Discount, Governance</td></tr>
+            <tr><td>Azure</td><td>107 rules</td><td>Idle, Rightsizing, Schedule, Orphan, Compliance, Discount, Governance</td></tr>
+            <tr><td>Cross-Provider (Autoscaler)</td><td>6 rules (RC-ASC-001 to RC-ASC-006)</td><td>Rightsizing, Compliance</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Supported resource types for start/stop</h3>
+        <table class="docs-table">
+          <thead><tr><th>Provider</th><th>Resource types</th></tr></thead>
+          <tbody>
+            <tr><td>AWS (Original)</td><td>EC2, RDS, EKS, ECS, ASG, Lambda</td></tr>
+            <tr><td>AWS (Extended)</td><td>EKS Deployments, EKS StatefulSets, EKS CronJobs, SageMaker Notebooks, ElastiCache, Beanstalk, EMR Serverless, App Runner</td></tr>
+            <tr><td>GCP</td><td>Compute Engine, GKE, Cloud SQL, GKE Deployments, GKE StatefulSets, GKE CronJobs</td></tr>
+            <tr><td>Azure</td><td>VMs, AKS, VMSS, Databricks (Workspace, Clusters, Instance Pools, SQL Warehouses), MySQL Flexible, PostgreSQL Flexible, Data Explorer, Synapse SQL Pools, SQL VMs, SSIS Integration Runtimes, ML Compute</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Dashboard limits</h3>
+        <table class="docs-table">
+          <thead><tr><th>Parameter</th><th>Limit</th></tr></thead>
+          <tbody>
+            <tr><td>Dashboards per organization</td><td>50</td></tr>
+            <tr><td>Widgets per dashboard</td><td>50</td></tr>
+            <tr><td>Widget config size</td><td>4 KiB</td></tr>
+            <tr><td>Layout payload size</td><td>64 KiB</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Glossary</h3>
+        <table class="docs-table">
+          <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+          <tbody>
+            <tr><td>RBAC</td><td>Role-Based Access Control &mdash; policy-driven authorization at the API gateway</td></tr>
+            <tr><td>Override</td><td>Temporary exception to active schedules (force_on or force_off) with ISO 8601 expiry</td></tr>
+            <tr><td>Rack rate</td><td>Calculated cost from cloud provider pricing APIs (always available)</td></tr>
+            <tr><td>Billing cost</td><td>Actual cost from cloud billing APIs (requires billing sync configuration)</td></tr>
+            <tr><td>Amortized cost</td><td>Azure billing cost type that distributes reservation purchases across the term</td></tr>
+            <tr><td>MCP</td><td>Model Context Protocol &mdash; standard for AI assistant integration</td></tr>
+            <tr><td>PAT</td><td>Personal Access Token &mdash; API authentication for service-to-service and MCP access</td></tr>
+            <tr><td>ZopDay</td><td>ZopNight's provisioning module for multi-cloud infrastructure deployment</td></tr>
+            <tr><td>Showback</td><td>Cost attribution report allocating spend to teams or tags</td></tr>
+            <tr><td>Tier</td><td>Execution priority level within a resource group for dependency ordering</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Contact and resources</h3>
+        <ul>
+          <li><strong>Product website:</strong> zopnight.com</li>
+          <li><strong>Documentation:</strong> zopnight.com/docs</li>
+          <li><strong>Support:</strong> support@zopnight.com</li>
+          <li><strong>Built by:</strong> ZopDev</li>
+        </ul>
+      </section>
+
+    </article>
+  </div>
+
+</main>
+
+
+<section class="final">
+  <div class="container">
+    <a class="final-mark" href="/" aria-label="ZopDev">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#mark-zopdev"/></svg>
+    </a>
+    <div class="final-grid">
+      <div>
+        <div class="sec-meta" style="color:var(--zop-orange); margin-bottom:20px">end · ready when you are</div>
+        <h2>Stop watching the waste.<br/>Start cutting it.</h2>
+        <p class="final-tag">See. Find. Fix. Automatic.</p>
+        <p>Connect your first cloud account in under 5 minutes. See your first remediation in under 7. No credit card required.</p>
+        <div class="final-cta">
+          <a class="btn btn-primary" href="signin.html">Start Free →</a>
+          <a class="btn btn-secondary" href="demo.html">Book a Demo</a>
+        </div>
+      </div>
+      <div class="final-stats">
+        <div><strong>5 min</strong>connect time</div>
+        <div><strong>7 min</strong>first remediation</div>
+        <div><strong>42%</strong>avg. waste cut in 30 days</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRIDGE MARQUEE · cream slab between dark CTA and dark footer -->
+<section class="bridge-marquee" aria-label="ZopDev brand statement">
+  <div class="bridge-track">
+    <span>Multi-cloud automation</span><span class="acc">·</span>
+    <span>Production-ready in 30 min</span><span class="acc">·</span>
+    <span>SOC 2 · ISO 27001 · zero-trust</span><span class="acc">·</span>
+    <span>30% average cloud cost cut</span><span class="acc">·</span>
+    <span>4 platforms · 1 console</span><span class="acc">·</span>
+    <span>Multi-cloud automation</span><span class="acc">·</span>
+    <span>Production-ready in 30 min</span><span class="acc">·</span>
+    <span>SOC 2 · ISO 27001 · zero-trust</span><span class="acc">·</span>
+    <span>30% average cloud cost cut</span><span class="acc">·</span>
+    <span>4 platforms · 1 console</span><span class="acc">·</span>
+  </div>
+</section>
+
+<!-- ========================================================================
+     FOOTER, identical on every page · CANONICAL.
+     5-cell grid (brand + 4 columns), trust badges, legal rail, bottom row.
+     If you change this block, run the chrome sweep so every subpage
+     stays in sync.
+     ======================================================================== -->
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <a href="/" class="brand" aria-label="ZopDev home">
+        <svg class="logo" viewBox="0 0 715 276" role="img" aria-hidden="true"><use href="#logo-zopdev"/></svg>
+      </a>
+      <p>The autopilot for multi-cloud cost. See everything. Find what's wrong. Fix it in one click.</p>
+    </div>
+
+    <div class="foot-col">
+      <h3>product</h3>
+      <ul>
+        <li><a href="/zopnight.html">ZopNight</a></li>
+        <li><a href="/zopday.html">ZopDay</a></li>
+        <li><a href="/zopcloud.html">ZopCloud</a></li>
+        <li><a href="/integrations.html">Integrations</a></li>
+        <li><a href="/pricing.html">Pricing</a></li>
+        <li><a href="/status.html">Status</a></li>
+      </ul>
+    </div>
+
+    <div class="foot-col">
+      <h3>resources</h3>
+      <ul>
+        <li><a href="/blog.html">Blog</a></li>
+        <li><a href="/free-ebooks.html">Ebooks</a></li>
+        <li><a href="/customers.html">Case studies</a></li>
+        <li><a href="/solutions.html">Use cases by industry</a></li>
+        <li><a href="/walkthrough.html">Product documentation</a></li>
+        <li><a href="/devops-hub.html">DevOps hub</a></li>
+        <li><a href="/kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="/ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="/changelog.html">Changelog</a></li>
+        <li><a href="/roadmap.html">Roadmap</a></li>
+      </ul>
+    </div>
+
+    <div class="foot-col">
+      <h3>developers</h3>
+      <ul>
+        <li><a href="/developers.html">Documentation</a></li>
+        <li><a href="/developers.html">API reference</a></li>
+        <li><a href="/developers.html">MCP server</a></li>
+        <li><a href="/developers.html">SDK &amp; CLI</a></li>
+        <li><a href="/developers.html">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li>
+      </ul>
+    </div>
+
+    <div class="foot-col">
+      <h3>company</h3>
+      <ul>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/careers.html">Careers</a></li>
+        <li><a href="/community.html">Community</a></li>
+        <li><a href="/brand-kit.html">Brand kit</a></li>
+        <li><a href="/brand-kit.html">Press kit</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+        <li><a href="/partners.html">Partners</a></li>
+        <li><a href="/trust.html">Trust center</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- trust badges + live status -->
+  <div class="foot-trust">
+    <span class="badge">SOC 2 Type II</span>
+    <span class="badge">ISO 27001</span>
+    <span class="badge o">HIPAA</span>
+    <span class="badge g">GDPR · CCPA</span>
+    <span class="badge k">AWS Marketplace</span>
+    <a href="/status.html" class="status"><span class="badge ok" style="border:0; padding:0; color:transparent; width:7px; height:7px"></span> All systems operational</a>
+  </div>
+
+  <!-- sub-legal rail · GDPR + enterprise procurement links -->
+  <div class="foot-legal-rail">
+    <a href="/trust.html">Privacy</a>
+    <a href="/trust.html">Terms</a>
+    <a href="/legal/cookies.html">Cookies</a>
+    <a href="/trust/dpa.html">DPA</a>
+    <a href="/trust/subprocessors.html">Subprocessors</a>
+    <a href="/trust/sla.html">SLA</a>
+    <a href="/trust/ai-policy.html">AI policy</a>
+    <a href="/accessibility.html">Accessibility</a>
+    <a href="/sitemap.xml">Sitemap</a>
+  </div>
+
+  <div class="foot-bottom">
+    <div>© <span data-year>2026</span> ZopDev, Inc. · san francisco · all rights reserved</div>
+    <div class="foot-social">
+      <a href="https://linkedin.com/company/zopdev">linkedin</a>
+      <a href="https://twitter.com/zopdev">twitter</a>
+      <a href="https://github.com/zopdev">github</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // dynamic copyright year · announcement-bar dismiss
+  (function(){
+    document.querySelectorAll('[data-year]').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+    var ann = document.getElementById('ann-bar');
+    var btn = document.getElementById('ann-close');
+    if(!ann || !btn) return;
+    var key = 'zop-ann-2026-mcp';
+    try{ if(localStorage.getItem(key) === '1') ann.style.display = 'none'; }catch(e){}
+    btn.addEventListener('click', function(){
+      ann.style.display = 'none';
+      try{ localStorage.setItem(key, '1'); }catch(e){}
+    });
+  })();
+</script>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="walkthrough.html">Product guide</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developers.html">Documentation</a></li>
+        <li><a href="developers.html">API reference</a></li>
+        <li><a href="developers.html">MCP server</a></li>
+        <li><a href="developers.html">SDK &amp; CLI</a></li>
+        <li><a href="developers.html">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-globe">
+      <div class="foot-globe-left">
+        <a href="/" class="foot-globe-mark" aria-label="ZopDev">
+          <svg class="foot-globe-logo" viewBox="0 0 715 276" aria-hidden="true">
+            <use href="#logo-zopdev"/>
+          </svg>
+        </a>
+      </div>
+      <div class="foot-globe-right">
+        <div class="foot-regions-v2" id="foot-regions-v2">
+          <canvas id="foot-regions-map"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom foot-bottom-3">
+      <div class="foot-copy">© <span data-year>2026</span> ZopDev · <a href="trust.html">privacy</a> · <a href="trust.html">terms</a></div>
+      <div class="foot-mid">made with <svg viewBox="0 0 7 6" aria-hidden="true"><rect x="1" y="0" width="1" height="1"/><rect x="2" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="0" y="1" width="7" height="1"/><rect x="0" y="2" width="7" height="1"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg> by <a href="https://zop.dev" target="_blank" rel="noopener">zop.dev</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

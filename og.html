@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<title>OG / social meta · ZopDev</title>
+<meta name="description" content="Open Graph + social meta image templates for ZopDev. 1200×630 SVG for every page type."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="chrome.css"/>
+<style>
+/* no-italic-site-wide */ em,i,cite,dfn,var,address,blockquote{font-style:normal}
+.page-head{ padding:var(--sec-pad) 0 var(--sp-10); max-width:var(--max); margin:0 auto; padding-left:var(--gutter); padding-right:var(--gutter); border-bottom:1px solid var(--line); }
+.crumb{ font-family:var(--mono); font-size:11px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase; margin-bottom:20px; }
+.crumb a{ color:var(--ink-3); } .crumb a:hover{ color:var(--ink); } .crumb .s{ color:var(--ink-5); margin:0 8px; }
+.page-head .meta{ font-family:var(--mono); font-size:11px; color:var(--zop-orange); letter-spacing:.14em; text-transform:uppercase; margin-bottom:16px; display:inline-flex; align-items:center; gap:8px; }
+.page-head .meta::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
+.page-head h1{ font-size:clamp(48px,6vw,88px); font-weight:700; letter-spacing:-.05em; line-height:.98; margin:0 0 24px; max-width:1100px; }
+.page-head h1 em{ font-style:normal; color:var(--zop-orange); }
+.page-head p.lede{ font-size:20px; color:var(--ink-3); max-width:760px; line-height:1.45; margin:0; }
+.page-head p.lede strong{ color:var(--ink); font-weight:500; }
+
+.sec{ padding:var(--sec-pad) 0; max-width:var(--max); margin:0 auto; padding-left:var(--gutter); padding-right:var(--gutter); border-bottom:1px solid var(--line); }
+.sec:last-of-type{ border-bottom:0; }
+.sec > h2{ font-family:var(--mono); font-size:11px; color:var(--zop-orange); letter-spacing:.14em; text-transform:uppercase; margin:0 0 12px; display:inline-flex; align-items:center; gap:8px; }
+.sec > h2::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
+.sec > h3{ font-size:clamp(28px,3vw,36px); font-weight:700; letter-spacing:-.03em; line-height:1.05; margin:0 0 12px; }
+.sec > p.lead{ font-size:15px; color:var(--ink-3); max-width:720px; line-height:1.55; margin:0 0 var(--sp-10); }
+.sec > p.lead strong{ color:var(--ink); font-weight:500; }
+
+/* OG grid */
+.og-grid{ display:grid; grid-template-columns:1fr; gap:var(--sp-6); }
+.og-card{
+  background:var(--bg-1); border:1px solid var(--line-2);
+}
+.og-head{
+  padding:12px 20px; background:#0A0A0A;
+  border-bottom:1px solid var(--line-2);
+  display:flex; justify-content:space-between; align-items:center;
+  font-family:var(--mono); font-size:11px;
+  color:var(--ink-4); letter-spacing:.04em;
+}
+.og-head strong{ color:var(--ink-2); font-weight:500; }
+.og-head .tag{ padding:2px 8px; background:var(--bg-3); color:var(--ink-3); font-size:10px; letter-spacing:.14em; text-transform:uppercase; }
+.og-preview{ padding:var(--sp-5); background:var(--bg-0); display:flex; justify-content:center; }
+.og-preview svg, .og-preview img{
+  width:100%; max-width:960px; height:auto;
+  border:1px solid var(--line);
+  display:block;
+}
+.og-foot{ padding:16px 20px; background:#0A0A0A; border-top:1px solid var(--line); font-family:var(--mono); font-size:11px; color:var(--ink-4); line-height:1.6; display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+.og-foot strong{ color:var(--ink-2); }
+.og-foot a{ color:var(--zop-orange); }
+
+/* spec code */
+.spec-code{ margin:var(--sp-6) 0 0; padding:var(--sp-5); background:#0A0A0A; border:1px solid var(--line); font-family:var(--mono); font-size:11.5px; color:var(--ink-3); line-height:1.7; white-space:pre; overflow-x:auto; }
+.spec-code .k{ color:var(--zop-orange); } .spec-code .v{ color:var(--ink); } .spec-code .c{ color:var(--ink-5); }
+
+/* platform row */
+.platforms{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--sp-4); margin-top:var(--sp-8); }
+.plat{ padding:var(--sp-6); background:var(--bg-1); border:1px solid var(--line-2); display:flex; flex-direction:column; gap:8px; }
+.plat .k{ font-family:var(--mono); font-size:10px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase; }
+.plat h4{ font-size:16px; font-weight:600; letter-spacing:-.02em; color:var(--ink); }
+.plat p{ font-size:12px; color:var(--ink-3); line-height:1.55; margin:0; font-family:var(--mono); letter-spacing:0.04em; }
+.plat p strong{ color:var(--ink-2); }
+
+/* dd */
+.dd{ display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--line-2); }
+.dd > div{ padding:var(--sp-7); }
+.dd .do{ border-right:1px solid var(--line-2); }
+.dd h5{ font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; margin:0 0 16px; display:flex; align-items:center; gap:8px; }
+.dd .do h5{ color:var(--ok); } .dd .do h5::before{ content:'\2713'; font-weight:700; }
+.dd .dont h5{ color:var(--err); } .dd .dont h5::before{ content:'\00d7'; font-weight:700; font-size:16px; }
+.dd ul{ list-style:none; padding:0; margin:0; }
+.dd li{ padding:8px 0; border-bottom:1px dashed var(--line-2); font-size:14px; color:var(--ink-2); }
+.dd li:last-child{ border-bottom:0; }
+.dd .dont li{ color:var(--ink-4); text-decoration:line-through; text-decoration-color:var(--line-b); }
+
+@media (max-width:960px){
+  .platforms, .dd{ grid-template-columns:1fr; }
+  .dd .do{ border-right:0; border-bottom:1px solid var(--line-2); }
+}
+</style>
+<script src="chrome-mobilenav.js" defer></script>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs><symbol id="logo-zopdev" viewBox="0 0 715 276">
+    <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+    <rect x="537" width="89" height="89" fill="var(--logo-blue, #2A4494)"/>
+    <rect x="626" width="89" height="89" fill="#F58549"/>
+    <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+  </symbol></defs>
+</svg>
+
+<!-- announcement bar -->
+<div class="ann-bar" id="ann-bar">
+  <div class="ann-inner">
+    <a href="developers.html" class="ann-chip">
+      <span class="ann-dot"></span>
+      <strong>MCP Server</strong>, live in Claude &amp; Codex
+      <span class="ann-arrow">→</span>
+    </a>
+    <a href="changelog.html" class="ann-link">Changelog →</a>
+    <button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button>
+  </div>
+</div>
+
+<div class="live-strip">
+  <div class="live-inner">
+    <span class="live-seg"><span class="live-dot"></span> <strong>All regions healthy</strong></span>
+    <span class="live-sep"></span>
+    <span class="live-seg"><span class="live-dot b"></span> 3,247 resources monitored</span>
+    <span class="live-sep"></span>
+    <span class="live-seg"><span class="live-dot o"></span> 12 remediations &middot; last 24h</span>
+    <span class="live-right">uptime 99.98% &middot; build 2026.04</span>
+  </div>
+</div>
+<nav class="nav"><div class="nav-inner">
+  <a href="/" class="nav-brand" aria-label="ZopDev home"><svg class="logo" viewBox="0 0 715 276" role="img" aria-hidden="true"><use href="#logo-zopdev"/></svg></a>
+  <div class="nav-links">
+      <a href="zopnight.html">Product</a>
+      <a href="solutions.html">Solutions</a>
+      <a href="customers.html">Customers</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="blog.html">Resources</a>
+      <a href="developers.html">Developers</a>
+    </div>
+  <div class="nav-cta"><a class="sign" href="signin.html">Sign In</a><a class="btn btn-accent" href="signin.html"><span>Start Free</span> <span class="arrow">&#8594;</span></a></div>
+</div></nav>
+
+<header class="page-head">
+  <div class="crumb"><a href="/">home</a><span class="s">/</span><a href="brand-guidelines.html">brand</a><span class="s">/</span>og templates</div>
+  <div class="meta">&#167; 16 &middot; open graph + social meta</div>
+  <h1>Link previews, <em>on brand.</em></h1>
+  <p class="lede">Every page on zop.dev gets a <strong>1200&times;630 SVG</strong> served as <code style="background:#0A0A0A; padding:2px 6px">og:image</code>. Five templates cover every surface type. Fill in the headline, the metric, or the title; the layout does the rest. <strong>LinkedIn, X, Slack, Teams previews</strong> all consume these.</p>
+</header>
+
+
+<section class="sec">
+  <h2>&#167; 01 &middot; default &middot; homepage + fallback</h2>
+  <h3>The three-numbers meta shot.</h3>
+  <p class="lead">Homepage, about, any page without a specific variant. Dark canvas with the full lockup top-left and the three-numbers strip along the bottom. Answers &ldquo;what is ZopDev?&rdquo; in one image.</p>
+  <div class="og-card">
+    <div class="og-head"><strong>og-default.svg</strong><span class="tag">1200 &times; 630 &middot; dark</span></div>
+    <div class="og-preview"><img src="og/og-default.svg" alt="ZopDev default OG preview"/></div>
+    <div class="og-foot">
+      <span><strong>Used on:</strong> / &middot; /about &middot; any fallback</span>
+      <span><a href="og/og-default.svg" download>Download SVG &#8594;</a></span>
+    </div>
+  </div>
+</section>
+
+
+<section class="sec">
+  <h2>&#167; 02 &middot; product</h2>
+  <h3>For product + sub-brand pages.</h3>
+  <p class="lead">Large &ldquo;One platform. Four surfaces.&rdquo; with the four surface chips below the headline. Swap the headline and chip names for sub-brand pages.</p>
+  <div class="og-card">
+    <div class="og-head"><strong>og-product.svg</strong><span class="tag">1200 &times; 630 &middot; dark &middot; orange pillar bar</span></div>
+    <div class="og-preview"><img src="og/og-product.svg" alt="ZopDev product OG preview"/></div>
+    <div class="og-foot">
+      <span><strong>Used on:</strong> /product &middot; /product/atlas &middot; /product/cdcr &middot; /product/showback &middot; /product/remediation</span>
+      <span><a href="og/og-product.svg" download>Download SVG &#8594;</a></span>
+    </div>
+  </div>
+</section>
+
+
+<section class="sec">
+  <h2>&#167; 03 &middot; customer story</h2>
+  <h3>Metric-dominant.</h3>
+  <p class="lead">A huge pillar-colored number (the signature case metric), industry chip, short quote, cited to a role. Use the pillar color that fits the story &mdash; green for savings-led, blue for defensibility-led, orange for speed-led.</p>
+  <div class="og-card">
+    <div class="og-head"><strong>og-customer.svg</strong><span class="tag">1200 &times; 630 &middot; dark &middot; green pillar</span></div>
+    <div class="og-preview"><img src="og/og-customer.svg" alt="ZopDev customer story OG preview"/></div>
+    <div class="og-foot">
+      <span><strong>Used on:</strong> /customers &middot; individual case-study pages</span>
+      <span><a href="og/og-customer.svg" download>Download SVG &#8594;</a></span>
+    </div>
+  </div>
+</section>
+
+
+<section class="sec">
+  <h2>&#167; 04 &middot; pricing</h2>
+  <h3>Three tiers, side-by-side.</h3>
+  <p class="lead">Mirrors the pricing page&mdash;reader sees all three tiers without clicking through. The featured (Pro) tier gets the orange frame + &ldquo;MOST POPULAR&rdquo; chip.</p>
+  <div class="og-card">
+    <div class="og-head"><strong>og-pricing.svg</strong><span class="tag">1200 &times; 630 &middot; dark &middot; 3-tier grid</span></div>
+    <div class="og-preview"><img src="og/og-pricing.svg" alt="ZopDev pricing OG preview"/></div>
+    <div class="og-foot">
+      <span><strong>Used on:</strong> /pricing</span>
+      <span><a href="og/og-pricing.svg" download>Download SVG &#8594;</a></span>
+    </div>
+  </div>
+</section>
+
+
+<section class="sec">
+  <h2>&#167; 05 &middot; blog / post</h2>
+  <h3>Editorial slot.</h3>
+  <p class="lead">Category chip, title (up to 3 lines), subtitle, byline with pillar-colored dot. Swap all text per post. Keeps the same 3-stripe top pillar strip so post thumbnails are identifiable as ZopDev even at low resolution.</p>
+  <div class="og-card">
+    <div class="og-head"><strong>og-post.svg</strong><span class="tag">1200 &times; 630 &middot; dark &middot; editorial</span></div>
+    <div class="og-preview"><img src="og/og-post.svg" alt="ZopDev blog post OG preview"/></div>
+    <div class="og-foot">
+      <span><strong>Used on:</strong> /blog/* &middot; /docs/*</span>
+      <span><a href="og/og-post.svg" download>Download SVG &#8594;</a></span>
+    </div>
+  </div>
+</section>
+
+
+<section class="sec">
+  <h2>&#167; 06 &middot; integration</h2>
+  <h3>Wiring meta tags.</h3>
+  <p class="lead">Drop these in every page&rsquo;s <code>&lt;head&gt;</code>. Prefer SVG where platforms support it; fall back to rasterized 1200&times;630 PNG at <code>og/og-default.png</code> (not included here &mdash; export via any SVG-to-PNG tool or the <code>rsvg-convert</code> CLI).</p>
+  <pre class="spec-code"><span class="c">&lt;!-- Open Graph --&gt;</span>
+<span class="k">&lt;meta property=</span><span class="v">"og:type"</span> <span class="k">content=</span><span class="v">"website"</span><span class="k">/&gt;</span>
+<span class="k">&lt;meta property=</span><span class="v">"og:title"</span> <span class="k">content=</span><span class="v">"ZopDev &middot; the Continuous CloudOps platform"</span><span class="k">/&gt;</span>
+<span class="k">&lt;meta property=</span><span class="v">"og:description"</span> <span class="k">content=</span><span class="v">"See everything. Find what's wrong. Fix it in one click."</span><span class="k">/&gt;</span>
+<span class="k">&lt;meta property=</span><span class="v">"og:url"</span> <span class="k">content=</span><span class="v">"https://zop.dev/"</span><span class="k">/&gt;</span>
+<span class="k">&lt;meta property=</span><span class="v">"og:image"</span> <span class="k">content=</span><span class="v">"https://zop.dev/og/og-default.png"</span><span class="k">/&gt;</span>
+<span class="k">&lt;meta property=</span><span class="v">"og:image:width"</span> <span class="k">content=</span><span class="v">"1200"</span><span class="k">/&gt;</span>
+<span class="k">&lt;meta property=</span><span class="v">"og:image:height"</span> <span class="k">content=</span><span class="v">"630"</span><span class="k">/&gt;</span>
+
+<span class="c">&lt;!-- Twitter / X --&gt;</span>
+<span class="k">&lt;meta name=</span><span class="v">"twitter:card"</span> <span class="k">content=</span><span class="v">"summary_large_image"</span><span class="k">/&gt;</span>
+<span class="k">&lt;meta name=</span><span class="v">"twitter:site"</span> <span class="k">content=</span><span class="v">"@zopdev"</span><span class="k">/&gt;</span>
+<span class="k">&lt;meta name=</span><span class="v">"twitter:title"</span> <span class="k">content=</span><span class="v">"ZopDev &middot; the Continuous CloudOps platform"</span><span class="k">/&gt;</span>
+<span class="k">&lt;meta name=</span><span class="v">"twitter:description"</span> <span class="k">content=</span><span class="v">"See everything. Find what's wrong. Fix it in one click."</span><span class="k">/&gt;</span>
+<span class="k">&lt;meta name=</span><span class="v">"twitter:image"</span> <span class="k">content=</span><span class="v">"https://zop.dev/og/og-default.png"</span><span class="k">/&gt;</span></pre>
+</section>
+
+
+<section class="sec">
+  <h2>&#167; 07 &middot; platform behaviour</h2>
+  <h3>Where each platform crops.</h3>
+  <p class="lead">Same 1200&times;630 source, three different crops in the wild. Keep all critical content (logo, headline, URL anchor) <strong>inside the safe zone</strong> &mdash; the central 1024&times;512 area.</p>
+
+  <div class="platforms">
+    <div class="plat">
+      <span class="k">01 &middot; LinkedIn feed</span>
+      <h4>Centered crop &middot; title below.</h4>
+      <p><strong>Keeps:</strong> full 1200&times;630 image in feed. Title and description render underneath.</p>
+    </div>
+    <div class="plat">
+      <span class="k">02 &middot; X / Twitter</span>
+      <h4>2:1 crop &middot; 1200&times;600.</h4>
+      <p><strong>Crops:</strong> ~15px off top and bottom. Safe zone centered. URL + title render below.</p>
+    </div>
+    <div class="plat">
+      <span class="k">03 &middot; Slack &middot; Teams</span>
+      <h4>Inline preview card.</h4>
+      <p><strong>Renders:</strong> full image above title + description + URL. No cropping but smaller size.</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="sec">
+  <h2>&#167; 08 &middot; rules</h2>
+  <h3>Do &middot; Don&rsquo;t.</h3>
+  <div class="dd">
+    <div class="do">
+      <h5>DO</h5>
+      <ul>
+        <li>Keep critical content inside the central 1024&times;512 safe zone</li>
+        <li>Match the URL anchor text to the actual URL</li>
+        <li>Export SVG source; render PNG fallback at 1200&times;630</li>
+        <li>Use the same three-stripe pillar bar at the top of every template</li>
+        <li>Keep one pillar color dominant per variant &mdash; blue, orange, or green</li>
+        <li>Always include the three-tile mark somewhere (top-left or bottom-right)</li>
+      </ul>
+    </div>
+    <div class="dont">
+      <h5>DON'T</h5>
+      <ul>
+        <li>No screenshots of the product UI inside OG images</li>
+        <li>No stock photography &middot; no gradients &middot; no shadows with blur</li>
+        <li>No light-canvas variant (the brand is dark on shared links)</li>
+        <li>No more than 20 words in the headline</li>
+        <li>No hashtag clusters or emoji in the preview image</li>
+        <li>No animation &mdash; platforms render static only</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <a href="/" class="brand" aria-label="ZopDev home">
+        <svg class="logo" viewBox="0 0 715 276" role="img" aria-hidden="true"><use href="#logo-zopdev"/></svg>
+      </a>
+      <p>The Continuous CloudOps platform. See everything. Find what's wrong. Fix it in one click.</p>
+    </div>
+
+    <div class="foot-col">
+      <h3>product</h3>
+      <ul>
+        <li><a href="/product/zopnight/atlas.html">Atlas</a></li>
+        <li><a href="/product/zopnight/mcp.html">MCP Server</a></li>
+        <li><a href="/product/zopnight/schedule.html">Schedule</a></li>
+        <li><a href="/product/zopnight/showback.html">Showback</a></li>
+        <li><a href="/product/zopnight/recommendation.html">Recommendations</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+      </ul>
+    </div>
+
+    <div class="foot-col">
+      <h3>solutions</h3>
+      <ul>
+        <li><a href="/solutions/finops.html">For FinOps</a></li>
+        <li><a href="/solutions/devops.html">For DevOps</a></li>
+        <li><a href="/solutions/cfo.html">For CFOs</a></li>
+        <li><a href="/solutions/aws.html">AWS</a></li>
+        <li><a href="/solutions/kubernetes.html">Kubernetes</a></li>
+        <li><a href="/solutions/rightsizing.html">Rightsizing</a></li>
+        <li><a href="/solutions/anomaly-detection.html">Anomaly detection</a></li>
+      </ul>
+    </div>
+
+    <div class="foot-col">
+      <h3>resources</h3>
+      <ul>
+        <li><a href="customers.html">Customers</a></li>
+        <li><a href="/resources/benchmarks.html">State of Cloud Waste</a></li>
+        <li><a href="/resources/blog.html">Blog</a></li>
+        <li><a href="/resources/glossary.html">Glossary</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li>
+        <li><a href="developers.html">Developers</a></li>
+      </ul>
+    </div>
+
+    <div class="foot-col">
+      <h3>company</h3>
+      <ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="/company/leadership.html">Leadership</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="trust.html">Trust center</a></li>
+        <li><a href="partners.html">Partners</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="foot-trust">
+    <span class="badge">SOC 2 Type II</span>
+    <span class="badge">ISO 27001</span>
+    <span class="badge o">HIPAA</span>
+    <span class="badge g">GDPR · CCPA</span>
+    <span class="badge k">AWS Marketplace</span>
+    <a href="status.html" class="status"><span class="badge ok" style="border:0; padding:0; color:transparent; width:7px; height:7px"></span> All systems operational</a>
+  </div>
+
+  <div class="foot-legal-rail">
+    <a href="trust.html">Privacy</a>
+    <a href="trust.html">Terms</a>
+    <a href="/legal/cookies.html">Cookies</a>
+    <a href="/trust/dpa.html">DPA</a>
+    <a href="/trust/subprocessors.html">Subprocessors</a>
+    <a href="/trust/sla.html">SLA</a>
+    <a href="/trust/ai-policy.html">AI policy</a>
+    <a href="/company/accessibility.html">Accessibility</a>
+    <a href="/sitemap.xml">Sitemap</a>
+  </div>
+
+  <div class="foot-bottom">
+    <div>© <span data-year>2026</span> ZopDev, Inc. · san francisco · all rights reserved</div>
+    <div>the Continuous CloudOps platform · see · find · fix</div>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    document.querySelectorAll('[data-year]').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+    var ann = document.getElementById('ann-bar');
+    var btn = document.getElementById('ann-close');
+    if(!ann || !btn) return;
+    var key = 'zop-ann-2026-mcp';
+    try{ if(localStorage.getItem(key) === '1') ann.style.display = 'none'; }catch(e){}
+    btn.addEventListener('click', function(){
+      ann.style.display = 'none';
+      try{ localStorage.setItem(key, '1'); }catch(e){}
+    });
+  })();
+</script>
+</body>
+</html>

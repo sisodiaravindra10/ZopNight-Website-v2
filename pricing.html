@@ -1,0 +1,2397 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+
+<title>Pricing · ZopDev</title>
+<meta name="description" content="ZopNight pricing, per cloud account, not per seat. Starter free, Pro $299/account/mo, Enterprise custom. Transparent, outcome-based pricing."/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="homepage-chrome.css"/>
+<link rel="stylesheet" href="chrome-footer.css">
+
+<style>
+/* no-italic-site-wide */ em,i,cite,dfn,var,address,blockquote{font-style:normal}
+/* ======================================================================
+   Pricing page, page-specific styles
+   ====================================================================== */
+
+.page{ padding:0; }
+.page > section{ padding:var(--sec-pad) 0; border-bottom:1px solid var(--line); }
+.page > section:last-child{ border-bottom:0; }
+
+.crumb{
+  padding:var(--sp-7) 0 var(--sp-4);
+  max-width:var(--max); margin:0 auto;
+  padding-left:var(--gutter); padding-right:var(--gutter);
+  font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4);
+  letter-spacing:var(--ls-meta-tight); text-transform:uppercase;
+}
+.crumb a{ color:var(--ink-3); }
+.crumb a:hover{ color:var(--ink); }
+.crumb .sep{ color:var(--ink-5); margin:0 var(--sp-2); }
+
+.page-head{
+  padding:var(--sp-10) 0 var(--sp-12);
+  max-width:var(--max); margin:0 auto;
+  padding-left:var(--gutter); padding-right:var(--gutter);
+  border-bottom:1px solid var(--line);
+}
+.page-head .meta{
+  font-family:var(--mono); font-size:var(--t-11);
+  color:var(--zop-orange); letter-spacing:var(--ls-meta);
+  text-transform:uppercase; margin-bottom:var(--sp-4);
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+}
+.page-head .meta::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
+.page-head h1{
+  font-size:clamp(40px, 5.5vw, 80px);
+  font-weight:var(--fw-bold); letter-spacing:var(--ls-display);
+  line-height:var(--lh-display);
+  max-width:1000px; margin:0 0 var(--sp-5);
+}
+.page-head h1 em{ font-style:normal; color:var(--zop-orange); }
+.page-head p.lede{
+  font-size:var(--t-20); color:var(--ink-3);
+  max-width:720px; line-height:1.45; margin:0;
+}
+.page-head p.lede strong{ color:var(--ink); font-weight:var(--fw-medium); }
+
+.inner{
+  max-width:var(--max); margin:0 auto;
+  padding-left:var(--gutter); padding-right:var(--gutter);
+}
+
+.sec-meta{
+  font-family:var(--mono); font-size:var(--t-10); letter-spacing:var(--ls-meta);
+  text-transform:uppercase; color:var(--zop-orange);
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+  margin-bottom:var(--sp-4);
+}
+.sec-meta::before{ content:''; width:8px; height:8px; background:var(--zop-orange); flex-shrink:0; }
+
+.sec-h{ margin-bottom:var(--sp-10); }
+.sec-h h2{ font-size:clamp(28px,3.2vw,44px); font-weight:var(--fw-bold); letter-spacing:var(--ls-display); line-height:1.1; margin:var(--sp-2) 0 var(--sp-3); }
+.sec-h p{ font-size:var(--t-15); color:var(--ink-3); line-height:var(--lh-body); max-width:720px; margin:0; }
+
+/* ---- 01 PRICING TIERS ---- */
+.tiers-grid{
+  display:grid; grid-template-columns:1fr 1fr 1fr; gap:0;
+  border:1px solid var(--line);
+}
+.tier{
+  padding:var(--sp-10) var(--sp-8);
+  display:flex; flex-direction:column; gap:var(--sp-5);
+  border-right:1px solid var(--line);
+  position:relative;
+}
+.tier:last-child{ border-right:0; }
+.tier.featured{
+  border:2px solid var(--zop-orange);
+  margin:-1px;
+  box-shadow:6px 6px 0 0 var(--zop-orange);
+  background:var(--bg-1);
+  z-index:1;
+}
+.tier-pop{
+  position:absolute; top:-14px; left:var(--sp-8);
+  font-family:var(--mono); font-size:var(--t-10); letter-spacing:var(--ls-meta);
+  text-transform:uppercase; background:var(--zop-orange); color:var(--bg-0);
+  padding:3px 12px; font-weight:var(--fw-bold);
+}
+.tier-name{
+  font-family:var(--mono); font-size:var(--t-11); letter-spacing:var(--ls-meta);
+  text-transform:uppercase; color:var(--ink-4);
+}
+.tier-price{
+  display:flex; align-items:baseline; gap:var(--sp-2);
+}
+.tier-price .amount{
+  font-size:var(--t-52); font-weight:var(--fw-bold);
+  letter-spacing:var(--ls-display); line-height:1;
+  color:var(--ink); font-variant-numeric:tabular-nums;
+}
+.tier-price .currency{
+  font-family:var(--mono); font-size:var(--t-22); color:var(--ink-3);
+}
+.tier-price .period{
+  font-family:var(--mono); font-size:var(--t-12); color:var(--ink-4);
+  letter-spacing:var(--ls-meta-tight);
+}
+.tier-tagline{ font-size:var(--t-14); color:var(--ink-3); line-height:var(--lh-body); margin:0; }
+.tier-cta{ margin-top:auto; }
+.tier-features{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:var(--sp-3); }
+.tier-features li{
+  display:flex; align-items:flex-start; gap:var(--sp-3);
+  font-size:var(--t-14); color:var(--ink-3); line-height:var(--lh-body);
+}
+/* Feature-list bullets · clean SVG checkmark per tier. Default tier
+   uses green stroke, featured tier uses orange. Each colour is its
+   own inline SVG so what you see is what you get — no filter hacks. */
+.tier-features li::before{
+  content:'';
+  width:14px; height:14px; flex-shrink:0;
+  margin-top:4px;
+  background-repeat:no-repeat; background-size:contain; background-position:center;
+  /* default · green check (#7FB236) */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none' stroke='%237FB236' stroke-width='2' stroke-linecap='square'><path d='M2.5 7.5l3 3 6-7'/></svg>");
+}
+.tier.featured .tier-features li::before{
+  /* featured · orange check (#F58549) */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none' stroke='%23F58549' stroke-width='2' stroke-linecap='square'><path d='M2.5 7.5l3 3 6-7'/></svg>");
+}
+.tier-divider{
+  height:1px; background:var(--line); width:100%;
+}
+.tier-label{
+  font-family:var(--mono); font-size:var(--t-11); color:var(--ink-5);
+  letter-spacing:var(--ls-meta-tight); text-transform:uppercase;
+}
+
+/* ---- 02 FEATURE MATRIX ---- */
+.matrix-wrap{ overflow-x:auto; }
+.matrix{
+  width:100%; border-collapse:collapse; border:1px solid var(--line);
+  min-width:700px;
+}
+.matrix th{
+  padding:var(--sp-4) var(--sp-6); text-align:left;
+  font-family:var(--mono); font-size:var(--t-11); letter-spacing:var(--ls-meta);
+  text-transform:uppercase; color:var(--ink-4);
+  border-bottom:2px solid var(--line); background:var(--bg-1);
+}
+.matrix th.col-plan{ text-align:center; color:var(--ink-3); }
+.matrix th.col-featured{ color:var(--zop-orange); }
+.matrix td{
+  padding:var(--sp-4) var(--sp-6); font-size:var(--t-14);
+  border-bottom:1px solid var(--line); color:var(--ink-3);
+  vertical-align:middle;
+}
+.matrix td.col-plan{ text-align:center; }
+.matrix td.feat-name{ color:var(--ink); font-weight:var(--fw-medium); }
+.matrix tbody tr:nth-child(odd) td{ background:var(--bg-1); }
+.matrix tbody tr:hover td{ background:var(--bg-2); }
+.check{ color:var(--zop-green); font-size:var(--t-15); font-weight:var(--fw-bold); }
+.check-o{ color:var(--zop-orange); font-size:var(--t-15); font-weight:var(--fw-bold); }
+.dash{ color:var(--ink-5); font-size:var(--t-15); }
+.matrix-group td{
+  background:var(--bg-2) !important; padding:var(--sp-2) var(--sp-6);
+  font-family:var(--mono); font-size:var(--t-10); letter-spacing:var(--ls-meta);
+  text-transform:uppercase; color:var(--ink-5); border-top:1px solid var(--line);
+}
+
+/* ── LIGHT-MODE overrides for the feature matrix ──────────────────
+   The default rules use dark-canvas tokens (cream-on-dark).
+   In light mode the page goes paper-cream and those tokens become
+   pale-on-pale (1.8:1 — way under AA). Re-scope the ink-X variables
+   inside the matrix to dark greys, and swap the bg-X stripe/header
+   shades to subtle ink tints. Keeps all the existing rules working
+   without rewriting them — every var() reference picks up the new
+   value via the cascade. */
+html[data-theme="light"] .matrix{
+  --ink:    #0A0A0A;          /* feature names · ~16:1 on cream */
+  --ink-3:  #3A3A40;          /* body cell text · ~10.5:1 */
+  --ink-4:  #5A5A62;          /* column headers · ~6.4:1 */
+  --ink-5:  #6A6A72;          /* dashes / group · ~5.1:1, AA */
+  --bg-1:   rgba(0,0,0,.03);  /* odd-row stripe · barely-there tint */
+  --bg-2:   rgba(0,0,0,.06);  /* hover + group band · slightly stronger */
+  --line:   rgba(0,0,0,.12);  /* dividers · ~3:1, AA for borders */
+  border-color:rgba(0,0,0,.18);
+}
+/* Brand-coloured ✓ stay the same — orange / green read fine on both
+   themes because they pull from --zop-orange / --zop-green, which are
+   theme-locked. */
+
+
+/* ============================================================
+   PORTED FROM HOMEPAGE · trust-marquee, calculator, FAQ, final
+   CTA. Same CSS rules that drive the homepage versions of
+   these sections, lifted verbatim so pricing renders identical.
+   ============================================================ */
+.sec-head{display:flex; flex-direction:column; align-items:flex-start;
+  gap:14px; margin-bottom:48px; padding-bottom:24px; border-bottom:1px solid var(--line)}
+.sec-meta{font-family:var(--mono); font-size:11px; font-weight:500; color:var(--g-500);
+  text-transform:uppercase; letter-spacing:.14em; flex-shrink:0;
+  display:flex; gap:10px; align-items:center}
+.sec-meta::before{content:''; width:10px; height:10px; background:var(--zop-orange)}
+.sec-head > div:not(.sec-meta){
+  width:100%;
+  display:flex; align-items:flex-end; justify-content:space-between; gap:48px;
+}
+.sec-head h2{font-size:clamp(28px,3.2vw,44px); font-weight:700; max-width:720px; letter-spacing:-0.03em; margin:0}
+.sec-head .sub{color:var(--g-600); font-size:15px; max-width:360px; line-height:1.55; flex-shrink:0; margin:0 0 8px; text-align:right}
+.sec-head > div:not(.sec-meta){ flex-direction:column; align-items:flex-start; gap:14px; }
+.sec-head .sub{ max-width:100%; text-align:left; margin:0 }
+.trust-marquee{
+  padding:48px 0;
+  overflow:hidden;
+  position:relative;
+  -webkit-mask-image:linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+          mask-image:linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+}
+.tm-track{
+  display:flex; gap:72px; width:max-content;
+  animation:tm-scroll 42s linear infinite;
+  will-change:transform;
+}
+.trust-marquee:hover .tm-track{ animation-play-state:paused; }
+.tm-lg{
+  font-family:var(--mono); font-size:17px; font-weight:500;
+  /* Bumped from --g-400 (#A3A3A3, ~2.6:1) to --g-600 (#525252, ~7.4:1)
+     so logos remain readable on paper · still visually quieter than
+     primary copy via the smaller weight + spacing. */
+  color:var(--g-600); letter-spacing:.04em;
+  white-space:nowrap; flex-shrink:0;
+  transition:color .3s var(--ease-out);
+  display:inline-flex; align-items:center; gap:10px;
+}
+.tm-lg::before{
+  content:''; width:6px; height:6px; background:currentColor; opacity:.6;
+  flex-shrink:0;
+}
+.tm-lg:hover{ color:var(--ink); }
+.tm-track{ animation:none; justify-content:center; }
+/* Mode toggle · segmented pill above the calculator */
+.cv-modes{
+  display:inline-flex; gap:0;
+  border:1px solid var(--line); margin-bottom:18px;
+  background:var(--paper); padding:3px;
+}
+html[data-theme="dark"] .cv-modes{ background:transparent; }
+.cv-mode-btn{
+  font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; font-weight:600;
+  padding:8px 18px; border:0; background:transparent; color:var(--g-500);
+  cursor:pointer; transition:color .2s, background .2s;
+}
+.cv-mode-btn:hover{ color:var(--ink); }
+.cv-mode-btn.active{ background:var(--ink); color:var(--paper); }
+
+/* ───── SIMPLE MODE · Braun ET66-inspired keypad calculator ─────
+   Ivory chassis (light) / matte dark (dark). */
+.cv-simple{
+  background:#ECE6D2;
+  color:#0a0a0c;
+  border:1px solid #0a0a0c;
+  padding:18px 20px 20px;
+  display:grid;
+  grid-template-columns:1.1fr 1fr;
+  grid-auto-rows:auto;
+  gap:10px 18px;
+  position:relative;
+  overflow:hidden;
+}
+html[data-theme="dark"] .cv-simple{
+  background:#1d1d1f; color:#F0EBDB; border-color:#333;
+}
+.cvs-brand{
+  grid-column:1 / -1;
+  display:flex; align-items:center; gap:10px;
+  font-family:var(--mono); font-size:10px; letter-spacing:.14em;
+  text-transform:uppercase; font-weight:700;
+  padding-bottom:10px;
+  border-bottom:1px solid rgba(10,10,12,.12);
+}
+html[data-theme="dark"] .cvs-brand{ border-bottom-color:rgba(240,235,219,.12); }
+.cvs-brand-name{ color:#0a0a0c; letter-spacing:.18em; }
+html[data-theme="dark"] .cvs-brand-name{ color:#F0EBDB; }
+.cvs-brand-model{ color:rgba(10,10,12,.45); font-weight:500; }
+html[data-theme="dark"] .cvs-brand-model{ color:rgba(240,235,219,.65); }
+.cvs-brand-led{
+  margin-left:auto;
+  width:7px; height:7px; background:var(--zop-green);
+  box-shadow:0 0 5px rgba(127,178,54,.6);
+  animation:cvs-live 1.8s ease-in-out infinite;
+}
+@keyframes cvs-live{ 0%,100%{opacity:1;} 50%{opacity:.45;} }
+.cvs-display{
+  grid-column:1 / -1;
+  padding:16px 22px;
+  background:#1a1a1e;
+  border:1px solid #0a0a0c;
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.45), inset 0 0 0 1px rgba(240,235,219,.04);
+  display:flex; flex-direction:column; gap:4px;
+  text-align:right;
+  font-variant-numeric:tabular-nums;
+}
+.cvs-display-label{
+  font-family:var(--mono); font-size:10px; letter-spacing:.12em;
+  text-transform:uppercase; color:#b4cc85; opacity:.6;
+  text-align:left; margin-bottom:4px;
+}
+.cvs-amount{
+  font-family:'JetBrains Mono', monospace;
+  font-size:clamp(44px, 6.5vw, 72px); font-weight:700;
+  letter-spacing:-.01em; line-height:.95;
+  color:#b4cc85;                           /* LCD green */
+  text-shadow:0 0 10px rgba(180,204,133,.25);
+  font-variant-numeric:tabular-nums;
+  transition:color .15s, text-shadow .15s;
+  /* Click-to-edit · text caret on hover, animated underline,
+     focus state matches the display's LCD-green tone. */
+  position:relative;
+  cursor:text;
+  outline:none;
+  caret-color:#b4cc85;
+  display:inline-block;        /* shrinkwraps the underline to the digits */
+  align-self:flex-end;         /* right-aligned within the display */
+  padding:0 2px;
+}
+.cvs-amount::after{
+  content:""; position:absolute; left:2px; right:2px; bottom:-3px; height:1px;
+  background:rgba(180,204,133,.4);
+  transform:scaleX(0); transform-origin:right;
+  transition:transform .28s var(--ease-out), background .28s var(--ease-out);
+}
+.cvs-amount:hover::after{
+  transform:scaleX(1); transform-origin:left;
+}
+.cvs-amount.editing::after{
+  transform:scaleX(1); transform-origin:left;
+  background:rgba(180,204,133,.85);
+  height:2px;
+}
+.cvs-amount.editing{
+  color:#F0EBDB;
+  text-shadow:0 0 14px rgba(240,235,219,.3);
+}
+.cvs-amount.bump{ color:var(--zop-orange); text-shadow:0 0 14px rgba(245,133,73,.5); }
+.cvs-display.editing .cvs-display-year{ visibility:hidden; }
+.cvs-display .cvs-edit-hint{
+  font-family:var(--mono); font-size:10px;
+  color:rgba(180,204,133,.45); letter-spacing:.08em;
+  text-transform:uppercase; margin-top:4px;
+  height:0; overflow:hidden; opacity:0;
+  transition:height .22s var(--ease-out), opacity .22s var(--ease-out);
+}
+.cvs-display.editing .cvs-edit-hint{
+  height:14px; opacity:1;
+}
+.cvs-sub{
+  font-family:var(--mono); font-size:11px;
+  color:rgba(180,204,133,.5); letter-spacing:.04em;
+  margin-top:4px;
+}
+.cvs-sub span{ color:rgba(180,204,133,.8); }
+.cvs-display-year{
+  font-family:var(--mono); font-size:11px;
+  color:rgba(180,204,133,.5); letter-spacing:.08em;
+  padding-top:8px; margin-top:4px; border-top:1px dashed rgba(180,204,133,.15);
+}
+.cvs-display-year strong{
+  color:rgba(180,204,133,.85); font-weight:700;
+  font-family:'JetBrains Mono', monospace;
+}
+.cvs-keys-label{
+  grid-column:1 / -1;
+  font-family:var(--mono); font-size:10px; letter-spacing:.14em;
+  text-transform:uppercase; color:rgba(10,10,12,.5);
+  font-weight:600; margin-top:4px;
+}
+html[data-theme="dark"] .cvs-keys-label{ color:rgba(240,235,219,.65); }
+.cvs-keypad{
+  grid-column:1 / -1;
+  display:grid; grid-template-columns:repeat(4, 1fr);
+  gap:6px;
+}
+.cvs-key{
+  padding:14px 0;
+  background:#D8D1BC;           /* Braun gray-beige key */
+  color:#0a0a0c;
+  border:1px solid rgba(10,10,12,.18);
+  border-bottom:2px solid rgba(10,10,12,.28);
+  font-family:var(--mono); font-size:13px; font-weight:600;
+  letter-spacing:.02em;
+  cursor:pointer;
+  transition:background .12s, transform .08s, border-color .12s;
+  text-align:center;
+}
+html[data-theme="dark"] .cvs-key{
+  background:#2b2b2e; color:#F0EBDB;
+  border-color:#444;
+  border-bottom-color:#1a1a1c;
+}
+.cvs-key:hover{ background:#e6dfc8; }
+html[data-theme="dark"] .cvs-key:hover{ background:#353538; }
+.cvs-key:active{
+  transform:translateY(1px);
+  border-bottom-width:1px;
+}
+.cvs-key.active{
+  background:#0a0a0c; color:#F0EBDB;
+  border-color:#0a0a0c; border-bottom-color:#0a0a0c;
+}
+html[data-theme="dark"] .cvs-key.active{
+  background:#F0EBDB; color:#0a0a0c;
+  border-color:#F0EBDB; border-bottom-color:#F0EBDB;
+}
+.cvs-fine{
+  grid-column:1 / -1;
+  display:flex; align-items:center; gap:14px;
+  padding-top:4px;
+}
+.cvs-fine-label{
+  font-family:var(--mono); font-size:10px; letter-spacing:.12em;
+  text-transform:uppercase; color:rgba(10,10,12,.5); font-weight:600;
+  white-space:nowrap;
+}
+html[data-theme="dark"] .cvs-fine-label{ color:rgba(240,235,219,.65); }
+.cvs-slider-val{
+  font-family:var(--mono); font-size:12px; font-weight:700;
+  letter-spacing:-.01em; color:#0a0a0c;
+  min-width:80px; text-align:right;
+}
+html[data-theme="dark"] .cvs-slider-val{ color:#F0EBDB; }
+.cvs-range{
+  -webkit-appearance:none; appearance:none;
+  flex:1; height:3px;
+  background:rgba(10,10,12,.2);
+  outline:none; cursor:pointer;
+  border-radius:0;
+}
+html[data-theme="dark"] .cvs-range{ background:rgba(240,235,219,.14); }
+.cvs-range::-webkit-slider-thumb{
+  -webkit-appearance:none; appearance:none;
+  width:14px; height:14px; background:var(--zop-orange);
+  border:0; cursor:pointer;
+  box-shadow:0 1px 3px rgba(0,0,0,.25);
+  transition:transform .12s, background .12s;
+}
+.cvs-range::-webkit-slider-thumb:hover{ transform:scale(1.15); }
+.cvs-range::-webkit-slider-thumb:active{ transform:scale(1.25); }
+.cvs-range::-moz-range-thumb{
+  width:14px; height:14px; background:var(--zop-orange); border:0; cursor:pointer;
+  box-shadow:0 1px 3px rgba(0,0,0,.25);
+}
+.cvs-advanced-rows{
+  grid-column:1 / -1;
+  display:grid; grid-template-rows:0fr;
+  transition:grid-template-rows .34s cubic-bezier(.22,1,.36,1);
+  overflow:hidden;
+}
+.cvs-advanced-rows > *{ min-height:0; }
+.cvs-advanced-rows > *:first-child{ margin-top:10px; }
+.calc-v2[data-mode="advanced"] .cvs-advanced-rows{ grid-template-rows:1fr; }
+.cvs-advanced-rows > *{
+  opacity:0; transform:translateY(-4px);
+  transition:opacity .22s var(--ease-out) .08s, transform .22s var(--ease-out) .08s;
+}
+.calc-v2[data-mode="advanced"] .cvs-advanced-rows > *{
+  opacity:1; transform:translateY(0);
+}
+.cvs-keys-label-top{ margin-top:6px; }
+.cvs-row-triple{
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:16px;
+  padding-bottom:6px;
+}
+.cvs-row-col{
+  display:flex; flex-direction:column; gap:8px; min-width:0;
+}
+.cvs-row-col .cvs-keys-label{ margin-top:0; margin-bottom:2px; }
+.cvs-keypad.cvs-keypad-sm{
+  display:grid !important;
+  gap:6px !important;
+}
+.cvs-keypad-sm .cvs-key{
+  padding:12px 6px;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.02em;
+  line-height:1;
+  min-height:42px;
+  text-align:center;
+  white-space:nowrap;
+  box-sizing:border-box;
+}
+.cvs-keypad.cvs-keypad-sm[data-group="cloud"]{   grid-template-columns:repeat(2, 1fr) !important; }
+.cvs-keypad.cvs-keypad-sm[data-group="nonprod"]{ grid-template-columns:repeat(3, 1fr) !important; }
+.cvs-keypad.cvs-keypad-sm[data-group="team"]{    grid-template-columns:repeat(3, 1fr) !important; }
+.cvs-breakdown{
+  display:flex; flex-direction:column; gap:7px;
+  padding:4px 0 2px;
+}
+.cvs-bd-row{
+  display:grid; grid-template-columns:150px 1fr 84px 44px; gap:10px;
+  align-items:center;
+  font-family:var(--mono); font-size:11px;
+}
+.cvs-bd-name{ color:#0a0a0c; font-family:var(--font); font-size:12px; letter-spacing:-0.005em; font-weight:500; }
+html[data-theme="dark"] .cvs-bd-name{ color:#F0EBDB; }
+.cvs-bd-track{ height:6px; background:rgba(10,10,12,.12); overflow:hidden; position:relative; }
+html[data-theme="dark"] .cvs-bd-track{ background:rgba(240,235,219,.12); }
+.cvs-bd-fill{ display:block; height:100%; background:var(--zop-orange); transition:width var(--dur-md) var(--ease-out); }
+.cvs-bd-fill.b{ background:var(--zop-blue); }
+.cvs-bd-fill.g{ background:var(--zop-green); }
+.cvs-bd-fill.o{ background:var(--zop-orange); }
+.cvs-bd-fill.k{ background:rgba(10,10,12,.55); }
+html[data-theme="dark"] .cvs-bd-fill.k{ background:rgba(240,235,219,.65); }
+.cvs-bd-amt{ text-align:right; color:#0a0a0c; font-weight:700; font-size:12px; font-family:var(--font); letter-spacing:-0.01em; }
+html[data-theme="dark"] .cvs-bd-amt{ color:#F0EBDB; }
+.cvs-bd-pct{ text-align:right; color:rgba(10,10,12,.45); font-size:10.5px; letter-spacing:.04em; }
+html[data-theme="dark"] .cvs-bd-pct{ color:rgba(240,235,219,.65); }
+@media(max-width:720px){
+  .cvs-row-triple{ grid-template-columns:1fr; }
+  .cvs-bd-row{ grid-template-columns:1fr 60px; }
+  .cvs-bd-track, .cvs-bd-amt{ grid-column:1/-1; }
+  .cvs-bd-amt{ text-align:left; }
+}
+.cvs-equals{
+  grid-column:1 / -1;
+  /* Pull up by the parent grid row-gap (10px) so the CTA sits flush
+     against the keypad / advanced rows above · matches the Braun ET66
+     stacked-key feel. Tracks the gap value in .cv-simple. */
+  margin-top:-10px;
+  display:flex; align-items:center; gap:14px;
+  padding:16px 20px;
+  background:var(--zop-orange);
+  color:#0a0a0c;
+  border:1px solid var(--zop-orange);
+  font-family:var(--font); font-size:14px; font-weight:700;
+  letter-spacing:-.01em;
+  cursor:pointer; text-decoration:none;
+  position:relative;
+  transition:transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out), background var(--dur-med) var(--ease-out);
+}
+.cvs-equals-sign{
+  font-family:'JetBrains Mono', monospace;
+  font-size:22px; font-weight:700;
+  width:32px; height:32px;
+  display:inline-flex; align-items:center; justify-content:center;
+  background:rgba(10,10,12,.12);
+  border:1px solid rgba(10,10,12,.3);
+  flex-shrink:0;
+}
+.cvs-equals-label{ flex:1; text-align:left; }
+.cvs-equals:hover{
+  transform:translateY(-4px);
+  box-shadow:0 8px 0 -4px var(--ink);
+  background:var(--zop-orange);
+}
+@media(max-width:720px){
+  .cv-simple{ padding:14px 16px 16px; gap:12px; }
+  .cvs-keypad{ grid-template-columns:repeat(2, 1fr); }
+  .cvs-fine{ flex-wrap:wrap; }
+  .cvs-equals{ padding:14px 16px; }
+  .cvs-equals-sign{ width:28px; height:28px; font-size:18px; }
+}
+.calc-v2{
+  position:relative;
+  display:grid;                  /* stack panels in same cell for crossfade */
+  grid-template-columns:1fr;
+}
+.calc-v2 > [data-mode-panel]{
+  grid-row:1; grid-column:1;
+  min-width:0;
+  transition:opacity .38s cubic-bezier(.22,1,.36,1), transform .38s cubic-bezier(.22,1,.36,1);
+  will-change:opacity, transform;
+}
+.calc-v2 > [data-mode-panel].cv-inactive{
+  opacity:0;
+  transform:translateY(-6px);
+  pointer-events:none;
+  visibility:hidden;
+  /* Keep zero-height so only one mode takes space at a time */
+  height:0;
+  overflow:hidden;
+  transition:opacity .28s cubic-bezier(.22,1,.36,1), transform .28s cubic-bezier(.22,1,.36,1), visibility 0s linear .28s, height 0s linear .28s;
+}
+.calc-v2 > [data-mode-panel].cv-active{
+  opacity:1;
+  transform:translateY(0);
+  visibility:visible;
+  height:auto;
+}
+.calc-v2{ border:1px solid var(--line); background:var(--paper); }
+html[data-theme="dark"] .calc-v2{ background:#16161a; border-color:#2a2a30; }
+.final{
+  background:#0A0A0A;
+  color:#F0EBDB;
+  padding:96px 0;
+  border:0;
+  position:relative;
+}
+.final h2{ color:#F0EBDB; }
+.final .final-tag{ color:#F0EBDB; }
+.final p:not(.final-tag){ color:#B8B0A0; }
+.final-stats strong{ color:#F0EBDB; }
+.final-stats div{ color:#9C9588; }
+.final-stats{ border-left:1px solid rgba(255,255,255,.18); padding-left:32px; }
+.final-mark{
+  position:absolute; top:0; right:0;
+  width:160px; height:160px;
+  display:flex; align-items:center; justify-content:center;
+  z-index:2;
+  transition:opacity var(--dur-med);
+}
+.final-mark svg{ width:100%; height:100%; display:block; }
+.final-mark:hover{ opacity:0.85; }
+.final-mark:focus-visible{ outline:2px solid var(--zop-orange); outline-offset:-2px; }
+.final-mark{ width:120px; height:120px; }
+.final-mark{ width:88px; height:88px; }
+.final-grid{display:grid; grid-template-columns:2fr 1fr; gap:60px; align-items:center}
+.final h2{font-size:clamp(36px,4vw,56px); font-weight:700; line-height:1; letter-spacing:-0.04em; margin-bottom:20px}
+.final p{font-size:16px; color:var(--g-600); max-width:460px; margin-bottom:28px}
+.final .final-cta{display:flex; gap:12px; flex-wrap:wrap}
+.final .btn-primary{background:var(--paper); color:var(--ink); border-color:var(--paper)}
+.final .btn-primary:hover{background:transparent; color:var(--paper)}
+.final .btn-secondary{border-color:rgba(255,255,255,.3); color:var(--paper)}
+.final .btn-secondary:hover{border-color:var(--paper); background:rgba(255,255,255,.05)}
+.final-stats{display:flex; flex-direction:column; gap:20px; font-family:var(--mono); font-size:12px;
+  border-left:1px solid rgba(255,255,255,.18); padding-left:28px}
+.final-stats div{color:#9C9588; letter-spacing:.05em}
+.final-stats strong{display:block; color:#F0EBDB; font-size:24px; letter-spacing:-0.02em; font-family:var(--font); font-weight:700; margin-bottom:4px}
+html[data-theme="dark"] .final p{color:#B8B0A0}
+html[data-theme="dark"] .final-stats{border-left-color:rgba(255,255,255,.2)}
+html[data-theme="dark"] .final-stats div{color:#9C9588}
+html[data-theme="dark"] .sec-meta::before{background:var(--zop-orange)}
+.hero-inner, .sec-head{grid-template-columns:1fr}
+.sec-head{flex-direction:column; gap:12px}
+.timeline, .regions, .calc, .trustpillars, .trust-row, .final-grid{grid-template-columns:1fr}
+.bridge-marquee{
+  background:#F0EBDB;                    /* cream slab */
+  color:#0A0A0A;                         /* ink type */
+  height:56px;
+  display:flex; align-items:center; overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg, transparent 0%, #000 4%, #000 96%, transparent 100%);
+          mask-image:linear-gradient(90deg, transparent 0%, #000 4%, #000 96%, transparent 100%);
+}
+.bridge-track{
+  display:flex; gap:32px; align-items:center; width:max-content;
+  animation:bridge-roll 24s linear infinite;
+  font-family:var(--mono); font-size:14px; letter-spacing:.06em;
+  white-space:nowrap;
+  padding:0 32px;
+}
+.bridge-marquee:hover .bridge-track{ animation-play-state:paused; }
+.bridge-track .acc{ color:var(--zop-orange); font-weight:700; }
+.bridge-track{ animation:none; }
+.bridge-marquee{ height:44px; }
+.bridge-track{ font-size:12px; gap:24px; }
+
+/* ── LIGHT-MODE contrast for the ported sections.  The homepage's
+   final-CTA hard-codes #F0EBDB cream text on its near-black slab,
+   so it stays legible in both themes. The trust-marquee logos use
+   var(--ink-3) which becomes pale on cream — patch it. */
+html[data-theme="light"] .tm-lg{ color:#3A3A40; }
+html[data-theme="light"] .tm-lg::before{ background:#3A3A40; }
+html[data-theme="light"] .tm-lg:hover{ color:#0A0A0A; }
+html[data-theme="light"] .calc-v2{
+  --ink: #0A0A0A; --ink-3: #3A3A40; --ink-4: #5A5A62; --ink-5: #6A6A72;
+  --bg-1: rgba(0,0,0,.03); --bg-2: rgba(0,0,0,.06); --bg-3: rgba(0,0,0,.10);
+  --line: rgba(0,0,0,.12);
+}
+
+
+/* Product switcher · ported from index.html so the pricing page and the
+   homepage share one switcher design. Three tabs (ZopNight / ZopDay /
+   ZopCloud) with mark + name + status; active gets a hard-offset shadow
+   and a 1px lift, mirroring the homepage's `.family-card:hover` language. */
+.prod-switch{
+  display:inline-flex; gap:6px;
+  margin:0 0 var(--sp-8);
+  padding:6px;
+  border:1px solid var(--line);
+  background:var(--bg-1);
+}
+.ps-tab{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:10px 18px;
+  border:1px solid transparent;
+  background:transparent;
+  color:var(--g-700);
+  font-family:var(--font); font-size:14px; font-weight:500;
+  cursor:pointer; line-height:1;
+  transition:background var(--dur-fast) var(--ease-out),
+             color var(--dur-fast) var(--ease-out),
+             border-color var(--dur-fast) var(--ease-out),
+             box-shadow var(--dur-med) var(--ease-out),
+             transform var(--dur-med) var(--ease-out);
+}
+.ps-tab:hover{ color:var(--ink); }
+.ps-tab.is-active{
+  background:var(--paper);
+  color:var(--ink);
+  border-color:var(--line);
+  box-shadow:0 4px 0 -2px var(--ink);
+  transform:translateY(-1px);
+}
+.ps-tab:focus-visible{ outline:2px solid var(--zop-orange); outline-offset:2px; }
+.ps-mark{ width:16px; height:16px; display:inline-flex; flex-shrink:0; }
+.ps-mark svg{ width:100%; height:100%; display:block; }
+.ps-name{ font-weight:600; letter-spacing:-0.01em; }
+.ps-status{
+  font-family:var(--mono); font-size:9px; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase;
+  padding:3px 6px;
+  border:1px solid var(--line); color:var(--g-500);
+}
+.ps-status.live{ color:#7FB236; border-color:#7FB236; }
+
+/* Soon panel · matches `.tiers-grid` shell so the section height stays
+   stable between flips. tuned taller than the homepage's `.pricing-soon`
+   because the live tier grid here has more features per card. */
+.pricing-soon{
+  border:1px solid var(--line);
+  background:var(--bg-1);
+  color:var(--ink);
+  padding:96px 40px;
+  display:flex; flex-direction:column; align-items:center; gap:14px;
+  text-align:center; min-height:680px; justify-content:center;
+}
+.pricing-soon h3{ color:var(--ink); }
+.pricing-soon .lede{ color:var(--ink-3); }
+.pricing-soon .ps-eta{ color:var(--ink-4); border-color:var(--line); }
+.pricing-soon .ps-soon-mark{ width:48px; height:48px; margin-bottom:8px; }
+.pricing-soon h3{ font-size:32px; font-weight:700; letter-spacing:-0.03em; line-height:1.1; margin:0; }
+.pricing-soon .lede{ color:var(--g-600); max-width:560px; line-height:1.55; font-size:15px; margin:0; }
+.pricing-soon .ps-eta{
+  font-family:var(--mono); font-size:11px; color:var(--g-500);
+  letter-spacing:.14em; text-transform:uppercase;
+  padding:6px 10px; border:1px solid var(--line); margin-top:4px;
+}
+.pricing-soon .cta-row{ display:flex; gap:12px; margin-top:8px; flex-wrap:wrap; justify-content:center; }
+
+.pricing-panes [data-product][hidden]{ display:none; }
+
+@media (max-width:760px){
+  .prod-switch{ display:flex; flex-direction:row; flex-wrap:nowrap; width:100%; }
+  .ps-tab{ flex:1; justify-content:center; padding:10px 8px; min-width:0; }
+  .pricing-soon{ padding:64px 24px; min-height:auto; }
+  .pricing-soon h3{ font-size:24px; }
+
+  /* Tiers stack vertically · borders move from right→bottom */
+  .tiers-grid{ grid-template-columns:1fr; }
+  .tier{
+    border-right:0;
+    border-bottom:1px solid var(--line);
+    padding:var(--sp-8) var(--sp-6);
+  }
+  .tier:last-child{ border-bottom:0; }
+  .tier.featured{
+    margin:0;
+    box-shadow:0 6px 0 0 var(--zop-orange);
+  }
+
+  /* Page head wraps + reduces */
+  .page-head{ padding:var(--sp-8) var(--gutter); }
+  .page-head h1{ font-size:clamp(32px, 7vw, 48px); }
+  .page-head p.lede{ font-size:var(--t-16); }
+
+  /* Feature comparison matrix · horizontal scroll inside its wrapper
+     so the giant table doesn't blow out the viewport */
+  .matrix-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .matrix{ min-width:540px; }
+
+  /* Cv calculator grid → single column, equals key sized for thumb */
+  .cv-simple{ grid-template-columns:1fr; }
+  .cvs-amount{ font-size:clamp(36px, 11vw, 56px); }
+
+  /* Section padding + headings */
+  section.section{ padding-top:48px; padding-bottom:48px; }
+  .sec-head{ flex-direction:column; align-items:flex-start; gap:12px; }
+  .sec-h h2{ font-size:clamp(26px, 5vw, 36px); }
+
+  /* FAQ summary text wrap */
+  .faq-list summary{ font-size:15px; padding:18px 16px; }
+  .faq-list .faq-body{ padding:0 16px 18px; }
+}
+@media (max-width:480px){
+  /* Tighten further on the smallest viewports */
+  .page-head h1{ font-size:28px; }
+  .page-head p.lede{ font-size:14px; }
+  .tier-name{ font-size:20px; }
+  .tier-price .amount{ font-size:36px; }
+}
+
+/* FAQ accordion styles — matching homepage */
+.faq-list{
+  display:flex; flex-direction:column;
+  border:1px solid var(--line);
+}
+.faq-list details{ border-bottom:1px solid var(--line); }
+.faq-list details:last-child{ border-bottom:0; }
+.faq-list summary{
+  padding:20px 24px;
+  font-size:15px; font-weight:600; font-family:var(--font);
+  cursor:pointer; list-style:none;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  color:var(--ink); user-select:none; line-height:1.4;
+  transition:background .14s, color .14s;
+}
+.faq-list summary::-webkit-details-marker{ display:none; }
+.faq-list summary:hover{ background:rgba(0,0,0,.025); }
+html[data-theme="dark"] .faq-list summary:hover{ background:rgba(255,255,255,.04); }
+.faq-list details[open] summary{ color:var(--zop-orange); }
+.faq-chevron{
+  width:22px; height:22px; flex-shrink:0;
+  border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; color:var(--g-400); font-family:var(--mono); font-weight:500;
+  transition:transform .14s, color .14s, border-color .14s;
+}
+.faq-list details[open] .faq-chevron{ transform:rotate(45deg); color:var(--zop-orange); border-color:var(--zop-orange); }
+.faq-body{
+  padding:0 24px 20px;
+  font-size:13.5px; color:var(--g-500); line-height:1.7;
+}
+.faq-body p{ margin:0 0 10px; }
+.faq-body p:last-child{ margin:0; }
+.faq-body strong{ color:var(--ink); }
+.faq-body a{ color:var(--zop-blue); }
+</style>
+</head>
+<body>
+
+<!-- SVG defs -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mark-zopdev" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="16" height="16" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="16" y="0" width="16" height="16" fill="#F58549"/>
+      <rect x="16" y="16" width="16" height="16" fill="#7FB236"/>
+    </symbol>
+    <symbol id="mark-zopnight" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="32" height="32" fill="var(--logo-blue, #2A4494)"/>
+      <circle cx="16" cy="16" r="8" fill="#FFFFFF"/>
+    </symbol>
+    <symbol id="mark-zopday" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="32" height="32" fill="#F58549"/>
+      <circle cx="16" cy="16" r="8" fill="#FFFFFF"/>
+    </symbol>
+    <symbol id="mark-zopcloud" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="10" height="10" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="11" y="0" width="10" height="10" fill="#F58549"/>
+      <rect x="22" y="11" width="10" height="10" fill="#7FB236"/>
+      <rect x="11" y="11" width="10" height="10" fill="#0A0A0A"/>
+      <rect x="0" y="22" width="10" height="10" fill="#7FB236"/>
+      <rect x="11" y="22" width="10" height="10" fill="var(--logo-blue, #2A4494)"/>
+    </symbol>
+    <symbol id="logo-zopdev" viewBox="0 0 715 276">
+      <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+      <rect x="537" width="89" height="89" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="626" width="89" height="89" fill="#F58549"/>
+      <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="ann-bar" id="ann-bar">
+  <div class="ann-inner">
+    <a href="developers.html" class="ann-chip">
+      <span class="ann-dot"></span>
+      <strong>MCP Server</strong>, live in Claude &amp; Codex
+      <span class="ann-arrow">→</span>
+    </a>
+    <a href="changelog.html" class="ann-link">Changelog →</a>
+    <button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button>
+  </div>
+</div>
+
+<!-- LIVE-OPS STRIP -->
+<!-- ============================================================
+     LIVE STATUS STRIP. Cloud-ops signal strip
+     ============================================================ -->
+<!-- ============================================================
+     SAVINGS CALCULATOR STRIP. Single CTA, links to the calculator.
+     ============================================================ -->
+<a class="live-strip live-strip-cta" href="#calculator" aria-label="Open the savings calculator">
+  <span class="ls-cta-anchor">
+    <span class="ls-live"><span class="ls-livedot"></span>Calculator</span>
+  </span>
+  <span class="ls-cta-msg">See how much your cloud is wasting right now.</span>
+  <span class="ls-cta-arrow">Try it <span class="ls-arrow">&rarr;</span></span>
+</a>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo-lockup sm" aria-label="ZopDev">
+      <svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <div class="nav-item" data-menu="product">
+        <a>Product <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <div class="nav-item" data-menu="resources">
+        <a>Resources <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="pricing.html">Pricing</a>
+      <div class="nav-item" data-menu="company">
+        <a>Company <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="community.html">Community</a>
+    </div>
+
+    <!-- Shared dropdown overlay. Content crossfades, panel slides left/right -->
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+      <div class="nav-panes" id="nav-panes">
+
+        <!-- ═══════ PRODUCT · 3 sub-products ═══════ -->
+        <div class="nav-pane" data-pane="product">
+          <!-- 3 equal cells. Inline grid-template-columns overrides the
+               default 1.3fr 1fr 1fr (which is built for a featured-hero
+               layout). All three products are equal here — no hero — so
+               no empty grid slots and no card stretches taller than its
+               siblings. -->
+          <div class="np-bento" style="grid-template-columns:1fr 1fr 1fr;">
+            <a class="np-cell" href="zopnight.html">
+              <span class="np-badge live">live</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopNight</h3>
+              <p class="np-cell-desc">Cloud cost optimization on autopilot. AWS, Azure, GCP.</p>
+            </a>
+            <a class="np-cell" href="zopday.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#F58549"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopDay</h3>
+              <p class="np-cell-desc">Deployment orchestration and release management.</p>
+            </a>
+            <a class="np-cell" href="zopcloud.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><rect x="12" y="8" width="8" height="6" fill="#FFFFFF"/><rect x="6" y="14" width="20" height="10" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopCloud</h3>
+              <p class="np-cell-desc">Multi-cloud resource graph and topology view.</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Live in Claude &amp; Codex</strong> · run ZopNight from your MCP client</span>
+            <a href="developers.html">Try MCP →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ RESOURCES · 9 cells in a 3×3 grid ═══════ -->
+        <div class="nav-pane" data-pane="resources">
+          <div class="np-bento np-bento--grid">
+            <a class="np-cell" href="blog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Blog</h3>
+              <p class="np-cell-desc">Engineering + cost optimization notes</p>
+            </a>
+            <a class="np-cell" href="free-ebooks.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 4h7v13H3zM10 4h7v13h-7z" stroke="currentColor" stroke-width="1.5"/><path d="M10 4v13" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Ebooks</h3>
+              <p class="np-cell-desc">Free playbooks · FinOps, K8s, CDCR</p>
+            </a>
+            <a class="np-cell" href="customers.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 16c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Case studies</h3>
+              <p class="np-cell-desc">42-67% cuts, real teams</p>
+            </a>
+            <a class="np-cell" href="solutions.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Use cases by industry</h3>
+              <p class="np-cell-desc">SaaS · fintech · retail · health</p>
+            </a>
+            <a class="np-cell" href="product-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M8 7l4 3-4 3z" fill="currentColor"/></svg>
+              </div>
+              <h3 class="np-cell-title">Product documentation</h3>
+              <p class="np-cell-desc">Walkthroughs · video tours</p>
+            </a>
+            <a class="np-cell" href="kubernetes-guide.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2l7 4v8l-7 4-7-4V6z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
+              </div>
+              <h3 class="np-cell-title">Kubernetes guide</h3>
+              <p class="np-cell-desc">From cluster basics to right-sizing</p>
+            </a>
+            <a class="np-cell" href="changelog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Changelog</h3>
+              <p class="np-cell-desc">What shipped this week</p>
+            </a>
+            <a class="np-cell" href="developer-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 6L3 10l4 4M13 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 class="np-cell-title">Developer documentation</h3>
+              <p class="np-cell-desc">REST API · SDKs · webhooks · MCP</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Weekly digest</strong> · waste signals, wins, war stories</span>
+            <a href="blog.html">Subscribe →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ COMPANY · 2 items ═══════ -->
+        <div class="nav-pane" data-pane="company">
+          <div class="np-bento" style="grid-template-columns:1fr 1fr;">
+            <a class="np-cell" href="about.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#0A0A0A"/><rect x="6" y="6" width="8" height="20" fill="#F0EBDB"/><rect x="18" y="12" width="8" height="14" fill="#F58549"/></svg>
+              </div>
+              <h3 class="np-cell-title">About</h3>
+              <p class="np-cell-desc">Founded 2024. The autopilot for multi-cloud cost.</p>
+            </a>
+            <a class="np-cell" href="careers.html">
+              <span class="np-badge">hiring</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="6" width="14" height="11" stroke="currentColor" stroke-width="1.5"/><path d="M7 6V4h6v2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Careers</h3>
+              <p class="np-cell-desc">Open roles · engineering, design, GTM</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>We're hiring</strong> · remote-first · 12 open roles</span>
+            <a href="careers.html">See roles →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="nav-cta">
+      <!-- Status pill · live dot · links to /status.html. Mirrors the
+           project's "always-on" identity (the live-ops strip above the
+           nav). Pulses green when all systems are operational. -->
+      <a class="nav-status" href="status.html" aria-label="System status">
+        <span class="nav-status-dot" aria-hidden="true"></span>
+        <span class="nav-status-text">Status</span>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" role="switch">
+        <span class="tt-opt tt-sun" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="8" cy="8" r="3" fill="currentColor" stroke="none"/>
+            <path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.9.9M11.7 11.7l.9.9M3.4 12.6l.9-.9M11.7 4.3l.9-.9"/>
+          </svg>
+        </span>
+        <span class="tt-opt tt-moon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M12.8 10.1a5.5 5.5 0 0 1-7-7 .5.5 0 0 0-.7-.6A6.5 6.5 0 1 0 13.4 10.8a.5.5 0 0 0-.6-.7z"/>
+          </svg>
+        </span>
+      </button>
+      <a class="chip-playground" href="playground.html"><span>Playground</span></a>
+      <a class="sign" href="signin.html">Sign In</a>
+      <a class="btn btn-accent" href="demo.html"><span>Book a Demo</span> <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="page">
+
+  <div class="crumb">
+    <a href="index.html">home</a>
+    <span class="sep">/</span>
+    pricing
+  </div>
+
+  <header class="page-head">
+    <div class="meta">pricing · transparent</div>
+    <h1>Pricing that scales with your <em>savings,</em> not your headcount.</h1>
+    <p class="lede">Per cloud account. <strong>Not per user. Not per seat.</strong> If you're saving more, you're growing, and that's the only metric that matters.</p>
+  </header>
+
+  <!-- ================================================================
+       01 · PRICING TIERS
+       ================================================================ -->
+  <section>
+    <div class="inner">
+      <div class="sec-h">
+        <div class="sec-meta">01 · plans</div>
+        <h2>Three tiers. One principle.</h2>
+        <p>Start free. Scale when you save. The account count is the only pricing variable, bring your whole team.</p>
+      </div>
+
+      <!-- Product switcher · same component as the homepage. ZopNight is
+           live; ZopDay + ZopCloud panes show a waitlist CTA until launch. -->
+      <div class="prod-switch" role="tablist" aria-label="Pricing by product">
+        <button class="ps-tab is-active" type="button" role="tab" data-product="zopnight" aria-selected="true" aria-controls="pricing-zopnight">
+          <span class="ps-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><rect width="32" height="32" fill="#2A4494"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+          </span>
+          <span class="ps-name">ZopNight</span>
+          <span class="ps-status live">live</span>
+        </button>
+        <button class="ps-tab" type="button" role="tab" data-product="zopday" aria-selected="false" aria-controls="pricing-zopday" tabindex="-1">
+          <span class="ps-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><rect width="32" height="32" fill="#F58549"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+          </span>
+          <span class="ps-name">ZopDay</span>
+          <span class="ps-status">soon</span>
+        </button>
+        <button class="ps-tab" type="button" role="tab" data-product="zopcloud" aria-selected="false" aria-controls="pricing-zopcloud" tabindex="-1">
+          <span class="ps-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><rect width="32" height="32" fill="#2A4494"/><rect x="12" y="8" width="8" height="6" fill="#FFFFFF"/><rect x="6" y="14" width="20" height="10" fill="#FFFFFF"/></svg>
+          </span>
+          <span class="ps-name">ZopCloud</span>
+          <span class="ps-status">soon</span>
+        </button>
+      </div>
+
+      <div class="pricing-panes">
+      <div class="tiers-grid" id="pricing-zopnight" role="tabpanel" data-product="zopnight">
+        <!-- STARTER -->
+        <div class="tier">
+          <div>
+            <div class="tier-name">Starter</div>
+            <div class="tier-price">
+              <span class="amount">Free</span>
+            </div>
+            <p class="tier-tagline">For teams starting their FinOps journey. Get visibility without commitment.</p>
+          </div>
+          <div class="tier-divider"></div>
+          <div class="tier-label">What's included</div>
+          <ul class="tier-features">
+            <li>Up to 2 cloud accounts (AWS, Azure, or GCP)</li>
+            <li>14-day resource history</li>
+            <li>Atlas inventory, full multi-cloud map</li>
+            <li>10 automated remediations per month</li>
+            <li>ZopNight Recommendations feed</li>
+            <li>Email support (2 business day response)</li>
+            <li>1 workspace, unlimited users</li>
+          </ul>
+          <div class="tier-cta">
+            <a class="btn btn-secondary" href="signin.html" style="width:100%; justify-content:center;">
+              <span>Start Free</span> <span class="arrow">→</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- PRO (featured) -->
+        <div class="tier featured">
+          <div class="tier-pop">Most popular</div>
+          <div>
+            <div class="tier-name">Pro</div>
+            <div class="tier-price">
+              <span class="currency">$</span>
+              <span class="amount">299</span>
+              <span class="period">/account/mo</span>
+            </div>
+            <p class="tier-tagline">For engineering and FinOps teams running production infrastructure at scale.</p>
+          </div>
+          <div class="tier-divider"></div>
+          <div class="tier-label">Everything in Starter, plus</div>
+          <ul class="tier-features">
+            <li>Unlimited cloud accounts</li>
+            <li>90-day resource history</li>
+            <li>Unlimited automated remediations</li>
+            <li>Schedule, automated maintenance windows</li>
+            <li>Showback, team cost attribution reports</li>
+            <li>Slack &amp; PagerDuty integration</li>
+            <li>MCP Server for Claude &amp; Codex</li>
+            <li>RBAC, viewer, editor, admin roles</li>
+            <li>Priority support (4h response, 24/5)</li>
+            <li>API access + webhook delivery</li>
+          </ul>
+          <div class="tier-cta">
+            <a class="btn btn-accent" href="signin.html" style="width:100%; justify-content:center;">
+              <span>Start 14-Day Trial</span> <span class="arrow">→</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- ENTERPRISE -->
+        <div class="tier">
+          <div>
+            <div class="tier-name">Enterprise</div>
+            <div class="tier-price">
+              <span class="amount" style="font-size:var(--t-36);">Custom</span>
+            </div>
+            <p class="tier-tagline">For regulated industries, self-hosted deployments, and multi-org complexity.</p>
+          </div>
+          <div class="tier-divider"></div>
+          <div class="tier-label">Everything in Pro, plus</div>
+          <ul class="tier-features">
+            <li>Self-hosted deployment option</li>
+            <li>SSO / SAML 2.0 + OIDC</li>
+            <li>Custom data retention (up to 2 years)</li>
+            <li>Enterprise SLA with dedicated uptime commitment</li>
+            <li>Dedicated Customer Success Manager</li>
+            <li>AWS, Azure &amp; GCP Marketplace billing</li>
+            <li>Custom IAM policy review + security walkthrough</li>
+            <li>Volume pricing across accounts</li>
+            <li>Shared Slack channel with engineering</li>
+            <li>Pentest report access under NDA</li>
+          </ul>
+          <div class="tier-cta">
+            <a class="btn btn-primary" href="demo.html" style="width:100%; justify-content:center;">
+              <span>Talk to Sales</span> <span class="arrow">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pricing-soon" id="pricing-zopday" role="tabpanel" data-product="zopday" hidden>
+        <svg class="ps-soon-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" fill="#F58549"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+        <h3>ZopDay pricing — coming soon.</h3>
+        <p class="lede">Deployment orchestration and release management. We're tuning pricing alongside the private preview so the first published tiers reflect what teams actually use, not what we'd guess at.</p>
+        <span class="ps-eta">private preview · h2 2026</span>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="signin.html">Join the Waitlist →</a>
+          <a class="btn btn-secondary" href="zopday.html">Learn More</a>
+        </div>
+      </div>
+
+      <div class="pricing-soon" id="pricing-zopcloud" role="tabpanel" data-product="zopcloud" hidden>
+        <svg class="ps-soon-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" fill="#2A4494"/><rect x="12" y="8" width="8" height="6" fill="#FFFFFF"/><rect x="6" y="14" width="20" height="10" fill="#FFFFFF"/></svg>
+        <h3>ZopCloud pricing — coming soon.</h3>
+        <p class="lede">A live multi-cloud resource graph across AWS, GCP, and Azure. Pricing will track resources mapped, not seats — same model as ZopNight, separate plan lines.</p>
+        <span class="ps-eta">private preview · h2 2026</span>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="signin.html">Join the Waitlist →</a>
+          <a class="btn btn-secondary" href="zopcloud.html">Learn More</a>
+        </div>
+      </div>
+      </div>
+
+      <p style="margin-top:var(--sp-6); font-family:var(--mono); font-size:var(--t-12); color:var(--ink-5); letter-spacing:var(--ls-meta-tight);">
+        All prices in USD. Annual plans available at 20% discount. Cloud Marketplace billing available, counts toward your cloud commitment spend.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       02 · FEATURE MATRIX
+       ================================================================ -->
+  <section>
+    <div class="inner">
+      <div class="sec-h">
+        <div class="sec-meta">02 · feature matrix</div>
+        <h2>Full feature comparison.</h2>
+        <p>Every capability across every tier, no asterisks, no footnotes, no surprises at renewal.</p>
+      </div>
+
+      <div class="matrix-wrap">
+        <table class="matrix">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th class="col-plan">Starter</th>
+              <th class="col-plan col-featured">Pro</th>
+              <th class="col-plan">Enterprise</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="matrix-group"><td colspan="4">Cloud Coverage</td></tr>
+            <tr>
+              <td class="feat-name">Cloud accounts</td>
+              <td class="col-plan"><span style="font-family:var(--mono);font-size:var(--t-13);color:var(--ink-3);">Up to 2</span></td>
+              <td class="col-plan"><span style="font-family:var(--mono);font-size:var(--t-13);color:var(--zop-orange);">Unlimited</span></td>
+              <td class="col-plan"><span style="font-family:var(--mono);font-size:var(--t-13);color:var(--ink-3);">Unlimited</span></td>
+            </tr>
+            <tr>
+              <td class="feat-name">AWS, Azure, GCP</td>
+              <td class="col-plan"><span class="check">✓</span></td>
+              <td class="col-plan"><span class="check-o">✓</span></td>
+              <td class="col-plan"><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="feat-name">Resource history</td>
+              <td class="col-plan"><span style="font-family:var(--mono);font-size:var(--t-13);color:var(--ink-3);">14 days</span></td>
+              <td class="col-plan"><span style="font-family:var(--mono);font-size:var(--t-13);color:var(--zop-orange);">90 days</span></td>
+              <td class="col-plan"><span style="font-family:var(--mono);font-size:var(--t-13);color:var(--ink-3);">Custom (up to 2y)</span></td>
+            </tr>
+            <tr class="matrix-group"><td colspan="4">Core Platform</td></tr>
+            <tr>
+              <td class="feat-name">Atlas inventory</td>
+              <td class="col-plan"><span class="check">✓</span></td>
+              <td class="col-plan"><span class="check-o">✓</span></td>
+              <td class="col-plan"><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="feat-name">MCP Server</td>
+              <td class="col-plan"><span class="dash">·</span></td>
+              <td class="col-plan"><span class="check-o">✓</span></td>
+              <td class="col-plan"><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="feat-name">Recommendations feed</td>
+              <td class="col-plan"><span class="check">✓</span></td>
+              <td class="col-plan"><span class="check-o">✓</span></td>
+              <td class="col-plan"><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="feat-name">Automated remediations</td>
+              <td class="col-plan"><span style="font-family:var(--mono);font-size:var(--t-13);color:var(--ink-3);">10 / month</span></td>
+              <td class="col-plan"><span style="font-family:var(--mono);font-size:var(--t-13);color:var(--zop-orange);">Unlimited</span></td>
+              <td class="col-plan"><span style="font-family:var(--mono);font-size:var(--t-13);color:var(--ink-3);">Unlimited</span></td>
+            </tr>
+            <tr>
+              <td class="feat-name">Schedule (maintenance windows)</td>
+              <td class="col-plan"><span class="dash">·</span></td>
+              <td class="col-plan"><span class="check-o">✓</span></td>
+              <td class="col-plan"><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="feat-name">Showback (team cost reports)</td>
+              <td class="col-plan"><span class="dash">·</span></td>
+              <td class="col-plan"><span class="check-o">✓</span></td>
+              <td class="col-plan"><span class="check">✓</span></td>
+            </tr>
+            <tr class="matrix-group"><td colspan="4">Integrations &amp; Alerts</td></tr>
+            <tr>
+              <td class="feat-name">Slack integration</td>
+              <td class="col-plan"><span class="dash">·</span></td>
+              <td class="col-plan"><span class="check-o">✓</span></td>
+              <td class="col-plan"><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="feat-name">PagerDuty integration</td>
+              <td class="col-plan"><span class="dash">·</span></td>
+              <td class="col-plan"><span class="check-o">✓</span></td>
+              <td class="col-plan"><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="feat-name">REST API + webhooks</td>
+              <td class="col-plan"><span class="dash">·</span></td>
+              <td class="col-plan"><span class="check-o">✓</span></td>
+              <td class="col-plan"><span class="check">✓</span></td>
+            </tr>
+            <tr class="matrix-group"><td colspan="4">Security &amp; Compliance</td></tr>
+            <tr>
+              <td class="feat-name">RBAC (viewer / editor / admin)</td>
+              <td class="col-plan"><span class="check">✓</span></td>
+              <td class="col-plan"><span class="check-o">✓</span></td>
+              <td class="col-plan"><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="feat-name">SSO / SAML 2.0 + OIDC</td>
+              <td class="col-plan"><span class="dash">·</span></td>
+              <td class="col-plan"><span class="dash">·</span></td>
+              <td class="col-plan"><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="feat-name">Audit log export to SIEM</td>
+              <td class="col-plan"><span class="dash">·</span></td>
+              <td class="col-plan"><span class="check-o">✓</span></td>
+              <td class="col-plan"><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="feat-name">Self-hosted deployment</td>
+              <td class="col-plan"><span class="dash">·</span></td>
+              <td class="col-plan"><span class="dash">·</span></td>
+              <td class="col-plan"><span class="check">✓</span></td>
+            </tr>
+            <tr class="matrix-group"><td colspan="4">Support &amp; Success</td></tr>
+            <tr>
+              <td class="feat-name">Email support</td>
+              <td class="col-plan"><span style="font-family:var(--mono);font-size:var(--t-12);color:var(--ink-3);">2 business days</span></td>
+              <td class="col-plan"><span style="font-family:var(--mono);font-size:var(--t-12);color:var(--zop-orange);">4h · 24/5</span></td>
+              <td class="col-plan"><span style="font-family:var(--mono);font-size:var(--t-12);color:var(--ink-3);">15m · 24/7</span></td>
+            </tr>
+            <tr>
+              <td class="feat-name">SLA guarantee</td>
+              <td class="col-plan"><span class="dash">·</span></td>
+              <td class="col-plan"><span style="font-family:var(--mono);font-size:var(--t-12);color:var(--zop-orange);">99.9%</span></td>
+              <td class="col-plan"><span style="font-family:var(--mono);font-size:var(--t-12);color:var(--ink-3);">Custom</span></td>
+            </tr>
+            <tr>
+              <td class="feat-name">Dedicated CSM</td>
+              <td class="col-plan"><span class="dash">·</span></td>
+              <td class="col-plan"><span class="dash">·</span></td>
+              <td class="col-plan"><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="feat-name">AWS / Azure / GCP Marketplace</td>
+              <td class="col-plan"><span class="dash">·</span></td>
+              <td class="col-plan"><span class="dash">·</span></td>
+              <td class="col-plan"><span class="check">✓</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════
+       TRUSTED BY · ported from homepage
+       ════════════════════════════════════════════════════════════ -->
+  <section class="trust-marquee" aria-label="Customers">
+  <div class="tm-track">
+    <span class="tm-lg">Zopping</span>
+    <span class="tm-lg">Linarc</span>
+    <span class="tm-lg">Flexflow</span>
+    <span class="tm-lg">ZopSmart</span>
+    <span class="tm-lg">Pragmatic Leaders</span>
+    <span class="tm-lg">Zopping</span>
+    <span class="tm-lg">Linarc</span>
+    <span class="tm-lg">Flexflow</span>
+    <span class="tm-lg">ZopSmart</span>
+    <span class="tm-lg">Pragmatic Leaders</span>
+    <!-- Duplicate for seamless loop -->
+    <span class="tm-lg" aria-hidden="true">Zopping</span>
+    <span class="tm-lg" aria-hidden="true">Linarc</span>
+    <span class="tm-lg" aria-hidden="true">Flexflow</span>
+    <span class="tm-lg" aria-hidden="true">ZopSmart</span>
+    <span class="tm-lg" aria-hidden="true">Pragmatic Leaders</span>
+    <span class="tm-lg" aria-hidden="true">Zopping</span>
+    <span class="tm-lg" aria-hidden="true">Linarc</span>
+    <span class="tm-lg" aria-hidden="true">Flexflow</span>
+    <span class="tm-lg" aria-hidden="true">ZopSmart</span>
+    <span class="tm-lg" aria-hidden="true">Pragmatic Leaders</span>
+  </div>
+</section>
+
+  <!-- ════════════════════════════════════════════════════════════
+       CALCULATOR · ported from homepage
+       ════════════════════════════════════════════════════════════ -->
+  <section class="section" id="calculator">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-meta">12 · savings calculator</div>
+      <div>
+        <h2>How much is your cloud wasting right now?</h2>
+        <p class="sub">Most teams are overspending by 30–60%. Find out your number in 30 seconds.</p>
+      </div>
+    </div>
+    <!-- Mode toggle · Simple (default) vs Advanced · content swap, chassis stays -->
+    <div class="cv-modes" role="tablist" aria-label="Calculator mode">
+      <button class="cv-mode-btn active" data-mode="simple" role="tab" aria-selected="true">Simple</button>
+      <button class="cv-mode-btn" data-mode="advanced" role="tab" aria-selected="false">Advanced</button>
+    </div>
+
+    <div class="calc-v2" data-mode="simple">
+      <!-- ═══ One Braun chassis · content swaps between Simple/Advanced ═══ -->
+      <div class="cv-simple">
+        <!-- Brand strip -->
+        <div class="cvs-brand">
+          <span class="cvs-brand-name">ZOPNIGHT</span>
+          <span class="cvs-brand-model">· ET–42 · SAVINGS</span>
+          <span class="cvs-brand-led"></span>
+        </div>
+
+        <!-- LCD display window · click the amount to type a custom spend -->
+        <div class="cvs-display" id="cvs-display">
+          <div class="cvs-display-label" id="cvs-display-label">monthly savings</div>
+          <div class="cvs-amount" id="cvs-amount" tabindex="0" role="textbox" aria-label="Tap to enter monthly cloud spend">$43,000</div>
+          <div class="cvs-sub">range <span id="out-month">$31,000–$54,000</span></div>
+          <div class="cvs-display-year">per year <strong id="out-year">$516,000</strong></div>
+          <div class="cvs-edit-hint">type your spend · press enter</div>
+        </div>
+
+        <!-- Key legend -->
+        <div class="cvs-keys-label">MONTHLY CLOUD SPEND</div>
+
+        <!-- Preset keypad · always visible -->
+        <div class="cvs-keypad">
+          <button class="cvs-key" data-spend="25000">$25K</button>
+          <button class="cvs-key" data-spend="50000">$50K</button>
+          <button class="cvs-key active" data-spend="100000">$100K</button>
+          <button class="cvs-key" data-spend="250000">$250K</button>
+          <button class="cvs-key" data-spend="500000">$500K</button>
+          <button class="cvs-key" data-spend="1000000">$1M</button>
+          <button class="cvs-key" data-spend="2500000">$2.5M</button>
+          <button class="cvs-key" data-spend="5000000">$5M</button>
+        </div>
+
+        <!-- Fine-tune slider · always visible -->
+        <div class="cvs-fine">
+          <span class="cvs-fine-label">fine tune</span>
+          <input type="range" id="spend" min="10000" max="5000000" step="10000" value="100000" class="cvs-range" aria-label="Monthly cloud spend">
+          <span class="cvs-slider-val" id="v-spend">$100,000</span>
+        </div>
+
+        <!-- ADVANCED ROWS · hidden in simple mode, revealed in advanced -->
+        <div class="cvs-advanced-rows">
+          <div class="cvs-row-triple">
+            <div class="cvs-row-col">
+              <div class="cvs-keys-label">PRIMARY CLOUD</div>
+              <div class="cvs-keypad cvs-keypad-sm calc-opts" data-group="cloud">
+                <button class="cvs-key calc-opt active" data-v="aws">AWS</button>
+                <button class="cvs-key calc-opt" data-v="azure">Azure</button>
+                <button class="cvs-key calc-opt" data-v="gcp">GCP</button>
+                <button class="cvs-key calc-opt" data-v="multi">Multi</button>
+              </div>
+            </div>
+            <div class="cvs-row-col">
+              <div class="cvs-keys-label">NON-PROD 24/7?</div>
+              <div class="cvs-keypad cvs-keypad-sm calc-opts" data-group="nonprod">
+                <button class="cvs-key calc-opt active" data-v="yes">Yes</button>
+                <button class="cvs-key calc-opt" data-v="no">No</button>
+                <button class="cvs-key calc-opt" data-v="unsure">Unsure</button>
+              </div>
+            </div>
+            <div class="cvs-row-col">
+              <div class="cvs-keys-label">TEAM SIZE</div>
+              <div class="cvs-keypad cvs-keypad-sm calc-opts" data-group="team">
+                <button class="cvs-key calc-opt active" data-v="1-3">1–3</button>
+                <button class="cvs-key calc-opt" data-v="4-10">4–10</button>
+                <button class="cvs-key calc-opt" data-v="10+">10+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Savings breakdown · tiny mono bars -->
+          <div class="cvs-keys-label cvs-keys-label-top">WHERE THE SAVINGS COME FROM</div>
+          <div class="cvs-breakdown">
+            <div class="cvs-bd-row">
+              <span class="cvs-bd-name">Scheduling non-prod</span>
+              <span class="cvs-bd-track"><span class="cvs-bd-fill g" style="width:42%"></span></span>
+              <span class="cvs-bd-amt" data-bd-amt="0.42">$17,640</span>
+              <span class="cvs-bd-pct">42%</span>
+            </div>
+            <div class="cvs-bd-row">
+              <span class="cvs-bd-name">Rightsizing instances</span>
+              <span class="cvs-bd-track"><span class="cvs-bd-fill b" style="width:28%"></span></span>
+              <span class="cvs-bd-amt" data-bd-amt="0.28">$11,760</span>
+              <span class="cvs-bd-pct">28%</span>
+            </div>
+            <div class="cvs-bd-row">
+              <span class="cvs-bd-name">Cleanup (idle, orphaned)</span>
+              <span class="cvs-bd-track"><span class="cvs-bd-fill o" style="width:18%"></span></span>
+              <span class="cvs-bd-amt" data-bd-amt="0.18">$7,560</span>
+              <span class="cvs-bd-pct">18%</span>
+            </div>
+            <div class="cvs-bd-row">
+              <span class="cvs-bd-name">Reserved instances</span>
+              <span class="cvs-bd-track"><span class="cvs-bd-fill k" style="width:12%"></span></span>
+              <span class="cvs-bd-amt" data-bd-amt="0.12">$5,040</span>
+              <span class="cvs-bd-pct">12%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- The signature equals-key CTA -->
+        <a class="cvs-equals" href="demo.html">
+          <span class="cvs-equals-sign">=</span>
+          <span class="cvs-equals-label">Get your exact savings →</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- ════════════════════════════════════════════════════════════
+       FAQ · ported from homepage
+       ════════════════════════════════════════════════════════════ -->
+  <section class="section" id="faq">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-meta">faq</div>
+      <div>
+        <h2>Questions we get a lot.</h2>
+        <p class="sub">If yours isn't here, <a href="demo.html" style="color:var(--zop-blue)">ask us directly</a>.</p>
+      </div>
+    </div>
+    <div class="faq-list">
+
+      <details>
+        <summary>Does ZopNight require agent installation or code changes? <span class="faq-chevron">+</span></summary>
+        <div class="faq-body">
+          <p>No agents, no sidecars, no Terraform changes. ZopNight connects through read-only cloud APIs. AWS, GCP, and Azure access is granted via IAM roles you provision once. Discovery starts in minutes, not days.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>How quickly will I see findings? <span class="faq-chevron">+</span></summary>
+        <div class="faq-body">
+          <p>Most accounts see their first findings within 2–3 minutes of connecting. The initial scan covers all resources across regions. After that, ZopNight runs continuously. New waste is surfaced as it appears, not on a daily batch.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>What does "one-click remediation" actually do? <span class="faq-chevron">+</span></summary>
+        <div class="faq-body">
+          <p>When you click Fix →, ZopNight calls the cloud provider API directly. Stopping an idle instance, deleting an orphaned volume, rightsizing a reservation. Every action is logged, reversible where the cloud allows it, and you can set approval workflows so nothing runs without a human sign-off.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Which clouds and services are supported? <span class="faq-chevron">+</span></summary>
+        <div class="faq-body">
+          <p>AWS, GCP, and Azure. Covering compute, storage, databases, networking, and Kubernetes across all regions. We add new service coverage every sprint. If you use something niche, <a href="demo.html">tell us</a> and it's usually on the roadmap within a quarter.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Is my cloud data safe? What does ZopNight read? <span class="faq-chevron">+</span></summary>
+        <div class="faq-body">
+          <p>ZopNight operates with least-privilege read access plus the specific write permissions for remediation actions you explicitly enable. We never read application data, secrets, or user content. Only resource metadata and billing data. All data is encrypted in transit and at rest. SOC 2 Type II report available on request.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Does it work alongside Terraform or other IaC tools? <span class="faq-chevron">+</span></summary>
+        <div class="faq-body">
+          <p>Yes. ZopNight detects IaC-managed resources and marks them separately so you know which fixes should go through your Terraform pipeline versus which can be actioned directly. For IaC resources, we can generate a diff-ready Terraform snippet rather than acting directly.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>How is ZopNight priced? <span class="faq-chevron">+</span></summary>
+        <div class="faq-body">
+          <p>Pricing is based on the number of cloud resources managed. Not on savings found or actions taken. Most teams pay back the subscription cost in the first week. See full plans on the <a href="pricing.html">pricing page</a>, or start free with the playground. No card required.</p>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+  <!-- ════════════════════════════════════════════════════════════
+       FINAL CTA · ported from homepage
+       ════════════════════════════════════════════════════════════ -->
+  <section class="final">
+  <div class="container">
+    <a class="final-mark" href="/" aria-label="ZopDev">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#mark-zopdev"/></svg>
+    </a>
+    <div class="final-grid">
+      <div>
+        <div class="sec-meta" style="color:var(--zop-orange); margin-bottom:20px">end · ready when you are</div>
+        <h2>Stop watching the waste.<br/>Start cutting it.</h2>
+        <p class="final-tag">See. Find. Fix. Automatic.</p>
+        <p>Connect your first cloud account in under 5 minutes. See your first remediation in under 7. No credit card required.</p>
+        <div class="final-cta">
+          <a class="btn btn-primary" href="signin.html">Start Free →</a>
+          <a class="btn btn-secondary" href="demo.html">Book a Demo</a>
+        </div>
+      </div>
+      <div class="final-stats">
+        <div><strong>5 min</strong>connect time</div>
+        <div><strong>7 min</strong>first remediation</div>
+        <div><strong>42%</strong>avg. waste cut in 30 days</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- BRIDGE MARQUEE · cream slab between dark CTA and dark footer -->
+<section class="bridge-marquee" aria-label="ZopDev brand statement">
+  <div class="bridge-track">
+    <span>Multi-cloud automation</span><span class="acc">·</span>
+    <span>Production-ready in 30 min</span><span class="acc">·</span>
+    <span>SOC 2 · ISO 27001 · zero-trust</span><span class="acc">·</span>
+    <span>30% average cloud cost cut</span><span class="acc">·</span>
+    <span>4 platforms · 1 console</span><span class="acc">·</span>
+    <span>Multi-cloud automation</span><span class="acc">·</span>
+    <span>Production-ready in 30 min</span><span class="acc">·</span>
+    <span>SOC 2 · ISO 27001 · zero-trust</span><span class="acc">·</span>
+    <span>30% average cloud cost cut</span><span class="acc">·</span>
+    <span>4 platforms · 1 console</span><span class="acc">·</span>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="walkthrough.html">Product guide</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developers.html">Documentation</a></li>
+        <li><a href="developers.html">API reference</a></li>
+        <li><a href="developers.html">MCP server</a></li>
+        <li><a href="developers.html">SDK &amp; CLI</a></li>
+        <li><a href="developers.html">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-globe">
+      <div class="foot-globe-left">
+        <a href="/" class="foot-globe-mark" aria-label="ZopDev">
+          <svg class="foot-globe-logo" viewBox="0 0 715 276" aria-hidden="true">
+            <use href="#logo-zopdev"/>
+          </svg>
+        </a>
+      </div>
+      <div class="foot-globe-right">
+        <div class="foot-regions-v2" id="foot-regions-v2">
+          <canvas id="foot-regions-map"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom foot-bottom-3">
+      <div class="foot-copy">© <span data-year>2026</span> ZopDev · <a href="trust.html">privacy</a> · <a href="trust.html">terms</a></div>
+      <div class="foot-mid">made with <svg viewBox="0 0 7 6" aria-hidden="true"><rect x="1" y="0" width="1" height="1"/><rect x="2" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="0" y="1" width="7" height="1"/><rect x="0" y="2" width="7" height="1"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg> by <a href="https://zop.dev" target="_blank" rel="noopener">zop.dev</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(){
+    document.querySelectorAll('[data-year]').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+    var ann = document.getElementById('ann-bar');
+    var btn = document.getElementById('ann-close');
+    if(!ann || !btn) return;
+    var key = 'zop-ann-2026-mcp';
+    try{ if(localStorage.getItem(key) === '1') ann.style.display = 'none'; }catch(e){}
+    btn.addEventListener('click', function(){
+      ann.style.display = 'none';
+      try{ localStorage.setItem(key, '1'); }catch(e){}
+    });
+  })();
+
+  function fmt(n){
+    return '$' + Math.round(n).toLocaleString('en-US');
+  }
+
+  function calcUpdate(){
+    var accounts = parseInt(document.getElementById('acct-slider').value) || 5;
+    var spend = parseFloat(document.getElementById('spend-input').value) || 80000;
+    var wastePct = parseInt(document.getElementById('waste-slider').value) || 30;
+
+    document.getElementById('acct-display').textContent = accounts;
+    document.getElementById('waste-pct-display').textContent = wastePct + '%';
+
+    var waste = spend * (wastePct / 100);
+    var zopCost = accounts <= 2 ? 0 : accounts * 299;
+    var net = waste - zopCost;
+    var roi = zopCost > 0 ? (net / zopCost).toFixed(1) : '\u221e';
+
+    document.getElementById('waste-display').textContent = fmt(waste);
+    document.getElementById('waste-sub').textContent =
+      wastePct + '% of your ' + fmt(spend) + ' cloud spend';
+
+    document.getElementById('zop-cost-display').textContent = zopCost === 0 ? 'Free' : fmt(zopCost);
+    document.getElementById('zop-cost-sub').textContent = accounts <= 2
+      ? 'Starter plan \u2014 up to 2 accounts'
+      : accounts + ' accounts \u00d7 $299/mo';
+
+    document.getElementById('net-savings-display').textContent = fmt(Math.max(0, net));
+    document.getElementById('roi-display').textContent = zopCost === 0
+      ? 'All waste recovered at zero cost'
+      : roi + '\u00d7 return on ZopNight investment';
+  }
+
+  calcUpdate();
+</script>
+
+
+<!-- homepage-chrome init: theme toggle + nav megamenu + scroll hide + section reveal -->
+<script>
+(function(){
+  /* Theme toggle */
+  var html = document.documentElement;
+  if(!html.getAttribute('data-theme')) html.setAttribute('data-theme','light');
+  var btn = document.getElementById('theme-toggle');
+  if(btn){
+      /* click handler moved to chrome-mobilenav.js (global) */
+  }
+})();
+
+(function(){
+  /* Nav megamenu */
+  var overlay = document.getElementById('nav-overlay');
+  var navLinks = document.getElementById('nav-links');
+  if(!overlay || !navLinks) return;
+  var panes = {};
+  overlay.querySelectorAll('.nav-pane').forEach(function(p){ panes[p.dataset.pane] = p; });
+  var activeMenu = null;
+  var closeTimer = null;
+  function getLeft(navItem){
+    var navInner = navItem.closest('.nav-inner');
+    var niRect = navItem.getBoundingClientRect();
+    var innerRect = navInner.getBoundingClientRect();
+    var left = niRect.left - innerRect.left;
+    var overlayW = overlay.offsetWidth || 720;
+    var maxLeft = innerRect.width - overlayW - 16;
+    return Math.max(0, Math.min(left, maxLeft));
+  }
+  function showMenu(menuName, navItem){
+    clearTimeout(closeTimer);
+    overlay.style.left = getLeft(navItem) + 'px';
+    if(activeMenu !== menuName){
+      Object.keys(panes).forEach(function(k){ panes[k].classList.remove('active'); });
+      var incoming = panes[menuName];
+      if(incoming){
+        incoming.classList.add('active');
+        var panesEl = overlay.querySelector('.nav-panes');
+        if(panesEl) panesEl.style.height = incoming.offsetHeight + 'px';
+      }
+      activeMenu = menuName;
+    }
+    navLinks.querySelectorAll('.nav-item').forEach(function(ni){
+      ni.classList.toggle('open', ni.dataset.menu === menuName);
+    });
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden','false');
+  }
+  function hideMenu(){
+    closeTimer = setTimeout(function(){
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden','true');
+      navLinks.querySelectorAll('.nav-item').forEach(function(ni){ ni.classList.remove('open'); });
+      activeMenu = null;
+    }, 120);
+  }
+  navLinks.querySelectorAll('.nav-item').forEach(function(item){
+    item.addEventListener('mouseenter', function(){ showMenu(item.dataset.menu, item); });
+    item.addEventListener('mouseleave', hideMenu);
+    var a = item.querySelector('a');
+    if(a){
+      a.addEventListener('focus', function(){ showMenu(item.dataset.menu, item); });
+      a.addEventListener('blur', hideMenu);
+    }
+  });
+  overlay.addEventListener('mouseenter', function(){ clearTimeout(closeTimer); });
+  overlay.addEventListener('mouseleave', hideMenu);
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){ clearTimeout(closeTimer); hideMenu(); }
+  });
+})();
+
+(function(){
+  /* Nav scroll hide/show */
+  var nav = document.querySelector('.nav');
+  if(!nav) return;
+  var lastY = 0, delta = 0, hidden = false, ticking = false;
+  var HIDE_AT = 72, SHOW_AT = 10;
+  function update(){
+    ticking = false;
+    var y = window.pageYOffset;
+    var diff = y - lastY;
+    lastY = y;
+    if(y <= 0){
+      if(hidden){ nav.classList.remove('nav--hidden'); hidden = false; }
+      delta = 0; return;
+    }
+    if(diff > 0){
+      delta = (delta > 0 ? delta : 0) + diff;
+      if(!hidden && delta > HIDE_AT){
+        var ov = document.getElementById('nav-overlay');
+        if(ov) ov.classList.remove('open');
+        nav.classList.add('nav--hidden'); hidden = true; delta = 0;
+      }
+    } else {
+      delta = (delta < 0 ? delta : 0) + diff;
+      if(hidden && Math.abs(delta) > SHOW_AT){
+        nav.classList.remove('nav--hidden'); hidden = false; delta = 0;
+      }
+    }
+  }
+  window.addEventListener('scroll', function(){
+    if(!ticking){ requestAnimationFrame(update); ticking = true; }
+  }, {passive:true});
+})();
+
+(function(){
+  /* Section reveal on scroll */
+  var sections = document.querySelectorAll('.section');
+  if(!sections.length || !('IntersectionObserver' in window)){
+    sections.forEach(function(s){ s.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {rootMargin:'-10% 0px -10% 0px', threshold:0.05});
+  sections.forEach(function(s){ io.observe(s); });
+})();
+</script>
+
+<script src="chrome-darkfold.js" defer></script>
+<script src="chrome-mobilenav.js" defer></script>
+<script src="chrome-footer.js" defer></script>
+<script>
+
+/* Theme management for pricing · the simpler toggle handler lives
+   higher up in this file (line ~1641). The homepage's scroll-driven
+   three-band logic doesn't fit a subpage (no .features-bento anchor),
+   and bringing it in alongside the existing handler caused both to
+   fire on the same click — the two flips cancelled out and the toggle
+   appeared dead. Removed; the existing handler does the job. */
+
+/* =================================================================
+   PILLARS: scroll-pinned full-viewport chapters
+   ================================================================= */
+(function(){
+  var pin = document.getElementById('pillars-pin');
+  if(!pin) return;
+  var panels = pin.querySelectorAll('.pillar-panel');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduced){
+    panels.forEach(function(p){ p.classList.add('is-active'); });
+    return;
+  }
+  function setActive(idx){
+    panels.forEach(function(panel, i){
+      var active = i === idx;
+      panel.classList.toggle('is-active', active);
+      panel.querySelectorAll('.pp-tick').forEach(function(t, ti){
+        t.classList.toggle('is-on', ti === idx);
+      });
+    });
+  }
+  var ticking = false;
+  function update(){
+    ticking = false;
+    var r = pin.getBoundingClientRect();
+    var total = pin.offsetHeight - window.innerHeight;
+    var scrolled = Math.min(Math.max(-r.top, 0), total);
+    var p = total > 0 ? scrolled / total : 0;
+    var idx = p < 0.34 ? 0 : (p < 0.67 ? 1 : 2);
+    setActive(idx);
+  }
+  function onScroll(){ if(!ticking){ requestAnimationFrame(update); ticking=true; } }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  update();
+})();
+
+/* =================================================================
+   TIMELINE: scroll-pinned progression (Day 0 → 7 → 30)
+   ================================================================= */
+(function(){
+  var pin = document.querySelector('.tl-pin');
+  if(!pin) return;
+  var fill  = pin.querySelector('.tl-rail-fill');
+  var cards = pin.querySelectorAll('.tl-card');
+  var steps = pin.querySelectorAll('.tl-step');
+  var colors = ['#2A4494', '#F58549', '#6da137']; // blue, orange, green
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduced){
+    cards.forEach(function(c){ c.classList.add('is-active'); });
+    return;
+  }
+  var ticking = false;
+  function update(){
+    ticking = false;
+    var r = pin.getBoundingClientRect();
+    var vh = window.innerHeight;
+    var total = r.height - vh;
+    var scrolled = Math.min(Math.max(-r.top, 0), total);
+    var p = total > 0 ? scrolled / total : 0;
+    // rail fill 0..100%
+    fill.style.width = (p * 100).toFixed(2) + '%';
+    // active index: thirds
+    var idx = p < 0.34 ? 0 : (p < 0.67 ? 1 : 2);
+    fill.style.background = colors[idx];
+    cards.forEach(function(c, i){ c.classList.toggle('is-active', i <= idx); });
+    steps.forEach(function(s, i){ s.classList.toggle('is-on', i <= idx); });
+  }
+  function onScroll(){
+    if(!ticking){ requestAnimationFrame(update); ticking = true; }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  update();
+})();
+
+
+/* =================================================================
+   CLOUD-CONCEPT: live status strip
+   ================================================================= */
+// Live ticking clock (UTC)
+function tickClock(){
+  const d = new Date();
+  const hh = String(d.getUTCHours()).padStart(2,'0');
+  const mm = String(d.getUTCMinutes()).padStart(2,'0');
+  const ss = String(d.getUTCSeconds()).padStart(2,'0');
+  const el = document.getElementById('live-clock');
+  if(el) el.textContent = `${hh}:${mm}:${ss}`;
+}
+setInterval(tickClock, 1000); tickClock();
+
+// Counters drift upward a little every few seconds, feels live
+(function(){
+  const state = { resources: 3247, remediations: 12, saved: 48210 };
+  function fmt(n){ return n.toLocaleString(); }
+  function render(){
+    const r = document.getElementById('live-resources');
+    const rm = document.getElementById('live-remediations');
+    const sv = document.getElementById('live-saved');
+    if(r)  r.textContent  = fmt(state.resources);
+    if(rm) rm.textContent = fmt(state.remediations);
+    if(sv) sv.textContent = '$' + fmt(state.saved);
+  }
+  setInterval(() => {
+    if(Math.random() > 0.4) state.resources += Math.floor(Math.random()*3);
+    if(Math.random() > 0.7) state.remediations += 1;
+    if(Math.random() > 0.3) state.saved += Math.floor(10 + Math.random()*90);
+    render();
+  }, 2400);
+  render();
+})();
+
+/* =================================================================
+   CLOUD-CONCEPT: streaming CLI hero
+   ================================================================= */
+(function(){
+  const body = document.getElementById('cli-body');
+  if(!body) return;
+
+  // Each item: {type: 'prompt'|'line'|'spin'|'gap', text, cls, delay}
+  const script = [
+    {t:'prompt', text:'$ ', cmd:'zop connect --cloud aws --region us-east-1', delay:300},
+    {t:'spin',   text:'  assuming read-only role · arn:aws:iam::acct/ZopRead', delay:700},
+    {t:'line',   cls:'ok',   text:'  ✓ authenticated · account 874-2103', delay:350},
+    {t:'line',   cls:'ok',   text:'  ✓ read-only role assumed · no write permissions', delay:350},
+    {t:'line',   cls:'dim',  text:'  → scanning 4 regions · ec2, rds, s3, ebs, eks', delay:450},
+    {t:'spin',   text:'  discovering resources', delay:1100},
+    {t:'line',   cls:'ok',   text:'  ✓ 847 resources indexed · 4 regions', delay:300},
+    {t:'gap', delay:400},
+    {t:'prompt', text:'$ ', cmd:'zop scan --find=waste', delay:700},
+    {t:'spin',   text:'  running CDCR.discover()', delay:900},
+    {t:'line',   cls:'warn', text:'  ! 47 optimizations found', delay:350},
+    {t:'line',   cls:'dim',  text:'    · 14 idle ec2 instances · us-east-1', delay:220},
+    {t:'line',   cls:'dim',  text:'    · 9 over-provisioned rds · eu-west-2', delay:220},
+    {t:'line',   cls:'dim',  text:'    · 24 orphaned ebs volumes · multi', delay:220},
+    {t:'line',   cls:'ok',   text:'  ✓ reclaimable: $23,450/mo', delay:400},
+    {t:'gap', delay:500},
+    {t:'prompt', text:'$ ', cmd:'zop remediate --apply --dry-run=false', delay:700},
+    {t:'spin',   text:'  applying 47 remediations · reversible · logged', delay:1200},
+    {t:'line',   cls:'ok',   text:'  ✓ 47/47 applied · 0 errors', delay:400},
+    {t:'line',   cls:'ok',   text:'  ✓ saved $23,450/mo · verified', delay:350},
+    {t:'line',   cls:'blue', text:'  → loop restarts · run #12,848 scheduled', delay:400},
+    {t:'gap', delay:400},
+    {t:'prompt', text:'$ ', cmd:'', cursor:true, delay:400}
+  ];
+
+  const spinnerFrames = ['⠋','⠙','⠹','⠸','⠼','⠴','⠦','⠧','⠇','⠏'];
+
+  function append(html){
+    const d = document.createElement('div');
+    d.className = 'cli-line cli-hidden';
+    d.innerHTML = html;
+    body.appendChild(d);
+    // auto-scroll within the cli body
+    body.scrollTop = body.scrollHeight;
+    return d;
+  }
+
+  async function typeCmd(line, cmd){
+    // type chars at ~18ms each
+    for(let i=0; i<cmd.length; i++){
+      line.innerHTML += cmd[i] === ' ' ? ' ' : escapeHtml(cmd[i]);
+      await sleep(18 + Math.random()*24);
+    }
+  }
+  function escapeHtml(s){ return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+  function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+  async function runSpin(text, ms){
+    const d = append('<span class="cli-spin">⠋</span>' + escapeHtml(text));
+    const spinEl = d.querySelector('.cli-spin');
+    let i = 0;
+    const id = setInterval(() => { if(spinEl) spinEl.textContent = spinnerFrames[i++ % spinnerFrames.length]; }, 80);
+    await sleep(ms);
+    clearInterval(id);
+    // replace spinner with check
+    if(spinEl){ spinEl.textContent = '✓'; spinEl.style.color = '#34d399'; }
+  }
+
+  async function run(){
+    for(const step of script){
+      if(step.t === 'gap'){ await sleep(step.delay || 300); continue; }
+      if(step.t === 'prompt'){
+        const d = append('<span class="p">$ </span>');
+        await sleep(80);
+        await typeCmd(d, step.cmd || '');
+        if(step.cursor){ d.innerHTML += '<span class="cli-cursor"></span>'; }
+        await sleep(step.delay || 350);
+        continue;
+      }
+      if(step.t === 'spin'){
+        await runSpin(step.text, step.delay || 800);
+        continue;
+      }
+      if(step.t === 'line'){
+        append('<span class="' + (step.cls||'') + '">' + escapeHtml(step.text) + '</span>');
+        await sleep(step.delay || 220);
+      }
+    }
+    // Restart loop for continuous "live" feel after a pause
+    await sleep(4000);
+    body.innerHTML = '';
+    run();
+  }
+
+  // Start once the hero CLI scrolls into view (or immediately if already visible)
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){ obs.disconnect(); run(); }
+    });
+  }, { threshold: 0.2 });
+  obs.observe(body);
+})();
+
+// Count-up on scroll
+const statIO = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting) return;
+    const el = e.target; const target = +el.dataset.target;
+    const prefix = el.dataset.prefix || ''; const suffix = el.dataset.suffix || '';
+    const dur = 1200; const start = performance.now();
+    function tick(now){
+      const p = Math.min(1, (now-start)/dur);
+      const ease = 1 - Math.pow(1-p,3);
+      el.textContent = prefix + Math.round(target*ease).toLocaleString() + suffix;
+      if(p<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+    statIO.unobserve(el);
+  });
+},{threshold:0.4});
+document.querySelectorAll('[data-target]').forEach(el=>statIO.observe(el));
+
+// Savings calculator · shared state between Simple + Advanced modes
+const state = {spend:100000, cloud:'aws', nonprod:'yes', team:'1-3'};
+const fmtUsd = n => '$' + n.toLocaleString();
+const fmtShort = n => {
+  if(n >= 1_000_000) return '$' + (n/1_000_000).toFixed(1).replace(/\.0$/,'') + 'M';
+  if(n >= 1_000)     return '$' + Math.round(n/1_000).toLocaleString() + 'K';
+  return '$' + n.toLocaleString();
+};
+// Edit-mode flag · while the user is typing into the LCD, calc() must
+// NOT overwrite the amount field. Slider/keypad changes still recompute
+// the surrounding range/year/breakdown rows.
+let cvsEditing = false;
+
+function calc(){
+  const base = state.spend;
+  let min = 0.25, max = 0.50;
+  if(state.nonprod==='yes'){ min += 0.06; max += 0.10; }
+  if(state.cloud==='multi'){ min += 0.03; max += 0.06; }
+  if(state.team==='1-3'){ max += 0.04; }
+  const lo = Math.round(base * min / 1000) * 1000;
+  const hi = Math.round(base * max / 1000) * 1000;
+  const mid = Math.round((lo + hi) / 2 / 1000) * 1000;
+
+  // LCD display outputs · shared between Simple and Advanced
+  const cvsAmt = document.getElementById('cvs-amount');
+  if(cvsAmt && !cvsEditing){
+    cvsAmt.textContent = fmtUsd(mid);
+    cvsAmt.classList.add('bump');
+    setTimeout(() => cvsAmt.classList.remove('bump'), 240);
+  }
+  const outMonth = document.getElementById('out-month');
+  if(outMonth) outMonth.textContent = fmtUsd(lo) + '–' + fmtUsd(hi);
+  const outYear = document.getElementById('out-year');
+  if(outYear) outYear.textContent = fmtUsd(mid * 12);
+  const vSpend = document.getElementById('v-spend');
+  if(vSpend) vSpend.textContent = fmtUsd(state.spend);
+
+  // Advanced breakdown rows · update dollar amounts using mid savings × category share
+  document.querySelectorAll('[data-bd-amt]').forEach(el => {
+    const share = parseFloat(el.getAttribute('data-bd-amt'));
+    const amt = Math.round(mid * share / 100) * 100;
+    el.textContent = fmtUsd(amt);
+  });
+}
+
+// LCD click-to-edit · the amount becomes a custom-input field. Label
+// flips from "monthly savings" to "monthly cloud spend" while editing,
+// so the typed number is unambiguous. Enter or blur commits and the
+// display flips back to showing the calculated savings.
+(function wireLcdEdit(){
+  const cvsAmt   = document.getElementById('cvs-amount');
+  const cvsDisp  = document.getElementById('cvs-display');
+  const cvsLabel = document.getElementById('cvs-display-label');
+  if(!cvsAmt || !cvsDisp || !cvsLabel) return;
+
+  const SPEND_MIN = 10000, SPEND_MAX = 20000000;
+
+  function enterEdit(){
+    if(cvsEditing) return;
+    cvsEditing = true;
+    cvsDisp.classList.add('editing');
+    cvsAmt.classList.add('editing');
+    cvsLabel.textContent = 'monthly cloud spend';
+    // Pre-fill with the raw spend (digits + commas, no $ so the user
+    // can just start typing without selecting/deleting a leading $).
+    cvsAmt.textContent = state.spend.toLocaleString();
+    cvsAmt.contentEditable = 'true';
+    cvsAmt.focus();
+    // Place caret at the end so typing extends rather than overwrites.
+    const range = document.createRange();
+    range.selectNodeContents(cvsAmt);
+    range.collapse(false);
+    const sel = window.getSelection();
+    sel.removeAllRanges(); sel.addRange(range);
+  }
+
+  function exitEdit(commit){
+    if(!cvsEditing) return;
+    cvsEditing = false;
+    cvsAmt.contentEditable = 'false';
+    cvsDisp.classList.remove('editing');
+    cvsAmt.classList.remove('editing');
+    cvsLabel.textContent = 'monthly savings';
+    if(commit){
+      const raw = cvsAmt.textContent.replace(/[^\d]/g, '');
+      let n = parseInt(raw, 10);
+      if(!isFinite(n) || n <= 0) n = state.spend; // fallback
+      n = Math.max(SPEND_MIN, Math.min(SPEND_MAX, n));
+      syncSpend(n);
+      refreshPresetActive();
+    } else {
+      calc();   // restore display from current state
+    }
+  }
+
+  cvsAmt.addEventListener('click', () => {
+    if(!cvsEditing) enterEdit();
+  });
+  cvsAmt.addEventListener('focus', () => {
+    if(!cvsEditing) enterEdit();
+  });
+  cvsAmt.addEventListener('keydown', e => {
+    if(e.key === 'Enter'){ e.preventDefault(); cvsAmt.blur(); return; }
+    if(e.key === 'Escape'){ e.preventDefault(); exitEdit(false); cvsAmt.blur(); return; }
+    // Allow digits + navigation/edit keys; block everything else.
+    const allow = ['Backspace','Delete','ArrowLeft','ArrowRight','Home','End','Tab'];
+    if(e.ctrlKey || e.metaKey) return;
+    if(allow.indexOf(e.key) >= 0) return;
+    if(e.key.length === 1 && !/\d/.test(e.key)) e.preventDefault();
+  });
+  cvsAmt.addEventListener('blur', () => exitEdit(true));
+
+  // Live formatting · keep commas as the user types, preserving caret.
+  cvsAmt.addEventListener('input', () => {
+    const raw = cvsAmt.textContent.replace(/[^\d]/g, '');
+    if(!raw){ return; }
+    const formatted = parseInt(raw, 10).toLocaleString();
+    if(formatted === cvsAmt.textContent) return;
+    cvsAmt.textContent = formatted;
+    // Park caret at end after re-render
+    const range = document.createRange();
+    range.selectNodeContents(cvsAmt);
+    range.collapse(false);
+    const sel = window.getSelection();
+    sel.removeAllRanges(); sel.addRange(range);
+  });
+})();
+
+// Single source of truth for spend value
+function syncSpend(v){
+  state.spend = +v;
+  const s = document.getElementById('spend');
+  if(s && s.value !== String(v)) s.value = v;
+  calc();
+}
+document.getElementById('spend')?.addEventListener('input', e => syncSpend(e.target.value));
+
+// Braun keypad preset keys · tap to set a round spend value
+document.querySelectorAll('.cvs-key[data-spend]').forEach(k => {
+  k.addEventListener('click', () => {
+    const v = parseInt(k.getAttribute('data-spend'), 10);
+    // Mark the active preset
+    document.querySelectorAll('.cvs-key[data-spend]').forEach(kk => kk.classList.remove('active'));
+    k.classList.add('active');
+    syncSpend(v);
+  });
+});
+// Slider drag should clear preset active state if value doesn't match a preset
+function refreshPresetActive(){
+  const v = state.spend;
+  document.querySelectorAll('.cvs-key[data-spend]').forEach(k => {
+    k.classList.toggle('active', parseInt(k.getAttribute('data-spend'), 10) === v);
+  });
+}
+document.getElementById('spend')?.addEventListener('input', refreshPresetActive);
+
+// Segmented options (advanced mode only)
+document.querySelectorAll('.calc-opts').forEach(group=>{
+  const name = group.dataset.group;
+  group.addEventListener('click', e=>{
+    if(!e.target.matches('.calc-opt')) return;
+    group.querySelectorAll('.calc-opt').forEach(b=>b.classList.remove('active'));
+    e.target.classList.add('active');
+    state[name] = e.target.dataset.v; calc();
+  });
+});
+
+// Mode toggle · Simple ↔ Advanced · one Braun chassis, content swaps via data-mode
+document.querySelectorAll('.cv-mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const mode = btn.getAttribute('data-mode');
+    document.querySelectorAll('.cv-mode-btn').forEach(b => {
+      const on = b.getAttribute('data-mode') === mode;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    const calcBox = document.querySelector('.calc-v2');
+    if(calcBox) calcBox.setAttribute('data-mode', mode);
+    calc();
+  });
+});
+
+calc();
+
+</script>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.prod-switch .ps-tab');
+  if(!tabs.length) return;
+  var panes = document.querySelectorAll('.pricing-panes [data-product]');
+
+  function activate(target){
+    var product = target.dataset.product;
+    tabs.forEach(function(t){
+      var on = t === target;
+      t.classList.toggle('is-active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.setAttribute('tabindex', on ? '0' : '-1');
+    });
+    panes.forEach(function(p){
+      if(p.dataset.product === product) p.removeAttribute('hidden');
+      else p.setAttribute('hidden', '');
+    });
+  }
+
+  tabs.forEach(function(tab, i){
+    tab.addEventListener('click', function(){ activate(tab); });
+    tab.addEventListener('keydown', function(e){
+      if(e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      var next = tabs[(i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length];
+      next.focus();
+      activate(next);
+    });
+  });
+})();
+</script>
+</body>
+</html>

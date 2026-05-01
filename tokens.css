@@ -1,0 +1,355 @@
+/* =========================================================================
+   ZopDev · design tokens
+   -------------------------------------------------------------------------
+   One source of truth for color, type, spacing, motion, shadow, and radius.
+   Any file in /zopdev-site/ that isn't the homepage should import this and
+   build on top of it — never redefine these values locally.
+
+   Standing rules (enforced at audit):
+     · NO radial-gradient anywhere — hero glow blobs, CTA auras, analogy
+       washes, "section atmosphere" — none. The faded-orange/green/blue
+       glow pattern is explicitly banned. Depth comes from solid fills
+       and hard offset shadows.
+     · NO linear-gradient on components. The only exception is the
+       homepage body background — a 1px white-pixel grid wash at
+       rgba(255,255,255,0.025) on both axes. No other linear-gradient.
+     · NO filter:blur. Backdrop-filter blur is permitted on one element
+       only — the sticky nav on index.html — and nowhere else.
+     · No drop shadows with blur radius on components — hard offset only.
+     · border-radius: 0 globally. 9999px permitted only on status pills.
+
+   For the brand spec in prose, see /brand-guidelines.html.
+   For component patterns, see /styleguide.html.
+   ========================================================================= */
+
+
+/* =========================================================================
+   1 · COLOR — pillar palette
+   -------------------------------------------------------------------------
+   The five locked brand colors. Do not add to this list without a brand
+   review. Usage ratios (approximate) on the dark canvas:
+     · Ink (cream)     ≈ 70%   surface text + mark
+     · Bg-0 / Bg-1     ≈ 20%   canvas + elevated surfaces
+     · Zop-Orange      ≈  5%   primary accent · CTAs · motion · "wasted"
+     · Zop-Blue        ≈  3%   "spent" · secure-pillar · featured metrics
+     · Zop-Green       ≈  2%   "recoverable" · savings-pillar · success
+   ========================================================================= */
+:root{
+  --zop-blue:   #2A4494;   /* Secure · visibility · trust · canonical brand blue */
+  --zop-orange: #F58549;   /* Speed · action · the accent */
+  --zop-green:  #7FB236;   /* Savings · outcome · success */
+  --zop-black:  #0A0A0A;   /* Ink · anchor · print */
+  --zop-cream:  #F0EBDB;   /* Paper · display text on dark */
+
+  /* ------- logo-only exception · lifted blue for tiles on dark surfaces ------- */
+  /* The canonical brand blue #2A4494 reads muted against #060608 once it's a
+     large filled tile next to the orange + green siblings. A single-purpose
+     lifted blue is used ONLY inside the logo/mark SVGs when they render on
+     dark. Applied via the --logo-blue CSS variable; never as a brand color. */
+  --logo-blue-on-dark: #4A66D4;
+
+  /* ------- dark canvas elevation ladder ------- */
+  --bg-0: #060608;   /* canvas */
+  --bg-1: #0E0E12;   /* section-lift · live-ops strip contrast */
+  --bg-2: #15151A;   /* card surface */
+  --bg-3: #1C1C24;   /* card-hover surface · nested */
+  --bg-4: #252530;   /* highest · chip · pill-bg */
+
+  /* ------- text on dark ------- */
+  --ink:    #F0EBDB;   /* primary · cream · same as --zop-cream */
+  --ink-2:  #D4CDB5;   /* soft primary */
+  --ink-3:  #A8A195;   /* body · secondary */
+  --ink-4:  #8A8378;   /* muted · meta · captions */
+  --ink-5:  #5A5A62;   /* deepest muted · rare */
+
+  /* ------- lines ------- */
+  --line:   #2A2A34;   /* default hairline */
+  --line-2: #3A3A46;   /* elevated card border */
+  --line-b: #55555E;   /* border-brighten on hover */
+
+  /* ------- tints (solid rgba — never gradients) ------- */
+  --blue-tint:   rgba(42,68,148,0.14);
+  --orange-tint: rgba(245,133,73,0.14);
+  --green-tint:  rgba(127,178,54,0.16);
+
+  /* ------- status (not brand — system semantics) ------- */
+  --ok:   #34d399;   /* live · healthy · applied */
+  --warn: #FBBF24;   /* attention · pending */
+  --err:  #F87171;   /* boundary · "what we're not" */
+}
+
+
+/* =========================================================================
+   COLOR · light theme overrides
+   -------------------------------------------------------------------------
+   The :root scale above is dark-canvas first. Subpages flip to light via
+   the global theme toggle (which sets `data-theme="light"` on <html>) and
+   without this block every elevation, line, and muted text token still
+   resolves to its dark hex — leaving cards as black boxes and body text
+   as low-contrast taupe on cream. Here we re-point the surface ladder,
+   muted ink scale, and line tokens to light-canvas equivalents so any
+   component built on them adapts. Brand accents (orange/blue/green) and
+   pure --ink stay where they are; the theme inversion of those is
+   handled by `homepage-chrome.css`.
+   ========================================================================= */
+html[data-theme="light"]{
+  --bg-0: #FAF7EC;   /* paper canvas */
+  --bg-1: #F0EBDB;   /* section-lift · card surface */
+  --bg-2: #ECE7D7;   /* card-hover surface */
+  --bg-3: #E2DDCD;   /* nested · icon bg */
+  --bg-4: #D9D3BF;   /* highest · pill bg */
+
+  --ink-2: #2a2a2a;
+  --ink-3: #525252;  /* body · AA dark grey on cream */
+  --ink-4: #707070;  /* meta · captions */
+  --ink-5: #9C9588;
+
+  --line:   #D9D3BF;
+  --line-2: #C9C4B5;
+  --line-b: #707070;
+}
+
+:root{
+  /* =======================================================================
+     2 · TYPE
+     ---------------------------------------------------------------------
+     Two faces only:
+       Space Grotesk — display, body, UI. Weights 300–700.
+       JetBrains Mono — numbers, meta, code, timestamps. Weights 400/500/600.
+
+     Letter-spacing baseline: -0.02em. Display sizes: -0.05em at ≥64px.
+     font-variant-numeric: tabular-nums on every figure without exception.
+     ======================================================================= */
+  --font: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* ------- weight ladder ------- */
+  --fw-light:   300;
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semibold:600;
+  --fw-bold:    700;
+
+  /* ------- type scale (px) ------- */
+  --t-10: 10px;   /* meta · all-caps labels */
+  --t-11: 11px;   /* ticker · small meta */
+  --t-12: 12px;   /* captions · mono rows */
+  --t-13: 13px;   /* UI default · body-small */
+  --t-14: 14px;   /* buttons · form inputs */
+  --t-15: 15px;   /* body */
+  --t-17: 17px;   /* lede · sub-heading */
+  --t-20: 20px;   /* hero lead */
+  --t-22: 22px;   /* h4 · card title small */
+  --t-24: 24px;   /* h3 · verb-copy */
+  --t-26: 26px;   /* pricing tier name */
+  --t-28: 28px;   /* card headline */
+  --t-32: 32px;   /* section heading min */
+  --t-36: 36px;   /* section heading mid */
+  --t-44: 44px;   /* pricing number */
+  --t-48: 48px;   /* proof-tile number */
+  --t-52: 52px;   /* section heading max · trigger */
+  --t-60: 60px;   /* h2 max */
+  --t-64: 64px;   /* case-study metric */
+  --t-72: 72px;   /* three-number figure */
+  --t-96: 96px;   /* hero h1 max · final CTA */
+
+  /* ------- line-heights ------- */
+  --lh-display: 0.95;   /* clamp hero · compressed */
+  --lh-heading: 1.05;   /* h2 · h3 */
+  --lh-body:    1.55;   /* paragraphs */
+  --lh-tight:   1.35;   /* cards · compact rows */
+  --lh-loose:   1.6;    /* mono body */
+
+  /* ------- letter-spacing ------- */
+  --ls-body:    -0.02em;
+  --ls-heading: -0.03em;
+  --ls-display: -0.05em;
+  --ls-meta:     0.14em;   /* all-caps labels */
+  --ls-meta-tight: 0.04em; /* mono rows · status */
+  --ls-meta-wide:  0.22em; /* final · hero tag */
+
+
+  /* =======================================================================
+     3 · SPACING — 4px grid
+     ---------------------------------------------------------------------
+     Every padding/margin value resolves to a multiple of 4. No exceptions.
+     ======================================================================= */
+  --sp-1:   4px;
+  --sp-2:   8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-7:  28px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-14: 56px;
+  --sp-16: 64px;
+  --sp-18: 72px;
+  --sp-20: 80px;
+  --sp-22: 88px;
+  --sp-24: 96px;
+  --sp-30:120px;
+
+  /* ------- section rhythm ------- */
+  --sec-pad:   88px;    /* vertical · default section */
+  --sec-pad-lg:96px;    /* vertical · emphasized section (cdcr, cases) */
+  --sec-pad-xl:120px;   /* vertical · final CTA */
+  --sec-pad-sm:56px;    /* vertical · mobile collapse */
+
+  /* ------- layout ------- */
+  --max:    1400px;     /* content max width */
+  --gutter: 32px;       /* container horizontal padding */
+
+
+  /* =======================================================================
+     4 · RADIUS
+     ---------------------------------------------------------------------
+     Sharp corners are part of the identity. The global reset sets
+     border-radius: 0. Only status pills opt out via --r-pill.
+     ======================================================================= */
+  --r-sharp: 0;
+  --r-pill:  9999px;     /* status dots · live-ticker pills ONLY */
+
+
+  /* =======================================================================
+     5 · DEPTH — hard offset shadows only
+     ---------------------------------------------------------------------
+     Never use a shadow with blur radius. Every depth cue below is a solid
+     offset block in a brand or status color. The hover pattern is:
+       translateY(-4px) + box-shadow: 0 8px 0 -4px <color>
+     ======================================================================= */
+  --shadow-hover-orange: 0 8px 0 -4px var(--zop-orange);
+  --shadow-hover-blue:   0 8px 0 -4px var(--zop-blue);
+  --shadow-hover-green:  0 8px 0 -4px var(--zop-green);
+  --shadow-hover-ink:    0 4px 0 -2px var(--ink);
+  --shadow-toast:        0 8px 0 -4px var(--zop-orange);
+
+
+  /* =======================================================================
+     6 · MOTION
+     ---------------------------------------------------------------------
+     Four durations. Four eases. No more, no less. Every component reuses
+     these tokens. prefers-reduced-motion gates everything (see below).
+     ======================================================================= */
+  --dur-fast: 160ms;    /* hover state, arrow slide */
+  --dur-med:  250ms;    /* card lift, border brighten */
+  --dur-slow: 400ms;    /* count-up, reveal-in */
+  --dur-xslow:520ms;    /* section enter-on-scroll */
+
+  /* MOTION duration scale, longer-form animations (entrances, reveals,
+     theme transitions, section morphs). Mirrors the JS MOTION.dur
+     block used by the canvas feature illustrations on the homepage so
+     canvas + CSS animations share one timing language. Ratio ~1.6x
+     between steps. */
+  --dur-xs:   240ms;
+  --dur-sm:   400ms;
+  --dur-md:   640ms;
+  --dur-lg:   1000ms;
+  --dur-xl:   1600ms;
+  --dur-xxl:  2560ms;
+
+  --ease-out:      cubic-bezier(.22, 1, .36, 1);
+  --ease-in-out:   cubic-bezier(.65, 0, .35, 1);
+  --ease-spring:   cubic-bezier(.175, .885, .32, 1.275);
+  --ease-snap:     cubic-bezier(.19, 1, .22, 1);
+
+
+  /* =======================================================================
+     7 · Z-INDEX
+     ======================================================================= */
+  --z-nav:   50;
+  --z-toast: 100;
+  --z-modal: 200;
+}
+
+
+/* =========================================================================
+   8 · GLOBAL RESET + BASE TYPOGRAPHY
+   -------------------------------------------------------------------------
+   Every file should load tokens.css before its own styles. This block
+   establishes the baseline so every page starts from the same posture.
+   ========================================================================= */
+*,*::before,*::after{
+  box-sizing: border-box;
+  border-radius: var(--r-sharp);
+}
+
+html{ scroll-behavior: smooth; overflow-x: clip; }
+
+body{
+  margin: 0;
+  font-family: var(--font);
+  background: var(--bg-0);
+  color: var(--ink);
+  font-size: var(--t-15);
+  line-height: var(--lh-body);
+  letter-spacing: var(--ls-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01" 0, "tnum" 1;
+  /* `overflow:clip` (not `hidden`) — same horizontal-scroll prevention,
+     but does NOT establish a scroll container, so descendant
+     `position:sticky` keeps working (e.g. the homepage globe-zoom
+     dashboard reveal). `hidden` was silently breaking sticky. */
+  overflow-x: clip;
+  max-width: 100vw;
+}
+
+img, svg{ display: block; max-width: 100%; }
+
+a{ color: inherit; text-decoration: none; }
+
+h1, h2, h3, h4{
+  margin: 0;
+  letter-spacing: var(--ls-heading);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-heading);
+}
+
+code, .mono{
+  font-family: var(--mono);
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+button{
+  font-family: inherit;
+  cursor: pointer;
+  border: 0;
+  background: none;
+  letter-spacing: inherit;
+}
+
+/* figures always use tabular-nums */
+.num, .three-nums .big, .proof-tile .v, .case .metric, .pr-tier .price{
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* =========================================================================
+   9 · REDUCED MOTION
+   -------------------------------------------------------------------------
+   Every animation/transition defined anywhere in the system is collapsed
+   to a 1ms no-op when the user has reduced-motion preference on.
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* =========================================================================
+   10 · UTILITY · container
+   ========================================================================= */
+.container{
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  position: relative;
+}
