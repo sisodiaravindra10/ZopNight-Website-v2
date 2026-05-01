@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<title>ZopDev · Brand Guidelines · v1.0</title>
+<meta name="description" content="The ZopDev brand guidelines, story, pillars, mark, color, type, motion, voice. The spec every team works from."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css"/>
+<style>
+/* no-italic-site-wide */ em,i,cite,dfn,var,address,blockquote{font-style:normal}
+/* =================================================================
+   Brand-guidelines · printable document layout
+   -------------------------------------------------------------------
+   Paper canvas · screen-readable · print-ready.
+   Chapters numbered. Each chapter fits on a screen-page.
+   Long-form writing · quotes · do/don't rules · application examples.
+   ================================================================= */
+
+/* override tokens for paper canvas (brand-guidelines is on light) */
+body{
+  background: var(--ink);            /* cream */
+  color: var(--zop-black);
+  font-family: var(--font);
+}
+
+/* ---- document shell ---- */
+.doc{ max-width: 960px; margin: 0 auto; padding: 0 var(--gutter); }
+
+/* ---- cover ---- */
+.cover{
+  min-height: 100vh;
+  background: var(--zop-black);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--sp-12) 0;
+  border-bottom: 8px solid var(--zop-orange);
+  --logo-blue: #4A66D4;   /* lifted for contrast on black */
+}
+.cover-inner{ max-width: 960px; margin:0 auto; padding:0 var(--gutter); width:100%; }
+.cover-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:var(--sp-8); }
+.cover-crumb{ font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); letter-spacing:var(--ls-meta); text-transform:uppercase; }
+.cover-mark{ display:inline-block; color:var(--ink); }
+.cover-mark svg{ height:36px; width:auto; color:currentColor; display:block; }
+.cover-middle{ padding:var(--sp-20) 0; }
+.cover-middle h1{ font-size:clamp(64px, 10vw, 156px); font-weight:var(--fw-bold); letter-spacing:var(--ls-display); line-height:0.9; margin:0; }
+.cover-middle h1 em{ font-style:normal; color:var(--zop-orange); }
+.cover-middle .ver{ font-family:var(--mono); font-size:var(--t-13); color:var(--ink-3); margin-top:var(--sp-8); letter-spacing:var(--ls-meta-tight); }
+.cover-middle .ver strong{ color:var(--ink); font-weight:var(--fw-medium); }
+.cover-bottom{ display:grid; grid-template-columns:repeat(4, 1fr); gap:var(--sp-5); border-top:1px solid var(--line); padding-top:var(--sp-8); }
+.cover-bottom .lbl{ font-family:var(--mono); font-size:var(--t-10); letter-spacing:var(--ls-meta); text-transform:uppercase; color:var(--ink-4); margin-bottom:var(--sp-2); display:block; }
+.cover-bottom .val{ font-size:var(--t-13); color:var(--ink-2); }
+.cover-swatches{ display:flex; gap:0; height:12px; margin-top:var(--sp-6); }
+.cover-swatches span{ flex:1; }
+
+/* ---- TOC ---- */
+.toc-page{ padding:var(--sp-20) 0 var(--sp-16); border-bottom:1px solid rgba(10,10,10,0.15); }
+.toc-page h2{ font-size:var(--t-48); font-weight:var(--fw-bold); letter-spacing:var(--ls-heading); margin:0 0 var(--sp-8); color:var(--zop-black); }
+.toc-list{ display:grid; grid-template-columns:1fr; max-width:720px; }
+.toc-item{ display:grid; grid-template-columns:40px 1fr auto; gap:var(--sp-5); padding:var(--sp-3) 0; border-bottom:1px dashed rgba(10,10,10,0.18); color:var(--zop-black); font-size:var(--t-17); letter-spacing:var(--ls-body); align-items:baseline; }
+.toc-item:last-child{ border-bottom:0; }
+.toc-item .n{ font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); letter-spacing:var(--ls-meta); }
+.toc-item a{ color:inherit; }
+.toc-item a:hover{ color:var(--zop-orange); }
+.toc-item .pg{ font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); letter-spacing:var(--ls-meta-tight); }
+
+/* ---- chapter shell ---- */
+.chap{ padding:var(--sp-20) 0 var(--sp-16); border-bottom:1px solid rgba(10,10,10,0.15); page-break-after:always; }
+.chap-num{ font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); letter-spacing:var(--ls-meta); text-transform:uppercase; margin-bottom:var(--sp-4); }
+.chap-num strong{ color:var(--zop-orange); font-weight:var(--fw-medium); }
+.chap h2{ font-size:clamp(44px, 6vw, 88px); font-weight:var(--fw-bold); letter-spacing:var(--ls-display); line-height:0.98; margin:0 0 var(--sp-6); color:var(--zop-black); }
+.chap h2 em{ font-style:normal; color:var(--zop-orange); }
+.chap h3{ font-size:var(--t-28); font-weight:var(--fw-bold); letter-spacing:var(--ls-heading); margin:var(--sp-10) 0 var(--sp-3); color:var(--zop-black); }
+.chap h4{ font-size:var(--t-17); font-weight:var(--fw-semibold); letter-spacing:var(--ls-body); margin:var(--sp-6) 0 var(--sp-2); color:var(--zop-black); }
+.chap p{ font-size:var(--t-17); color:var(--zop-black); line-height:var(--lh-body); max-width:720px; margin:0 0 var(--sp-4); }
+.chap p.lede{ font-size:var(--t-20); line-height:1.45; max-width:720px; margin-bottom:var(--sp-8); color:var(--zop-black); }
+.chap p.lede strong{ color:var(--zop-orange); font-weight:var(--fw-medium); }
+.chap ul, .chap ol{ padding-left:24px; max-width:720px; color:var(--zop-black); font-size:var(--t-17); line-height:var(--lh-body); }
+.chap ul li, .chap ol li{ padding:var(--sp-1) 0; }
+.chap strong{ color:var(--zop-black); font-weight:var(--fw-semibold); }
+.chap em{ color:var(--zop-orange); font-style:normal; font-weight:var(--fw-medium); }
+.chap code{ font-family:var(--mono); font-size:var(--t-13); background:#FAF7EC; color:var(--zop-black); padding:2px 6px; border:1px solid rgba(10,10,10,0.14); }
+
+/* pull quote */
+.pullq{ margin:var(--sp-10) 0; padding:var(--sp-8) var(--sp-10); border-left:4px solid var(--zop-orange); background:#FAF7EC; max-width:780px; }
+.pullq p{ font-size:var(--t-24); line-height:1.35; margin:0; letter-spacing:var(--ls-heading); color:var(--zop-black); font-weight:var(--fw-medium); }
+.pullq cite{ display:block; margin-top:var(--sp-4); font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); letter-spacing:var(--ls-meta-tight); font-style:normal; }
+
+/* footnote bar */
+.footnote{ margin:var(--sp-10) 0 0; padding-top:var(--sp-4); border-top:1px solid rgba(10,10,10,0.18); font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); letter-spacing:var(--ls-meta-tight); }
+
+/* key-value facts list */
+.facts{ display:grid; grid-template-columns:1fr 1fr; gap:0; margin:var(--sp-8) 0; border-top:1px solid rgba(10,10,10,0.18); }
+.facts dt{ padding:var(--sp-4) 0; font-family:var(--mono); font-size:var(--t-11); letter-spacing:var(--ls-meta); text-transform:uppercase; color:var(--ink-4); border-bottom:1px solid rgba(10,10,10,0.12); }
+.facts dd{ padding:var(--sp-4) 0; font-size:var(--t-15); color:var(--zop-black); margin:0; border-bottom:1px solid rgba(10,10,10,0.12); letter-spacing:var(--ls-body); }
+
+/* three-pillar block */
+.pillars-row{ display:grid; grid-template-columns:repeat(3, 1fr); gap:var(--sp-4); margin:var(--sp-10) 0; }
+.pillar{ padding:var(--sp-10) var(--sp-7); min-height:340px; display:flex; flex-direction:column; gap:var(--sp-3); color:var(--ink); position:relative; }
+.pillar.secure{ background:var(--zop-blue); }
+.pillar.speed{ background:var(--zop-orange); color:var(--zop-black); }
+.pillar.speed .meta, .pillar.speed .def{ color:rgba(10,10,10,0.65); }
+.pillar.savings{ background:var(--zop-green); color:var(--zop-black); }
+.pillar.savings .meta, .pillar.savings .def{ color:rgba(10,10,10,0.65); }
+.pillar .meta{ font-family:var(--mono); font-size:var(--t-11); letter-spacing:var(--ls-meta); text-transform:uppercase; opacity:0.7; }
+.pillar .name{ font-size:var(--t-72); font-weight:var(--fw-bold); letter-spacing:var(--ls-display); line-height:0.9; margin:var(--sp-4) 0; }
+.pillar .def{ font-size:var(--t-13); line-height:var(--lh-body); margin-top:auto; font-family:var(--mono); letter-spacing:var(--ls-meta-tight); }
+.pillar .hex{ position:absolute; bottom:var(--sp-5); right:var(--sp-7); font-family:var(--mono); font-size:var(--t-11); letter-spacing:var(--ls-meta-tight); opacity:0.5; }
+
+/* swatch mini-grid */
+.swatch-mini{ display:grid; grid-template-columns:repeat(5,1fr); gap:var(--sp-3); margin:var(--sp-6) 0; }
+.sm{ border:1px solid rgba(10,10,10,0.14); background:#FAF7EC; }
+.sm .chip{ height:80px; }
+.sm .meta{ padding:var(--sp-3); font-family:var(--mono); font-size:var(--t-11); line-height:1.5; color:var(--ink-4); letter-spacing:var(--ls-meta-tight); }
+.sm .meta .name{ color:var(--zop-black); font-family:var(--font); font-weight:var(--fw-semibold); font-size:var(--t-13); letter-spacing:var(--ls-body); display:block; margin-bottom:var(--sp-1); }
+.sm .meta .hex{ color:var(--zop-black); }
+
+/* mark gallery (reuse) */
+.mk{ position:relative; display:inline-block; }
+.mk.sz-s{ width:24px; height:24px; }
+.mk.sz-m{ width:48px; height:48px; }
+.mk.sz-l{ width:96px; height:96px; }
+.mk.sz-xl{ width:160px; height:160px; }
+.mk span{ position:absolute; width:50%; height:50%; }
+.mk .a{ top:0; left:0; background:var(--zop-blue); }
+.mk .b{ top:0; right:0; background:var(--zop-orange); }
+.mk .c{ bottom:0; right:0; background:var(--zop-green); }
+.mk.ink .a, .mk.ink .b, .mk.ink .c{ background:var(--zop-black); }
+.mk.cream .a, .mk.cream .b, .mk.cream .c{ background:var(--ink); }
+
+.mark-showcase{ display:grid; grid-template-columns:repeat(4,1fr); gap:var(--sp-3); margin:var(--sp-8) 0; }
+.mshow{ background:#FAF7EC; border:1px solid rgba(10,10,10,0.14); padding:var(--sp-8); display:flex; flex-direction:column; gap:var(--sp-3); align-items:center; justify-content:center; min-height:180px; }
+.mshow.dark{ background:var(--zop-black); --logo-blue:#4A66D4; }
+.mshow .cap{ font-family:var(--mono); font-size:var(--t-10); color:var(--ink-4); letter-spacing:var(--ls-meta); text-transform:uppercase; }
+.mshow.dark .cap{ color:var(--ink-4); }
+
+/* clear-space schematic */
+.clearspace{ display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-6); margin:var(--sp-8) 0; background:#FAF7EC; padding:var(--sp-8); border:1px solid rgba(10,10,10,0.14); }
+.cs-diagram{ position:relative; display:flex; align-items:center; justify-content:center; min-height:240px; }
+.cs-frame{ position:relative; padding:64px; border:1px dashed var(--zop-orange); }
+.cs-frame::before{ content:'x'; position:absolute; top:-4px; left:50%; transform:translate(-50%, -100%); font-family:var(--mono); font-size:var(--t-11); color:var(--zop-orange); letter-spacing:var(--ls-meta); }
+.cs-notes{ font-family:var(--mono); font-size:var(--t-13); color:var(--zop-black); letter-spacing:var(--ls-meta-tight); line-height:var(--lh-loose); }
+.cs-notes strong{ display:block; font-family:var(--font); font-size:var(--t-17); color:var(--zop-black); letter-spacing:var(--ls-body); margin-bottom:var(--sp-3); }
+
+/* do / don't */
+.dd{ display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid rgba(10,10,10,0.16); margin:var(--sp-8) 0; background:#FAF7EC; }
+.dd > div{ padding:var(--sp-7); }
+.dd .do{ border-right:1px solid rgba(10,10,10,0.16); }
+.dd h5{ font-family:var(--mono); font-size:var(--t-11); letter-spacing:var(--ls-meta); text-transform:uppercase; margin:0 0 var(--sp-4); display:flex; align-items:center; gap:var(--sp-2); }
+.dd .do h5{ color:#1f7a4d; }
+.dd .do h5::before{ content:'✓'; font-weight:var(--fw-bold); font-size:var(--t-15); }
+.dd .dont h5{ color:#b11f1f; }
+.dd .dont h5::before{ content:'×'; font-weight:var(--fw-bold); font-size:var(--t-17); }
+.dd ul{ list-style:none; padding:0; margin:0; max-width:none; font-size:var(--t-15); }
+.dd li{ padding:var(--sp-2) 0; border-bottom:1px dashed rgba(10,10,10,0.14); letter-spacing:var(--ls-body); }
+.dd li:last-child{ border-bottom:0; }
+.dd .dont li{ color:#6e6e6e; text-decoration:line-through; text-decoration-color:rgba(10,10,10,0.35); }
+
+/* voice before/after */
+.voice-row{ display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-4); margin:var(--sp-4) 0 var(--sp-6); }
+.voice-col{ background:#FAF7EC; border:1px solid rgba(10,10,10,0.14); padding:var(--sp-6); }
+.voice-col .t{ font-family:var(--mono); font-size:var(--t-10); color:var(--ink-4); letter-spacing:var(--ls-meta); text-transform:uppercase; margin-bottom:var(--sp-3); }
+.voice-col.bad .t{ color:#b11f1f; }
+.voice-col.good .t{ color:#1f7a4d; }
+.voice-col p{ font-size:var(--t-17); line-height:1.45; margin:0; letter-spacing:var(--ls-body); color:var(--zop-black); }
+.voice-col.bad p{ color:#6e6e6e; }
+
+/* application examples row */
+.apps{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--sp-4); margin:var(--sp-8) 0; }
+.app{ background:#FAF7EC; border:1px solid rgba(10,10,10,0.14); padding:var(--sp-6); min-height:220px; display:flex; flex-direction:column; gap:var(--sp-3); }
+.app .tag{ font-family:var(--mono); font-size:var(--t-10); color:var(--ink-4); letter-spacing:var(--ls-meta); text-transform:uppercase; }
+.app h4{ font-size:var(--t-17); font-weight:var(--fw-semibold); margin:0; letter-spacing:var(--ls-body); color:var(--zop-black); }
+.app-vis{ --logo-blue:#4A66D4; padding:var(--sp-5); background:var(--zop-black); color:var(--ink); min-height:96px; display:flex; align-items:center; gap:var(--sp-3); font-size:var(--t-13); font-family:var(--font); margin-top:auto; }
+.app.paper .app-vis{ --logo-blue:#2A4494; background:var(--ink); color:var(--zop-black); }
+.app.orange .app-vis{ background:var(--zop-orange); color:var(--zop-black); font-weight:var(--fw-semibold); }
+
+/* footer */
+footer{ padding:var(--sp-10) 0 var(--sp-6); background:var(--zop-black); color:var(--ink-3); border-top:4px solid var(--zop-orange); }
+footer .inner{ max-width:960px; margin:0 auto; padding:0 var(--gutter); display:grid; grid-template-columns:2fr 1fr 1fr; gap:var(--sp-6); }
+footer h5{ font-family:var(--mono); font-size:var(--t-10); letter-spacing:var(--ls-meta); text-transform:uppercase; color:var(--ink-4); margin:0 0 var(--sp-2); font-weight:var(--fw-medium); }
+footer p{ font-size:var(--t-13); color:var(--ink-3); margin:0; line-height:var(--lh-body); }
+footer a{ color:var(--ink-2); }
+footer a:hover{ color:var(--zop-orange); }
+footer .bot{ margin:var(--sp-8) auto 0; max-width:960px; padding:var(--sp-4) var(--gutter) 0; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); letter-spacing:var(--ls-meta-tight); }
+
+/* print */
+@media print{
+  body{ background:#FAF7EC; }
+  .chap{ page-break-after:always; }
+  .cover{ min-height:auto; page-break-after:always; }
+  a{ color:var(--zop-black); }
+  footer{ page-break-before:always; }
+}
+
+@media (max-width:800px){
+  .cover-bottom, .pillars-row, .swatch-mini, .mark-showcase, .clearspace, .dd, .voice-row, .apps, footer .inner{ grid-template-columns:1fr; }
+  .dd .do{ border-right:0; border-bottom:1px solid rgba(10,10,10,0.16); }
+  .facts{ grid-template-columns:1fr; }
+}
+</style>
+<link rel="stylesheet" href="homepage-chrome.css"/>
+<link rel="stylesheet" href="chrome-footer.css">
+</head>
+<body>
+
+<!-- ========================================================
+     Canonical logo symbols, single source of truth.
+     #logo-zopdev    · primary lockup (wordmark + off-aligned mark)
+     #mark-zopdev    · standalone three-tile mark (favicon / avatar)
+     ======================================================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mark-zopdev" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="16" height="16" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="16" y="0" width="16" height="16" fill="#F58549"/>
+      <rect x="16" y="16" width="16" height="16" fill="#7FB236"/>
+    </symbol>
+    <symbol id="logo-zopdev" viewBox="0 0 715 276">
+      <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+      <rect x="537" width="89" height="89" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="626" width="89" height="89" fill="#F58549"/>
+      <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ============================================================
+     LIVE STATUS STRIP. Cloud-ops signal strip
+     ============================================================ -->
+<!-- ============================================================
+     SAVINGS CALCULATOR STRIP. Single CTA, links to the calculator.
+     ============================================================ -->
+<a class="live-strip live-strip-cta" href="#calculator" aria-label="Open the savings calculator">
+  <span class="ls-cta-anchor">
+    <span class="ls-live"><span class="ls-livedot"></span>Calculator</span>
+  </span>
+  <span class="ls-cta-msg">See how much your cloud is wasting right now.</span>
+  <span class="ls-cta-arrow">Try it <span class="ls-arrow">&rarr;</span></span>
+</a>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo-lockup sm" aria-label="ZopDev">
+      <svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <div class="nav-item" data-menu="product">
+        <a>Product <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <div class="nav-item" data-menu="resources">
+        <a>Resources <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="pricing.html">Pricing</a>
+      <div class="nav-item" data-menu="company">
+        <a>Company <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="community.html">Community</a>
+    </div>
+
+    <!-- Shared dropdown overlay. Content crossfades, panel slides left/right -->
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+      <div class="nav-panes" id="nav-panes">
+
+        <!-- ═══════ PRODUCT · 3 sub-products ═══════ -->
+        <div class="nav-pane" data-pane="product">
+          <!-- 3 equal cells. Inline grid-template-columns overrides the
+               default 1.3fr 1fr 1fr (which is built for a featured-hero
+               layout). All three products are equal here — no hero — so
+               no empty grid slots and no card stretches taller than its
+               siblings. -->
+          <div class="np-bento" style="grid-template-columns:1fr 1fr 1fr;">
+            <a class="np-cell" href="zopnight.html">
+              <span class="np-badge live">live</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopNight</h3>
+              <p class="np-cell-desc">Cloud cost optimization on autopilot. AWS, Azure, GCP.</p>
+            </a>
+            <a class="np-cell" href="zopday.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#F58549"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopDay</h3>
+              <p class="np-cell-desc">Deployment orchestration and release management.</p>
+            </a>
+            <a class="np-cell" href="zopcloud.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><rect x="12" y="8" width="8" height="6" fill="#FFFFFF"/><rect x="6" y="14" width="20" height="10" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopCloud</h3>
+              <p class="np-cell-desc">Multi-cloud resource graph and topology view.</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Live in Claude &amp; Codex</strong> · run ZopNight from your MCP client</span>
+            <a href="developers.html">Try MCP →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ RESOURCES · 9 cells in a 3×3 grid ═══════ -->
+        <div class="nav-pane" data-pane="resources">
+          <div class="np-bento np-bento--grid">
+            <a class="np-cell" href="blog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Blog</h3>
+              <p class="np-cell-desc">Engineering + cost optimization notes</p>
+            </a>
+            <a class="np-cell" href="free-ebooks.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 4h7v13H3zM10 4h7v13h-7z" stroke="currentColor" stroke-width="1.5"/><path d="M10 4v13" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Ebooks</h3>
+              <p class="np-cell-desc">Free playbooks · FinOps, K8s, CDCR</p>
+            </a>
+            <a class="np-cell" href="customers.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 16c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Case studies</h3>
+              <p class="np-cell-desc">42-67% cuts, real teams</p>
+            </a>
+            <a class="np-cell" href="solutions.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Use cases by industry</h3>
+              <p class="np-cell-desc">SaaS · fintech · retail · health</p>
+            </a>
+            <a class="np-cell" href="product-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M8 7l4 3-4 3z" fill="currentColor"/></svg>
+              </div>
+              <h3 class="np-cell-title">Product documentation</h3>
+              <p class="np-cell-desc">Walkthroughs · video tours</p>
+            </a>
+            <a class="np-cell" href="kubernetes-guide.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2l7 4v8l-7 4-7-4V6z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
+              </div>
+              <h3 class="np-cell-title">Kubernetes guide</h3>
+              <p class="np-cell-desc">From cluster basics to right-sizing</p>
+            </a>
+            <a class="np-cell" href="changelog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Changelog</h3>
+              <p class="np-cell-desc">What shipped this week</p>
+            </a>
+            <a class="np-cell" href="developer-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 6L3 10l4 4M13 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 class="np-cell-title">Developer documentation</h3>
+              <p class="np-cell-desc">REST API · SDKs · webhooks · MCP</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Weekly digest</strong> · waste signals, wins, war stories</span>
+            <a href="blog.html">Subscribe →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ COMPANY · 2 items ═══════ -->
+        <div class="nav-pane" data-pane="company">
+          <div class="np-bento" style="grid-template-columns:1fr 1fr;">
+            <a class="np-cell" href="about.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#0A0A0A"/><rect x="6" y="6" width="8" height="20" fill="#F0EBDB"/><rect x="18" y="12" width="8" height="14" fill="#F58549"/></svg>
+              </div>
+              <h3 class="np-cell-title">About</h3>
+              <p class="np-cell-desc">Founded 2024. The autopilot for multi-cloud cost.</p>
+            </a>
+            <a class="np-cell" href="careers.html">
+              <span class="np-badge">hiring</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="6" width="14" height="11" stroke="currentColor" stroke-width="1.5"/><path d="M7 6V4h6v2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Careers</h3>
+              <p class="np-cell-desc">Open roles · engineering, design, GTM</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>We're hiring</strong> · remote-first · 12 open roles</span>
+            <a href="careers.html">See roles →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="nav-cta">
+      <!-- Status pill · live dot · links to /status.html. Mirrors the
+           project's "always-on" identity (the live-ops strip above the
+           nav). Pulses green when all systems are operational. -->
+      <a class="nav-status" href="status.html" aria-label="System status">
+        <span class="nav-status-dot" aria-hidden="true"></span>
+        <span class="nav-status-text">Status</span>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" role="switch">
+        <span class="tt-opt tt-sun" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="8" cy="8" r="3" fill="currentColor" stroke="none"/>
+            <path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.9.9M11.7 11.7l.9.9M3.4 12.6l.9-.9M11.7 4.3l.9-.9"/>
+          </svg>
+        </span>
+        <span class="tt-opt tt-moon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M12.8 10.1a5.5 5.5 0 0 1-7-7 .5.5 0 0 0-.7-.6A6.5 6.5 0 1 0 13.4 10.8a.5.5 0 0 0-.6-.7z"/>
+          </svg>
+        </span>
+      </button>
+      <a class="chip-playground" href="playground.html"><span>Playground</span></a>
+      <a class="sign" href="signin.html">Sign In</a>
+      <a class="btn btn-accent" href="demo.html"><span>Book a Demo</span> <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ================= COVER ================= -->
+<section class="cover">
+  <div class="cover-inner cover-top">
+    <span class="cover-crumb">brand guidelines · internal + partner use</span>
+    <span class="cover-mark" aria-label="ZopDev"><svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg></span>
+  </div>
+  <div class="cover-inner cover-middle">
+    <h1>The brand,<br>in one <em>document.</em></h1>
+    <div class="ver"><strong>Version 1.0</strong> · April 2026 · 12 chapters · printable</div>
+  </div>
+  <div class="cover-inner">
+    <div class="cover-swatches">
+      <span style="background:var(--zop-blue)"></span>
+      <span style="background:var(--zop-orange)"></span>
+      <span style="background:var(--zop-green)"></span>
+      <span style="background:var(--ink)"></span>
+      <span style="background:var(--zop-black)"></span>
+    </div>
+    <div class="cover-bottom">
+      <div><span class="lbl">doc</span><span class="val">brand-guidelines.html</span></div>
+      <div><span class="lbl">tokens</span><span class="val">tokens.css</span></div>
+      <div><span class="lbl">components</span><span class="val">styleguide.html</span></div>
+      <div><span class="lbl">owner</span><span class="val">design@zop.dev</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="doc">
+
+<!-- ================= TOC ================= -->
+<section class="toc-page">
+  <h2>Table of contents.</h2>
+  <div class="toc-list">
+    <div class="toc-item"><span class="n">01</span><a href="#story">The story, why the rebrand</a><span class="pg">p. 03</span></div>
+    <div class="toc-item"><span class="n">02</span><a href="#pillars">The three pillars</a><span class="pg">p. 04</span></div>
+    <div class="toc-item"><span class="n">03</span><a href="#mark">The mark</a><span class="pg">p. 05</span></div>
+    <div class="toc-item"><span class="n">04</span><a href="#color">Color system</a><span class="pg">p. 06</span></div>
+    <div class="toc-item"><span class="n">05</span><a href="#type">Typography</a><span class="pg">p. 07</span></div>
+    <div class="toc-item"><span class="n">06</span><a href="#motion">Motion system</a><span class="pg">p. 08</span></div>
+    <div class="toc-item"><span class="n">07</span><a href="#voice">Voice &amp; tone</a><span class="pg">p. 09</span></div>
+    <div class="toc-item"><span class="n">08</span><a href="#apps">Application examples</a><span class="pg">p. 10</span></div>
+    <div class="toc-item"><span class="n">09</span><a href="#subs">Sub-brands, ZopNight · ZopDay · ZopCloud</a><span class="pg">p. 11</span></div>
+    <div class="toc-item"><span class="n">10</span><a href="#rules">Standing rules, do / don't</a><span class="pg">p. 12</span></div>
+    <div class="toc-item"><span class="n">11</span><a href="#contact">Assets &amp; contact</a><span class="pg">p. 13</span></div>
+    <div class="toc-item"><span class="n">12</span><a href="#changelog">Changelog</a><span class="pg">p. 14</span></div>
+  </div>
+</section>
+
+
+<!-- ================= 01 · STORY ================= -->
+<section class="chap" id="story">
+  <div class="chap-num"><strong>chapter 01</strong> · the story</div>
+  <h2>We rebuilt the brand around <em>one emotion.</em></h2>
+  <p class="lede">Seven interviews. Two workshops. One empathy map. One word-frequency analysis. The research all pointed to the same thing: engineering and FinOps leaders don't lose sleep over <strong>saving money</strong>. They lose sleep over <strong>being asked a question they can't answer.</strong></p>
+
+  <p>The CFO asks why AWS grew 28% last quarter. The board review is Friday. A new CTO is walking in on Monday. ZopDev is the thing that makes sure the answer is on-screen <em>before</em> the question gets asked.</p>
+
+  <h3>Three pillars came out of the research.</h3>
+  <p>Not three features. Three feelings the brand has to deliver, in that order, every time:</p>
+  <ol>
+    <li><strong>Secure</strong>, visibility, trust, the defensible posture. Blue carries this.</li>
+    <li><strong>Speed</strong>, the pace at which you find what's wrong and fix it. Orange carries this.</li>
+    <li><strong>Savings</strong>, the outcome, the number at the end. Green carries this.</li>
+  </ol>
+
+  <div class="pullq">
+    <p>"Cloud cost is an anxiety product. Savings is the outcome. The trigger is accountability."</p>
+    <cite>– research synthesis · Q1 2026 · see /research-emotion.html</cite>
+  </div>
+
+  <p>Everything in this document, the mark, the palette, the type, the motion, the voice, exists to serve that emotional truth. If a new design decision doesn't help an engineering leader feel more <em>defensible</em>, it doesn't belong in the brand.</p>
+
+  <div class="footnote">research sources: 7 interview transcripts · 2 workshop outputs · empathy map · word-frequency report · JTBD framework · trigger-event log · competitor Venn · archived in /research/ (internal).</div>
+</section>
+
+
+<!-- ================= 02 · PILLARS ================= -->
+<section class="chap" id="pillars">
+  <div class="chap-num"><strong>chapter 02</strong> · the three pillars</div>
+  <h2>Secure. <em>Speed.</em> Savings.</h2>
+  <p class="lede">Three pillars. Three colors. One order, always. The order encodes the emotional arc the customer travels: <strong>first they feel safe</strong> (secure), <strong>then they feel fast</strong> (speed), <strong>then they see the number</strong> (savings).</p>
+
+  <div class="pillars-row">
+    <div class="pillar secure">
+      <span class="meta">01 · secure</span>
+      <div class="name">Secure.</div>
+      <div class="def">visibility · trust · defensibility · the posture a CTO can stand behind in a board meeting. Blue carries it.</div>
+      <span class="hex">#2A4494</span>
+    </div>
+    <div class="pillar speed">
+      <span class="meta">02 · speed</span>
+      <div class="name">Speed.</div>
+      <div class="def">pace of discovery · pace of action · the accent color · 5 min to connect · 7 min to first fix · orange carries it.</div>
+      <span class="hex">#F58549</span>
+    </div>
+    <div class="pillar savings">
+      <span class="meta">03 · savings</span>
+      <div class="name">Savings.</div>
+      <div class="def">the outcome · the number at the end · the reclaimed budget · the "recoverable" column · green carries it.</div>
+      <span class="hex">#7FB236</span>
+    </div>
+  </div>
+
+  <h3>Rules</h3>
+  <ul>
+    <li>The pillar → color binding is locked. Blue <em>is</em> Secure. Orange <em>is</em> Speed. Green <em>is</em> Savings. Never swap.</li>
+    <li>When all three appear together (e.g. on the three-numbers dashboard), the order is always <strong>blue · orange · green</strong>, left to right.</li>
+    <li>The three-numbers dashboard on the homepage encodes this order in UI: <em>Spent</em> (blue) → <em>Wasted</em> (orange) → <em>Recoverable</em> (green). The composition is the identity.</li>
+  </ul>
+</section>
+
+
+<!-- ================= 03 · MARK ================= -->
+<section class="chap" id="mark">
+  <div class="chap-num"><strong>chapter 03</strong> · the mark</div>
+  <h2>Wordmark first. <em>Mark</em> off-aligned.</h2>
+  <p class="lede">The primary lockup reads <strong>ZopDev</strong> on the left, Space Grotesk, heavy weight, custom-drawn. A three-tile mark sits <em>off-aligned to the top-right</em>, forming an L-shape (blue top-left, orange top-right, green bottom-right). The empty bottom-left tile is deliberate, it's <strong>the void the product fills</strong>. Sharp corners. No gradients. Never rotated. Never redrawn.</p>
+
+  <h3>Primary lockup</h3>
+  <div class="mark-showcase">
+    <div class="mshow dark" style="min-height:220px"><svg viewBox="0 0 715 276" style="height:84px; width:auto; color:var(--ink)"><use href="#logo-zopdev"/></svg><span class="cap">primary · on dark canvas</span></div>
+    <div class="mshow" style="min-height:220px"><svg viewBox="0 0 715 276" style="height:84px; width:auto; color:var(--zop-black)"><use href="#logo-zopdev"/></svg><span class="cap">primary · on paper</span></div>
+    <div class="mshow dark" style="min-height:220px"><svg viewBox="0 0 715 276" style="height:84px; width:auto; color:var(--ink)"><rect x="0" y="0" width="715" height="276" fill="none"/><path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/><rect x="537" width="89" height="89" fill="currentColor"/><rect x="626" width="89" height="89" fill="currentColor"/><rect x="626" y="89" width="89" height="89" fill="currentColor"/></svg><span class="cap">cream monochrome · on dark</span></div>
+    <div class="mshow" style="min-height:220px"><svg viewBox="0 0 715 276" style="height:84px; width:auto; color:var(--zop-black)"><path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/><rect x="537" width="89" height="89" fill="currentColor"/><rect x="626" width="89" height="89" fill="currentColor"/><rect x="626" y="89" width="89" height="89" fill="currentColor"/></svg><span class="cap">ink monochrome · on paper</span></div>
+  </div>
+
+  <h3>The standalone mark</h3>
+  <p>The three-tile mark without the wordmark. Use only when the wordmark is already present elsewhere in the composition, or for favicon / social avatar / in-product uses where the space won't hold the lockup.</p>
+  <div class="mark-showcase">
+    <div class="mshow dark"><svg viewBox="0 0 32 32" style="width:96px; height:96px"><use href="#mark-zopdev"/></svg><span class="cap">master · 96px</span></div>
+    <div class="mshow"><svg viewBox="0 0 32 32" style="width:64px; height:64px"><use href="#mark-zopdev"/></svg><span class="cap">master · 64px · paper</span></div>
+    <div class="mshow dark"><svg viewBox="0 0 32 32" style="width:48px; height:48px"><use href="#mark-zopdev"/></svg><span class="cap">master · 48px</span></div>
+    <div class="mshow"><svg viewBox="0 0 32 32" style="width:32px; height:32px"><rect x="0" y="0" width="16" height="16" fill="#4A66D4"/><rect x="16" y="0" width="16" height="16" fill="#F58549"/><rect x="16" y="16" width="16" height="16" fill="#7FB236"/></svg><span class="cap">full-color · 32px · favicon</span></div>
+  </div>
+
+  <h3>Clear space + minimum size</h3>
+  <div class="clearspace">
+    <div class="cs-diagram">
+      <div class="cs-frame">
+        <svg viewBox="0 0 32 32" style="width:88px; height:88px"><use href="#mark-zopdev"/></svg>
+      </div>
+    </div>
+    <div class="cs-notes">
+      <strong>Clear space</strong>
+      Equal to the width of one tile (<code>x</code>) on every side. Nothing, no copy, no line, no other mark, encroaches inside this boundary.
+      <br><br>
+      <strong>Minimum size · lockup</strong>
+      72px wide on screen. Never smaller than that, the wordmark breaks down.
+      <br><br>
+      <strong>Minimum size · standalone mark</strong>
+      20px on color backgrounds, 16px in monochrome. Below 16px the empty bottom-left tile reads ambiguous, switch to the monochrome mark.
+    </div>
+  </div>
+
+  <h3>Lockup anatomy</h3>
+  <p>The lockup is a <strong>single drawn artwork</strong>, not a mark and wordmark composed at runtime. The SVG symbol <code>#logo-zopdev</code> contains both elements with the correct spatial relationship baked in. Never recompose from DOM tiles + text.</p>
+
+  <dl class="facts">
+    <dt>primary lockup</dt><dd>"ZopDev" wordmark left · three-tile mark off-aligned top-right · viewBox 715×276</dd>
+    <dt>standalone mark</dt><dd>three-tile L-shape · empty bottom-left · viewBox 32×32</dd>
+    <dt>wordmark</dt><dd>custom-drawn · Space Grotesk skeleton · heavy weight · never substitute with system font</dd>
+    <dt>monochrome variants</dt><dd>ink (#0A0A0A on light) · cream (#F0EBDB on dark) · all four tiles render in currentColor</dd>
+    <dt>minimum size · lockup</dt><dd>72px wide · always as a single SVG</dd>
+    <dt>minimum size · mark</dt><dd>16px mono · 20px color</dd>
+    <dt>favicon</dt><dd>standalone mark · full color · 32×32 · SVG · green tile pulses gently in-browser (2.8s loop)</dd>
+    <dt>social avatar</dt><dd>standalone mark · full color · filled #060608 square ground</dd>
+    <dt>never</dt><dd>rotate · skew · recolor tiles · add a fourth tile · compose from DOM · substitute the wordmark font</dd>
+  </dl>
+</section>
+
+
+<!-- ================= 04 · COLOR ================= -->
+<section class="chap" id="color">
+  <div class="chap-num"><strong>chapter 04</strong> · color system</div>
+  <h2>Five brand colors. Three statuses. <em>No more.</em></h2>
+  <p class="lede">Every color the system uses is either a <strong>brand pillar</strong> (carries emotion) or a <strong>status semantic</strong> (carries information). Never mix, a pillar color never means "error," a status color never means "savings."</p>
+
+  <h3>Brand, the locked palette</h3>
+  <div class="swatch-mini">
+    <div class="sm"><div class="chip" style="background:#2A4494"></div><div class="meta"><span class="name">Zop Blue</span><span class="hex">#2A4494</span><br>rgb 42 · 68 · 148<br>secure · trust</div></div>
+    <div class="sm"><div class="chip" style="background:#F58549"></div><div class="meta"><span class="name">Zop Orange</span><span class="hex">#F58549</span><br>rgb 245 · 133 · 73<br>speed · accent</div></div>
+    <div class="sm"><div class="chip" style="background:#7FB236"></div><div class="meta"><span class="name">Zop Green</span><span class="hex">#7FB236</span><br>rgb 127 · 178 · 54<br>savings · outcome</div></div>
+    <div class="sm"><div class="chip" style="background:#0A0A0A"></div><div class="meta"><span class="name">Zop Black</span><span class="hex">#0A0A0A</span><br>rgb 10 · 10 · 10<br>ink · anchor</div></div>
+    <div class="sm"><div class="chip" style="background:#F0EBDB"></div><div class="meta"><span class="name">Zop Cream</span><span class="hex">#F0EBDB</span><br>rgb 240 · 235 · 219<br>paper · display</div></div>
+  </div>
+
+  <h3>Usage ratios on the dark canvas</h3>
+  <p>The homepage runs on <code>#060608</code>. Approximate surface distribution:</p>
+  <ul>
+    <li><strong>~70%</strong>, Ink (cream text) on bg-0/bg-1 surfaces. The reading surface.</li>
+    <li><strong>~20%</strong>, Elevation surfaces (bg-2, bg-3) for cards and panels.</li>
+    <li><strong>~5%</strong>, Orange. Primary CTA. The "Wasted" figure. The accent.</li>
+    <li><strong>~3%</strong>, Blue. "Spent." Secure-pillar meta. Featured metrics.</li>
+    <li><strong>~2%</strong>, Green. "Recoverable." Savings-pillar meta. Success states.</li>
+  </ul>
+
+  <div class="pullq">
+    <p>Orange is the accent. Never more than one orange moment per viewport. Over-using it collapses the hierarchy, the eye stops knowing where to land.</p>
+    <cite>– rule · enforced at code review</cite>
+  </div>
+
+  <h3>One exception, the logo-only lifted blue</h3>
+  <p>The canonical brand blue <code>#2A4494</code> is a deep navy. Against the <code>#060608</code> dark canvas, once it becomes a large filled tile sitting next to the brighter orange and green siblings, it reads muted and the three tiles lose visual balance. A single-purpose <strong>lifted blue <code>#4A66D4</code></strong> is used <em>only</em> inside the logo and standalone-mark SVGs when they render on dark surfaces, never anywhere else, never as a brand color. Applied via the <code>--logo-blue</code> CSS variable (default <code>#2A4494</code>, override <code>#4A66D4</code> on dark).</p>
+
+  <h3>Status, system semantics, not brand</h3>
+  <div class="swatch-mini">
+    <div class="sm"><div class="chip" style="background:#34d399"></div><div class="meta"><span class="name">ok</span><span class="hex">#34d399</span><br>live · healthy</div></div>
+    <div class="sm"><div class="chip" style="background:#FBBF24"></div><div class="meta"><span class="name">warn</span><span class="hex">#FBBF24</span><br>pending</div></div>
+    <div class="sm"><div class="chip" style="background:#F87171"></div><div class="meta"><span class="name">err</span><span class="hex">#F87171</span><br>boundary</div></div>
+  </div>
+</section>
+
+
+<!-- ================= 05 · TYPE ================= -->
+<section class="chap" id="type">
+  <div class="chap-num"><strong>chapter 05</strong> · typography</div>
+  <h2>Two faces. <em>No substitutes.</em></h2>
+  <p class="lede"><strong>Space Grotesk</strong>, display, body, UI. Weights 300 through 700. <strong>JetBrains Mono</strong>, numbers, meta labels, code, timestamps. That's the entire type system.</p>
+
+  <h3>Scale</h3>
+  <p>Eleven steps. Stop exactly on one. Never invent a 54px or 40px, pick <code>t-48</code> or <code>t-52</code>.</p>
+
+  <dl class="facts">
+    <dt>t-96 · hero headline max</dt><dd>clamp() at the top of the scale, -0.05em tracking</dd>
+    <dt>t-72 · three-number figure</dt><dd>tabular-nums always, pillar-colored per slot</dd>
+    <dt>t-60 · section heading max</dt><dd>h2 default at wide viewports</dd>
+    <dt>t-48 / t-44 · proof + pricing figures</dt><dd>always tabular-nums</dd>
+    <dt>t-28 / t-24 · card headlines + h3</dt><dd>weight 600–700</dd>
+    <dt>t-20 · hero lead</dt><dd>max-width 720px · line-height 1.45</dd>
+    <dt>t-17 · section lede</dt><dd>body tone, ink-3 color</dd>
+    <dt>t-15 · body</dt><dd>default reading size, ink-2</dd>
+    <dt>t-13 · UI default</dt><dd>nav links · buttons · labels</dd>
+    <dt>t-11 / t-10 · mono meta</dt><dd>uppercase 0.14em ls, always JetBrains Mono</dd>
+  </dl>
+
+  <h3>Signature rules</h3>
+  <ul>
+    <li><strong>Letter-spacing baseline:</strong> <code>-0.02em</code> everywhere. Display ≥64px drops to <code>-0.05em</code>.</li>
+    <li><strong>Tabular-nums:</strong> every figure, prices, percentages, timestamps, uses <code>font-variant-numeric: tabular-nums</code>. No exceptions.</li>
+    <li><strong>Mono for meta:</strong> uppercase labels, section tags, table headers, counters, status chips, are JetBrains Mono at 10–11px with <code>letter-spacing: 0.14em</code>. No decorative prefixes of any kind.</li>
+    <li><strong>Weight ladder:</strong> 300 (rare) · 400 (body) · 500 (UI-strong) · 600 (card h3) · 700 (h1, h2, large numbers). Never bold a body paragraph.</li>
+  </ul>
+</section>
+
+
+<!-- ================= 06 · MOTION ================= -->
+<section class="chap" id="motion">
+  <div class="chap-num"><strong>chapter 06</strong> · motion</div>
+  <h2>Motion is the product, <em>working.</em></h2>
+  <p class="lede">The motion system exists to make a static page feel like telemetry you can watch. Every animation is functional, it signals that something is happening, not that the page is decorated.</p>
+
+  <h3>The signature</h3>
+  <p>One hover behavior defines the whole system:</p>
+  <ul>
+    <li><strong>translateY(-4px)</strong>, the card rises 4px</li>
+    <li><strong>border-color → ink</strong>, the border brightens to cream</li>
+    <li><strong>box-shadow: 0 8px 0 -4px var(--zop-orange)</strong>, a hard orange block appears 8px below, no blur</li>
+    <li><strong>::after bar grows top-to-bottom</strong> in orange, 4px wide, along the left edge</li>
+  </ul>
+  <p>All four changes fire at the same 250ms ease-out. That single gesture is the <em>feel</em> of ZopDev.</p>
+
+  <h3>Durations</h3>
+  <dl class="facts">
+    <dt>--dur-fast · 160ms</dt><dd>hover state-change · arrow slide · link underline</dd>
+    <dt>--dur-med · 250ms</dt><dd>card lift · border-brighten · CTA fill-slide · the signature</dd>
+    <dt>--dur-slow · 400ms</dt><dd>count-up reveal · three-numbers stagger · hero entrance</dd>
+    <dt>--dur-xslow · 520ms</dt><dd>section reveal on viewport enter · only this one use</dd>
+  </dl>
+
+  <h3>Eases</h3>
+  <p>Four cubic-beziers. Never invent a fifth.</p>
+  <ul>
+    <li><code>--ease-out</code> · cubic-bezier(.22, 1, .36, 1) · default for all state changes</li>
+    <li><code>--ease-in-out</code> · cubic-bezier(.65, 0, .35, 1) · subtle loops (mark pulse)</li>
+    <li><code>--ease-spring</code> · cubic-bezier(.175, .885, .32, 1.275) · only for reveal-in</li>
+    <li><code>--ease-snap</code> · cubic-bezier(.19, 1, .22, 1) · rare · close-in accelerations</li>
+  </ul>
+
+  <div class="pullq">
+    <p>Respect <code>prefers-reduced-motion</code>, always. The system collapses to a 1ms no-op globally when the user has the setting on.</p>
+    <cite>– baseline · enforced in tokens.css</cite>
+  </div>
+</section>
+
+
+<!-- ================= 07 · VOICE ================= -->
+<section class="chap" id="voice">
+  <div class="chap-num"><strong>chapter 07</strong> · voice &amp; tone</div>
+  <h2>Direct. Declarative. <em>Confident.</em></h2>
+  <p class="lede">Short sentences. Active verbs. Concrete numbers. No hedging. No "solutions"-speak. Every sentence either tells the reader what to do or what they'll feel when they do it.</p>
+
+  <h3>Principles</h3>
+  <ul>
+    <li><strong>Outcome over feature.</strong> Lead with the number the customer cares about, not the feature that produced it.</li>
+    <li><strong>Claim language.</strong> We don't enter categories, we name them. "The Continuous CloudOps platform." "The CDCR loop." "The three-numbers dashboard."</li>
+    <li><strong>Numbers are punctuation.</strong> Every claim is immediately followed by a concrete figure. "5 min to connect. 7 min to first fix. 42% median week-one cut."</li>
+    <li><strong>Em dashes over colons.</strong> The rhythm of the brand.</li>
+  </ul>
+
+  <h3>Before / after</h3>
+
+  <h4>Example 1 · hero</h4>
+  <div class="voice-row">
+    <div class="voice-col bad"><div class="t">don't</div><p>We provide a comprehensive cloud optimization platform that helps enterprises leverage advanced analytics to drive efficiency at scale.</p></div>
+    <div class="voice-col good"><div class="t">do</div><p>See everything. Find what's wrong. Fix it in one click.</p></div>
+  </div>
+
+  <h4>Example 2 · feature</h4>
+  <div class="voice-row">
+    <div class="voice-col bad"><div class="t">don't</div><p>Our sophisticated machine-learning engine helps identify potential areas for cost reduction across your cloud infrastructure.</p></div>
+    <div class="voice-col good"><div class="t">do</div><p>Finds idle resources, over-provisioned instances, orphaned storage. Scores them by $ impact × risk × effort. Surfaces the top 10.</p></div>
+  </div>
+
+  <h4>Example 3 · trigger</h4>
+  <div class="voice-row">
+    <div class="voice-col bad"><div class="t">don't</div><p>Get ready for your next board review with confidence, ZopDev helps you prepare.</p></div>
+    <div class="voice-col good"><div class="t">do</div><p>You don't clean a messy room to save space. You clean it because someone important is coming.</p></div>
+  </div>
+
+  <h3>Words we use</h3>
+  <p><code>see</code> · <code>find</code> · <code>fix</code> · <code>continuous</code> · <code>defensible</code> · <code>reversible</code> · <code>loop</code> · <code>under 60 seconds</code> · <code>the only</code> · <code>one click</code></p>
+
+  <h3>Words we never use</h3>
+  <p><code>solutions</code> · <code>leverage</code> · <code>synergy</code> · <code>best-in-class</code> · <code>enterprise-grade</code> (unless literally stating a tier) · <code>empower</code> · <code>journey</code> · <code>unlock value</code></p>
+</section>
+
+
+<!-- ================= 08 · APPS ================= -->
+<section class="chap" id="apps">
+  <div class="chap-num"><strong>chapter 08</strong> · application examples</div>
+  <h2>Every surface, one grammar.</h2>
+  <p class="lede">The same tokens, the same mark, the same voice, scaled to fit whatever the surface is: a business card, a pitch slide, a social tile, an email signature, an invoice. The reader should recognize it in ~200ms without reading any copy.</p>
+
+  <div class="apps">
+    <div class="app">
+      <span class="tag">01 · business card</span>
+      <h4>Front · dark canvas · mark centered · name + title mono</h4>
+      <div class="app-vis"><span style="font-family:var(--mono); font-size:var(--t-11); letter-spacing:var(--ls-meta); color:var(--ink-4)">talvinder singh</span> <span style="margin-left:auto; font-family:var(--mono); font-size:var(--t-10); color:var(--ink-4)">founder</span></div>
+    </div>
+    <div class="app paper">
+      <span class="tag">02 · email signature</span>
+      <h4>Sign-off · mono · mark · role · direct link</h4>
+      <div class="app-vis"><span style="font-weight:var(--fw-semibold)">– talvinder</span> <span style="font-family:var(--mono); color:var(--ink-4); font-size:var(--t-11)">· zop.dev</span></div>
+    </div>
+    <div class="app orange">
+      <span class="tag">03 · social tile</span>
+      <h4>1080×1080 · orange ground · huge figure · pillar-colored CTA</h4>
+      <div class="app-vis">$48K <span style="font-family:var(--mono); font-weight:var(--fw-regular); font-size:var(--t-11); margin-left:auto; letter-spacing:var(--ls-meta-tight)">reclaimed in 24h</span></div>
+    </div>
+    <div class="app">
+      <span class="tag">04 · pitch slide · title</span>
+      <h4>Dark · huge h2 · orange verb · mono meta</h4>
+      <div class="app-vis"><span style="font-weight:var(--fw-bold); font-size:var(--t-17)">Fix it</span> <span style="color:var(--zop-orange)">· in one click.</span></div>
+    </div>
+    <div class="app">
+      <span class="tag">05 · product UI chrome</span>
+      <h4>App shell · live ticker · three-numbers · CDCR pulse</h4>
+      <div class="app-vis"><svg viewBox="0 0 32 32" style="width:18px; height:18px; flex-shrink:0"><use href="#mark-zopdev"/></svg> <span style="font-size:var(--t-12); font-family:var(--mono)">atlas · 847 resources</span></div>
+    </div>
+    <div class="app paper">
+      <span class="tag">06 · invoice / report</span>
+      <h4>Paper canvas · three-numbers · signed footer</h4>
+      <div class="app-vis"><span style="font-family:var(--mono); font-size:var(--t-11); letter-spacing:var(--ls-meta)">showback</span> <span style="margin-left:auto; font-weight:var(--fw-bold); font-size:var(--t-17)">$38,210</span></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================= 09 · SUB-BRANDS ================= -->
+<section class="chap" id="subs">
+  <div class="chap-num"><strong>chapter 09</strong> · sub-brands</div>
+  <h2>One family, <em>three products.</em></h2>
+  <p class="lede">ZopDev is the umbrella. ZopNight, ZopDay, and ZopCloud sit under it. Each inherits the mark, type, and motion, but each owns one of the three pillar colors as its <strong>primary identity color</strong>.</p>
+
+  <dl class="facts">
+    <dt>ZopDev · parent</dt><dd>all three pillar colors · dark canvas default · the Continuous CloudOps platform</dd>
+    <dt>ZopNight · blue · secure</dt><dd>cloud optimization at night, when systems sleep. Blue is dominant.</dd>
+    <dt>ZopDay · orange · speed</dt><dd>deployment + release velocity. Orange is dominant.</dd>
+    <dt>ZopCloud · green · savings</dt><dd>managed savings + Showback reporting. Green is dominant.</dd>
+  </dl>
+
+  <h3>Rules for sub-brand marks</h3>
+  <ul>
+    <li>Each sub-brand uses the same 2×2 grid structure. The product's pillar tile is <strong>full saturation</strong>; the other two tiles drop to <code>var(--bg-3)</code> (on dark) or <code>rgba(10,10,10,0.06)</code> (on paper).</li>
+    <li>Wordmark: "Zop" stays in ink/cream · the product suffix ("Night", "Day", "Cloud") takes the pillar color.</li>
+    <li>Never use ZopDev's full-color mark on a sub-brand page. Pick a lane.</li>
+  </ul>
+</section>
+
+
+<!-- ================= 10 · RULES ================= -->
+<section class="chap" id="rules">
+  <div class="chap-num"><strong>chapter 10</strong> · standing rules</div>
+  <h2>Enforced at <em>every</em> code review.</h2>
+  <p class="lede">These are not suggestions. A PR that violates any of the "don't" rules below gets rejected on principle, the grammar of the brand has to hold, even when no one's looking.</p>
+
+  <div class="dd">
+    <div class="do">
+      <h5>DO</h5>
+      <ul>
+        <li>Solid color fills · pillar-tinted rgba for subtle surfaces</li>
+        <li>Hard offset shadows: <code>0 8px 0 -4px var(--zop-orange)</code></li>
+        <li>Hairline 1px borders · sharp corners globally</li>
+        <li>One orange moment per viewport</li>
+        <li>Tabular-nums on every figure</li>
+        <li>Mono for meta · Sans for everything else</li>
+        <li>Respect <code>prefers-reduced-motion</code></li>
+        <li>Pillar → color binding (blue=secure · orange=speed · green=savings)</li>
+        <li>Three-numbers order always: Spent · Wasted · Recoverable</li>
+      </ul>
+    </div>
+    <div class="dont">
+      <h5>DON'T</h5>
+      <ul>
+        <li><strong style="color:#b11f1f">No radial-gradient anywhere</strong>, especially no faded orange / blue / green "glow" blobs on hero or CTA sections. Banned outright.</li>
+        <li>No linear-gradient on components. Only exception: the homepage body pixel-grid wash at rgba(255,255,255,0.025).</li>
+        <li>No filter:blur. Backdrop-filter permitted only on the sticky homepage nav, nowhere else.</li>
+        <li>No drop-shadow with any blur radius</li>
+        <li>No rounded corners (9999px pills are the only exception)</li>
+        <li>No two pillar colors on the same CTA</li>
+        <li>No rotation or skew on the mark</li>
+        <li>No fourth tile on the mark</li>
+        <li>No "leverage" / "solutions" / "synergy" copy</li>
+        <li>No <code>//</code> decorative prefix on labels · no code-comment cosplay anywhere, ever</li>
+        <li>No figure without tabular-nums</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================= 11 · CONTACT ================= -->
+<section class="chap" id="contact">
+  <div class="chap-num"><strong>chapter 11</strong> · assets &amp; contact</div>
+  <h2>Questions go to <em>design@zop.dev.</em></h2>
+  <p class="lede">Any request that touches brand, new page, new collateral, new partner asset, external co-marketing, starts here. Response time under 24 hours.</p>
+
+  <dl class="facts">
+    <dt>brand owner</dt><dd><a href="mailto:design@zop.dev" style="color:var(--zop-orange)">design@zop.dev</a> · ravindra sisodia</dd>
+    <dt>design system files</dt><dd><code>tokens.css</code> · <code>styleguide.html</code> · <code>brand-guidelines.html</code>, all in <code>/zopdev-site/</code></dd>
+    <dt>logo pack</dt><dd>SVG + PNG · color · monochrome · favicon set · social avatars, available on request</dd>
+    <dt>typeface licenses</dt><dd>Space Grotesk (OFL) · JetBrains Mono (OFL) · both free, no approvals needed</dd>
+    <dt>partner co-marketing</dt><dd>request co-brand lockup via design@zop.dev, never compose ad-hoc</dd>
+    <dt>press inquiries</dt><dd>press@zop.dev · press kit coming in Phase 3 of the site buildout</dd>
+  </dl>
+</section>
+
+
+<!-- ================= 12 · CHANGELOG ================= -->
+<section class="chap" id="changelog">
+  <div class="chap-num"><strong>chapter 12</strong> · changelog</div>
+  <h2>Versions of this document.</h2>
+  <p class="lede">Every change to the brand is logged. Read the changelog before assuming what version a partner received.</p>
+
+  <dl class="facts">
+    <dt>v1.0 · 2026-04-21</dt><dd>first canonical release, derived from v1.3 motion variant · homepage lock-in · tokens extracted · styleguide published · this document published</dd>
+    <dt>v0.9 · 2026-04-20</dt><dd>variant comparison complete · v1.3-motion selected as direction · 21 variants archived in /zopdev-variants/</dd>
+    <dt>v0.7 · 2026-04-15</dt><dd>research synthesis complete · three-pillar model locked (Secure · Speed · Savings)</dd>
+    <dt>v0.5 · 2026-04-01</dt><dd>initial wordmark + mark explorations · 2×2 grid direction chosen</dd>
+    <dt>v0.1 · 2026-03-10</dt><dd>research phase kickoff · 7 interviews scheduled</dd>
+  </dl>
+</section>
+
+</div>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="walkthrough.html">Product guide</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developers.html">Documentation</a></li>
+        <li><a href="developers.html">API reference</a></li>
+        <li><a href="developers.html">MCP server</a></li>
+        <li><a href="developers.html">SDK &amp; CLI</a></li>
+        <li><a href="developers.html">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-globe">
+      <div class="foot-globe-left">
+        <a href="/" class="foot-globe-mark" aria-label="ZopDev">
+          <svg class="foot-globe-logo" viewBox="0 0 715 276" aria-hidden="true">
+            <use href="#logo-zopdev"/>
+          </svg>
+        </a>
+      </div>
+      <div class="foot-globe-right">
+        <div class="foot-regions-v2" id="foot-regions-v2">
+          <canvas id="foot-regions-map"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom foot-bottom-3">
+      <div class="foot-copy">© <span data-year>2026</span> ZopDev · <a href="trust.html">privacy</a> · <a href="trust.html">terms</a></div>
+      <div class="foot-mid">made with <svg viewBox="0 0 7 6" aria-hidden="true"><rect x="1" y="0" width="1" height="1"/><rect x="2" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="0" y="1" width="7" height="1"/><rect x="0" y="2" width="7" height="1"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg> by <a href="https://zop.dev" target="_blank" rel="noopener">zop.dev</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="chrome-darkfold.js" defer></script>
+<script src="chrome-mobilenav.js" defer></script>
+<script src="chrome-footer.js" defer></script>
+</body>
+</html>

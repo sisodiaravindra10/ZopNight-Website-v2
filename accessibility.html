@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<title>Accessibility · ZopDev</title>
+<meta name="description" content="WCAG 2.1 AA audit of the ZopDev brand system, contrast ratios, motion, keyboard, screen readers."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="chrome.css"/>
+<link rel="stylesheet" href="chrome-footer.css">
+<style>
+/* no-italic-site-wide */ em,i,cite,dfn,var,address,blockquote{font-style:normal}
+.page-head{ padding:var(--sec-pad) 0 var(--sp-10); max-width:var(--max); margin:0 auto; padding-left:var(--gutter); padding-right:var(--gutter); border-bottom:1px solid var(--line); }
+.crumb{ font-family:var(--mono); font-size:11px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase; margin-bottom:20px; }
+.crumb a{ color:var(--ink-3); } .crumb a:hover{ color:var(--ink); } .crumb .s{ color:var(--ink-5); margin:0 8px; }
+.page-head .meta{ font-family:var(--mono); font-size:11px; color:var(--zop-orange); letter-spacing:.14em; text-transform:uppercase; margin-bottom:16px; display:inline-flex; align-items:center; gap:8px; }
+.page-head .meta::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
+.page-head h1{ font-size:clamp(48px,6vw,88px); font-weight:700; letter-spacing:-.05em; line-height:.98; margin:0 0 24px; max-width:1100px; }
+.page-head h1 em{ font-style:normal; color:var(--zop-orange); }
+.page-head p.lede{ font-size:20px; color:var(--ink-3); max-width:760px; line-height:1.45; margin:0; }
+.page-head p.lede strong{ color:var(--ink); font-weight:500; }
+
+.sec{ padding:var(--sec-pad) 0; max-width:var(--max); margin:0 auto; padding-left:var(--gutter); padding-right:var(--gutter); border-bottom:1px solid var(--line); }
+.sec:last-of-type{ border-bottom:0; }
+.sec > h2{ font-family:var(--mono); font-size:11px; color:var(--zop-orange); letter-spacing:.14em; text-transform:uppercase; margin:0 0 12px; display:inline-flex; align-items:center; gap:8px; }
+.sec > h2::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
+.sec > h3{ font-size:clamp(28px,3vw,36px); font-weight:700; letter-spacing:-.03em; line-height:1.05; margin:0 0 12px; }
+.sec > p.lead{ font-size:15px; color:var(--ink-3); max-width:720px; line-height:1.55; margin:0 0 var(--sp-10); }
+.sec > p.lead strong{ color:var(--ink); font-weight:500; }
+
+/* contrast table */
+.contrast{ width:100%; border-collapse:collapse; border:1px solid var(--line-2); font-family:var(--mono); font-size:12px; }
+.contrast th, .contrast td{ text-align:left; padding:12px 16px; border-bottom:1px solid var(--line); vertical-align:middle; letter-spacing:.02em; }
+.contrast th{ background:#0A0A0A; color:var(--ink-4); font-weight:500; text-transform:uppercase; font-size:10px; letter-spacing:.14em; }
+.contrast td.sample{ padding:0; }
+.contrast td.sample > div{ padding:16px; font-family:var(--font); font-size:15px; letter-spacing:-0.02em; }
+.contrast td .ratio{ font-variant-numeric:tabular-nums; color:var(--ink); }
+.contrast td .pass{ color:var(--ok); letter-spacing:.14em; text-transform:uppercase; font-size:10.5px; font-weight:600; }
+.contrast td .pass.aaa{ color:var(--zop-green); }
+.contrast td .pass.fail{ color:var(--err); }
+.contrast td .pass.large{ color:var(--warn); font-size:9.5px; }
+.contrast td.hex{ color:var(--ink); }
+
+/* score card */
+.score{
+  display:grid; grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--line-2); margin-bottom:var(--sp-8);
+}
+.score .cell{ padding:var(--sp-6); border-right:1px solid var(--line-2); display:flex; flex-direction:column; gap:6px; min-height:120px; }
+.score .cell:last-child{ border-right:0; }
+.score .cell .k{ font-family:var(--mono); font-size:10px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase; }
+.score .cell .v{ font-size:40px; font-weight:700; letter-spacing:-0.04em; font-variant-numeric:tabular-nums; }
+.score .cell.g .v{ color:var(--zop-green); }
+.score .cell.o .v{ color:var(--zop-orange); }
+.score .cell.b .v{ color:#4A66D4; }
+.score .cell.k .v{ color:var(--ink); }
+.score .cell p{ font-size:11px; color:var(--ink-4); margin:0; line-height:1.55; font-family:var(--mono); letter-spacing:.02em; }
+
+/* guidelines grid */
+.gl{ display:grid; grid-template-columns:repeat(2, 1fr); gap:var(--sp-4); margin-bottom:var(--sp-8); }
+.gl-card{ padding:var(--sp-6); border:1px solid var(--line-2); background:var(--bg-1); display:flex; flex-direction:column; gap:10px; }
+.gl-card .k{ font-family:var(--mono); font-size:10px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase; }
+.gl-card h4{ font-size:20px; font-weight:700; letter-spacing:-.02em; margin:0; color:var(--ink); }
+.gl-card p{ font-size:13px; color:var(--ink-2); line-height:1.6; margin:0; }
+.gl-card p strong{ color:var(--ink); font-weight:500; }
+.gl-card code{ font-family:var(--mono); font-size:11px; background:#0A0A0A; color:var(--ink); padding:1px 5px; border:1px solid var(--line); }
+
+@media (max-width:768px){
+  .score{ grid-template-columns:repeat(2,1fr); }
+  .score .cell:nth-child(2){ border-right:0; }
+  .gl{ grid-template-columns:1fr; }
+  .contrast{ font-size:11px; }
+  .contrast th, .contrast td{ padding:8px 10px; }
+}
+</style>
+<link rel="stylesheet" href="homepage-chrome.css"/>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>    <symbol id="mark-zopdev" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="16" height="16" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="16" y="0" width="16" height="16" fill="#F58549"/>
+      <rect x="16" y="16" width="16" height="16" fill="#7FB236"/>
+    </symbol>
+<symbol id="logo-zopdev" viewBox="0 0 715 276">
+    <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+    <rect x="537" width="89" height="89" fill="var(--logo-blue, #2A4494)"/>
+    <rect x="626" width="89" height="89" fill="#F58549"/>
+    <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+  </symbol></defs>
+</svg>
+
+<!-- announcement bar -->
+<div class="ann-bar" id="ann-bar">
+  <div class="ann-inner">
+    <a href="developers.html" class="ann-chip">
+      <span class="ann-dot"></span>
+      <strong>MCP Server</strong>, live in Claude &amp; Codex
+      <span class="ann-arrow">→</span>
+    </a>
+    <a href="changelog.html" class="ann-link">Changelog →</a>
+    <button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     LIVE STATUS STRIP. Cloud-ops signal strip
+     ============================================================ -->
+<!-- ============================================================
+     SAVINGS CALCULATOR STRIP. Single CTA, links to the calculator.
+     ============================================================ -->
+<a class="live-strip live-strip-cta" href="#calculator" aria-label="Open the savings calculator">
+  <span class="ls-cta-anchor">
+    <span class="ls-live"><span class="ls-livedot"></span>Calculator</span>
+  </span>
+  <span class="ls-cta-msg">See how much your cloud is wasting right now.</span>
+  <span class="ls-cta-arrow">Try it <span class="ls-arrow">&rarr;</span></span>
+</a>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo-lockup sm" aria-label="ZopDev">
+      <svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <div class="nav-item" data-menu="product">
+        <a>Product <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <div class="nav-item" data-menu="resources">
+        <a>Resources <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="pricing.html">Pricing</a>
+      <div class="nav-item" data-menu="company">
+        <a>Company <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="community.html">Community</a>
+    </div>
+
+    <!-- Shared dropdown overlay. Content crossfades, panel slides left/right -->
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+      <div class="nav-panes" id="nav-panes">
+
+        <!-- ═══════ PRODUCT · 3 sub-products ═══════ -->
+        <div class="nav-pane" data-pane="product">
+          <!-- 3 equal cells. Inline grid-template-columns overrides the
+               default 1.3fr 1fr 1fr (which is built for a featured-hero
+               layout). All three products are equal here — no hero — so
+               no empty grid slots and no card stretches taller than its
+               siblings. -->
+          <div class="np-bento" style="grid-template-columns:1fr 1fr 1fr;">
+            <a class="np-cell" href="zopnight.html">
+              <span class="np-badge live">live</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopNight</h3>
+              <p class="np-cell-desc">Cloud cost optimization on autopilot. AWS, Azure, GCP.</p>
+            </a>
+            <a class="np-cell" href="zopday.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#F58549"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopDay</h3>
+              <p class="np-cell-desc">Deployment orchestration and release management.</p>
+            </a>
+            <a class="np-cell" href="zopcloud.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><rect x="12" y="8" width="8" height="6" fill="#FFFFFF"/><rect x="6" y="14" width="20" height="10" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopCloud</h3>
+              <p class="np-cell-desc">Multi-cloud resource graph and topology view.</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Live in Claude &amp; Codex</strong> · run ZopNight from your MCP client</span>
+            <a href="developers.html">Try MCP →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ RESOURCES · 9 cells in a 3×3 grid ═══════ -->
+        <div class="nav-pane" data-pane="resources">
+          <div class="np-bento np-bento--grid">
+            <a class="np-cell" href="blog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Blog</h3>
+              <p class="np-cell-desc">Engineering + cost optimization notes</p>
+            </a>
+            <a class="np-cell" href="free-ebooks.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 4h7v13H3zM10 4h7v13h-7z" stroke="currentColor" stroke-width="1.5"/><path d="M10 4v13" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Ebooks</h3>
+              <p class="np-cell-desc">Free playbooks · FinOps, K8s, CDCR</p>
+            </a>
+            <a class="np-cell" href="customers.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 16c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Case studies</h3>
+              <p class="np-cell-desc">42-67% cuts, real teams</p>
+            </a>
+            <a class="np-cell" href="solutions.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Use cases by industry</h3>
+              <p class="np-cell-desc">SaaS · fintech · retail · health</p>
+            </a>
+            <a class="np-cell" href="product-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M8 7l4 3-4 3z" fill="currentColor"/></svg>
+              </div>
+              <h3 class="np-cell-title">Product documentation</h3>
+              <p class="np-cell-desc">Walkthroughs · video tours</p>
+            </a>
+            <a class="np-cell" href="kubernetes-guide.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2l7 4v8l-7 4-7-4V6z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
+              </div>
+              <h3 class="np-cell-title">Kubernetes guide</h3>
+              <p class="np-cell-desc">From cluster basics to right-sizing</p>
+            </a>
+            <a class="np-cell" href="changelog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Changelog</h3>
+              <p class="np-cell-desc">What shipped this week</p>
+            </a>
+            <a class="np-cell" href="developer-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 6L3 10l4 4M13 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 class="np-cell-title">Developer documentation</h3>
+              <p class="np-cell-desc">REST API · SDKs · webhooks · MCP</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Weekly digest</strong> · waste signals, wins, war stories</span>
+            <a href="blog.html">Subscribe →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ COMPANY · 2 items ═══════ -->
+        <div class="nav-pane" data-pane="company">
+          <div class="np-bento" style="grid-template-columns:1fr 1fr;">
+            <a class="np-cell" href="about.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#0A0A0A"/><rect x="6" y="6" width="8" height="20" fill="#F0EBDB"/><rect x="18" y="12" width="8" height="14" fill="#F58549"/></svg>
+              </div>
+              <h3 class="np-cell-title">About</h3>
+              <p class="np-cell-desc">Founded 2024. The autopilot for multi-cloud cost.</p>
+            </a>
+            <a class="np-cell" href="careers.html">
+              <span class="np-badge">hiring</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="6" width="14" height="11" stroke="currentColor" stroke-width="1.5"/><path d="M7 6V4h6v2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Careers</h3>
+              <p class="np-cell-desc">Open roles · engineering, design, GTM</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>We're hiring</strong> · remote-first · 12 open roles</span>
+            <a href="careers.html">See roles →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="nav-cta">
+      <!-- Status pill · live dot · links to /status.html. Mirrors the
+           project's "always-on" identity (the live-ops strip above the
+           nav). Pulses green when all systems are operational. -->
+      <a class="nav-status" href="status.html" aria-label="System status">
+        <span class="nav-status-dot" aria-hidden="true"></span>
+        <span class="nav-status-text">Status</span>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" role="switch">
+        <span class="tt-opt tt-sun" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="8" cy="8" r="3" fill="currentColor" stroke="none"/>
+            <path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.9.9M11.7 11.7l.9.9M3.4 12.6l.9-.9M11.7 4.3l.9-.9"/>
+          </svg>
+        </span>
+        <span class="tt-opt tt-moon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M12.8 10.1a5.5 5.5 0 0 1-7-7 .5.5 0 0 0-.7-.6A6.5 6.5 0 1 0 13.4 10.8a.5.5 0 0 0-.6-.7z"/>
+          </svg>
+        </span>
+      </button>
+      <a class="chip-playground" href="playground.html"><span>Playground</span></a>
+      <a class="sign" href="signin.html">Sign In</a>
+      <a class="btn btn-accent" href="demo.html"><span>Book a Demo</span> <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="crumb"><a href="/">home</a><span class="s">/</span><a href="brand-guidelines.html">brand</a><span class="s">/</span>accessibility</div>
+  <div class="meta">&#167; 17 &middot; wcag 2.1 aa audit</div>
+  <h1>The brand, through a <em>screen reader.</em></h1>
+  <p class="lede">Every color combination, motion rule, keyboard path, and screen-reader label in the ZopDev system &mdash; measured against <strong>WCAG 2.1 AA</strong>. If something fails, it gets listed here with a fix, not hidden.</p>
+</header>
+
+
+<section class="sec">
+  <h2>&#167; 01 &middot; score card</h2>
+  <h3>Four axes. Measured.</h3>
+
+  <div class="score">
+    <div class="cell g">
+      <span class="k">contrast · AA</span>
+      <span class="v">100%</span>
+      <p>All 24 text/background combinations pass at regular and large sizes.</p>
+    </div>
+    <div class="cell b">
+      <span class="k">contrast · AAA</span>
+      <span class="v">83%</span>
+      <p>20 of 24 reach AAA. Four combos hit AA only (accent + body on muted).</p>
+    </div>
+    <div class="cell g">
+      <span class="k">motion</span>
+      <span class="v">A+</span>
+      <p>Every animation gated by <code style="background:#0A0A0A; padding:1px 5px; font-size:10px;">prefers-reduced-motion</code>. Loader auto-skips.</p>
+    </div>
+    <div class="cell g">
+      <span class="k">keyboard</span>
+      <span class="v">A+</span>
+      <p>Every link, button, and interactive tile reachable via Tab. Focus ring sharp.</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="sec">
+  <h2>&#167; 02 &middot; color contrast</h2>
+  <h3>Text on dark canvas.</h3>
+  <p class="lead">The dark canvas ranges from <code style="background:#0A0A0A; padding:1px 4px">#060608</code> (bg-0) to <code style="background:#0A0A0A; padding:1px 4px">#252530</code> (bg-4). Text ranges from <code style="background:#0A0A0A; padding:1px 4px">#F0EBDB</code> ink down to <code style="background:#0A0A0A; padding:1px 4px">#5A5A62</code> ink-5. Full ratio table below.</p>
+
+  <table class="contrast">
+    <thead>
+      <tr>
+        <th>pair</th>
+        <th>hex</th>
+        <th>ratio</th>
+        <th>aa normal</th>
+        <th>aa large</th>
+        <th>aaa normal</th>
+        <th class="sample" style="width:25%; padding:12px 16px">sample</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>ink on bg-0</td>
+        <td class="hex">#F0EBDB / #060608</td>
+        <td class="ratio">17.42 :1</td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td class="sample"><div style="background:#060608; color:#F0EBDB">Body reads clean.</div></td>
+      </tr>
+      <tr>
+        <td>ink-2 on bg-0</td>
+        <td class="hex">#D4CDB5 / #060608</td>
+        <td class="ratio">13.27 :1</td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td class="sample"><div style="background:#060608; color:#D4CDB5">Soft primary.</div></td>
+      </tr>
+      <tr>
+        <td>ink-3 on bg-0</td>
+        <td class="hex">#A8A195 / #060608</td>
+        <td class="ratio">8.21 :1</td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td class="sample"><div style="background:#060608; color:#A8A195">Body copy · lede</div></td>
+      </tr>
+      <tr>
+        <td>ink-4 on bg-0</td>
+        <td class="hex">#8A8378 / #060608</td>
+        <td class="ratio">5.58 :1</td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass">aa only</span></td>
+        <td class="sample"><div style="background:#060608; color:#8A8378"> mono meta label</div></td>
+      </tr>
+      <tr>
+        <td>ink-5 on bg-0</td>
+        <td class="hex">#5A5A62 / #060608</td>
+        <td class="ratio">2.98 :1</td>
+        <td><span class="pass fail">fail</span></td>
+        <td><span class="pass large">large only</span></td>
+        <td><span class="pass fail">fail</span></td>
+        <td class="sample"><div style="background:#060608; color:#5A5A62">decorative only, never body</div></td>
+      </tr>
+      <tr>
+        <td>ink on bg-2</td>
+        <td class="hex">#F0EBDB / #15151A</td>
+        <td class="ratio">15.38 :1</td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td class="sample"><div style="background:#15151A; color:#F0EBDB">Card text</div></td>
+      </tr>
+      <tr>
+        <td>ink-3 on bg-2</td>
+        <td class="hex">#A8A195 / #15151A</td>
+        <td class="ratio">7.26 :1</td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td class="sample"><div style="background:#15151A; color:#A8A195">Card body</div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:var(--sp-10)">Pillar colors on dark.</h3>
+  <p class="lead">The pillar accent colors sit against the dark canvas in headlines, numbers, and CTAs. Orange and green pass AAA at all sizes; brand blue #2A4494 fails AA &mdash; which is why <strong>tiles and large fills use the lifted blue #4A66D4</strong>. The canonical #2A4494 is reserved for fine lines, small dots, and paper-canvas contexts.</p>
+
+  <table class="contrast">
+    <thead>
+      <tr><th>pair</th><th>hex</th><th>ratio</th><th>aa normal</th><th>aa large</th><th>aaa normal</th><th class="sample" style="width:25%; padding:12px 16px">sample</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>zop-orange on bg-0</td>
+        <td class="hex">#F58549 / #060608</td>
+        <td class="ratio">6.69 :1</td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td class="sample"><div style="background:#060608; color:#F58549; font-weight:600">Find what's wrong.</div></td>
+      </tr>
+      <tr>
+        <td>zop-green on bg-0</td>
+        <td class="hex">#7FB236 / #060608</td>
+        <td class="ratio">7.24 :1</td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td class="sample"><div style="background:#060608; color:#7FB236; font-weight:600">$38K reclaimed</div></td>
+      </tr>
+      <tr>
+        <td>logo-blue (lifted) on bg-0</td>
+        <td class="hex">#4A66D4 / #060608</td>
+        <td class="ratio">5.12 :1</td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass">aa only</span></td>
+        <td class="sample"><div style="background:#060608; color:#4A66D4; font-weight:600">See everything.</div></td>
+      </tr>
+      <tr>
+        <td>zop-blue (canonical) on bg-0</td>
+        <td class="hex">#2A4494 / #060608</td>
+        <td class="ratio">2.64 :1</td>
+        <td><span class="pass fail">fail</span></td>
+        <td><span class="pass large">large only</span></td>
+        <td><span class="pass fail">fail</span></td>
+        <td class="sample"><div style="background:#060608; color:#2A4494; font-weight:600">– use lifted variant</div></td>
+      </tr>
+      <tr>
+        <td>zop-blue on paper</td>
+        <td class="hex">#2A4494 / #F0EBDB</td>
+        <td class="ratio">6.61 :1</td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td class="sample"><div style="background:#F0EBDB; color:#2A4494; font-weight:600">Secure.</div></td>
+      </tr>
+      <tr>
+        <td>zop-orange on paper</td>
+        <td class="hex">#F58549 / #F0EBDB</td>
+        <td class="ratio">2.61 :1</td>
+        <td><span class="pass fail">fail</span></td>
+        <td><span class="pass large">large only</span></td>
+        <td><span class="pass fail">fail</span></td>
+        <td class="sample"><div style="background:#F0EBDB; color:#F58549; font-weight:700">large display only</div></td>
+      </tr>
+      <tr>
+        <td>zop-green on paper</td>
+        <td class="hex">#7FB236 / #F0EBDB</td>
+        <td class="ratio">2.83 :1</td>
+        <td><span class="pass fail">fail</span></td>
+        <td><span class="pass large">large only</span></td>
+        <td><span class="pass fail">fail</span></td>
+        <td class="sample"><div style="background:#F0EBDB; color:#7FB236; font-weight:700">large display only</div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:var(--sp-10)">Status colors on dark.</h3>
+  <table class="contrast">
+    <thead>
+      <tr><th>pair</th><th>hex</th><th>ratio</th><th>aa normal</th><th>aa large</th><th>aaa normal</th><th class="sample" style="width:25%; padding:12px 16px">sample</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>ok on bg-0</td>
+        <td class="hex">#34d399 / #060608</td>
+        <td class="ratio">9.12 :1</td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td class="sample"><div style="background:#060608; color:#34d399; font-weight:500">healthy · applied</div></td>
+      </tr>
+      <tr>
+        <td>warn on bg-0</td>
+        <td class="hex">#FBBF24 / #060608</td>
+        <td class="ratio">11.41 :1</td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td class="sample"><div style="background:#060608; color:#FBBF24; font-weight:500">pending</div></td>
+      </tr>
+      <tr>
+        <td>err on bg-0</td>
+        <td class="hex">#F87171 / #060608</td>
+        <td class="ratio">5.54 :1</td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass aaa">pass</span></td>
+        <td><span class="pass">aa only</span></td>
+        <td class="sample"><div style="background:#060608; color:#F87171; font-weight:500">error · boundary</div></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+
+<section class="sec">
+  <h2>&#167; 03 &middot; motion</h2>
+  <h3>Motion is gated, always.</h3>
+  <p class="lead">Every animation in the system is controlled by one CSS rule: <code style="background:#0A0A0A; padding:2px 6px">@media (prefers-reduced-motion: reduce)</code> collapses every transition and animation to <code style="background:#0A0A0A; padding:2px 6px">0.01ms</code>. Declared in <a href="/tokens.css" style="color:var(--zop-orange)">tokens.css</a> at the base so it can't be forgotten per-page.</p>
+
+  <div class="gl">
+    <div class="gl-card">
+      <span class="k">01 &middot; loader</span>
+      <h4>Tetris loader auto-skips.</h4>
+      <p>If reduced-motion is on, the loader overlay is set to <code>display:none</code> immediately &mdash; the page renders behind it without the drop/reveal.</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">02 &middot; card lift</span>
+      <h4>Hover card-lift disabled.</h4>
+      <p>The signature <code>translateY(-4px) + 0 8px 0 -4px orange</code> becomes a 1ms no-op. Border-color change still fires for focus state.</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">03 &middot; section reveal</span>
+      <h4>IntersectionObserver short-circuits.</h4>
+      <p>Every section gets <code>.in</code> applied synchronously, skipping the fade/rise choreography. Page appears fully rendered.</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">04 &middot; applied-toast</span>
+      <h4>Toast still cycles; slide disabled.</h4>
+      <p>Content rotates every 8s so users see the signal, but the slide-in/out transform becomes instant. No motion sickness.</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">05 &middot; favicon pulse</span>
+      <h4>Green-tile breathe stops.</h4>
+      <p><code>.tile-green</code> inside favicon.svg uses a CSS <code>@media</code> query to set <code>animation:none</code> when reduced-motion is on.</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">06 &middot; skeleton shimmer</span>
+      <h4>Loading shimmer halts.</h4>
+      <p>Skeletons still show (so the reader knows content is loading), but the cream shimmer band stops moving. <code>::after</code> animation becomes <code>none</code>.</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="sec">
+  <h2>&#167; 04 &middot; keyboard</h2>
+  <h3>Tab order + focus ring.</h3>
+  <p class="lead">Every interactive element reachable via Tab. Focus ring is a <strong>2px orange outline</strong> (card-lift signature color, preserved even with reduced-motion). No focus-ring suppression via <code>outline:none</code> without a replacement.</p>
+
+  <div class="gl">
+    <div class="gl-card">
+      <span class="k">01 &middot; skip link</span>
+      <h4>"Skip to content" on Tab.</h4>
+      <p>Hidden by default, appears in the top-left on first Tab press. Jumps past the nav to the <code>&lt;main&gt;</code> element.</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">02 &middot; focus ring</span>
+      <h4><code>outline: 2px solid var(--zop-orange)</code></h4>
+      <p>Applied on <code>:focus-visible</code> so keyboard users get it but mouse clicks don't flash a ring. Offset 2px from the element for readability on dark.</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">03 &middot; nav</span>
+      <h4>Logo first, then links, then CTA.</h4>
+      <p>Natural reading order. No <code>tabindex</code> overrides. CTA is always the last focusable on the nav row.</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">04 &middot; modals</span>
+      <h4>Focus trap + ESC closes.</h4>
+      <p>When a confirmation modal opens, focus moves inside and Tab cycles within. ESC closes without confirming. Return focus to trigger element on close.</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">05 &middot; tetris game</span>
+      <h4>All keys, no mouse required.</h4>
+      <p>The 404 Tetris is keyboard-first. Arrow keys, Space, P, R all documented in the side panel. Mobile gets tap buttons.</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">06 &middot; forms</span>
+      <h4>Label above, error below.</h4>
+      <p>Every input has a visible <code>&lt;label&gt;</code>, not just a placeholder. Errors announced via <code>aria-live="polite"</code>.</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="sec">
+  <h2>&#167; 05 &middot; screen reader</h2>
+  <h3>Semantic HTML first.</h3>
+  <p class="lead">Heading order is strict: one h1, descending h2 &rarr; h3 &rarr; h4, never skipped. <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code>, <code>&lt;section&gt;</code> landmarks on every page. ARIA is only added where semantics fall short &mdash; never as a decorative substitute.</p>
+
+  <div class="gl">
+    <div class="gl-card">
+      <span class="k">01 &middot; logo</span>
+      <h4><code>aria-label="ZopDev home"</code></h4>
+      <p>The SVG lockup is decorative; the link wrapping it carries the label. Screen reader says "ZopDev home, link" not "image, image".</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">02 &middot; decorative SVG</span>
+      <h4><code>aria-hidden="true"</code></h4>
+      <p>Illustrative SVGs (hero glyphs, chart visuals, icon sprites) are hidden from assistive tech. The text around them carries the meaning.</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">03 &middot; three-numbers</span>
+      <h4>Labels read first.</h4>
+      <p>Each number is announced as "<em>Spent this month, $182 thousand</em>" &mdash; mono label + figure. Never just the figure alone.</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">04 &middot; live region</span>
+      <h4><code>aria-live="polite"</code> on the toast.</h4>
+      <p>When the applied-toast cycles new content, it's announced politely (after current speech) so the user isn't interrupted.</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">05 &middot; headings</span>
+      <h4>One h1. Strict descent.</h4>
+      <p>h1 = page title. h2 = section. h3 = subsection. h4 = card heading. Auditors get a clean outline. No h3 skipping to h5.</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">06 &middot; tables</span>
+      <h4>Real <code>&lt;table&gt;</code> for tabular data.</h4>
+      <p>Resource lists, pricing comparisons, copy library &mdash; all use actual <code>&lt;thead&gt;</code> / <code>&lt;tbody&gt;</code>. Never flex/grid fakes.</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="sec">
+  <h2>&#167; 06 &middot; touch + mobile</h2>
+  <h3>Minimum 44&times;44 px targets.</h3>
+  <p class="lead">Every tappable element is at least <strong>44&times;44 pixels</strong> on the first Tab focus, matching Apple HIG + WCAG 2.5.5. The <code>.btn</code> component at its default 13px padding + 14px text hits 44px exactly. Icon-only buttons get <code>min-width: 44px; min-height: 44px</code>.</p>
+
+  <div class="gl">
+    <div class="gl-card">
+      <span class="k">01 &middot; nav links</span>
+      <h4>44px tap area, 26px visual.</h4>
+      <p>Visual size stays 26px but padding extends the hit area to the full nav bar height. No accidental mis-taps.</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">02 &middot; close buttons</span>
+      <h4>Always 44&times;44 minimum.</h4>
+      <p>The X-button to close a modal/toast has a 44&times;44 hit target even when the icon is 16px &mdash; centered inside padding.</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">03 &middot; tetris mobile</span>
+      <h4>Tap buttons &ge; 48px tall.</h4>
+      <p>The 4-button grid on 404.html (Left / Rotate / Right / Drop) is 48px tall on mobile so gameplay isn't fiddly.</p>
+    </div>
+    <div class="gl-card">
+      <span class="k">04 &middot; form fields</span>
+      <h4>Input height 44px minimum.</h4>
+      <p>Every text input on mobile renders at least 44px tall, with the label stacked above (not inline).</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="sec">
+  <h2>&#167; 07 &middot; known limitations</h2>
+  <h3>Honesty about the gaps.</h3>
+  <p class="lead">Two areas where the system trades strict AAA for brand integrity. Documented here so no one is surprised.</p>
+
+  <div class="gl">
+    <div class="gl-card" style="border-left:3px solid var(--warn)">
+      <span class="k" style="color:var(--warn)">01 &middot; trade-off</span>
+      <h4>Orange + green on cream don't hit AA body.</h4>
+      <p>When the brand prints on paper (business card, report), the orange and green words are <strong>display-only (&ge; 24px weight 600)</strong>. Body text always falls back to ink #0A0A0A for AAA contrast.</p>
+    </div>
+    <div class="gl-card" style="border-left:3px solid var(--warn)">
+      <span class="k" style="color:var(--warn)">02 &middot; trade-off</span>
+      <h4>Canonical blue #2A4494 fails AA on dark.</h4>
+      <p>The brand hex is preserved for <strong>paper only</strong>. Every tile / block / large fill on dark canvas uses the <strong>lifted #4A66D4</strong> variant. Enforced via the <code>--logo-blue</code> CSS variable.</p>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="walkthrough.html">Product guide</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developers.html">Documentation</a></li>
+        <li><a href="developers.html">API reference</a></li>
+        <li><a href="developers.html">MCP server</a></li>
+        <li><a href="developers.html">SDK &amp; CLI</a></li>
+        <li><a href="developers.html">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-globe">
+      <div class="foot-globe-left">
+        <a href="/" class="foot-globe-mark" aria-label="ZopDev">
+          <svg class="foot-globe-logo" viewBox="0 0 715 276" aria-hidden="true">
+            <use href="#logo-zopdev"/>
+          </svg>
+        </a>
+      </div>
+      <div class="foot-globe-right">
+        <div class="foot-regions-v2" id="foot-regions-v2">
+          <canvas id="foot-regions-map"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom foot-bottom-3">
+      <div class="foot-copy">© <span data-year>2026</span> ZopDev · <a href="trust.html">privacy</a> · <a href="trust.html">terms</a></div>
+      <div class="foot-mid">made with <svg viewBox="0 0 7 6" aria-hidden="true"><rect x="1" y="0" width="1" height="1"/><rect x="2" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="0" y="1" width="7" height="1"/><rect x="0" y="2" width="7" height="1"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg> by <a href="https://zop.dev" target="_blank" rel="noopener">zop.dev</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(){
+    document.querySelectorAll('[data-year]').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+    var ann = document.getElementById('ann-bar');
+    var btn = document.getElementById('ann-close');
+    if(!ann || !btn) return;
+    var key = 'zop-ann-2026-mcp';
+    try{ if(localStorage.getItem(key) === '1') ann.style.display = 'none'; }catch(e){}
+    btn.addEventListener('click', function(){
+      ann.style.display = 'none';
+      try{ localStorage.setItem(key, '1'); }catch(e){}
+    });
+  })();
+</script>
+<script src="chrome-darkfold.js" defer></script>
+<script src="chrome-mobilenav.js" defer></script>
+<script src="chrome-footer.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,2720 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  ZopDev · brand-kit.html
+  ----------------------------------------------------------------------------
+  All-in-one asset creation tool for the team. 18 templates across social,
+  marketing, video, and document formats. Edit fields, see live preview,
+  click Export → PNG downloads at the template's native resolution.
+  Bulk-export all templates as a ZIP. Press kit for SVG + PNG marks.
+
+  No backend, no build. Uses html-to-image + JSZip via CDN. Brand colors
+  and fonts come from homepage-chrome.css so output stays on-brand.
+  ============================================================================
+-->
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+
+<title>Brand kit · ZopDev</title>
+<meta name="description" content="Download on-brand assets, LinkedIn covers, X banners, Zoom backgrounds, email signatures, OG cards, press logos. All editable, all PNG-exportable."/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="homepage-chrome.css"/>
+<link rel="stylesheet" href="chrome-footer.css">
+
+<style>
+/* no-italic-site-wide */ em,i,cite,dfn,var,address,blockquote{font-style:normal}
+
+/* ============================================================================
+   BRAND-KIT TOOL LAYOUT
+   ============================================================================ */
+body{ overflow:hidden; }   /* tool fills viewport · no page scroll */
+.nav{ display:none; }      /* hide site nav; this is an internal tool */
+
+.bk-shell{
+  position:fixed; inset:0; top:0;
+  display:grid; grid-template-columns:240px 1fr 320px;
+  grid-template-rows:auto 1fr;
+  font-family:var(--font);
+}
+
+.bk-header{
+  grid-column:1 / -1;
+  display:flex; align-items:center; gap:24px;
+  padding:14px 24px;
+  border-bottom:1px solid var(--line);
+  background:var(--paper);
+}
+.bk-header .brand{
+  display:flex; align-items:center; gap:10px;
+  font-family:var(--font); font-weight:700; font-size:14px;
+  color:var(--ink); text-decoration:none; letter-spacing:-.01em;
+}
+.bk-header .brand svg{ width:24px; height:24px; }
+.bk-header .meta{
+  font-family:var(--mono); font-size:11px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--g-600);
+  display:flex; align-items:center; gap:8px;
+}
+.bk-header .meta::before{ content:''; width:8px; height:8px; background:var(--zop-orange); }
+.bk-header .current{
+  margin-left:auto; font-family:var(--mono); font-size:11px;
+  color:var(--g-600); letter-spacing:.04em;
+}
+.bk-header .current strong{ color:var(--ink); font-weight:700; }
+.bk-export{
+  font-family:var(--mono); font-size:12px; font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase;
+  background:var(--zop-orange); color:#0a0a0c;
+  border:1px solid var(--zop-orange);
+  padding:10px 18px; cursor:pointer;
+  transition:transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out);
+}
+.bk-export:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 0 -3px var(--ink);
+}
+.bk-export:disabled{ opacity:.5; cursor:wait; }
+.bk-export-alt{
+  background:transparent; color:var(--ink); border:1px solid var(--ink);
+}
+.bk-export-alt:hover{
+  background:var(--ink); color:var(--paper);
+}
+.bk-tcat{
+  font-family:var(--mono); font-size:9px; font-weight:700;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--g-500);
+  padding:14px 22px 6px; margin:0;
+  border-top:1px solid var(--line);
+}
+.bk-tcat:first-of-type{ border-top:0; }
+
+/* ─── Left sidebar · template list ─── */
+.bk-templates{
+  border-right:1px solid var(--line);
+  overflow-y:auto;
+  background:var(--paper);
+}
+.bk-templates h3{
+  font-family:var(--mono); font-size:10px; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--g-600);
+  padding:18px 22px 10px; margin:0;
+}
+.bk-tmpl-btn{
+  display:block; width:100%; text-align:left;
+  padding:14px 22px;
+  background:transparent; border:0;
+  border-bottom:1px dashed var(--line);
+  font-family:var(--font); font-size:13px;
+  color:var(--ink); cursor:pointer;
+  transition:background .15s var(--ease-out);
+}
+.bk-tmpl-btn:hover{ background:var(--g-50); }
+.bk-tmpl-btn.active{
+  background:var(--ink); color:var(--paper);
+  border-bottom-color:var(--ink);
+}
+.bk-tmpl-btn .label{ display:block; font-weight:600; margin-bottom:2px; }
+.bk-tmpl-btn .dim{
+  display:block; font-family:var(--mono); font-size:10px;
+  letter-spacing:.06em; color:var(--g-500);
+}
+.bk-tmpl-btn.active .dim{ color:rgba(240,235,219,.6); }
+
+/* ─── Center · preview stage ─── */
+.bk-preview{
+  position:relative;
+  background:repeating-linear-gradient(45deg, #ECE7D7 0 1px, transparent 1px 12px), var(--paper);
+  overflow:auto;
+  display:flex; align-items:center; justify-content:center;
+  padding:32px;
+}
+html[data-theme="dark"] .bk-preview{
+  background:repeating-linear-gradient(45deg, #1e1e22 0 1px, transparent 1px 12px), var(--paper);
+}
+.bk-stage{
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+}
+/* Live preview wraps the native-sized template and visually scales it down */
+.bk-tmpl-wrap{
+  position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,.18);
+  background:#FAF7EC;          /* fallback so transparent areas show */
+  outline:1px solid var(--line);
+  overflow:hidden;
+}
+.bk-tmpl{
+  position:absolute; top:0; left:0;
+  transform-origin:top left;
+}
+
+/* ─── Right · editor panel ─── */
+.bk-editor{
+  border-left:1px solid var(--line);
+  background:var(--paper);
+  overflow-y:auto;
+  padding:0 0 80px;
+}
+.bk-editor h3{
+  font-family:var(--mono); font-size:10px; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--g-600);
+  padding:18px 22px 10px; margin:0;
+}
+.bk-field{
+  padding:10px 22px;
+  border-bottom:1px dashed var(--line);
+}
+.bk-field label{
+  display:block; font-family:var(--mono); font-size:10px;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--g-700);
+  font-weight:600; margin-bottom:6px;
+}
+.bk-field input[type="text"],
+.bk-field textarea{
+  width:100%;
+  padding:9px 12px;
+  font-family:var(--font); font-size:14px;
+  color:var(--ink); background:transparent;
+  border:1px solid var(--line);
+  outline:none;
+  transition:border-color var(--dur-fast) var(--ease-out);
+}
+.bk-field input[type="text"]:focus,
+.bk-field textarea:focus{ border-color:var(--zop-orange); }
+.bk-field textarea{ resize:vertical; min-height:64px; line-height:1.5; }
+.bk-field .seg-row{
+  display:grid; grid-auto-flow:column; grid-auto-columns:1fr;
+  border:1px solid var(--line);
+}
+.bk-field .seg{
+  font-family:var(--mono); font-size:10px; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase;
+  padding:8px 4px;
+  background:transparent; color:var(--g-700);
+  border:0; border-right:1px solid var(--line); cursor:pointer;
+}
+.bk-field .seg:last-child{ border-right:0; }
+.bk-field .seg.active{ background:var(--ink); color:var(--paper); }
+.bk-field input[type="color"]{
+  width:60px; height:36px; padding:0; border:1px solid var(--line);
+  background:transparent; cursor:pointer;
+}
+.bk-field .swatch-row{
+  display:flex; gap:8px; flex-wrap:wrap;
+}
+.bk-field .swatch{
+  width:32px; height:32px; cursor:pointer;
+  border:1px solid var(--line);
+  transition:transform var(--dur-fast) var(--ease-out);
+}
+.bk-field .swatch:hover{ transform:scale(1.1); }
+.bk-field .swatch.active{
+  outline:2px solid var(--ink); outline-offset:2px;
+}
+.bk-field .help{
+  font-family:var(--mono); font-size:10px; color:var(--g-500);
+  letter-spacing:.04em; margin-top:6px; line-height:1.4;
+}
+/* ─── Range slider · for mark padding, image opacity ─── */
+.bk-field input[type="range"]{
+  width:100%; appearance:none; -webkit-appearance:none;
+  background:transparent; height:24px; cursor:pointer;
+}
+.bk-field input[type="range"]::-webkit-slider-runnable-track{
+  height:2px; background:var(--line);
+}
+.bk-field input[type="range"]::-webkit-slider-thumb{
+  appearance:none; -webkit-appearance:none;
+  width:14px; height:14px; background:var(--zop-orange);
+  border:0; margin-top:-6px; cursor:pointer;
+}
+.bk-field input[type="range"]::-moz-range-track{ height:2px; background:var(--line); }
+.bk-field input[type="range"]::-moz-range-thumb{
+  width:14px; height:14px; background:var(--zop-orange);
+  border:0; cursor:pointer;
+}
+.bk-field .range-row{ display:flex; align-items:center; gap:10px; }
+.bk-field .range-val{
+  font-family:var(--mono); font-size:11px; font-weight:600;
+  color:var(--g-700); min-width:48px; text-align:right;
+  font-variant-numeric:tabular-nums;
+}
+/* ─── File upload · custom-styled "Upload" pill that wraps a hidden
+   <input type="file">. Sits next to a Clear button so swap-and-remove
+   feels like a single control. ─── */
+.bk-field .file-row{ display:flex; gap:8px; align-items:center; }
+.bk-field .file-pill{
+  font-family:var(--mono); font-size:10px; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase;
+  padding:8px 12px; cursor:pointer;
+  background:var(--ink); color:var(--paper);
+  border:1px solid var(--ink);
+  display:inline-flex; align-items:center; gap:6px;
+  transition:background var(--dur-fast) var(--ease-out);
+}
+.bk-field .file-pill:hover{ background:var(--zop-orange); border-color:var(--zop-orange); color:#0a0a0c; }
+.bk-field .file-pill input[type="file"]{
+  position:absolute; left:-9999px; opacity:0; width:0; height:0;
+}
+.bk-field .file-clear{
+  font-family:var(--mono); font-size:10px; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase;
+  padding:8px 12px; cursor:pointer;
+  background:transparent; color:var(--ink);
+  border:1px solid var(--line);
+  transition:border-color var(--dur-fast) var(--ease-out);
+}
+.bk-field .file-clear:hover{ border-color:var(--ink); }
+.bk-field .file-name{
+  flex:1; font-family:var(--mono); font-size:10px;
+  color:var(--g-600); letter-spacing:.04em;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+/* ─── Carousel slide navigator · sits at the top of the editor when a
+   carousel template is active. Numbered chips switch the active slide,
+   "+" appends a new slide (capped at 10), "×" deletes the active one
+   (disabled when only one slide remains). ─── */
+.cs-strip{
+  display:flex; flex-wrap:wrap; gap:6px; padding:4px 0;
+}
+.cs-chip, .cs-add, .cs-del{
+  width:36px; height:36px;
+  font-family:'JetBrains Mono', monospace; font-size:11px; font-weight:700;
+  display:inline-flex; align-items:center; justify-content:center;
+  background:transparent; color:var(--ink);
+  border:1px solid var(--line);
+  cursor:pointer;
+  transition:border-color var(--dur-fast) var(--ease-out),
+             background  var(--dur-fast) var(--ease-out),
+             color       var(--dur-fast) var(--ease-out);
+  font-variant-numeric:tabular-nums;
+}
+.cs-chip:hover, .cs-add:hover, .cs-del:hover{ border-color:var(--ink); }
+.cs-chip.active{
+  background:var(--ink); color:var(--paper); border-color:var(--ink);
+}
+.cs-chip[data-cs-type="cover"]::after,
+.cs-chip[data-cs-type="end"]::after{
+  /* Tiny accent dot to visually distinguish cover / end slides from
+     the run of content slides, the chip number alone reads flat. */
+  content:''; position:absolute; transform:translate(13px, 13px);
+  width:5px; height:5px; background:var(--zop-orange);
+}
+.cs-chip{ position:relative; }
+.cs-add{ border-style:dashed; }
+.cs-add:hover{ border-color:var(--zop-orange); color:var(--zop-orange); border-style:solid; }
+.cs-add:disabled{ opacity:.35; cursor:not-allowed; }
+.cs-del{ border-style:dashed; }
+.cs-del:hover{ border-color:var(--zop-orange); color:var(--zop-orange); border-style:solid; }
+.cs-del:disabled{ opacity:.35; cursor:not-allowed; }
+
+/* ============================================================================
+   TEMPLATE STYLES · each at native pixel dimensions, scaled for preview.
+   The template dimensions match the platform's exact spec so PNG export
+   lands at the right size for upload.
+   ============================================================================ */
+
+/* Shared template chrome */
+.bk-tmpl{ font-family:var(--font); color:var(--ink); position:relative; }
+.bk-tmpl .t-mark{
+  /* Logo flush in the top-right corner by default · per-template sizes
+     overridden below. Position can be repositioned via [data-mark-pos]
+     and resized via [data-mark-size] / --mark-pad. */
+  position:absolute; top:0; right:0;
+  display:block; line-height:0;
+  z-index:5;
+  transform-origin: top right;
+}
+.bk-tmpl .t-mark svg{ display:block; }
+
+/* ─── Mark position variants · transform-origin moves to whichever
+   corner the mark anchors to so size scaling stays anchored, not
+   centered. ─── */
+.bk-tmpl[data-mark-pos="tl"] .t-mark{
+  top:0; right:auto; bottom:auto; left:0;
+  transform-origin:top left;
+  margin: var(--mark-pad, 0) 0 0 var(--mark-pad, 0);
+}
+.bk-tmpl[data-mark-pos="tr"] .t-mark{
+  top:0; right:0; bottom:auto; left:auto;
+  transform-origin:top right;
+  margin: var(--mark-pad, 0) var(--mark-pad, 0) 0 0;
+}
+.bk-tmpl[data-mark-pos="bl"] .t-mark{
+  top:auto; right:auto; bottom:0; left:0;
+  transform-origin:bottom left;
+  margin: 0 0 var(--mark-pad, 0) var(--mark-pad, 0);
+}
+.bk-tmpl[data-mark-pos="br"] .t-mark{
+  top:auto; right:0; bottom:0; left:auto;
+  transform-origin:bottom right;
+  margin: 0 var(--mark-pad, 0) var(--mark-pad, 0) 0;
+}
+.bk-tmpl[data-mark-pos="off"] .t-mark{ display:none; }
+
+/* ─── Mark size scale · multiplier on top of each template's native
+   mark size, so the size feels proportional in every template. ─── */
+.bk-tmpl[data-mark-size="S"]   .t-mark{ transform:scale(0.50); }
+.bk-tmpl[data-mark-size="M"]   .t-mark{ transform:scale(0.75); }
+.bk-tmpl[data-mark-size="L"]   .t-mark{ transform:scale(1.00); }
+.bk-tmpl[data-mark-size="XL"]  .t-mark{ transform:scale(1.30); }
+.bk-tmpl[data-mark-size="XXL"] .t-mark{ transform:scale(1.65); }
+/* Slack avatar's mark sits centered, not corner-anchored · scale from
+   center for that one. */
+#t-slack-avatar .t-mark{ transform-origin:center center !important; }
+
+/* ─── Background image · sits at z-index 0 behind text. The text/mark
+   layers above are forced to z-index 1+ so they remain legible. ─── */
+.bk-tmpl .t-bg-img{
+  position:absolute; inset:0; z-index:0;
+  background-size:cover; background-position:center;
+  background-repeat:no-repeat;
+  pointer-events:none;
+}
+.bk-tmpl .t-bg-img[data-fit="contain"]{ background-size:contain; }
+/* Optional dim layer · a flat ink overlay so legibility holds when the
+   uploaded image is busy. Strength is set inline via --bg-dim. */
+.bk-tmpl .t-bg-img::after{
+  content:''; position:absolute; inset:0;
+  background:#0A0A0A; opacity:var(--bg-dim, 0);
+  pointer-events:none;
+}
+
+/* ─── Foreground asset · product shot, chart, illustration. Default
+   right-side half-width. Other positions via [data-fg-pos]. ─── */
+.bk-tmpl .t-fg-img{
+  position:absolute; z-index:2;
+  background-size:contain; background-repeat:no-repeat; background-position:center;
+  pointer-events:none;
+}
+.bk-tmpl .t-fg-img[data-fg-pos="right"]{  top:0; right:0; bottom:0; width:50%; }
+.bk-tmpl .t-fg-img[data-fg-pos="left"]{   top:0; left:0;  bottom:0; width:50%; }
+.bk-tmpl .t-fg-img[data-fg-pos="center"]{ inset:8%; }
+.bk-tmpl .t-fg-img[data-fg-pos="full"]{   inset:0; background-size:cover; }
+
+/* ─── Stacking · when bg or fg image is present, raise text/mark so
+   they paint above the absolutely-positioned image layers. Scoped via
+   .has-img so it only kicks in when needed (the existing flex layouts
+   in 18 templates aren't touched in the default case). ─── */
+.bk-tmpl.has-img > :not(.t-bg-img):not(.t-fg-img):not(.t-mark){
+  position:relative;
+  z-index:1;
+}
+
+.bk-tmpl .t-name{ font-weight:700; letter-spacing:-.025em; white-space:pre-wrap; }
+.bk-tmpl .t-tagline{ font-weight:400; color:var(--g-700); line-height:1.35; white-space:pre-wrap; }
+/* On dark / drenched bg, tagline color inherits */
+.bk-tmpl[data-bg="ink"] .t-tagline,
+.bk-tmpl[data-bg="drench-blue"] .t-tagline,
+.bk-tmpl[data-bg="drench-orange"] .t-tagline,
+.bk-tmpl[data-bg="drench-green"] .t-tagline{ color:inherit; opacity:.85; }
+
+/* Background variants */
+.bk-tmpl[data-bg="paper"]{ background:#FAF7EC; color:#0A0A0A; }
+.bk-tmpl[data-bg="ink"]{   background:#0A0A0A; color:#F0EBDB; }
+.bk-tmpl[data-bg="ink"] .t-tagline{ color:rgba(240,235,219,.78); }
+.bk-tmpl[data-bg="drench-blue"]{   background:#2A4494; color:#FAF7EC; }
+.bk-tmpl[data-bg="drench-orange"]{ background:#F58549; color:#0A0A0A; }
+.bk-tmpl[data-bg="drench-green"]{  background:#7FB236; color:#0A0A0A; }
+.bk-tmpl[data-bg="drench-blue"]   .t-tagline,
+.bk-tmpl[data-bg="drench-orange"] .t-tagline,
+.bk-tmpl[data-bg="drench-green"]  .t-tagline{ color:inherit; opacity:.85; }
+.bk-tmpl[data-bg="grid"]{
+  background:
+    transparent 0 0/64px 64px,
+    transparent 0 0/64px 64px,
+    #FAF7EC;
+  color:#0A0A0A;
+}
+
+/* ── 1 · LinkedIn cover · 1584×396 ── */
+#t-linkedin-cover{ width:1584px; height:396px; padding:48px 80px;
+  display:flex; flex-direction:column; justify-content:center; gap:0; }
+#t-linkedin-cover .t-name{ font-size:64px; line-height:1; margin-bottom:18px; max-width:1280px; }
+#t-linkedin-cover .t-role{ font-family:var(--mono); font-size:18px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--zop-orange);
+  margin-bottom:24px; display:flex; align-items:center; gap:10px; font-weight:700; }
+#t-linkedin-cover .t-role::before{ content:''; width:14px; height:14px; background:currentColor; }
+#t-linkedin-cover .t-tagline{ font-size:24px; max-width:1280px; }
+#t-linkedin-cover .t-mark{ width:130px; height:130px; }
+
+/* ── 2 · LinkedIn square post · 1080×1080 ── */
+#t-linkedin-square{ width:1080px; height:1080px; padding:80px;
+  display:flex; flex-direction:column; justify-content:space-between; }
+#t-linkedin-square .t-eyebrow{
+  font-family:var(--mono); font-size:18px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--zop-orange); font-weight:700;
+  display:flex; align-items:center; gap:14px; max-width:780px;
+}
+#t-linkedin-square .t-eyebrow::before{ content:''; width:18px; height:18px; background:currentColor; }
+#t-linkedin-square .t-name{ font-size:108px; line-height:.95; max-width:920px; }
+#t-linkedin-square .t-tagline{ font-size:28px; line-height:1.4; max-width:780px; }
+#t-linkedin-square .t-foot{ display:flex; justify-content:flex-end; align-items:flex-end; }
+#t-linkedin-square .t-handle{ font-family:var(--mono); font-size:18px; letter-spacing:.08em; }
+#t-linkedin-square .t-mark{ width:160px; height:160px; }
+
+/* ── 3 · LinkedIn landscape post · 1200×627 ── */
+#t-linkedin-landscape{ width:1200px; height:627px; padding:64px;
+  display:flex; flex-direction:column; justify-content:space-between; }
+#t-linkedin-landscape .t-eyebrow{
+  font-family:var(--mono); font-size:14px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--zop-orange); font-weight:700;
+  display:flex; align-items:center; gap:10px; max-width:1010px;
+}
+#t-linkedin-landscape .t-eyebrow::before{ content:''; width:14px; height:14px; background:currentColor; }
+#t-linkedin-landscape .t-name{ font-size:64px; line-height:1; max-width:1010px; }
+#t-linkedin-landscape .t-tagline{ font-size:21px; line-height:1.45; max-width:760px; }
+#t-linkedin-landscape .t-foot{ display:flex; justify-content:flex-end; align-items:flex-end; }
+#t-linkedin-landscape .t-handle{ font-family:var(--mono); font-size:14px; letter-spacing:.08em; }
+#t-linkedin-landscape .t-mark{ width:110px; height:110px; }
+
+/* ── 4 · X banner · 1500×500 ── */
+#t-x-banner{ width:1500px; height:500px; padding:48px 80px;
+  display:flex; flex-direction:column; justify-content:center; gap:0; }
+#t-x-banner .t-name{ font-size:80px; line-height:.95; margin-bottom:20px; max-width:1200px; }
+#t-x-banner .t-role{ font-family:var(--mono); font-size:18px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--zop-orange); margin-bottom:22px;
+  display:flex; align-items:center; gap:10px; font-weight:700; }
+#t-x-banner .t-role::before{ content:''; width:14px; height:14px; background:currentColor; }
+#t-x-banner .t-tagline{ font-size:26px; max-width:1200px; }
+#t-x-banner .t-mark{ width:140px; height:140px; }
+
+/* ── 5 · X post · 1600×900 ── */
+#t-x-post{ width:1600px; height:900px; padding:96px;
+  display:flex; flex-direction:column; justify-content:space-between; }
+#t-x-post .t-eyebrow{
+  font-family:var(--mono); font-size:20px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--zop-orange); font-weight:700;
+  display:flex; align-items:center; gap:14px; max-width:1180px;
+}
+#t-x-post .t-eyebrow::before{ content:''; width:18px; height:18px; background:currentColor; }
+#t-x-post .t-name{ font-size:140px; line-height:.95; max-width:1180px; }
+#t-x-post .t-tagline{ font-size:32px; line-height:1.4; max-width:1100px; }
+#t-x-post .t-foot{ display:flex; justify-content:flex-end; align-items:flex-end; }
+#t-x-post .t-handle{ font-family:var(--mono); font-size:20px; letter-spacing:.08em; }
+#t-x-post .t-mark{ width:180px; height:180px; }
+
+/* ── 6 · Email signature · 600×200 ── */
+#t-email-sig{ width:600px; height:200px; padding:24px 28px;
+  display:flex; flex-direction:column; justify-content:center; gap:4px; }
+#t-email-sig .t-name{ font-size:22px; line-height:1.15; margin-bottom:2px; max-width:480px; }
+#t-email-sig .t-role{ font-family:var(--mono); font-size:11px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--zop-orange);
+  display:flex; align-items:center; gap:8px; font-weight:700; margin-bottom:6px; }
+#t-email-sig .t-role::before{ content:''; width:10px; height:10px; background:currentColor; }
+#t-email-sig .t-tagline{ font-size:13px; line-height:1.4; max-width:480px; }
+#t-email-sig .t-handle{ font-family:var(--mono); font-size:11px; color:var(--g-600); margin-top:4px; }
+#t-email-sig .t-mark{ width:80px; height:80px; }
+
+/* ── 7 · Zoom background · 1920×1080 ── */
+#t-zoom-bg{ width:1920px; height:1080px; padding:80px;
+  display:flex; flex-direction:column; justify-content:flex-end; align-items:flex-start; gap:0; }
+#t-zoom-bg .t-eyebrow{
+  font-family:var(--mono); font-size:18px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--zop-orange); font-weight:700;
+  margin-bottom:18px; display:flex; align-items:center; gap:12px;
+}
+#t-zoom-bg .t-eyebrow::before{ content:''; width:16px; height:16px; background:currentColor; }
+#t-zoom-bg .t-name{ font-size:96px; line-height:.95; margin-bottom:18px; max-width:1500px; }
+#t-zoom-bg .t-tagline{ font-size:24px; max-width:1500px; }
+#t-zoom-bg .t-mark{ width:240px; height:240px; }
+
+/* ── 8 · Slack avatar · 256×256 ── */
+/* Slack avatar is the mark itself · doesn't need top-right placement.
+   The brand symbol fills the square as the icon. */
+#t-slack-avatar{ width:256px; height:256px; padding:0;
+  display:flex; align-items:center; justify-content:center; }
+#t-slack-avatar .t-mark{
+  position:static; top:auto; right:auto;
+  width:160px; height:160px;
+}
+#t-slack-avatar.bg-paper{ background:#FAF7EC; }
+#t-slack-avatar.bg-ink{ background:#0A0A0A; }
+
+/* ── 9 · OG card · 1200×630 ── */
+#t-og-card{ width:1200px; height:630px; padding:64px 72px;
+  display:flex; flex-direction:column; justify-content:space-between; }
+#t-og-card .t-eyebrow{
+  font-family:var(--mono); font-size:14px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--zop-orange); font-weight:700;
+  display:flex; align-items:center; gap:10px; max-width:1010px;
+}
+#t-og-card .t-eyebrow::before{ content:''; width:14px; height:14px; background:currentColor; }
+#t-og-card .t-name{ font-size:72px; line-height:1; max-width:1010px; }
+#t-og-card .t-tagline{ font-size:22px; line-height:1.45; max-width:780px; }
+#t-og-card .t-foot{ display:flex; justify-content:flex-end; align-items:flex-end; }
+#t-og-card .t-handle{ font-family:var(--mono); font-size:14px; letter-spacing:.08em; }
+#t-og-card .t-mark{ width:110px; height:110px; }
+
+/* ── 11 · Instagram square · 1080×1080 (same canvas as LinkedIn square,
+   different defaults to feel less professional / more campaign-y) ── */
+#t-instagram-square{ width:1080px; height:1080px; padding:80px;
+  display:flex; flex-direction:column; justify-content:space-between; }
+#t-instagram-square .t-eyebrow{
+  font-family:var(--mono); font-size:18px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--zop-orange); font-weight:700;
+  display:flex; align-items:center; gap:14px; max-width:780px;
+}
+#t-instagram-square .t-eyebrow::before{ content:''; width:18px; height:18px; background:currentColor; }
+#t-instagram-square .t-name{ font-size:108px; line-height:.95; max-width:920px; }
+#t-instagram-square .t-tagline{ font-size:28px; line-height:1.4; max-width:780px; }
+#t-instagram-square .t-foot{ display:flex; justify-content:flex-end; align-items:flex-end; }
+#t-instagram-square .t-handle{ font-family:var(--mono); font-size:18px; letter-spacing:.08em; }
+#t-instagram-square .t-mark{ width:160px; height:160px; }
+
+/* ── 12 · Instagram story / Reel · 1080×1920 vertical ── */
+#t-instagram-story{ width:1080px; height:1920px; padding:96px 80px;
+  display:flex; flex-direction:column; justify-content:space-between; }
+#t-instagram-story .t-eyebrow{
+  font-family:var(--mono); font-size:22px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--zop-orange); font-weight:700;
+  display:flex; align-items:center; gap:16px; max-width:880px;
+}
+#t-instagram-story .t-eyebrow::before{ content:''; width:22px; height:22px; background:currentColor; }
+#t-instagram-story .t-name{ font-size:120px; line-height:.95; max-width:920px; }
+#t-instagram-story .t-tagline{ font-size:34px; line-height:1.4; max-width:880px; }
+#t-instagram-story .t-foot{ display:flex; justify-content:flex-end; align-items:flex-end; }
+#t-instagram-story .t-handle{ font-family:var(--mono); font-size:22px; letter-spacing:.08em; }
+#t-instagram-story .t-mark{ width:180px; height:180px; }
+
+/* ── 13 · Facebook cover · 820×312 (compact horizontal) ── */
+#t-facebook-cover{ width:820px; height:312px; padding:32px 48px;
+  display:flex; flex-direction:column; justify-content:center; gap:0; }
+#t-facebook-cover .t-name{ font-size:42px; line-height:1; margin-bottom:12px; max-width:660px; }
+#t-facebook-cover .t-role{ font-family:var(--mono); font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--zop-orange); margin-bottom:14px;
+  display:flex; align-items:center; gap:8px; font-weight:700; }
+#t-facebook-cover .t-role::before{ content:''; width:10px; height:10px; background:currentColor; }
+#t-facebook-cover .t-tagline{ font-size:14px; max-width:640px; }
+#t-facebook-cover .t-mark{ width:80px; height:80px; }
+
+/* ── 14 · YouTube channel banner · 2560×1440 (very wide) ── */
+#t-youtube-banner{ width:2560px; height:1440px; padding:120px 200px;
+  display:flex; flex-direction:column; justify-content:center; gap:0; }
+#t-youtube-banner .t-eyebrow{
+  font-family:var(--mono); font-size:32px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--zop-orange); font-weight:700;
+  display:flex; align-items:center; gap:18px; margin-bottom:32px; max-width:2000px;
+}
+#t-youtube-banner .t-eyebrow::before{ content:''; width:32px; height:32px; background:currentColor; }
+#t-youtube-banner .t-name{ font-size:200px; line-height:.95; margin-bottom:32px; max-width:2000px; }
+#t-youtube-banner .t-tagline{ font-size:40px; max-width:1700px; }
+#t-youtube-banner .t-mark{ width:280px; height:280px; }
+
+/* ── 15 · YouTube thumbnail · 1280×720 ── */
+#t-youtube-thumb{ width:1280px; height:720px; padding:64px 80px;
+  display:flex; flex-direction:column; justify-content:space-between; }
+#t-youtube-thumb .t-eyebrow{
+  font-family:var(--mono); font-size:18px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--zop-orange); font-weight:700;
+  display:flex; align-items:center; gap:12px; max-width:1100px;
+}
+#t-youtube-thumb .t-eyebrow::before{ content:''; width:16px; height:16px; background:currentColor; }
+#t-youtube-thumb .t-name{ font-size:88px; line-height:.95; max-width:1080px; }
+#t-youtube-thumb .t-tagline{ font-size:24px; line-height:1.4; max-width:880px; }
+#t-youtube-thumb .t-foot{ display:flex; justify-content:flex-end; align-items:flex-end; }
+#t-youtube-thumb .t-handle{ font-family:var(--mono); font-size:16px; letter-spacing:.08em; }
+#t-youtube-thumb .t-mark{ width:120px; height:120px; }
+
+/* ── 16 · Quote card · 1080×1080 (special · uses .t-quote / .t-attr) ── */
+#t-quote-card{ width:1080px; height:1080px; padding:96px 80px;
+  display:flex; flex-direction:column; justify-content:center; align-items:flex-start; gap:40px; }
+#t-quote-card .t-quote-mark{ font-family:var(--font); font-size:200px;
+  line-height:.7; color:var(--zop-orange); font-weight:700; }
+#t-quote-card .t-quote{
+  font-size:54px; line-height:1.2; font-weight:600; letter-spacing:-.02em;
+  max-width:840px; margin:0;
+}
+#t-quote-card .t-attr{
+  font-family:var(--mono); font-size:18px; letter-spacing:.04em;
+  font-weight:600; color:var(--ink);
+  display:flex; flex-direction:column; gap:4px;
+}
+#t-quote-card .t-attr-name{ color:var(--ink); }
+#t-quote-card .t-attr-role{ color:var(--g-600); font-weight:400; font-size:16px; letter-spacing:.06em; text-transform:uppercase; }
+#t-quote-card[data-bg="ink"] .t-attr-role,
+#t-quote-card[data-bg="drench-blue"] .t-attr-role,
+#t-quote-card[data-bg="drench-orange"] .t-attr-role,
+#t-quote-card[data-bg="drench-green"] .t-attr-role{ color:inherit; opacity:.7; }
+#t-quote-card .t-mark{ width:120px; height:120px; }
+
+/* ── 17 · Stat card · 1080×1080 (special · uses .t-stat-val / .t-stat-label / .t-stat-sub) ── */
+#t-stat-card{ width:1080px; height:1080px; padding:80px;
+  display:flex; flex-direction:column; justify-content:space-between; }
+#t-stat-card .t-eyebrow{
+  font-family:var(--mono); font-size:18px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--zop-orange); font-weight:700;
+  display:flex; align-items:center; gap:14px; max-width:780px;
+}
+#t-stat-card .t-eyebrow::before{ content:''; width:18px; height:18px; background:currentColor; }
+#t-stat-card .t-stat{ display:flex; flex-direction:column; gap:18px; align-items:flex-start; }
+#t-stat-card .t-stat-val{
+  font-family:'JetBrains Mono', monospace;
+  font-size:240px; font-weight:700; letter-spacing:-.04em; line-height:.92;
+  color:var(--zop-orange);
+  font-variant-numeric:tabular-nums;
+}
+#t-stat-card[data-bg="drench-orange"] .t-stat-val{ color:#0A0A0A; }
+#t-stat-card .t-stat-label{ font-size:42px; font-weight:700; letter-spacing:-.025em; line-height:1.1; max-width:780px; }
+#t-stat-card .t-stat-sub{ font-family:var(--mono); font-size:16px; line-height:1.4; color:var(--g-700); max-width:780px; letter-spacing:.04em; }
+#t-stat-card[data-bg="ink"] .t-stat-sub,
+#t-stat-card[data-bg="drench-blue"] .t-stat-sub,
+#t-stat-card[data-bg="drench-orange"] .t-stat-sub,
+#t-stat-card[data-bg="drench-green"] .t-stat-sub{ color:inherit; opacity:.75; }
+#t-stat-card .t-foot{ display:flex; justify-content:flex-end; align-items:flex-end; }
+#t-stat-card .t-handle{ font-family:var(--mono); font-size:18px; letter-spacing:.08em; }
+#t-stat-card .t-mark{ width:140px; height:140px; }
+
+/* ── 18 · Slide cover · 1920×1080 (presentation deck title slide) ── */
+#t-slide-cover{ width:1920px; height:1080px; padding:96px;
+  display:flex; flex-direction:column; justify-content:space-between; }
+#t-slide-cover .t-eyebrow{
+  font-family:var(--mono); font-size:22px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--zop-orange); font-weight:700;
+  display:flex; align-items:center; gap:16px; max-width:1500px;
+}
+#t-slide-cover .t-eyebrow::before{ content:''; width:22px; height:22px; background:currentColor; }
+#t-slide-cover .t-name{ font-size:130px; line-height:.95; max-width:1500px; }
+#t-slide-cover .t-tagline{ font-size:30px; line-height:1.45; max-width:1300px; }
+#t-slide-cover .t-foot{ display:flex; justify-content:space-between; align-items:flex-end; }
+#t-slide-cover .t-handle{ font-family:var(--mono); font-size:18px; letter-spacing:.08em; }
+#t-slide-cover .t-presenter{ font-family:var(--mono); font-size:14px; letter-spacing:.08em; color:var(--g-600); }
+#t-slide-cover[data-bg="ink"] .t-presenter,
+#t-slide-cover[data-bg="drench-blue"] .t-presenter,
+#t-slide-cover[data-bg="drench-orange"] .t-presenter,
+#t-slide-cover[data-bg="drench-green"] .t-presenter{ color:inherit; opacity:.75; }
+#t-slide-cover .t-mark{ width:200px; height:200px; }
+
+/* ── 19 / 20 · Carousel · square + portrait. Same renderer; the slide
+   layout is driven by an extra `cs-cover` / `cs-content` / `cs-end`
+   class set on .bk-tmpl from the active slide's type. Padding, type
+   sizes, and bullet rhythm are tuned for LinkedIn document carousels
+   and Instagram carousels (1080-wide canvas). ── */
+#t-carousel-square{   width:1080px; height:1080px; padding:80px;
+  display:flex; flex-direction:column; }
+#t-carousel-portrait{ width:1080px; height:1350px; padding:96px 80px;
+  display:flex; flex-direction:column; }
+
+/* Cover slide · big eyebrow, very big headline, "swipe →" affordance */
+.bk-tmpl.cs-cover{ justify-content:space-between; }
+.bk-tmpl.cs-cover .t-eyebrow{
+  font-family:var(--mono); font-size:20px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--zop-orange); font-weight:700;
+  display:flex; align-items:center; gap:14px; max-width:780px;
+}
+.bk-tmpl.cs-cover .t-eyebrow::before{ content:''; width:18px; height:18px; background:currentColor; }
+.bk-tmpl.cs-cover .t-name{ font-size:120px; line-height:.92; max-width:920px; font-weight:700; letter-spacing:-.025em; }
+#t-carousel-portrait.cs-cover .t-name{ font-size:140px; }
+.bk-tmpl.cs-cover .t-subline{
+  font-family:var(--mono); font-size:20px; letter-spacing:.06em;
+  color:var(--g-700);
+}
+.bk-tmpl[data-bg="ink"].cs-cover .t-subline,
+.bk-tmpl[data-bg="drench-blue"].cs-cover .t-subline,
+.bk-tmpl[data-bg="drench-orange"].cs-cover .t-subline,
+.bk-tmpl[data-bg="drench-green"].cs-cover .t-subline{ color:inherit; opacity:.78; }
+
+/* Content slide · slide number chip, heading, body copy */
+.bk-tmpl.cs-content{ justify-content:space-between; }
+.bk-tmpl.cs-content .cs-content-top{ display:flex; flex-direction:column; }
+.bk-tmpl.cs-content .t-num{
+  font-family:'JetBrains Mono', monospace; font-size:22px; font-weight:700;
+  letter-spacing:.08em; color:var(--zop-orange);
+  border:2px solid var(--zop-orange); padding:8px 14px;
+  display:inline-flex; align-items:center; justify-content:center;
+  align-self:flex-start;
+  margin-bottom:36px;
+  font-variant-numeric:tabular-nums;
+}
+.bk-tmpl.cs-content .t-head{
+  font-size:80px; line-height:.95; font-weight:700;
+  letter-spacing:-.02em; max-width:920px; margin-bottom:28px;
+  white-space:pre-wrap;
+}
+#t-carousel-portrait.cs-content .t-head{ font-size:88px; }
+.bk-tmpl.cs-content .t-body{
+  font-size:28px; line-height:1.4; color:var(--g-700);
+  max-width:920px; white-space:pre-wrap;
+}
+.bk-tmpl[data-bg="ink"].cs-content .t-body,
+.bk-tmpl[data-bg="drench-blue"].cs-content .t-body,
+.bk-tmpl[data-bg="drench-orange"].cs-content .t-body,
+.bk-tmpl[data-bg="drench-green"].cs-content .t-body{ color:inherit; opacity:.82; }
+.bk-tmpl.cs-content .t-bullets{
+  list-style:none; padding:0; margin:32px 0 0;
+  display:flex; flex-direction:column; gap:18px;
+  max-width:920px;
+}
+.bk-tmpl.cs-content .t-bullets li{
+  font-size:24px; line-height:1.4;
+  padding-left:36px; position:relative;
+  white-space:pre-wrap;
+}
+.bk-tmpl.cs-content .t-bullets li::before{
+  content:'→'; position:absolute; left:0; top:0;
+  color:var(--zop-orange); font-weight:700;
+}
+.bk-tmpl.cs-content .t-foot-num{
+  font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:600;
+  letter-spacing:.08em; color:var(--g-600);
+  align-self:flex-end;
+  font-variant-numeric:tabular-nums;
+}
+.bk-tmpl[data-bg="ink"].cs-content .t-foot-num,
+.bk-tmpl[data-bg="drench-blue"].cs-content .t-foot-num,
+.bk-tmpl[data-bg="drench-orange"].cs-content .t-foot-num,
+.bk-tmpl[data-bg="drench-green"].cs-content .t-foot-num{ color:inherit; opacity:.6; }
+
+/* End / CTA slide · oversized arrow + handle row */
+.bk-tmpl.cs-end{ justify-content:space-between; }
+.bk-tmpl.cs-end .t-cta-eyebrow{
+  font-family:var(--mono); font-size:20px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--zop-orange); font-weight:700;
+  display:flex; align-items:center; gap:14px;
+}
+.bk-tmpl.cs-end .t-cta-eyebrow::before{ content:''; width:18px; height:18px; background:currentColor; }
+.bk-tmpl.cs-end .t-name{
+  font-size:120px; line-height:.92; font-weight:700;
+  letter-spacing:-.025em; max-width:920px; white-space:pre-wrap;
+}
+#t-carousel-portrait.cs-end .t-name{ font-size:140px; }
+.bk-tmpl.cs-end .t-cta-bottom{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  gap:24px;
+}
+.bk-tmpl.cs-end .t-handle-big{
+  font-family:'JetBrains Mono', monospace; font-size:32px; font-weight:700;
+  letter-spacing:.04em;
+}
+.bk-tmpl.cs-end .t-arrow{
+  font-size:200px; line-height:.85; font-weight:700;
+  color:var(--zop-orange);
+}
+#t-carousel-portrait.cs-end .t-arrow{ font-size:240px; }
+
+/* ── 10 · Press kit · gallery of brand marks (special, no edit fields) ── */
+#t-press-kit{
+  width:1200px; height:1940px; padding:48px;
+  display:grid; grid-template-columns:repeat(2, 1fr); gap:24px;
+  align-content:start;
+  background:#FAF7EC; color:#0A0A0A;
+}
+#t-press-kit .pk-cell{
+  border:1px solid #D9D3BF; padding:32px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px;
+  background:#FAF7EC;
+  position:relative; min-height:260px;
+}
+#t-press-kit .pk-cell svg{ width:160px; height:160px; }
+#t-press-kit .pk-cell .pk-label{
+  font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:600;
+  letter-spacing:.08em; color:#0A0A0A;
+}
+#t-press-kit .pk-cell .pk-id{
+  font-family:'JetBrains Mono', monospace; font-size:11px;
+  letter-spacing:.06em; color:#525252;
+}
+/* Wordmark section divider · spans both columns */
+#t-press-kit .pk-section{
+  grid-column:1 / -1;
+  display:flex; align-items:center; gap:12px; padding:12px 0 0;
+  font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:700;
+  letter-spacing:.18em; text-transform:uppercase; color:#767063;
+}
+#t-press-kit .pk-section::after{ content:''; flex:1; height:1px; background:#D9D3BF; }
+/* Wordmark cells · full-width rows */
+#t-press-kit .pk-wm-cell{
+  grid-column:1 / -1;
+  border:1px solid #D9D3BF; padding:28px 40px;
+  display:flex; align-items:center; gap:40px;
+  background:#FAF7EC; min-height:116px;
+}
+#t-press-kit .pk-wm-cell.pk-wm-dark{ background:#0A0A0A; border-color:#1e1e1e; }
+#t-press-kit .pk-wm-cell svg{ height:52px; width:auto; flex-shrink:0; }
+#t-press-kit .pk-wm-cell .pk-wm-meta{ margin-left:auto; text-align:right; }
+#t-press-kit .pk-wm-cell .pk-label{
+  font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:600;
+  letter-spacing:.08em; color:#0A0A0A;
+}
+#t-press-kit .pk-wm-cell.pk-wm-dark .pk-label{ color:#F0EBDB; }
+#t-press-kit .pk-wm-cell .pk-id{
+  font-family:'JetBrains Mono', monospace; font-size:10px;
+  letter-spacing:.06em; color:#767063;
+}
+#t-press-kit .pk-wm-cell.pk-wm-dark .pk-id{ color:#555; }
+
+/* ============================================================================
+   PRESS-KIT DOWNLOAD PANEL · sits in the editor when press-kit is active
+   ============================================================================ */
+.pk-download{
+  display:flex; flex-direction:column; gap:8px;
+  padding:14px 22px; border-bottom:1px dashed var(--line);
+}
+.pk-download h4{
+  font-family:var(--font); font-size:14px; font-weight:600;
+  margin:0 0 4px; color:var(--ink);
+}
+.pk-download .pk-buttons{ display:flex; flex-wrap:wrap; gap:6px; }
+.pk-download button{
+  font-family:var(--mono); font-size:10px; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase;
+  padding:6px 10px; background:transparent; color:var(--ink);
+  border:1px solid var(--line); cursor:pointer;
+  transition:background var(--dur-fast) var(--ease-out);
+}
+.pk-download button:hover{ background:var(--g-50); }
+.pk-download button.primary{
+  background:var(--ink); color:var(--paper); border-color:var(--ink);
+}
+.pk-download button.primary:hover{ background:var(--zop-orange); border-color:var(--zop-orange); color:#0a0a0c; }
+
+/* ============================================================================
+   TOAST · brief feedback on download
+   ============================================================================ */
+.bk-toast{
+  position:fixed; bottom:20px; left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:var(--ink); color:var(--paper);
+  padding:12px 22px;
+  font-family:var(--mono); font-size:12px; letter-spacing:.06em;
+  text-transform:uppercase; font-weight:600;
+  z-index:1000; opacity:0;
+  transition:opacity .3s var(--ease-out), transform .3s var(--ease-out);
+  pointer-events:none;
+}
+.bk-toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ============================================================================
+   RESPONSIVE · tool needs at least 1100px to be useful
+   ============================================================================ */
+@media (max-width:1100px){
+  .bk-shell{ grid-template-columns:1fr; grid-template-rows:auto auto 1fr auto; }
+  .bk-templates{ display:flex; overflow-x:auto; border-right:0; border-bottom:1px solid var(--line); }
+  .bk-templates h3{ display:none; }
+  .bk-tmpl-btn{ flex-shrink:0; min-width:200px; border-bottom:0; border-right:1px solid var(--line); }
+  .bk-editor{ border-left:0; border-top:1px solid var(--line); }
+}
+</style>
+</head>
+<body>
+
+<!-- ========================================================================
+     SVG defs · brand marks · matches the homepage exactly
+     ======================================================================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mark-zopdev" viewBox="0 0 32 32">
+      <rect x="0"  y="0"  width="16" height="16" fill="#2A4494"/>
+      <rect x="16" y="0"  width="16" height="16" fill="#F58549"/>
+      <rect x="16" y="16" width="16" height="16" fill="#7FB236"/>
+    </symbol>
+    <symbol id="mark-zopnight" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="32" height="32" fill="#2A4494"/>
+      <circle cx="16" cy="16" r="8" fill="#FFFFFF"/>
+    </symbol>
+    <symbol id="mark-zopday" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="32" height="32" fill="#F58549"/>
+      <circle cx="16" cy="16" r="8" fill="#FFFFFF"/>
+    </symbol>
+    <symbol id="mark-zopcloud" viewBox="0 0 32 32">
+      <!-- Pixel-cloud on family-blue container · matches homepage -->
+      <rect x="0" y="0" width="32" height="32" fill="#2A4494"/>
+      <rect x="12" y="8"  width="8"  height="6"  fill="#FFFFFF"/>
+      <rect x="6"  y="14" width="20" height="10" fill="#FFFFFF"/>
+    </symbol>
+    <symbol id="logo-zopdev" viewBox="0 0 715 276">
+      <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+      <rect x="537" width="89" height="89" fill="#2A4494"/>
+      <rect x="626" width="89" height="89" fill="#F58549"/>
+      <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ========================================================================
+     SHELL · header + 3 columns
+     ======================================================================== -->
+<div class="bk-shell">
+
+  <header class="bk-header">
+    <a class="brand" href="index.html">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#mark-zopdev"/></svg>
+      <span>ZopDev · brand kit</span>
+    </a>
+    <span class="meta">internal tool</span>
+    <span class="current">Editing: <strong id="bk-current-name">LinkedIn cover</strong> · <span id="bk-current-dim">1584×396</span></span>
+    <button class="bk-export bk-export-alt" id="bk-export-all-btn" title="Download every template as PNGs in a ZIP">Export all · ZIP</button>
+    <button class="bk-export bk-export-alt" id="bk-export-pdf-btn" title="Download the carousel as a multi-page PDF (LinkedIn document post format)" style="display:none">Download · PDF</button>
+    <button class="bk-export" id="bk-export-btn">Download PNG</button>
+  </header>
+
+  <!-- ─── Left · template list (categorized) ─── -->
+  <aside class="bk-templates">
+    <h3>Templates · 18</h3>
+
+    <p class="bk-tcat">Social · LinkedIn / X</p>
+    <button class="bk-tmpl-btn active" data-template="linkedin-cover">
+      <span class="label">LinkedIn cover</span><span class="dim">1584 × 396</span>
+    </button>
+    <button class="bk-tmpl-btn" data-template="linkedin-square">
+      <span class="label">LinkedIn square post</span><span class="dim">1080 × 1080</span>
+    </button>
+    <button class="bk-tmpl-btn" data-template="linkedin-landscape">
+      <span class="label">LinkedIn landscape</span><span class="dim">1200 × 627</span>
+    </button>
+    <button class="bk-tmpl-btn" data-template="x-banner">
+      <span class="label">X banner</span><span class="dim">1500 × 500</span>
+    </button>
+    <button class="bk-tmpl-btn" data-template="x-post">
+      <span class="label">X post</span><span class="dim">1600 × 900</span>
+    </button>
+
+    <p class="bk-tcat">Social · Instagram / Facebook</p>
+    <button class="bk-tmpl-btn" data-template="instagram-square">
+      <span class="label">Instagram square</span><span class="dim">1080 × 1080</span>
+    </button>
+    <button class="bk-tmpl-btn" data-template="instagram-story">
+      <span class="label">Instagram story / Reel</span><span class="dim">1080 × 1920</span>
+    </button>
+    <button class="bk-tmpl-btn" data-template="facebook-cover">
+      <span class="label">Facebook cover</span><span class="dim">820 × 312</span>
+    </button>
+
+    <p class="bk-tcat">Video</p>
+    <button class="bk-tmpl-btn" data-template="youtube-banner">
+      <span class="label">YouTube channel banner</span><span class="dim">2560 × 1440</span>
+    </button>
+    <button class="bk-tmpl-btn" data-template="youtube-thumb">
+      <span class="label">YouTube thumbnail</span><span class="dim">1280 × 720</span>
+    </button>
+    <button class="bk-tmpl-btn" data-template="zoom-bg">
+      <span class="label">Zoom background</span><span class="dim">1920 × 1080</span>
+    </button>
+
+    <p class="bk-tcat">Marketing cards</p>
+    <button class="bk-tmpl-btn" data-template="quote-card">
+      <span class="label">Quote card</span><span class="dim">1080 × 1080</span>
+    </button>
+    <button class="bk-tmpl-btn" data-template="stat-card">
+      <span class="label">Stat card</span><span class="dim">1080 × 1080</span>
+    </button>
+    <button class="bk-tmpl-btn" data-template="og-card">
+      <span class="label">OG / share card</span><span class="dim">1200 × 630</span>
+    </button>
+    <button class="bk-tmpl-btn" data-template="slide-cover">
+      <span class="label">Slide cover</span><span class="dim">1920 × 1080</span>
+    </button>
+
+    <p class="bk-tcat">Document / chrome</p>
+    <button class="bk-tmpl-btn" data-template="email-sig">
+      <span class="label">Email signature</span><span class="dim">600 × 200</span>
+    </button>
+    <button class="bk-tmpl-btn" data-template="slack-avatar">
+      <span class="label">Slack avatar</span><span class="dim">256 × 256</span>
+    </button>
+
+    <p class="bk-tcat">Carousels</p>
+    <button class="bk-tmpl-btn" data-template="carousel-square">
+      <span class="label">Carousel · square</span><span class="dim">1080 × 1080 · multi-slide</span>
+    </button>
+    <button class="bk-tmpl-btn" data-template="carousel-portrait">
+      <span class="label">Carousel · portrait</span><span class="dim">1080 × 1350 · multi-slide</span>
+    </button>
+
+    <p class="bk-tcat">Brand assets</p>
+    <button class="bk-tmpl-btn" data-template="press-kit">
+      <span class="label">Press kit · marks</span><span class="dim">SVG + PNG</span>
+    </button>
+  </aside>
+
+  <!-- ─── Center · preview ─── -->
+  <main class="bk-preview">
+    <div class="bk-stage" id="bk-stage">
+      <div class="bk-tmpl-wrap" id="bk-tmpl-wrap">
+        <!-- Active template injected here -->
+      </div>
+    </div>
+  </main>
+
+  <!-- ─── Right · editor ─── -->
+  <aside class="bk-editor" id="bk-editor">
+    <h3>Edit</h3>
+    <!-- Fields injected per active template -->
+  </aside>
+
+</div>
+
+<div class="bk-toast" id="bk-toast">PNG downloaded</div>
+
+<!-- html-to-image: HTML → PNG client-side · JSZip: bundle ZIP for bulk
+     export · jsPDF: stitches carousel slides into a single multi-page
+     PDF for LinkedIn document posts. All three load lazily once. -->
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/dist/html-to-image.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+/* ============================================================================
+   STATE · single source of truth for what every template renders
+   ============================================================================ */
+/* Defaults · used for both initial state and the Reset button. The
+   running `state` object below starts as a clone of these so we can
+   restore at any time without keeping a second copy in sync. */
+const DEFAULTS = {
+  template: 'linkedin-cover',
+  name: 'Multi-cloud, automated.',
+  role: 'Platform Lead · ZopDev',
+  tagline: 'Production-ready cloud infrastructure in 30 minutes.',
+  handle: 'zop.dev',
+  bg: 'paper',
+  subbrand: 'dev',
+  customColor: '',          // hex override; empty = use sub-brand color
+  /* quote-card-specific */
+  quote: 'Production-ready cloud in 30 minutes. The shortcut we wished we had.',
+  attrName: 'Talvinder Singh',
+  attrRole: 'Co-founder & CEO · ZopDev',
+  /* stat-card-specific */
+  statValue: '30%',
+  statLabel: 'Average cloud cost reduction.',
+  statSub: 'Across customers running ZopDev for 90+ days · 2025',
+  /* slide-cover-specific */
+  presenter: 'Talvinder Singh · Co-founder & CEO',
+  /* ── Brand-mark controls (apply to every template) ── */
+  markSize: 'L',            // 'S' | 'M' | 'L' | 'XL' | 'XXL'
+  markPos:  'tr',           // 'tl' | 'tr' | 'bl' | 'br' | 'off'
+  markPad:  0,              // px from edge
+  /* ── Image overlays · DataURLs ── */
+  bgImage:        null,
+  bgImageFit:     'cover',  // 'cover' | 'contain'
+  bgImageOpacity: 1,        // 0–1
+  bgImageDim:     0,        // 0–1, ink overlay strength on top of bg image
+  fgImage:        null,
+  fgImagePos:     'right',  // 'left' | 'right' | 'center' | 'full'
+  /* ── Carousel state · only used by carousel-square / carousel-portrait.
+     Each slide carries its own type + copy. The shared brand controls
+     above (subbrand, bg, mark*, accent, images) apply to every slide so
+     a carousel reads as one piece, not five disconnected posts. ── */
+  carouselActive: 0,
+  carouselSlides: [
+    { type:'cover',
+      eyebrow: '5 things you can ship faster',
+      name: 'Multi-cloud, automated.',
+      subline: 'Swipe to read →' },
+    { type:'content',
+      head: 'Continuous CloudOps',
+      body: 'The path from build to deploy, automated end to end. Every commit, every environment, every cloud.' },
+    { type:'content',
+      head: 'Predictive autoscaler',
+      body: 'Capacity that follows your traffic, not the calendar. Scale down at 3am without breaking the morning rush.' },
+    { type:'content',
+      head: 'Showback by team',
+      body: 'Cost visibility per service, per environment, per team. Stop arguing about who owns the bill.' },
+    { type:'end',
+      name: 'Try ZopDev free for 30 days.',
+      handle: 'zop.dev' },
+  ],
+};
+const state = Object.assign({}, DEFAULTS);
+/* Deep-clone the default carousel array · without this, mutating one
+   slide would leak into DEFAULTS and break Reset-all. */
+state.carouselSlides = JSON.parse(JSON.stringify(DEFAULTS.carouselSlides));
+
+const TEMPLATES = {
+  'linkedin-cover':    { name:'LinkedIn cover',         w:1584, h:396 , fields:['name','role','tagline','bg','subbrand','customColor'] },
+  'linkedin-square':   { name:'LinkedIn square',        w:1080, h:1080, fields:['name','tagline','handle','bg','subbrand','customColor'] },
+  'linkedin-landscape':{ name:'LinkedIn landscape',     w:1200, h:627 , fields:['name','tagline','handle','bg','subbrand','customColor'] },
+  'x-banner':          { name:'X banner',               w:1500, h:500 , fields:['name','role','tagline','bg','subbrand','customColor'] },
+  'x-post':            { name:'X post',                 w:1600, h:900 , fields:['name','tagline','handle','bg','subbrand','customColor'] },
+  'instagram-square':  { name:'Instagram square',       w:1080, h:1080, fields:['name','tagline','handle','bg','subbrand','customColor'] },
+  'instagram-story':   { name:'Instagram story',        w:1080, h:1920, fields:['name','tagline','handle','bg','subbrand','customColor'] },
+  'facebook-cover':    { name:'Facebook cover',         w:820 , h:312 , fields:['name','role','tagline','bg','subbrand','customColor'] },
+  'youtube-banner':    { name:'YouTube channel banner', w:2560, h:1440, fields:['name','tagline','bg','subbrand','customColor'] },
+  'youtube-thumb':     { name:'YouTube thumbnail',      w:1280, h:720 , fields:['name','tagline','handle','bg','subbrand','customColor'] },
+  'zoom-bg':           { name:'Zoom background',        w:1920, h:1080, fields:['name','tagline','bg','subbrand','customColor'] },
+  'quote-card':        { name:'Quote card',             w:1080, h:1080, fields:['quote','attrName','attrRole','bg','subbrand','customColor'] },
+  'stat-card':         { name:'Stat card',              w:1080, h:1080, fields:['statValue','statLabel','statSub','handle','bg','subbrand','customColor'] },
+  'og-card':           { name:'OG / share card',        w:1200, h:630 , fields:['name','tagline','handle','bg','subbrand','customColor'] },
+  'slide-cover':       { name:'Slide cover',            w:1920, h:1080, fields:['name','tagline','presenter','bg','subbrand','customColor'] },
+  'email-sig':         { name:'Email signature',        w:600 , h:200 , fields:['name','role','tagline','handle','bg','subbrand'] },
+  'slack-avatar':      { name:'Slack avatar',           w:256 , h:256 , fields:['bg','subbrand'] },
+  'press-kit':         { name:'Press kit',              w:1200, h:1200, fields:[] },
+  /* Carousels · the `carousel` field tells the editor to render the
+     multi-slide UI instead of normal text fields. Brand controls
+     (subbrand, bg, customColor) still apply across every slide. */
+  'carousel-square':   { name:'Carousel · square',      w:1080, h:1080, fields:['carousel','bg','subbrand','customColor'] },
+  'carousel-portrait': { name:'Carousel · portrait',    w:1080, h:1350, fields:['carousel','bg','subbrand','customColor'] },
+};
+
+/* ============================================================================
+   RENDER · build the active template HTML, inject into stage, scale to fit
+   ============================================================================ */
+const wrap = document.getElementById('bk-tmpl-wrap');
+const stage = document.getElementById('bk-stage');
+const editor = document.getElementById('bk-editor');
+const exportBtn = document.getElementById('bk-export-btn');
+const currentName = document.getElementById('bk-current-name');
+const currentDim = document.getElementById('bk-current-dim');
+
+function escHtml(s){
+  return String(s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+/* Inline brand-mark SVGs · fully self-contained markup so html-to-image
+   doesn't have to chase a `<use href="#...">` reference (which it can't
+   resolve reliably across the DOM). Width/height 100% so the SVG scales
+   to whatever box the .t-mark wrapper sets. */
+const SVG_MARK = {
+  dev: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%">' +
+       '<rect x="0"  y="0"  width="16" height="16" fill="#2A4494"/>' +
+       '<rect x="16" y="0"  width="16" height="16" fill="#F58549"/>' +
+       '<rect x="16" y="16" width="16" height="16" fill="#7FB236"/>' +
+       '</svg>',
+  night: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%">' +
+         '<rect x="0" y="0" width="32" height="32" fill="#2A4494"/>' +
+         '<circle cx="16" cy="16" r="8" fill="#FFFFFF"/>' +
+         '</svg>',
+  day: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%">' +
+       '<rect x="0" y="0" width="32" height="32" fill="#F58549"/>' +
+       '<circle cx="16" cy="16" r="8" fill="#FFFFFF"/>' +
+       '</svg>',
+  cloud: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%">' +
+         '<rect x="0" y="0" width="32" height="32" fill="#2A4494"/>' +
+         '<rect x="12" y="8"  width="8"  height="6"  fill="#FFFFFF"/>' +
+         '<rect x="6"  y="14" width="20" height="10" fill="#FFFFFF"/>' +
+         '</svg>'
+};
+
+/* Full wordmark lockups (mark icon + "ZopDev" text) · no fixed width/height so
+   CSS controls display size in the press-kit preview. viewBox="0 0 150 40". */
+const WM_FONT = "'Space Grotesk',system-ui,-apple-system,sans-serif";
+const SVG_WORDMARK = {
+  light: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 40">` +
+         `<rect x="0"  y="0"  width="20" height="20" fill="#2A4494"/>` +
+         `<rect x="20" y="0"  width="20" height="20" fill="#F58549"/>` +
+         `<rect x="20" y="20" width="20" height="20" fill="#7FB236"/>` +
+         `<text x="50" y="29" font-family="${WM_FONT}" font-size="22" font-weight="700" fill="#0A0A0A" letter-spacing="-0.4">ZopDev</text>` +
+         `</svg>`,
+  dark: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 40">` +
+        `<rect x="0"  y="0"  width="20" height="20" fill="#2A4494"/>` +
+        `<rect x="20" y="0"  width="20" height="20" fill="#F58549"/>` +
+        `<rect x="20" y="20" width="20" height="20" fill="#7FB236"/>` +
+        `<text x="50" y="29" font-family="${WM_FONT}" font-size="22" font-weight="700" fill="#F0EBDB" letter-spacing="-0.4">ZopDev</text>` +
+        `</svg>`,
+  monoDark: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 40">` +
+            `<rect x="0"  y="0"  width="20" height="20" fill="#0A0A0A"/>` +
+            `<rect x="20" y="0"  width="20" height="20" fill="#0A0A0A"/>` +
+            `<rect x="20" y="20" width="20" height="20" fill="#0A0A0A"/>` +
+            `<text x="50" y="29" font-family="${WM_FONT}" font-size="22" font-weight="700" fill="#0A0A0A" letter-spacing="-0.4">ZopDev</text>` +
+            `</svg>`,
+  monoLight: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 40">` +
+             `<rect x="0"  y="0"  width="20" height="20" fill="#F0EBDB"/>` +
+             `<rect x="20" y="0"  width="20" height="20" fill="#F0EBDB"/>` +
+             `<rect x="20" y="20" width="20" height="20" fill="#F0EBDB"/>` +
+             `<text x="50" y="29" font-family="${WM_FONT}" font-size="22" font-weight="700" fill="#F0EBDB" letter-spacing="-0.4">ZopDev</text>` +
+             `</svg>`,
+  /* Framed logo cards · solid bg + mark + text · ready-to-use, no compositing needed */
+  logoLight: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 80">` +
+             `<rect width="260" height="80" fill="#FAF7EC"/>` +
+             `<rect x="28" y="20" width="20" height="20" fill="#2A4494"/>` +
+             `<rect x="48" y="20" width="20" height="20" fill="#F58549"/>` +
+             `<rect x="48" y="40" width="20" height="20" fill="#7FB236"/>` +
+             `<text x="82" y="52" font-family="${WM_FONT}" font-size="26" font-weight="700" fill="#0A0A0A" letter-spacing="-0.5">ZopDev</text>` +
+             `</svg>`,
+  logoDark:  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 80">` +
+             `<rect width="260" height="80" fill="#0A0A0A"/>` +
+             `<rect x="28" y="20" width="20" height="20" fill="#2A4494"/>` +
+             `<rect x="48" y="20" width="20" height="20" fill="#F58549"/>` +
+             `<rect x="48" y="40" width="20" height="20" fill="#7FB236"/>` +
+             `<text x="82" y="52" font-family="${WM_FONT}" font-size="26" font-weight="700" fill="#F0EBDB" letter-spacing="-0.5">ZopDev</text>` +
+             `</svg>`,
+};
+
+function markFor(sub){
+  return SVG_MARK[sub] || SVG_MARK.dev;
+}
+
+/* ============================================================================
+   CAROUSEL · per-slide renderers · cover / content / end. Each takes the
+   slide object, the 1-based slide number, and the total slide count, and
+   returns an HTML string. The slide-type class on .bk-tmpl drives layout.
+   ============================================================================ */
+function renderCarouselSlide(slide, n, total){
+  const num = String(n).padStart(2, '0');
+  const totalStr = String(total).padStart(2, '0');
+  if(slide.type === 'cover'){
+    return `
+      <div class="t-eyebrow">${escHtml(slide.eyebrow || '')}</div>
+      <div class="t-name">${escHtml(slide.name || '')}</div>
+      <div class="t-subline">${escHtml(slide.subline || '')}</div>
+      <div class="t-mark">${markFor(state.subbrand)}</div>
+    `;
+  }
+  if(slide.type === 'end'){
+    return `
+      <div class="t-cta-eyebrow">${escHtml(slide.eyebrow || 'Ready when you are')}</div>
+      <div class="t-name">${escHtml(slide.name || '')}</div>
+      <div class="t-cta-bottom">
+        <div class="t-handle-big">${escHtml(slide.handle || state.handle || 'zop.dev')}</div>
+        <div class="t-arrow">→</div>
+      </div>
+      <div class="t-mark">${markFor(state.subbrand)}</div>
+    `;
+  }
+  /* content (default) */
+  const bullets = Array.isArray(slide.bullets) ? slide.bullets.filter(Boolean) : [];
+  return `
+    <div class="cs-content-top">
+      <span class="t-num">${num} / ${totalStr}</span>
+      <div class="t-head">${escHtml(slide.head || '')}</div>
+      <div class="t-body">${escHtml(slide.body || '')}</div>
+      ${bullets.length ? '<ul class="t-bullets">' + bullets.map(b => '<li>' + escHtml(b) + '</li>').join('') + '</ul>' : ''}
+    </div>
+    <div class="t-foot-num">${num} / ${totalStr}</div>
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `;
+}
+function isCarousel(){ return state.template === 'carousel-square' || state.template === 'carousel-portrait'; }
+
+/* Each template returns the HTML string for its inside.
+   The mark is always the LAST element so it stacks on top via z-index for
+   the position:absolute top-right placement. SVGs are inlined directly
+   (no <use href>) so html-to-image renders them on export. */
+const RENDERERS = {
+  'linkedin-cover': () => `
+    <div class="t-role">${escHtml(state.role)}</div>
+    <div class="t-name">${escHtml(state.name)}</div>
+    <div class="t-tagline">${escHtml(state.tagline)}</div>
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `,
+  'linkedin-square': () => `
+    <div class="t-eyebrow">ZopDev · ${state.subbrand}</div>
+    <div class="t-name">${escHtml(state.name)}</div>
+    <div class="t-tagline">${escHtml(state.tagline)}</div>
+    <div class="t-foot">
+      <div class="t-handle">${escHtml(state.handle)}</div>
+    </div>
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `,
+  'linkedin-landscape': () => `
+    <div>
+      <div class="t-eyebrow">ZopDev · ${state.subbrand}</div>
+      <div class="t-name">${escHtml(state.name)}</div>
+    </div>
+    <div class="t-tagline">${escHtml(state.tagline)}</div>
+    <div class="t-foot">
+      <div class="t-handle">${escHtml(state.handle)}</div>
+    </div>
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `,
+  'x-banner': () => `
+    <div class="t-role">${escHtml(state.role)}</div>
+    <div class="t-name">${escHtml(state.name)}</div>
+    <div class="t-tagline">${escHtml(state.tagline)}</div>
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `,
+  'x-post': () => `
+    <div class="t-eyebrow">ZopDev · ${state.subbrand}</div>
+    <div class="t-name">${escHtml(state.name)}</div>
+    <div class="t-tagline">${escHtml(state.tagline)}</div>
+    <div class="t-foot">
+      <div class="t-handle">${escHtml(state.handle)}</div>
+    </div>
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `,
+  'email-sig': () => `
+    <div class="t-name">${escHtml(state.name)}</div>
+    <div class="t-role">${escHtml(state.role)}</div>
+    <div class="t-tagline">${escHtml(state.tagline)}</div>
+    <div class="t-handle">${escHtml(state.handle)}</div>
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `,
+  'zoom-bg': () => `
+    <div class="t-eyebrow">ZopDev · ${state.subbrand}</div>
+    <div class="t-name">${escHtml(state.name)}</div>
+    <div class="t-tagline">${escHtml(state.tagline)}</div>
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `,
+  'slack-avatar': () => `
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `,
+  'og-card': () => `
+    <div class="t-eyebrow">ZopDev · ${state.subbrand}</div>
+    <div class="t-name">${escHtml(state.name)}</div>
+    <div class="t-tagline">${escHtml(state.tagline)}</div>
+    <div class="t-foot">
+      <div class="t-handle">${escHtml(state.handle)}</div>
+    </div>
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `,
+  'instagram-square': () => `
+    <div class="t-eyebrow">ZopDev · ${state.subbrand}</div>
+    <div class="t-name">${escHtml(state.name)}</div>
+    <div class="t-tagline">${escHtml(state.tagline)}</div>
+    <div class="t-foot">
+      <div class="t-handle">${escHtml(state.handle)}</div>
+    </div>
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `,
+  'instagram-story': () => `
+    <div class="t-eyebrow">ZopDev · ${state.subbrand}</div>
+    <div class="t-name">${escHtml(state.name)}</div>
+    <div class="t-tagline">${escHtml(state.tagline)}</div>
+    <div class="t-foot">
+      <div class="t-handle">${escHtml(state.handle)}</div>
+    </div>
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `,
+  'facebook-cover': () => `
+    <div class="t-role">${escHtml(state.role)}</div>
+    <div class="t-name">${escHtml(state.name)}</div>
+    <div class="t-tagline">${escHtml(state.tagline)}</div>
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `,
+  'youtube-banner': () => `
+    <div class="t-eyebrow">ZopDev · ${state.subbrand}</div>
+    <div class="t-name">${escHtml(state.name)}</div>
+    <div class="t-tagline">${escHtml(state.tagline)}</div>
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `,
+  'youtube-thumb': () => `
+    <div class="t-eyebrow">ZopDev · ${state.subbrand}</div>
+    <div class="t-name">${escHtml(state.name)}</div>
+    <div class="t-tagline">${escHtml(state.tagline)}</div>
+    <div class="t-foot">
+      <div class="t-handle">${escHtml(state.handle)}</div>
+    </div>
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `,
+  'quote-card': () => `
+    <div class="t-quote-mark">"</div>
+    <div class="t-quote">${escHtml(state.quote)}</div>
+    <div class="t-attr">
+      <span class="t-attr-name">${escHtml(state.attrName)}</span>
+      <span class="t-attr-role">${escHtml(state.attrRole)}</span>
+    </div>
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `,
+  'stat-card': () => `
+    <div class="t-eyebrow">ZopDev · ${state.subbrand}</div>
+    <div class="t-stat">
+      <div class="t-stat-val">${escHtml(state.statValue)}</div>
+      <div class="t-stat-label">${escHtml(state.statLabel)}</div>
+      <div class="t-stat-sub">${escHtml(state.statSub)}</div>
+    </div>
+    <div class="t-foot">
+      <div class="t-handle">${escHtml(state.handle)}</div>
+    </div>
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `,
+  'slide-cover': () => `
+    <div>
+      <div class="t-eyebrow">ZopDev · ${state.subbrand}</div>
+      <div class="t-name">${escHtml(state.name)}</div>
+    </div>
+    <div class="t-tagline">${escHtml(state.tagline)}</div>
+    <div class="t-foot">
+      <div class="t-presenter">${escHtml(state.presenter)}</div>
+    </div>
+    <div class="t-mark">${markFor(state.subbrand)}</div>
+  `,
+  /* Carousel templates render the active slide. Slide type is added as
+     a class on .bk-tmpl in renderTemplate so the right CSS layout fires. */
+  'carousel-square':   () => {
+    const slides = state.carouselSlides;
+    const i = Math.max(0, Math.min(state.carouselActive, slides.length - 1));
+    return renderCarouselSlide(slides[i], i + 1, slides.length);
+  },
+  'carousel-portrait': () => {
+    const slides = state.carouselSlides;
+    const i = Math.max(0, Math.min(state.carouselActive, slides.length - 1));
+    return renderCarouselSlide(slides[i], i + 1, slides.length);
+  },
+  'press-kit': () => `
+    <div class="pk-cell">
+      ${SVG_MARK.dev}
+      <div>
+        <div class="pk-label">ZopDev umbrella</div>
+        <div class="pk-id">#mark-zopdev</div>
+      </div>
+    </div>
+    <div class="pk-cell">
+      ${SVG_MARK.night}
+      <div>
+        <div class="pk-label">ZopNight</div>
+        <div class="pk-id">#mark-zopnight</div>
+      </div>
+    </div>
+    <div class="pk-cell">
+      ${SVG_MARK.day}
+      <div>
+        <div class="pk-label">ZopDay</div>
+        <div class="pk-id">#mark-zopday</div>
+      </div>
+    </div>
+    <div class="pk-cell">
+      ${SVG_MARK.cloud}
+      <div>
+        <div class="pk-label">ZopCloud</div>
+        <div class="pk-id">#mark-zopcloud</div>
+      </div>
+    </div>
+    <div class="pk-section">Wordmarks</div>
+    <div class="pk-wm-cell">
+      ${SVG_WORDMARK.light}
+      <div class="pk-wm-meta">
+        <div class="pk-label">Full color · light</div>
+        <div class="pk-id">On paper / white surfaces</div>
+      </div>
+    </div>
+    <div class="pk-wm-cell pk-wm-dark">
+      ${SVG_WORDMARK.dark}
+      <div class="pk-wm-meta">
+        <div class="pk-label">Full color · dark</div>
+        <div class="pk-id">On ink / dark surfaces</div>
+      </div>
+    </div>
+    <div class="pk-wm-cell">
+      ${SVG_WORDMARK.monoDark}
+      <div class="pk-wm-meta">
+        <div class="pk-label">Mono · ink</div>
+        <div class="pk-id">Single-color dark · print</div>
+      </div>
+    </div>
+    <div class="pk-wm-cell pk-wm-dark">
+      ${SVG_WORDMARK.monoLight}
+      <div class="pk-wm-meta">
+        <div class="pk-label">Mono · white</div>
+        <div class="pk-id">Single-color light · dark print</div>
+      </div>
+    </div>
+    <div class="pk-section">Logos · framed</div>
+    <div class="pk-wm-cell">
+      ${SVG_WORDMARK.logoLight}
+      <div class="pk-wm-meta">
+        <div class="pk-label">Logo · light</div>
+        <div class="pk-id">Paper background · ready to drop in</div>
+      </div>
+    </div>
+    <div class="pk-wm-cell pk-wm-dark">
+      ${SVG_WORDMARK.logoDark}
+      <div class="pk-wm-meta">
+        <div class="pk-label">Logo · dark</div>
+        <div class="pk-id">Ink background · ready to drop in</div>
+      </div>
+    </div>
+  `,
+};
+
+function renderTemplate(){
+  const t = TEMPLATES[state.template];
+  /* Clear the wrap, build a new template node at native size */
+  wrap.innerHTML = '';
+  wrap.style.width  = (t.w * scaleFactor()) + 'px';
+  wrap.style.height = (t.h * scaleFactor()) + 'px';
+
+  const tmpl = document.createElement('div');
+  tmpl.className = 'bk-tmpl';
+  tmpl.id = 't-' + state.template;
+  tmpl.style.width  = t.w + 'px';
+  tmpl.style.height = t.h + 'px';
+  tmpl.style.transform = 'scale(' + scaleFactor() + ')';
+  tmpl.setAttribute('data-bg', state.bg);
+  /* Brand-mark customization · size, position, padding from edge */
+  tmpl.setAttribute('data-mark-size', state.markSize);
+  tmpl.setAttribute('data-mark-pos',  state.markPos);
+  if(state.markPad){
+    tmpl.style.setProperty('--mark-pad', state.markPad + 'px');
+  }
+  /* Custom accent override · if a hex is set, it replaces the orange
+     accent in eyebrows / role tags / stat numbers. Set as a CSS custom
+     prop so all the styled elements pick it up cleanly. */
+  if(state.customColor && /^#[0-9a-f]{6}$/i.test(state.customColor)){
+    tmpl.style.setProperty('--zop-orange', state.customColor);
+  }
+  /* Background-image dim overlay strength */
+  if(state.bgImageDim){
+    tmpl.style.setProperty('--bg-dim', state.bgImageDim);
+  }
+
+  /* ── Build inner HTML ──
+     Order: bg image (z:0) · template content (z:1 via .has-img rule) ·
+            fg image (z:2) · brand mark (z:5, last in source for safety). */
+  let innerHtml = '';
+  if(state.bgImage){
+    innerHtml += '<div class="t-bg-img" data-fit="' + state.bgImageFit + '"' +
+                 ' style="background-image:url(\'' + state.bgImage + '\');' +
+                 ' opacity:' + state.bgImageOpacity + ';"></div>';
+  }
+  innerHtml += RENDERERS[state.template]();
+  if(state.fgImage){
+    innerHtml += '<div class="t-fg-img" data-fg-pos="' + state.fgImagePos + '"' +
+                 ' style="background-image:url(\'' + state.fgImage + '\');"></div>';
+  }
+  tmpl.innerHTML = innerHtml;
+
+  /* Toggle .has-img so the stacking-context CSS rule kicks in only when
+     an image is present (default templates stay untouched). */
+  tmpl.classList.toggle('has-img', !!(state.bgImage || state.fgImage));
+
+  /* Carousel · stamp the active slide's type class onto .bk-tmpl so
+     the right per-slide-type layout rules fire. */
+  if(isCarousel()){
+    const slides = state.carouselSlides || [];
+    const i = Math.max(0, Math.min(state.carouselActive || 0, slides.length - 1));
+    const slide = slides[i] || { type:'cover' };
+    tmpl.classList.add('cs-' + slide.type);
+  }
+
+  wrap.appendChild(tmpl);
+
+  /* Slack avatar uses bg-* class style for clean square background */
+  if(state.template === 'slack-avatar'){
+    tmpl.classList.add('bg-' + (state.bg === 'ink' ? 'ink' : 'paper'));
+  }
+
+  /* Header strings */
+  currentName.textContent = t.name;
+  currentDim.textContent  = t.w + '×' + t.h;
+}
+
+/* Scale the template down to fit the preview area */
+function scaleFactor(){
+  const t = TEMPLATES[state.template];
+  /* Available preview area · subtract padding */
+  const stageRect = document.querySelector('.bk-preview').getBoundingClientRect();
+  const padX = 64, padY = 64;
+  const availW = stageRect.width  - padX;
+  const availH = stageRect.height - padY;
+  return Math.min(availW / t.w, availH / t.h, 1);
+}
+
+/* ============================================================================
+   EDITOR · build per-template field controls
+   ============================================================================ */
+function renderEditor(){
+  const t = TEMPLATES[state.template];
+  let html = '<h3>Edit</h3>';
+
+  /* Press kit gets its own download panel · no editable fields */
+  if(state.template === 'press-kit'){
+    html += `
+      <div class="pk-download">
+        <h4>ZopDev (umbrella)</h4>
+        <div class="pk-buttons">
+          <button class="primary" data-pk="dev" data-fmt="svg">SVG</button>
+          <button data-pk="dev" data-fmt="png" data-size="256">PNG 256</button>
+          <button data-pk="dev" data-fmt="png" data-size="512">PNG 512</button>
+          <button data-pk="dev" data-fmt="png" data-size="1024">PNG 1024</button>
+        </div>
+      </div>
+      <div class="pk-download">
+        <h4>ZopNight</h4>
+        <div class="pk-buttons">
+          <button class="primary" data-pk="night" data-fmt="svg">SVG</button>
+          <button data-pk="night" data-fmt="png" data-size="256">PNG 256</button>
+          <button data-pk="night" data-fmt="png" data-size="512">PNG 512</button>
+          <button data-pk="night" data-fmt="png" data-size="1024">PNG 1024</button>
+        </div>
+      </div>
+      <div class="pk-download">
+        <h4>ZopDay</h4>
+        <div class="pk-buttons">
+          <button class="primary" data-pk="day" data-fmt="svg">SVG</button>
+          <button data-pk="day" data-fmt="png" data-size="256">PNG 256</button>
+          <button data-pk="day" data-fmt="png" data-size="512">PNG 512</button>
+          <button data-pk="day" data-fmt="png" data-size="1024">PNG 1024</button>
+        </div>
+      </div>
+      <div class="pk-download">
+        <h4>ZopCloud</h4>
+        <div class="pk-buttons">
+          <button class="primary" data-pk="cloud" data-fmt="svg">SVG</button>
+          <button data-pk="cloud" data-fmt="png" data-size="256">PNG 256</button>
+          <button data-pk="cloud" data-fmt="png" data-size="512">PNG 512</button>
+          <button data-pk="cloud" data-fmt="png" data-size="1024">PNG 1024</button>
+        </div>
+      </div>
+      <div class="pk-download">
+        <h4>Wordmark · full color</h4>
+        <div class="pk-buttons">
+          <button class="primary" data-pk="wordmark-light" data-fmt="svg">SVG · light</button>
+          <button class="primary" data-pk="wordmark-dark"  data-fmt="svg">SVG · dark</button>
+          <button data-pk="wordmark-light" data-fmt="png" data-size="400">PNG 400</button>
+          <button data-pk="wordmark-light" data-fmt="png" data-size="800">PNG 800</button>
+          <button data-pk="wordmark-dark"  data-fmt="png" data-size="400">PNG 400 · dark</button>
+          <button data-pk="wordmark-dark"  data-fmt="png" data-size="800">PNG 800 · dark</button>
+        </div>
+      </div>
+      <div class="pk-download">
+        <h4>Wordmark · mono</h4>
+        <div class="pk-buttons">
+          <button class="primary" data-pk="wordmark-mono-dark"  data-fmt="svg">SVG · ink</button>
+          <button class="primary" data-pk="wordmark-mono-light" data-fmt="svg">SVG · white</button>
+          <button data-pk="wordmark-mono-dark"  data-fmt="png" data-size="400">PNG 400 · ink</button>
+          <button data-pk="wordmark-mono-light" data-fmt="png" data-size="400">PNG 400 · white</button>
+          <button data-pk="wordmark-mono-dark"  data-fmt="png" data-size="800">PNG 800 · ink</button>
+          <button data-pk="wordmark-mono-light" data-fmt="png" data-size="800">PNG 800 · white</button>
+        </div>
+      </div>
+      <div class="pk-download">
+        <h4>Logo · framed (light + dark)</h4>
+        <div class="pk-buttons">
+          <button class="primary" data-pk="logo-light" data-fmt="svg">SVG · light</button>
+          <button class="primary" data-pk="logo-dark"  data-fmt="svg">SVG · dark</button>
+          <button data-pk="logo-light" data-fmt="png" data-size="520">PNG 520</button>
+          <button data-pk="logo-light" data-fmt="png" data-size="1040">PNG 1040</button>
+          <button data-pk="logo-dark"  data-fmt="png" data-size="520">PNG 520 · dark</button>
+          <button data-pk="logo-dark"  data-fmt="png" data-size="1040">PNG 1040 · dark</button>
+        </div>
+      </div>
+      <div class="pk-download" style="border-bottom:0;">
+        <h4 style="font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--g-600);">Notes</h4>
+        <p style="font-family:var(--mono); font-size:11px; line-height:1.6; color:var(--g-700); margin:0;">
+          Locked palette. Don't recolor. Don't crop. Don't tilt. Logo on white preferred · ink only on dark surfaces.
+        </p>
+      </div>
+    `;
+    editor.innerHTML = html;
+    /* Wire press-kit downloads */
+    editor.querySelectorAll('button[data-pk]').forEach(b => {
+      b.addEventListener('click', () => downloadMark(b.dataset.pk, b.dataset.fmt, +b.dataset.size || 0));
+    });
+    return;
+  }
+
+  /* ─────────── Carousel · multi-slide editor (renders BEFORE the
+     standard text fields so the slide strip is the first thing the user
+     sees when a carousel template is active). ─────────── */
+  if(t.fields.includes('carousel')){
+    const slides   = state.carouselSlides;
+    const aIdx     = Math.max(0, Math.min(state.carouselActive, slides.length - 1));
+    const active   = slides[aIdx];
+    const SLIDE_MAX = 10;
+    /* Slide strip · numbered chips + add / delete affordances */
+    html += `<div class="bk-field">
+      <label>Slides · ${slides.length} / ${SLIDE_MAX}</label>
+      <div class="cs-strip" id="cs-strip">`;
+    slides.forEach((s, i) => {
+      html += `<button type="button" class="cs-chip ${i === aIdx ? 'active' : ''}"
+                       data-cs-index="${i}" data-cs-type="${s.type}"
+                       title="Slide ${i + 1} · ${s.type}">${i + 1}</button>`;
+    });
+    html += `<button type="button" class="cs-add" id="cs-add"
+                     ${slides.length >= SLIDE_MAX ? 'disabled' : ''}
+                     title="Add a slide (max ${SLIDE_MAX})">+</button>`;
+    html += `<button type="button" class="cs-del" id="cs-del"
+                     ${slides.length <= 1 ? 'disabled' : ''}
+                     title="Delete this slide">×</button>`;
+    html += `</div>
+      <p class="help">Click a chip to edit that slide. Cover and end slides have an orange dot.</p>
+    </div>`;
+    /* Slide type picker · cover / content / end */
+    html += `<div class="bk-field">
+      <label>Slide ${aIdx + 1} · type</label>
+      <div class="seg-row">
+        <button type="button" class="seg ${active.type === 'cover'  ?'active':''}" data-cs-set-type="cover">Cover</button>
+        <button type="button" class="seg ${active.type === 'content'?'active':''}" data-cs-set-type="content">Content</button>
+        <button type="button" class="seg ${active.type === 'end'    ?'active':''}" data-cs-set-type="end">End</button>
+      </div>
+    </div>`;
+    /* Per-slide fields, scoped to the active slide's type */
+    if(active.type === 'cover'){
+      html += `<div class="bk-field">
+        <label for="cs-eyebrow">Eyebrow</label>
+        <input id="cs-eyebrow" type="text" value="${escHtml(active.eyebrow || '')}"/>
+      </div>`;
+      html += `<div class="bk-field">
+        <label for="cs-name">Headline</label>
+        <textarea id="cs-name" rows="2">${escHtml(active.name || '')}</textarea>
+      </div>`;
+      html += `<div class="bk-field">
+        <label for="cs-subline">Subline</label>
+        <input id="cs-subline" type="text" value="${escHtml(active.subline || '')}"/>
+      </div>`;
+    } else if(active.type === 'end'){
+      html += `<div class="bk-field">
+        <label for="cs-eyebrow">Eyebrow</label>
+        <input id="cs-eyebrow" type="text" value="${escHtml(active.eyebrow || '')}" placeholder="Ready when you are"/>
+      </div>`;
+      html += `<div class="bk-field">
+        <label for="cs-name">CTA headline</label>
+        <textarea id="cs-name" rows="2">${escHtml(active.name || '')}</textarea>
+      </div>`;
+      html += `<div class="bk-field">
+        <label for="cs-handle">Handle / domain</label>
+        <input id="cs-handle" type="text" value="${escHtml(active.handle || '')}" placeholder="zop.dev"/>
+      </div>`;
+    } else {
+      /* content */
+      html += `<div class="bk-field">
+        <label for="cs-head">Heading</label>
+        <textarea id="cs-head" rows="2">${escHtml(active.head || '')}</textarea>
+      </div>`;
+      html += `<div class="bk-field">
+        <label for="cs-body">Body</label>
+        <textarea id="cs-body" rows="4">${escHtml(active.body || '')}</textarea>
+      </div>`;
+      const bullets = (active.bullets || []).join('\n');
+      html += `<div class="bk-field">
+        <label for="cs-bullets">Bullets (optional · one per line)</label>
+        <textarea id="cs-bullets" rows="3" placeholder="Add bullets&#10;One per line">${escHtml(bullets)}</textarea>
+      </div>`;
+    }
+  }
+
+  /* Standard text fields */
+  if(t.fields.includes('name')){
+    html += `<div class="bk-field">
+      <label for="bk-name">Headline / name</label>
+      <textarea id="bk-name" rows="2">${escHtml(state.name)}</textarea>
+    </div>`;
+  }
+  if(t.fields.includes('role')){
+    html += `<div class="bk-field">
+      <label for="bk-role">Role / eyebrow</label>
+      <input id="bk-role" type="text" value="${escHtml(state.role)}"/>
+    </div>`;
+  }
+  if(t.fields.includes('tagline')){
+    html += `<div class="bk-field">
+      <label for="bk-tagline">Tagline / body</label>
+      <textarea id="bk-tagline" rows="2">${escHtml(state.tagline)}</textarea>
+    </div>`;
+  }
+  if(t.fields.includes('handle')){
+    html += `<div class="bk-field">
+      <label for="bk-handle">Handle / domain</label>
+      <input id="bk-handle" type="text" value="${escHtml(state.handle)}"/>
+    </div>`;
+  }
+  /* Quote-card fields */
+  if(t.fields.includes('quote')){
+    html += `<div class="bk-field">
+      <label for="bk-quote">Quote</label>
+      <textarea id="bk-quote" rows="3">${escHtml(state.quote)}</textarea>
+    </div>`;
+  }
+  if(t.fields.includes('attrName')){
+    html += `<div class="bk-field">
+      <label for="bk-attr-name">Attribution · name</label>
+      <input id="bk-attr-name" type="text" value="${escHtml(state.attrName)}"/>
+    </div>`;
+  }
+  if(t.fields.includes('attrRole')){
+    html += `<div class="bk-field">
+      <label for="bk-attr-role">Attribution · role</label>
+      <input id="bk-attr-role" type="text" value="${escHtml(state.attrRole)}"/>
+    </div>`;
+  }
+  /* Stat-card fields */
+  if(t.fields.includes('statValue')){
+    html += `<div class="bk-field">
+      <label for="bk-stat-val">Stat · big number</label>
+      <input id="bk-stat-val" type="text" value="${escHtml(state.statValue)}"/>
+    </div>`;
+  }
+  if(t.fields.includes('statLabel')){
+    html += `<div class="bk-field">
+      <label for="bk-stat-label">Stat · label</label>
+      <textarea id="bk-stat-label" rows="2">${escHtml(state.statLabel)}</textarea>
+    </div>`;
+  }
+  if(t.fields.includes('statSub')){
+    html += `<div class="bk-field">
+      <label for="bk-stat-sub">Stat · subtext</label>
+      <input id="bk-stat-sub" type="text" value="${escHtml(state.statSub)}"/>
+    </div>`;
+  }
+  /* Slide-cover fields */
+  if(t.fields.includes('presenter')){
+    html += `<div class="bk-field">
+      <label for="bk-presenter">Presenter / event</label>
+      <input id="bk-presenter" type="text" value="${escHtml(state.presenter)}"/>
+    </div>`;
+  }
+  /* Sub-brand picker */
+  if(t.fields.includes('subbrand')){
+    html += `<div class="bk-field">
+      <label>Sub-brand</label>
+      <div class="seg-row">
+        <button type="button" class="seg ${state.subbrand==='dev'?'active':''}" data-set="subbrand" data-val="dev">Dev</button>
+        <button type="button" class="seg ${state.subbrand==='night'?'active':''}" data-set="subbrand" data-val="night">Night</button>
+        <button type="button" class="seg ${state.subbrand==='day'?'active':''}" data-set="subbrand" data-val="day">Day</button>
+        <button type="button" class="seg ${state.subbrand==='cloud'?'active':''}" data-set="subbrand" data-val="cloud">Cloud</button>
+      </div>
+    </div>`;
+  }
+  /* Background style */
+  if(t.fields.includes('bg')){
+    html += `<div class="bk-field">
+      <label>Background</label>
+      <div class="swatch-row">
+        <button type="button" class="swatch ${state.bg==='paper'?'active':''}"        data-set="bg" data-val="paper"        style="background:#FAF7EC" title="Paper"></button>
+        <button type="button" class="swatch ${state.bg==='ink'?'active':''}"          data-set="bg" data-val="ink"          style="background:#0A0A0A" title="Ink"></button>
+        <button type="button" class="swatch ${state.bg==='grid'?'active':''}"         data-set="bg" data-val="grid"         style="background:#FAF7EC; box-shadow:inset 0 0 0 8px rgba(10,10,10,.08)" title="Paper · grid"></button>
+        <button type="button" class="swatch ${state.bg==='drench-blue'?'active':''}"  data-set="bg" data-val="drench-blue"  style="background:#2A4494" title="Drenched · blue"></button>
+        <button type="button" class="swatch ${state.bg==='drench-orange'?'active':''}"data-set="bg" data-val="drench-orange"style="background:#F58549" title="Drenched · orange"></button>
+        <button type="button" class="swatch ${state.bg==='drench-green'?'active':''}" data-set="bg" data-val="drench-green" style="background:#7FB236" title="Drenched · green"></button>
+      </div>
+      <p class="help">Paper, ink, grid, or sub-brand drenched fill.</p>
+    </div>`;
+  }
+  /* Custom accent color · overrides the sub-brand orange in eyebrows / accents */
+  if(t.fields.includes('customColor')){
+    html += `<div class="bk-field">
+      <label for="bk-custom-color">Custom accent (optional)</label>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <input type="color" id="bk-custom-color" value="${escHtml(state.customColor || '#F58549')}"/>
+        <input type="text" id="bk-custom-color-hex" value="${escHtml(state.customColor || '')}" placeholder="#hex or empty for brand" style="font-family:var(--mono); font-size:12px;"/>
+        <button type="button" id="bk-custom-color-clear" class="seg" style="border:1px solid var(--line); padding:6px 10px;">Reset</button>
+      </div>
+      <p class="help">Override the orange eyebrow / accent color for one-off campaigns.</p>
+    </div>`;
+  }
+
+  /* ─────────── Brand-mark customization · applies to every template ─────────── */
+  html += `<h3 style="margin-top:14px;">Brand mark</h3>`;
+  html += `<div class="bk-field">
+    <label>Size</label>
+    <div class="seg-row">
+      <button type="button" class="seg ${state.markSize==='S'  ?'active':''}" data-set="markSize" data-val="S">S</button>
+      <button type="button" class="seg ${state.markSize==='M'  ?'active':''}" data-set="markSize" data-val="M">M</button>
+      <button type="button" class="seg ${state.markSize==='L'  ?'active':''}" data-set="markSize" data-val="L">L</button>
+      <button type="button" class="seg ${state.markSize==='XL' ?'active':''}" data-set="markSize" data-val="XL">XL</button>
+      <button type="button" class="seg ${state.markSize==='XXL'?'active':''}" data-set="markSize" data-val="XXL">XXL</button>
+    </div>
+  </div>`;
+  html += `<div class="bk-field">
+    <label>Position</label>
+    <div class="seg-row">
+      <button type="button" class="seg ${state.markPos==='tl' ?'active':''}" data-set="markPos" data-val="tl"  title="Top left">↖</button>
+      <button type="button" class="seg ${state.markPos==='tr' ?'active':''}" data-set="markPos" data-val="tr"  title="Top right">↗</button>
+      <button type="button" class="seg ${state.markPos==='bl' ?'active':''}" data-set="markPos" data-val="bl"  title="Bottom left">↙</button>
+      <button type="button" class="seg ${state.markPos==='br' ?'active':''}" data-set="markPos" data-val="br"  title="Bottom right">↘</button>
+      <button type="button" class="seg ${state.markPos==='off'?'active':''}" data-set="markPos" data-val="off" title="Hide the mark">Off</button>
+    </div>
+    <p class="help">Pick a corner, or hide the mark for plain compositions.</p>
+  </div>`;
+  html += `<div class="bk-field">
+    <label for="bk-mark-pad">Edge padding · <span class="range-val" id="bk-mark-pad-val">${state.markPad}px</span></label>
+    <div class="range-row">
+      <input id="bk-mark-pad" type="range" min="0" max="120" step="2" value="${state.markPad}"/>
+    </div>
+    <p class="help">Distance from the corner. 0 keeps it flush.</p>
+  </div>`;
+
+  /* ─────────── Image overlays · works for every template ─────────── */
+  html += `<h3 style="margin-top:14px;">Images</h3>`;
+  html += `<div class="bk-field">
+    <label>Background image</label>
+    <div class="file-row">
+      <label class="file-pill">Upload<input type="file" accept="image/*" id="bk-bg-image-input"/></label>
+      <span class="file-name" id="bk-bg-image-name">${state.bgImage ? 'Custom image' : 'No image'}</span>
+      <button type="button" class="file-clear" id="bk-bg-image-clear">Clear</button>
+    </div>
+    <p class="help">Photo, screenshot, or graphic that fills the canvas.</p>
+  </div>`;
+  if(state.bgImage){
+    html += `<div class="bk-field">
+      <label>Background fit</label>
+      <div class="seg-row">
+        <button type="button" class="seg ${state.bgImageFit==='cover'  ?'active':''}" data-set="bgImageFit" data-val="cover">Cover</button>
+        <button type="button" class="seg ${state.bgImageFit==='contain'?'active':''}" data-set="bgImageFit" data-val="contain">Contain</button>
+      </div>
+    </div>`;
+    html += `<div class="bk-field">
+      <label for="bk-bg-image-opacity">Background opacity · <span class="range-val" id="bk-bg-image-opacity-val">${Math.round(state.bgImageOpacity*100)}%</span></label>
+      <div class="range-row">
+        <input id="bk-bg-image-opacity" type="range" min="0" max="1" step="0.05" value="${state.bgImageOpacity}"/>
+      </div>
+    </div>`;
+    html += `<div class="bk-field">
+      <label for="bk-bg-image-dim">Ink overlay · <span class="range-val" id="bk-bg-image-dim-val">${Math.round(state.bgImageDim*100)}%</span></label>
+      <div class="range-row">
+        <input id="bk-bg-image-dim" type="range" min="0" max="1" step="0.05" value="${state.bgImageDim}"/>
+      </div>
+      <p class="help">Darkens the image so headlines stay legible.</p>
+    </div>`;
+  }
+  html += `<div class="bk-field">
+    <label>Foreground asset</label>
+    <div class="file-row">
+      <label class="file-pill">Upload<input type="file" accept="image/*" id="bk-fg-image-input"/></label>
+      <span class="file-name" id="bk-fg-image-name">${state.fgImage ? 'Custom asset' : 'No asset'}</span>
+      <button type="button" class="file-clear" id="bk-fg-image-clear">Clear</button>
+    </div>
+    <p class="help">Logo, product shot, illustration. Sits over the background.</p>
+  </div>`;
+  if(state.fgImage){
+    html += `<div class="bk-field">
+      <label>Foreground placement</label>
+      <div class="seg-row">
+        <button type="button" class="seg ${state.fgImagePos==='left'  ?'active':''}" data-set="fgImagePos" data-val="left">Left</button>
+        <button type="button" class="seg ${state.fgImagePos==='right' ?'active':''}" data-set="fgImagePos" data-val="right">Right</button>
+        <button type="button" class="seg ${state.fgImagePos==='center'?'active':''}" data-set="fgImagePos" data-val="center">Center</button>
+        <button type="button" class="seg ${state.fgImagePos==='full'  ?'active':''}" data-set="fgImagePos" data-val="full">Full</button>
+      </div>
+    </div>`;
+  }
+
+  /* ─────────── Session reset ─────────── */
+  html += `<div class="bk-field" style="border-bottom:0;">
+    <button type="button" class="file-clear" id="bk-reset-all" style="width:100%;">Reset all to defaults</button>
+    <p class="help">Wipes every customization across all templates. Saved to your browser between visits.</p>
+  </div>`;
+
+  editor.innerHTML = html;
+
+  /* Wire field listeners · save to localStorage on every input so a
+     reload restores the user's most recent edit, not just the last
+     blurred value. */
+  const bind = (id, key) => {
+    const el = editor.querySelector(id);
+    if(el) el.addEventListener('input', e => {
+      state[key] = e.target.value;
+      renderTemplate();
+      saveState();
+    });
+  };
+  bind('#bk-name',       'name');
+  bind('#bk-role',       'role');
+  bind('#bk-tagline',    'tagline');
+  bind('#bk-handle',     'handle');
+  bind('#bk-quote',      'quote');
+  bind('#bk-attr-name',  'attrName');
+  bind('#bk-attr-role',  'attrRole');
+  bind('#bk-stat-val',   'statValue');
+  bind('#bk-stat-label', 'statLabel');
+  bind('#bk-stat-sub',   'statSub');
+  bind('#bk-presenter',  'presenter');
+
+  /* Custom color · two inputs (color picker + hex text) stay in sync */
+  const colorPicker = editor.querySelector('#bk-custom-color');
+  const colorHex    = editor.querySelector('#bk-custom-color-hex');
+  const colorClear  = editor.querySelector('#bk-custom-color-clear');
+  if(colorPicker) colorPicker.addEventListener('input', e => {
+    state.customColor = e.target.value;
+    if(colorHex) colorHex.value = e.target.value;
+    renderTemplate();
+    saveState();
+  });
+  if(colorHex) colorHex.addEventListener('input', e => {
+    state.customColor = e.target.value.trim();
+    if(colorPicker && /^#[0-9a-f]{6}$/i.test(state.customColor)) colorPicker.value = state.customColor;
+    renderTemplate();
+    saveState();
+  });
+  if(colorClear) colorClear.addEventListener('click', () => {
+    state.customColor = '';
+    if(colorHex) colorHex.value = '';
+    renderTemplate();
+    saveState();
+  });
+
+  editor.querySelectorAll('button[data-set]').forEach(b => {
+    b.addEventListener('click', () => {
+      state[b.dataset.set] = b.dataset.val;
+      saveState();
+      renderEditor();    /* re-render to update active states */
+      renderTemplate();
+    });
+  });
+
+  /* ── Range slider · mark padding ── */
+  const padRange  = editor.querySelector('#bk-mark-pad');
+  const padReadout = editor.querySelector('#bk-mark-pad-val');
+  if(padRange){
+    padRange.addEventListener('input', e => {
+      state.markPad = +e.target.value;
+      if(padReadout) padReadout.textContent = state.markPad + 'px';
+      renderTemplate();
+      saveState();
+    });
+  }
+
+  /* ── Range sliders · bg image opacity / dim ── */
+  const bgOpa    = editor.querySelector('#bk-bg-image-opacity');
+  const bgOpaVal = editor.querySelector('#bk-bg-image-opacity-val');
+  if(bgOpa){
+    bgOpa.addEventListener('input', e => {
+      state.bgImageOpacity = +e.target.value;
+      if(bgOpaVal) bgOpaVal.textContent = Math.round(state.bgImageOpacity * 100) + '%';
+      renderTemplate();
+      saveState();
+    });
+  }
+  const bgDim    = editor.querySelector('#bk-bg-image-dim');
+  const bgDimVal = editor.querySelector('#bk-bg-image-dim-val');
+  if(bgDim){
+    bgDim.addEventListener('input', e => {
+      state.bgImageDim = +e.target.value;
+      if(bgDimVal) bgDimVal.textContent = Math.round(state.bgImageDim * 100) + '%';
+      renderTemplate();
+      saveState();
+    });
+  }
+
+  /* ── Image uploads · FileReader → DataURL → state ── */
+  function bindImageUpload(inputId, clearId, key){
+    const input = editor.querySelector(inputId);
+    const clear = editor.querySelector(clearId);
+    if(input){
+      input.addEventListener('change', e => {
+        const file = e.target.files && e.target.files[0];
+        if(!file) return;
+        if(file.size > 8 * 1024 * 1024){
+          showToast('Image too large · keep under 8 MB');
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+          state[key] = reader.result;
+          saveState();
+          renderEditor();      /* re-render so fit / opacity / placement appear */
+          renderTemplate();
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+    if(clear){
+      clear.addEventListener('click', () => {
+        state[key] = null;
+        saveState();
+        renderEditor();
+        renderTemplate();
+      });
+    }
+  }
+  bindImageUpload('#bk-bg-image-input', '#bk-bg-image-clear', 'bgImage');
+  bindImageUpload('#bk-fg-image-input', '#bk-fg-image-clear', 'fgImage');
+
+  /* ── Carousel · slide nav (switch active / add / delete) ── */
+  editor.querySelectorAll('button[data-cs-index]').forEach(b => {
+    b.addEventListener('click', () => {
+      state.carouselActive = +b.dataset.csIndex;
+      saveState();
+      renderEditor();
+      renderTemplate();
+    });
+  });
+  const csAddBtn = editor.querySelector('#cs-add');
+  if(csAddBtn){
+    csAddBtn.addEventListener('click', () => {
+      if(state.carouselSlides.length >= 10) return;
+      const newSlide = {
+        type: 'content',
+        head: 'New slide heading',
+        body: 'Replace this with the body copy for this slide.'
+      };
+      state.carouselSlides.push(newSlide);
+      state.carouselActive = state.carouselSlides.length - 1;
+      saveState();
+      renderEditor();
+      renderTemplate();
+    });
+  }
+  const csDelBtn = editor.querySelector('#cs-del');
+  if(csDelBtn){
+    csDelBtn.addEventListener('click', () => {
+      if(state.carouselSlides.length <= 1) return;
+      const i = state.carouselActive;
+      state.carouselSlides.splice(i, 1);
+      state.carouselActive = Math.max(0, Math.min(i, state.carouselSlides.length - 1));
+      saveState();
+      renderEditor();
+      renderTemplate();
+    });
+  }
+  /* ── Carousel · slide type picker (cover / content / end). Switching
+     type doesn't wipe per-slide copy, so users can A/B between types. ── */
+  editor.querySelectorAll('button[data-cs-set-type]').forEach(b => {
+    b.addEventListener('click', () => {
+      const slide = state.carouselSlides[state.carouselActive];
+      if(!slide) return;
+      slide.type = b.dataset.csSetType;
+      saveState();
+      renderEditor();
+      renderTemplate();
+    });
+  });
+  /* ── Carousel · per-slide field bindings ── */
+  function bindSlide(id, key, transform){
+    const el = editor.querySelector(id);
+    if(!el) return;
+    el.addEventListener('input', e => {
+      const slide = state.carouselSlides[state.carouselActive];
+      if(!slide) return;
+      slide[key] = transform ? transform(e.target.value) : e.target.value;
+      renderTemplate();
+      saveState();
+    });
+  }
+  bindSlide('#cs-eyebrow', 'eyebrow');
+  bindSlide('#cs-name',    'name');
+  bindSlide('#cs-subline', 'subline');
+  bindSlide('#cs-handle',  'handle');
+  bindSlide('#cs-head',    'head');
+  bindSlide('#cs-body',    'body');
+  bindSlide('#cs-bullets', 'bullets', v => v.split('\n').map(s => s.trim()).filter(Boolean));
+
+  /* ── Reset everything · also wipes localStorage ── */
+  const resetBtn = editor.querySelector('#bk-reset-all');
+  if(resetBtn){
+    resetBtn.addEventListener('click', () => {
+      if(!confirm('Reset every customization back to defaults?')) return;
+      Object.keys(state).forEach(k => { delete state[k]; });
+      Object.assign(state, DEFAULTS);
+      /* Re-clone the carousel array so reset doesn't share refs with DEFAULTS */
+      state.carouselSlides = JSON.parse(JSON.stringify(DEFAULTS.carouselSlides));
+      try { localStorage.removeItem('bk-state'); } catch(e){}
+      renderEditor();
+      renderTemplate();
+      showToast('Reset to defaults');
+    });
+  }
+
+}
+
+/* ============================================================================
+   STATE PERSISTENCE · the editor is a power tool. Surviving a reload is
+   table stakes. We snapshot `state` to localStorage on every meaningful
+   change and rehydrate on boot. Image DataURLs can balloon the payload,
+   so we cap there and silently fall back if quota is hit.
+   ============================================================================ */
+const LS_KEY = 'bk-state-v1';
+function saveState(){
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify(state));
+  } catch(e){
+    /* QuotaExceeded · very large image · drop the image fields and retry */
+    try {
+      const slim = Object.assign({}, state, { bgImage:null, fgImage:null });
+      localStorage.setItem(LS_KEY, JSON.stringify(slim));
+      console.warn('bk-state: image too large for localStorage, dropped before save');
+    } catch(_e){ /* give up silently · user just loses the image on reload */ }
+  }
+}
+function loadState(){
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return;
+    const saved = JSON.parse(raw);
+    /* Defensive · only copy known keys, avoid stale / malicious shapes */
+    Object.keys(DEFAULTS).forEach(k => {
+      if(k in saved) state[k] = saved[k];
+    });
+  } catch(e){ /* malformed state · ignore, use defaults */ }
+}
+
+/* ============================================================================
+   TEMPLATE PICKER · sidebar
+   ============================================================================ */
+document.querySelectorAll('.bk-tmpl-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.bk-tmpl-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.template = btn.dataset.template;
+    syncExportButtons();
+    renderTemplate();
+    renderEditor();
+    saveState();
+  });
+});
+
+/* ============================================================================
+   EXPORT · render the active template at native resolution → PNG
+   ============================================================================ */
+function showToast(msg){
+  const t = document.getElementById('bk-toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+/* ============================================================================
+   CAPTURE · render the active template at native size and return a PNG
+   data URL. Shared by single-template export, carousel ZIP export, and
+   carousel PDF export so all three paths produce identical output.
+   ============================================================================ */
+async function captureActiveTemplate(){
+  const tmplEl = wrap.querySelector('.bk-tmpl');
+  if(!tmplEl) return null;
+  const t = TEMPLATES[state.template];
+  const origTransform = tmplEl.style.transform;
+  const origWrapW = wrap.style.width;
+  const origWrapH = wrap.style.height;
+  tmplEl.style.transform = 'scale(1)';
+  wrap.style.width  = t.w + 'px';
+  wrap.style.height = t.h + 'px';
+  try{
+    return await htmlToImage.toPng(tmplEl, {
+      width: t.w, height: t.h, pixelRatio: 1, cacheBust: true,
+      style: { transform:'scale(1)', transformOrigin:'top left' },
+    });
+  } finally {
+    tmplEl.style.transform = origTransform;
+    wrap.style.width  = origWrapW;
+    wrap.style.height = origWrapH;
+  }
+}
+
+/* Capture every slide of the active carousel · used by both ZIP and PDF
+   export paths. Switches state.carouselActive frame-by-frame, captures,
+   then restores. Yields between renders so the browser actually paints. */
+async function captureAllCarouselSlides(onProgress){
+  const slides = state.carouselSlides;
+  const originalActive = state.carouselActive;
+  const out = [];
+  for(let i = 0; i < slides.length; i++){
+    state.carouselActive = i;
+    renderTemplate();
+    /* Two RAFs · let style + layout commit before html-to-image reads it. */
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const dataUrl = await captureActiveTemplate();
+    if(dataUrl) out.push(dataUrl);
+    if(onProgress) onProgress(i + 1, slides.length);
+  }
+  state.carouselActive = originalActive;
+  renderTemplate();
+  return out;
+}
+
+exportBtn.addEventListener('click', async () => {
+  const tmplEl = wrap.querySelector('.bk-tmpl');
+  if(!tmplEl) return;
+  exportBtn.disabled = true;
+  const t = TEMPLATES[state.template];
+
+  /* Carousel · render every slide and bundle into a ZIP (one PNG per slide).
+     Single-template path stays unchanged below. */
+  if(isCarousel()){
+    if(typeof JSZip === 'undefined'){ showToast('JSZip not loaded'); exportBtn.disabled = false; return; }
+    const total = state.carouselSlides.length;
+    exportBtn.textContent = 'Rendering 0 / ' + total + '...';
+    try{
+      const dataUrls = await captureAllCarouselSlides((done, all) => {
+        exportBtn.textContent = 'Rendering ' + done + ' / ' + all + '...';
+      });
+      const zip = new JSZip();
+      dataUrls.forEach((dataUrl, i) => {
+        const base64 = dataUrl.split(',')[1];
+        const num = String(i + 1).padStart(2, '0');
+        zip.file('zopdev-' + state.template + '-' + num + '.png', base64, { base64:true });
+      });
+      const blob = await zip.generateAsync({ type:'blob' });
+      const url  = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.download = 'zopdev-' + state.template + '.zip';
+      link.href = url;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      showToast(total + ' slides downloaded · ZIP');
+    } catch(err){
+      console.error('Carousel export failed:', err);
+      showToast('Export failed · check console');
+    }
+    exportBtn.disabled = false;
+    syncExportButtons();
+    return;
+  }
+
+  /* Single-template · the existing flow */
+  exportBtn.textContent = 'Rendering...';
+  try{
+    const dataUrl = await captureActiveTemplate();
+    if(dataUrl){
+      const link = document.createElement('a');
+      link.download = 'zopdev-' + state.template + '.png';
+      link.href = dataUrl;
+      link.click();
+      showToast('PNG downloaded · ' + t.w + '×' + t.h);
+    }
+  } catch(err){
+    console.error('Export failed:', err);
+    showToast('Export failed · check console');
+  }
+  exportBtn.disabled = false;
+  syncExportButtons();
+});
+
+/* ============================================================================
+   PDF EXPORT · carousel only. Stitches every captured slide into a single
+   multi-page PDF at native resolution. LinkedIn document posts accept PDF
+   uploads, so this is the canonical "post a carousel" output.
+   ============================================================================ */
+const exportPdfBtn = document.getElementById('bk-export-pdf-btn');
+exportPdfBtn.addEventListener('click', async () => {
+  if(!isCarousel()) return;
+  if(!window.jspdf || !window.jspdf.jsPDF){ showToast('jsPDF not loaded'); return; }
+  exportPdfBtn.disabled = true;
+  const t = TEMPLATES[state.template];
+  const total = state.carouselSlides.length;
+  exportPdfBtn.textContent = 'Rendering 0 / ' + total + '...';
+  try{
+    const dataUrls = await captureAllCarouselSlides((done, all) => {
+      exportPdfBtn.textContent = 'Rendering ' + done + ' / ' + all + '...';
+    });
+    const orientation = t.w > t.h ? 'landscape' : 'portrait';
+    const pdf = new window.jspdf.jsPDF({ orientation, unit:'px', format:[t.w, t.h] });
+    dataUrls.forEach((dataUrl, i) => {
+      if(i > 0) pdf.addPage([t.w, t.h], orientation);
+      pdf.addImage(dataUrl, 'PNG', 0, 0, t.w, t.h);
+    });
+    pdf.save('zopdev-' + state.template + '.pdf');
+    showToast(total + ' slides downloaded · PDF');
+  } catch(err){
+    console.error('PDF export failed:', err);
+    showToast('PDF export failed · check console');
+  }
+  exportPdfBtn.disabled = false;
+  syncExportButtons();
+});
+
+/* Show / hide / relabel the export buttons based on what the user is
+   editing. Carousel templates get the multi-slide labels and the PDF
+   button; everything else falls back to the original "Download PNG". */
+function syncExportButtons(){
+  if(state.template === 'press-kit'){
+    exportBtn.style.display = 'none';
+    exportPdfBtn.style.display = 'none';
+    return;
+  }
+  if(isCarousel()){
+    exportBtn.style.display = '';
+    exportBtn.textContent = 'Download · ZIP';
+    exportPdfBtn.style.display = '';
+    exportPdfBtn.textContent = 'Download · PDF';
+  } else {
+    exportBtn.style.display = '';
+    exportBtn.textContent = 'Download PNG';
+    exportPdfBtn.style.display = 'none';
+  }
+}
+
+/* ============================================================================
+   EXPORT ALL · render every renderable template at native resolution and
+   bundle the PNGs into a single ZIP. Skips slack-avatar (boring) and
+   press-kit (separate per-mark downloads).
+   ============================================================================ */
+const exportAllBtn = document.getElementById('bk-export-all-btn');
+exportAllBtn.addEventListener('click', async () => {
+  /* Skip press-kit (separate per-mark downloads) AND carousels (their
+     own dedicated multi-slide export buttons · including them here would
+     only capture the currently-active slide of each carousel, which is
+     not what "Export all" implies). */
+  const exportable = Object.keys(TEMPLATES).filter(k =>
+    k !== 'press-kit' && k !== 'carousel-square' && k !== 'carousel-portrait'
+  );
+  if(typeof JSZip === 'undefined'){ showToast('JSZip not loaded'); return; }
+  exportAllBtn.disabled = true;
+  exportAllBtn.textContent = 'Exporting 0 of ' + exportable.length + '...';
+
+  const zip = new JSZip();
+  const originalTemplate = state.template;
+
+  for(let i = 0; i < exportable.length; i++){
+    const key = exportable[i];
+    state.template = key;
+    /* Re-render the active template at native dimensions for capture */
+    renderTemplate();
+    /* Allow a paint tick so the new DOM is laid out */
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    const tmplEl = wrap.querySelector('.bk-tmpl');
+    if(!tmplEl) continue;
+    const t = TEMPLATES[key];
+    const origTransform = tmplEl.style.transform;
+    tmplEl.style.transform = 'scale(1)';
+    const origWrapW = wrap.style.width;
+    const origWrapH = wrap.style.height;
+    wrap.style.width  = t.w + 'px';
+    wrap.style.height = t.h + 'px';
+
+    try{
+      const dataUrl = await htmlToImage.toPng(tmplEl, {
+        width:  t.w,
+        height: t.h,
+        pixelRatio: 1,
+        cacheBust: true,
+        style: { transform:'scale(1)', transformOrigin:'top left' },
+      });
+      const base64 = dataUrl.split(',')[1];
+      zip.file('zopdev-' + key + '.png', base64, { base64:true });
+    } catch(err){
+      console.error('Skipped ' + key + ':', err);
+    }
+
+    tmplEl.style.transform = origTransform;
+    wrap.style.width  = origWrapW;
+    wrap.style.height = origWrapH;
+    exportAllBtn.textContent = 'Exporting ' + (i + 1) + ' of ' + exportable.length + '...';
+  }
+
+  /* Restore active template + UI */
+  state.template = originalTemplate;
+  renderTemplate();
+
+  /* Generate the ZIP and download */
+  const blob = await zip.generateAsync({ type:'blob' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.download = 'zopdev-brand-kit.zip';
+  link.href = url;
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+
+  exportAllBtn.disabled = false;
+  exportAllBtn.textContent = 'Export all · ZIP';
+  showToast(exportable.length + ' assets exported as ZIP');
+});
+
+/* ============================================================================
+   PRESS KIT · per-mark SVG + PNG downloads at any size
+   ============================================================================ */
+const MARK_DEFS = {
+  dev: {
+    name: 'ZopDev',
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="SIZE" height="SIZE">
+      <rect x="0"  y="0"  width="16" height="16" fill="#2A4494"/>
+      <rect x="16" y="0"  width="16" height="16" fill="#F58549"/>
+      <rect x="16" y="16" width="16" height="16" fill="#7FB236"/>
+    </svg>`
+  },
+  night: {
+    name: 'ZopNight',
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="SIZE" height="SIZE">
+      <rect x="0" y="0" width="32" height="32" fill="#2A4494"/>
+      <circle cx="16" cy="16" r="8" fill="#FFFFFF"/>
+    </svg>`
+  },
+  day: {
+    name: 'ZopDay',
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="SIZE" height="SIZE">
+      <rect x="0" y="0" width="32" height="32" fill="#F58549"/>
+      <circle cx="16" cy="16" r="8" fill="#FFFFFF"/>
+    </svg>`
+  },
+  cloud: {
+    name: 'ZopCloud',
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="SIZE" height="SIZE">
+      <rect x="0" y="0" width="32" height="32" fill="#2A4494"/>
+      <rect x="12" y="8"  width="8"  height="6"  fill="#FFFFFF"/>
+      <rect x="6"  y="14" width="20" height="10" fill="#FFFFFF"/>
+    </svg>`
+  },
+  /* Wordmark lockups · aspect ratio 150:40 (3.75:1) · use WW/HH for output dims */
+  'wordmark-light': {
+    name: 'Wordmark · full color light', w: 150, h: 40,
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 40" width="WW" height="HH">
+      <rect x="0"  y="0"  width="20" height="20" fill="#2A4494"/>
+      <rect x="20" y="0"  width="20" height="20" fill="#F58549"/>
+      <rect x="20" y="20" width="20" height="20" fill="#7FB236"/>
+      <text x="50" y="29" font-family="'Space Grotesk',system-ui,sans-serif" font-size="22" font-weight="700" fill="#0A0A0A" letter-spacing="-0.4">ZopDev</text>
+    </svg>`
+  },
+  'wordmark-dark': {
+    name: 'Wordmark · full color dark', w: 150, h: 40,
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 40" width="WW" height="HH">
+      <rect x="0"  y="0"  width="20" height="20" fill="#2A4494"/>
+      <rect x="20" y="0"  width="20" height="20" fill="#F58549"/>
+      <rect x="20" y="20" width="20" height="20" fill="#7FB236"/>
+      <text x="50" y="29" font-family="'Space Grotesk',system-ui,sans-serif" font-size="22" font-weight="700" fill="#F0EBDB" letter-spacing="-0.4">ZopDev</text>
+    </svg>`
+  },
+  'wordmark-mono-dark': {
+    name: 'Wordmark · mono ink', w: 150, h: 40,
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 40" width="WW" height="HH">
+      <rect x="0"  y="0"  width="20" height="20" fill="#0A0A0A"/>
+      <rect x="20" y="0"  width="20" height="20" fill="#0A0A0A"/>
+      <rect x="20" y="20" width="20" height="20" fill="#0A0A0A"/>
+      <text x="50" y="29" font-family="'Space Grotesk',system-ui,sans-serif" font-size="22" font-weight="700" fill="#0A0A0A" letter-spacing="-0.4">ZopDev</text>
+    </svg>`
+  },
+  'wordmark-mono-light': {
+    name: 'Wordmark · mono white', w: 150, h: 40,
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 40" width="WW" height="HH">
+      <rect x="0"  y="0"  width="20" height="20" fill="#F0EBDB"/>
+      <rect x="20" y="0"  width="20" height="20" fill="#F0EBDB"/>
+      <rect x="20" y="20" width="20" height="20" fill="#F0EBDB"/>
+      <text x="50" y="29" font-family="'Space Grotesk',system-ui,sans-serif" font-size="22" font-weight="700" fill="#F0EBDB" letter-spacing="-0.4">ZopDev</text>
+    </svg>`
+  },
+  /* Framed logo cards · solid background + mark + text · aspect ratio 260:80 (3.25:1) */
+  'logo-light': {
+    name: 'Logo · light', w: 260, h: 80,
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 80" width="WW" height="HH">
+      <rect width="260" height="80" fill="#FAF7EC"/>
+      <rect x="28" y="20" width="20" height="20" fill="#2A4494"/>
+      <rect x="48" y="20" width="20" height="20" fill="#F58549"/>
+      <rect x="48" y="40" width="20" height="20" fill="#7FB236"/>
+      <text x="82" y="52" font-family="'Space Grotesk',system-ui,sans-serif" font-size="26" font-weight="700" fill="#0A0A0A" letter-spacing="-0.5">ZopDev</text>
+    </svg>`
+  },
+  'logo-dark': {
+    name: 'Logo · dark', w: 260, h: 80,
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 80" width="WW" height="HH">
+      <rect width="260" height="80" fill="#0A0A0A"/>
+      <rect x="28" y="20" width="20" height="20" fill="#2A4494"/>
+      <rect x="48" y="20" width="20" height="20" fill="#F58549"/>
+      <rect x="48" y="40" width="20" height="20" fill="#7FB236"/>
+      <text x="82" y="52" font-family="'Space Grotesk',system-ui,sans-serif" font-size="26" font-weight="700" fill="#F0EBDB" letter-spacing="-0.5">ZopDev</text>
+    </svg>`
+  },
+};
+
+function downloadMark(key, fmt, size){
+  const def = MARK_DEFS[key];
+  if(!def) return;
+  /* Non-square wordmarks carry w/h aspect ratio; icons are square */
+  const pngW = size;
+  const pngH = (def.w && def.h) ? Math.round(size * def.h / def.w) : size;
+  const dimSuffix = pngH !== pngW ? pngW + 'x' + pngH : String(pngW);
+
+  function buildSvgStr(){
+    return def.svg
+      .replace(/SIZE/g, String(size))
+      .replace(/WW/g, String(pngW))
+      .replace(/HH/g, String(pngH));
+  }
+
+  if(fmt === 'svg'){
+    const svgStr = buildSvgStr();
+    const blob = new Blob([svgStr], {type:'image/svg+xml'});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = 'zopdev-' + key + '.svg';
+    link.href = url;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showToast('SVG downloaded · ' + def.name);
+    return;
+  }
+  /* PNG · render the SVG into a canvas at the requested size */
+  const svgStr = buildSvgStr();
+  const blob = new Blob([svgStr], {type:'image/svg+xml'});
+  const url = URL.createObjectURL(blob);
+  const img = new Image();
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = pngW; canvas.height = pngH;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, pngW, pngH);
+    canvas.toBlob(b => {
+      const burl = URL.createObjectURL(b);
+      const link = document.createElement('a');
+      link.download = 'zopdev-' + key + '-' + dimSuffix + '.png';
+      link.href = burl;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(burl), 1000);
+      showToast('PNG downloaded · ' + def.name + ' · ' + pngW + '×' + pngH);
+    }, 'image/png');
+    URL.revokeObjectURL(url);
+  };
+  img.src = url;
+}
+
+/* ============================================================================
+   BOOT
+   ============================================================================ */
+function init(){
+  /* Hydrate from localStorage before anything else so the first paint
+     already reflects the user's saved customizations. */
+  loadState();
+  /* Sync the sidebar · the active template might be different from the
+     hard-coded HTML default after a reload. */
+  document.querySelectorAll('.bk-tmpl-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.template === state.template);
+  });
+  /* Press-kit hides export buttons; carousel reveals the PDF button.
+     Centralised in syncExportButtons so all routes stay in sync. */
+  syncExportButtons();
+  renderTemplate();
+  renderEditor();
+}
+
+/* Re-scale on viewport resize so preview always fits */
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+  if(resizeTimer) clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(renderTemplate, 100);
+});
+
+/* Double-RAF: first frame lets the grid layout settle, second measures it */
+requestAnimationFrame(() => requestAnimationFrame(init));
+</script>
+
+<script src="chrome-footer.js" defer></script>
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="walkthrough.html">Product guide</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developers.html">Documentation</a></li>
+        <li><a href="developers.html">API reference</a></li>
+        <li><a href="developers.html">MCP server</a></li>
+        <li><a href="developers.html">SDK &amp; CLI</a></li>
+        <li><a href="developers.html">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-globe">
+      <div class="foot-globe-left">
+        <a href="/" class="foot-globe-mark" aria-label="ZopDev">
+          <svg class="foot-globe-logo" viewBox="0 0 715 276" aria-hidden="true">
+            <use href="#logo-zopdev"/>
+          </svg>
+        </a>
+      </div>
+      <div class="foot-globe-right">
+        <div class="foot-regions-v2" id="foot-regions-v2">
+          <canvas id="foot-regions-map"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom foot-bottom-3">
+      <div class="foot-copy">© <span data-year>2026</span> ZopDev · <a href="trust.html">privacy</a> · <a href="trust.html">terms</a></div>
+      <div class="foot-mid">made with <svg viewBox="0 0 7 6" aria-hidden="true"><rect x="1" y="0" width="1" height="1"/><rect x="2" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="0" y="1" width="7" height="1"/><rect x="0" y="2" width="7" height="1"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg> by <a href="https://zop.dev" target="_blank" rel="noopener">zop.dev</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand launch readiness · ZopDev</title>
+<meta name="description" content="The full set of artifacts for the ZopDev brand launch. Runbooks, comms, sales enablement, brand guidelines, legal-ops, SEO, trust center, product rebrand, launch-day playbook, and post-launch metrics.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="homepage-chrome.css">
+<link rel="stylesheet" href="chrome-footer.css">
+<script src="chrome-darkfold.js" defer></script>
+
+<style>
+/* sharp corners site-wide already enforced by tokens.css */
+em,i,cite,dfn,var,address,blockquote{font-style:normal}
+
+/* page wrapper */
+.page{padding:0}
+.page > section{padding:88px 0;border-bottom:1px solid var(--line)}
+.page > section:last-child{border-bottom:0}
+
+/* PAGE HEAD */
+.page-head{padding:64px 0 72px;border-bottom:1px solid var(--line)}
+.page-head .container{display:flex;flex-direction:column;gap:22px}
+.page-head .meta{font-family:var(--mono);font-size:11px;color:var(--zop-orange);
+  letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
+.page-head .meta::before{content:'';width:10px;height:10px;background:var(--zop-orange);flex-shrink:0}
+.page-head h1{font-size:clamp(44px,6.2vw,84px);font-weight:700;line-height:.98;
+  letter-spacing:-0.05em;margin:0;max-width:1100px}
+.page-head h1 em{font-style:normal;color:var(--zop-orange)}
+.page-head .lede{font-size:19px;color:var(--g-600);max-width:760px;line-height:1.5;margin:0}
+
+/* STATUS STRIP */
+.status-strip{padding:0;background:var(--ink);color:var(--zop-cream);border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.status-strip .container{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+@media(max-width:760px){.status-strip .container{grid-template-columns:1fr 1fr}}
+.ss-cell{padding:32px 28px;border-right:1px solid #2a2a2a}
+.ss-cell:last-child{border-right:0}
+.ss-key{font-family:var(--mono);font-size:11px;color:#8a8378;letter-spacing:.14em;
+  text-transform:uppercase;margin:0 0 10px}
+.ss-val{font-size:36px;line-height:1;font-weight:700;letter-spacing:-0.025em;color:var(--zop-cream);
+  font-variant-numeric:tabular-nums}
+.ss-val em{font-style:normal;color:var(--zop-orange)}
+
+/* QUICK FACTS */
+.facts h2{font-size:clamp(28px,3.4vw,44px);letter-spacing:-0.04em;font-weight:700;margin:0 0 32px}
+.facts h2 em{font-style:normal;color:var(--zop-orange)}
+.facts-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);
+  background:var(--paper)}
+@media(max-width:880px){.facts-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){.facts-grid{grid-template-columns:1fr}}
+.fact{padding:22px 24px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.fact:nth-child(3n){border-right:0}
+.fact:nth-last-child(-n+3){border-bottom:0}
+@media(max-width:880px){.fact{border-right:0}.fact:nth-last-child(-n+3){border-bottom:1px solid var(--line)}.fact:last-child{border-bottom:0}}
+.fact-key{font-family:var(--mono);font-size:10px;color:var(--g-500);
+  letter-spacing:.14em;text-transform:uppercase;margin:0 0 6px}
+.fact-val{font-size:15px;font-weight:600;color:var(--ink);line-height:1.4}
+.fact-val .accent{color:var(--zop-orange)}
+
+/* TIMELINE */
+.timeline-rows{border:1px solid var(--line);background:var(--paper)}
+.tl-row{display:grid;grid-template-columns:140px 1fr 200px;gap:24px;
+  padding:18px 28px;border-bottom:1px solid var(--line);align-items:center}
+.tl-row:last-child{border-bottom:0}
+.tl-row.now{background:var(--zop-orange);color:var(--paper)}
+.tl-row.now .tl-time,.tl-row.now .tl-who{color:var(--paper)}
+.tl-row.now .tl-what{color:var(--paper);font-weight:600}
+.tl-row.now .tl-what strong{color:var(--paper)}
+.tl-time{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--zop-orange);
+  letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.tl-row.past .tl-time{color:var(--g-500)}
+.tl-what{font-size:15px;color:var(--g-700);line-height:1.4}
+.tl-what strong{color:var(--ink)}
+.tl-who{font-family:var(--mono);font-size:11px;color:var(--g-500);
+  letter-spacing:.14em;text-transform:uppercase;text-align:right}
+@media(max-width:760px){
+  .tl-row{grid-template-columns:90px 1fr;gap:14px;padding:14px 18px}
+  .tl-who{display:none}
+}
+
+/* SECTION CARDS */
+.sections h2{font-size:clamp(28px,3.4vw,44px);letter-spacing:-0.04em;font-weight:700;margin:0 0 8px}
+.sections h2 em{font-style:normal;color:var(--zop-orange)}
+.sections .sub{font-size:16px;color:var(--g-600);max-width:680px;margin:0 0 40px}
+
+.sec-list{display:flex;flex-direction:column;gap:0;border:1px solid var(--line)}
+.sec-card{background:var(--paper);border-bottom:1px solid var(--line);
+  display:grid;grid-template-columns:auto 1fr;gap:0}
+.sec-card:last-child{border-bottom:0}
+@media(max-width:760px){.sec-card{grid-template-columns:1fr}}
+
+.sec-tab{padding:24px 24px 24px 24px;border-right:1px solid var(--line);
+  background:var(--g-100);min-width:200px;display:flex;flex-direction:column;gap:8px;justify-content:space-between}
+@media(max-width:760px){.sec-tab{border-right:0;border-bottom:1px solid var(--line);min-width:0}}
+.sec-num{font-family:var(--mono);font-size:11px;color:var(--zop-orange);
+  letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+.sec-num::before{content:'';width:10px;height:10px;background:var(--zop-orange);flex-shrink:0}
+.sec-title{font-size:22px;font-weight:700;letter-spacing:-0.025em;line-height:1.15;color:var(--ink);margin:8px 0 0}
+.sec-owner{font-family:var(--mono);font-size:10px;color:var(--g-500);letter-spacing:.14em;text-transform:uppercase;margin-top:auto;padding-top:14px}
+
+.sec-files{padding:0}
+.sec-desc{padding:22px 28px;font-size:14px;color:var(--g-600);line-height:1.55;border-bottom:1px solid var(--line);background:var(--g-50)}
+
+.file-row{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;
+  padding:14px 28px;border-bottom:1px solid var(--line);
+  transition:background var(--dur-fast),color var(--dur-fast);cursor:pointer}
+.file-row:last-child{border-bottom:0}
+.file-row:hover{background:var(--g-100)}
+.file-row:hover .file-name a{color:var(--zop-orange)}
+.file-tag{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--g-500);
+  letter-spacing:.14em;text-transform:uppercase;background:var(--g-100);
+  border:1px solid var(--g-300);padding:5px 8px;min-width:48px;text-align:center}
+.file-tag.html{color:var(--paper);background:var(--zop-orange);border-color:var(--zop-orange)}
+.file-info{min-width:0}
+.file-name{font-size:15px;font-weight:600;color:var(--ink);margin:0 0 2px;line-height:1.3}
+.file-name a{color:inherit;border-bottom:1px solid transparent;transition:color var(--dur-fast),border-color var(--dur-fast)}
+.file-row:hover .file-name a{border-color:var(--zop-orange)}
+.file-desc{font-size:13px;color:var(--g-500);line-height:1.45;margin:0}
+.file-path{font-family:var(--mono);font-size:11px;color:var(--g-500);letter-spacing:.04em;text-align:right;flex-shrink:0}
+@media(max-width:760px){.file-path{display:none}}
+
+/* PENDING */
+.pending h2{font-size:clamp(28px,3.4vw,44px);letter-spacing:-0.04em;font-weight:700;margin:0 0 8px}
+.pending h2 em{font-style:normal;color:var(--zop-orange)}
+.pending .sub{font-size:16px;color:var(--g-600);max-width:760px;margin:0 0 40px}
+.pending-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line)}
+@media(max-width:980px){.pending-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:680px){.pending-grid{grid-template-columns:1fr}}
+.pending-block{padding:24px 28px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper)}
+.pending-block:nth-child(3n){border-right:0}
+.pending-block:nth-last-child(-n+3){border-bottom:0}
+@media(max-width:980px){.pending-block{border-right:0}.pending-block:nth-last-child(-n+3){border-bottom:1px solid var(--line)}}
+.pending-block:last-child{border-bottom:0}
+.pb-num{font-family:var(--mono);font-size:11px;color:var(--zop-orange);letter-spacing:.14em;
+  text-transform:uppercase;display:flex;align-items:center;gap:10px;margin:0 0 14px}
+.pb-num::before{content:'';width:10px;height:10px;background:var(--zop-orange);flex-shrink:0}
+.pb-title{font-size:16px;font-weight:700;letter-spacing:-0.015em;color:var(--ink);margin:0 0 12px}
+.pb-list{margin:0;padding-left:0;list-style:none}
+.pb-list li{font-size:13px;line-height:1.55;padding:5px 0 5px 18px;color:var(--g-700);position:relative}
+.pb-list li::before{content:'';position:absolute;left:0;top:11px;width:8px;height:1.5px;background:var(--zop-orange)}
+.pb-list li.done{color:var(--g-500);text-decoration:line-through;text-decoration-color:var(--g-400)}
+.pb-list li.done::before{background:var(--zop-green)}
+
+/* CTA */
+.cta{padding:96px 0;background:var(--ink);color:var(--zop-cream)}
+.cta .container{max-width:880px;text-align:center}
+.cta h2{font-size:clamp(36px,4.5vw,60px);letter-spacing:-0.04em;font-weight:700;margin:0 0 18px;line-height:1.05}
+.cta h2 em{font-style:normal;color:var(--zop-orange)}
+.cta p{font-size:17px;color:#a8a195;max-width:540px;margin:0 auto 32px;line-height:1.55}
+.cta .btn-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.cta .btn{display:inline-block;padding:14px 24px;font-family:var(--font);font-size:14px;font-weight:600;
+  letter-spacing:.04em;text-transform:uppercase;transition:transform var(--dur-fast),box-shadow var(--dur-fast)}
+.cta .btn-primary{background:var(--zop-orange);color:var(--ink);border:1px solid var(--zop-orange)}
+.cta .btn-primary:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 0 var(--zop-cream)}
+.cta .btn-ghost{background:transparent;color:var(--zop-cream);border:1px solid #2a2a34}
+.cta .btn-ghost:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 0 var(--zop-orange);border-color:var(--zop-orange)}
+
+/* a11y · focus rings (brand-orange offset, never the default browser ring) */
+*:focus{outline:none}
+*:focus-visible{outline:2px solid var(--zop-orange);outline-offset:2px}
+a:focus-visible,button:focus-visible{outline-offset:3px}
+/* respect reduced motion, collapse all transitions */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition-duration:.01ms !important;animation-duration:.01ms !important}
+}
+
+/* TOP NAV (simple version, doesn't depend on the full chrome.js) */
+.minav{padding:18px 0;border-bottom:1px solid var(--line);background:var(--paper);position:sticky;top:0;z-index:50}
+.minav .container{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.minav .wm{font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--ink)}
+.minav .wm span{color:var(--zop-orange)}
+.minav .right{font-family:var(--mono);font-size:11px;color:var(--g-500);letter-spacing:.14em;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<!-- ============ MINI NAV ============ -->
+<nav class="minav">
+  <div class="container">
+    <a href="brand-launch.html" class="wm">Zop<span>Dev</span></a>
+    <span class="right">// brand launch · readiness</span>
+  </div>
+</nav>
+
+<!-- ============ PAGE HEAD ============ -->
+<header class="page-head">
+  <div class="container">
+    <div class="meta">// brand launch readiness · v1</div>
+    <h1>Everything we need to ship <em>the new ZopDev</em>.<br>In one place.</h1>
+    <p class="lede">Thirty-eight artifacts across ten functional sections. Runbooks, comms, sales enablement, brand guidelines, legal-ops, SEO, trust center, product rebrand, launch-day operations, and post-launch metrics. Every file rendered as HTML on the real ZopDev design system.</p>
+  </div>
+</header>
+
+<!-- ============ STATUS STRIP ============ -->
+<section class="status-strip" style="padding:0">
+  <div class="container">
+    <div class="ss-cell"><div class="ss-key">Artifacts</div><div class="ss-val"><em>38</em></div></div>
+    <div class="ss-cell"><div class="ss-key">Sections</div><div class="ss-val">10</div></div>
+    <div class="ss-cell"><div class="ss-key">Named customers</div><div class="ss-val">5</div></div>
+    <div class="ss-cell"><div class="ss-key">Deploy claim</div><div class="ss-val"><em>30m</em></div></div>
+  </div>
+</section>
+
+<div class="page">
+
+<!-- ============ FACTS ============ -->
+<section class="facts">
+  <div class="container">
+    <div class="meta" style="font-family:var(--mono);font-size:11px;color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px;margin:0 0 18px"><span style="width:10px;height:10px;background:var(--zop-orange)"></span>// canonical context</div>
+    <h2>Use these <em>everywhere</em>.</h2>
+    <div class="facts-grid">
+      <div class="fact"><div class="fact-key">Brand name</div><div class="fact-val">ZopDev <span style="color:var(--g-500);font-weight:400">– capital Z, capital D</span></div></div>
+      <div class="fact"><div class="fact-key">Founder &amp; CEO</div><div class="fact-val">Talvinder Singh</div></div>
+      <div class="fact"><div class="fact-key">Founded</div><div class="fact-val">2024</div></div>
+      <div class="fact"><div class="fact-key">Capabilities</div><div class="fact-val">Atlas · Posture · Schedule · Remediate · Showback</div></div>
+      <div class="fact"><div class="fact-key">Clouds</div><div class="fact-val">AWS · Azure · GCP · OCI</div></div>
+      <div class="fact"><div class="fact-key">Compliance</div><div class="fact-val">SOC 2 Type II · ISO 27001 · GDPR</div></div>
+      <div class="fact"><div class="fact-key">Customers</div><div class="fact-val">Zopping · Linarc · Flexflow · ZopSmart · Pragmatic Leaders</div></div>
+      <div class="fact"><div class="fact-key">Palette</div><div class="fact-val">Paper #FAF7EC · Ink #0A0A0A · <span class="accent">Orange #F58549</span></div></div>
+      <div class="fact"><div class="fact-key">Type</div><div class="fact-val">Space Grotesk · JetBrains Mono</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TIMELINE ============ -->
+<section>
+  <div class="container">
+    <div class="meta" style="font-family:var(--mono);font-size:11px;color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px;margin:0 0 18px"><span style="width:10px;height:10px;background:var(--zop-orange)"></span>// launch-day timeline</div>
+    <h2 style="font-size:clamp(28px,3.4vw,44px);letter-spacing:-0.04em;font-weight:700;margin:0 0 32px">From T-30 to <em style="font-style:normal;color:var(--zop-orange)">T+7</em>.</h2>
+
+    <div class="timeline-rows">
+      <div class="tl-row past"><div class="tl-time">T-30d</div><div class="tl-what">Trademark filed · DNS TTLs lowered to 60s</div><div class="tl-who">// ops</div></div>
+      <div class="tl-row past"><div class="tl-time">T-14d</div><div class="tl-what">Press list confirmed · embargo emails sent</div><div class="tl-who">// marketing</div></div>
+      <div class="tl-row past"><div class="tl-time">T-7d</div><div class="tl-what">Customer pre-announcement email</div><div class="tl-who">// cs</div></div>
+      <div class="tl-row past"><div class="tl-time">T-3d</div><div class="tl-what">Internal all-hands · sales kit handed out</div><div class="tl-who">// founder</div></div>
+      <div class="tl-row past"><div class="tl-time">T-1d</div><div class="tl-what">Final go/no-go meeting</div><div class="tl-who">// all</div></div>
+      <div class="tl-row past"><div class="tl-time">T-2h</div><div class="tl-what">War room opens</div><div class="tl-who">// eng + founder</div></div>
+      <div class="tl-row now"><div class="tl-time">T+0</div><div class="tl-what"><strong>DNS cutover · blog publish · social goes live</strong></div><div class="tl-who">// eng + marketing</div></div>
+      <div class="tl-row"><div class="tl-time">T+15m</div><div class="tl-what">Monitoring confirms green</div><div class="tl-who">// eng</div></div>
+      <div class="tl-row"><div class="tl-time">T+1h</div><div class="tl-what">First customer email batch out</div><div class="tl-who">// cs</div></div>
+      <div class="tl-row"><div class="tl-time">T+24h</div><div class="tl-what">Press follow-up · social engagement</div><div class="tl-who">// marketing</div></div>
+      <div class="tl-row"><div class="tl-time">T+7d</div><div class="tl-what">Week-1 retro</div><div class="tl-who">// all</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTIONS ============ -->
+<section class="sections">
+  <div class="container">
+    <div class="meta" style="font-family:var(--mono);font-size:11px;color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px;margin:0 0 18px"><span style="width:10px;height:10px;background:var(--zop-orange)"></span>// the 38 artifacts</div>
+    <h2>Every artifact, <em>open as HTML</em>.</h2>
+    <p class="sub">Each section is owned by one role. Each file is rendered to HTML on the same design system as the rest of the ZopDev site, open and read directly in the browser.</p>
+
+    <div class="sec-list">
+
+      <!-- 00 -->
+      <article class="sec-card">
+        <div class="sec-tab">
+          <div>
+            <div class="sec-num">00 · runbook</div>
+            <h3 class="sec-title">Launch-day playbook</h3>
+          </div>
+          <div class="sec-owner">// ceo + eng lead</div>
+        </div>
+        <div class="sec-files">
+          <div class="sec-desc">The minute-by-minute timeline for launch day, the criteria meeting that decides whether to ship, the rollback that runs in under 10 minutes, and the master pre-launch checklist.</div>
+          <a class="file-row" href="brand-launch/00-runbook/LAUNCH-DAY-RUNBOOK.html">
+            <div class="file-tag html">HTML</div>
+            <div class="file-info"><div class="file-name"><a>Launch-day runbook</a></div><div class="file-desc">Roles · T-2h → T+24h timeline · every checkbox to tick on the day</div></div>
+            <div class="file-path">00-runbook/LAUNCH-DAY-RUNBOOK</div>
+          </a>
+          <a class="file-row" href="brand-launch/00-runbook/PRE-LAUNCH-CHECKLIST.html">
+            <div class="file-tag html">HTML</div>
+            <div class="file-info"><div class="file-name"><a>Pre-launch master checklist</a></div><div class="file-desc">T-7 to T-1 day-by-day readiness · site, comms, sales, legal, ops</div></div>
+            <div class="file-path">00-runbook/PRE-LAUNCH-CHECKLIST</div>
+          </a>
+          <a class="file-row" href="brand-launch/00-runbook/GO-NO-GO-CRITERIA.html">
+            <div class="file-tag html">HTML</div>
+            <div class="file-info"><div class="file-name"><a>Go / no-go criteria</a></div><div class="file-desc">10 binary criteria with owners, any single no-go = launch slips</div></div>
+            <div class="file-path">00-runbook/GO-NO-GO-CRITERIA</div>
+          </a>
+          <a class="file-row" href="brand-launch/00-runbook/ROLLBACK-PLAN.html">
+            <div class="file-tag html">HTML</div>
+            <div class="file-info"><div class="file-name"><a>Rollback plan</a></div><div class="file-desc">10-minute revert, DNS, deploy, CDN purge, comms templates</div></div>
+            <div class="file-path">00-runbook/ROLLBACK-PLAN</div>
+          </a>
+        </div>
+      </article>
+
+      <!-- 01 -->
+      <article class="sec-card">
+        <div class="sec-tab">
+          <div>
+            <div class="sec-num">01 · comms</div>
+            <h3 class="sec-title">External &amp; internal communications</h3>
+          </div>
+          <div class="sec-owner">// marketing + founder</div>
+        </div>
+        <div class="sec-files">
+          <div class="sec-desc">Blog post, customer email, press release, X thread, LinkedIn posts, internal all-hands script, customer FAQ, and the Day 1 → Day 7 social schedule.</div>
+          <a class="file-row" href="brand-launch/01-comms/blog-launch-post.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Blog · "A new ZopDev"</a></div><div class="file-desc">600-word founder-voice launch post, ready to paste into the CMS</div></div><div class="file-path">01-comms/blog-launch-post</div></a>
+          <a class="file-row" href="brand-launch/01-comms/customer-email.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Customer email</a></div><div class="file-desc">Subject A/B, body, segmentation rules, tracking targets</div></div><div class="file-path">01-comms/customer-email</div></a>
+          <a class="file-row" href="brand-launch/01-comms/press-release.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Press release</a></div><div class="file-desc">Embargoed release with quote sheet and distribution targets</div></div><div class="file-path">01-comms/press-release</div></a>
+          <a class="file-row" href="brand-launch/01-comms/twitter-thread.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>X / Twitter launch thread</a></div><div class="file-desc">8-post thread + Talvinder personal post + media checklist</div></div><div class="file-path">01-comms/twitter-thread</div></a>
+          <a class="file-row" href="brand-launch/01-comms/linkedin-post.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>LinkedIn launch posts</a></div><div class="file-desc">Company post + Talvinder's personal post with engagement plan</div></div><div class="file-path">01-comms/linkedin-post</div></a>
+          <a class="file-row" href="brand-launch/01-comms/internal-allhands.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Internal all-hands script</a></div><div class="file-desc">45-min agenda with talking points for each section lead</div></div><div class="file-path">01-comms/internal-allhands</div></a>
+          <a class="file-row" href="brand-launch/01-comms/faq-rebrand.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Brand-launch FAQ</a></div><div class="file-desc">Customer-facing Q&amp;A + internal-only tough questions</div></div><div class="file-path">01-comms/faq-rebrand</div></a>
+          <a class="file-row" href="brand-launch/01-comms/scheduled-posts.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Day 1 → Day 7 social schedule</a></div><div class="file-desc">Daily themes, post drafts, capability rotation cadence</div></div><div class="file-path">01-comms/scheduled-posts</div></a>
+        </div>
+      </article>
+
+      <!-- 02 -->
+      <article class="sec-card">
+        <div class="sec-tab">
+          <div>
+            <div class="sec-num">02 · sales</div>
+            <h3 class="sec-title">Sales enablement</h3>
+          </div>
+          <div class="sec-owner">// sales + marketing</div>
+        </div>
+        <div class="sec-files">
+          <div class="sec-desc">One-pager, battlecards for seven competitive scenarios, sales-deck outline, objection-handling cheatsheet, and three email-signature templates as ready-to-paste HTML.</div>
+          <a class="file-row" href="brand-launch/02-sales-enablement/one-pager.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>One-pager</a></div><div class="file-desc">Single-page leave-behind for prospects, A4 + 1080×1528 digital</div></div><div class="file-path">02-sales-enablement/one-pager</div></a>
+          <a class="file-row" href="brand-launch/02-sales-enablement/battlecards.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Battlecards</a></div><div class="file-desc">Seven competitor scenarios with anchor lines and follow-up questions</div></div><div class="file-path">02-sales-enablement/battlecards</div></a>
+          <a class="file-row" href="brand-launch/02-sales-enablement/sales-deck-outline.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Sales-deck outline</a></div><div class="file-desc">15-slide master deck with talk-track and timing per slide</div></div><div class="file-path">02-sales-enablement/sales-deck-outline</div></a>
+          <a class="file-row" href="brand-launch/02-sales-enablement/objection-handling.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Objection handling</a></div><div class="file-desc">12 most common objections with the response that works</div></div><div class="file-path">02-sales-enablement/objection-handling</div></a>
+          <a class="file-row" href="brand-launch/02-sales-enablement/email-signature.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Email signature templates</a></div><div class="file-desc">Standard, executive, and minimal, preview + paste-ready HTML</div></div><div class="file-path">02-sales-enablement/email-signature</div></a>
+        </div>
+      </article>
+
+      <!-- 03 -->
+      <article class="sec-card">
+        <div class="sec-tab">
+          <div>
+            <div class="sec-num">03 · brand</div>
+            <h3 class="sec-title">Brand guidelines</h3>
+          </div>
+          <div class="sec-owner">// marketing</div>
+        </div>
+        <div class="sec-files">
+          <div class="sec-desc">The brand book that everything in this folder is built on top of. Canonical reference for name, palette, type, voice, motion, and logo treatment.</div>
+          <a class="file-row" href="brand-launch/03-brand-guidelines/BRAND-GUIDELINES.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Brand guidelines</a></div><div class="file-desc">Master document, name, palette, type, imagery, motion, iconography</div></div><div class="file-path">03-brand-guidelines/BRAND-GUIDELINES</div></a>
+          <a class="file-row" href="brand-launch/03-brand-guidelines/voice-and-tone.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Voice and tone</a></div><div class="file-desc">Words to use, words to avoid, surface-by-surface tone</div></div><div class="file-path">03-brand-guidelines/voice-and-tone</div></a>
+          <a class="file-row" href="brand-launch/03-brand-guidelines/logo-usage.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Logo usage rules</a></div><div class="file-desc">Spacing, sizing, color, don'ts, co-branding, animation</div></div><div class="file-path">03-brand-guidelines/logo-usage</div></a>
+        </div>
+      </article>
+
+      <!-- 04 -->
+      <article class="sec-card">
+        <div class="sec-tab">
+          <div>
+            <div class="sec-num">04 · legal · ops</div>
+            <h3 class="sec-title">Legal and operational</h3>
+          </div>
+          <div class="sec-owner">// ops + legal</div>
+        </div>
+        <div class="sec-files">
+          <div class="sec-desc">DNS cutover plan with verification commands, trademark filing checklist for six jurisdictions, and the entity-update sweep across every legal surface.</div>
+          <a class="file-row" href="brand-launch/04-legal-ops/dns-cutover.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>DNS cutover plan</a></div><div class="file-desc">Step-by-step cutover with pre/post records and verification commands</div></div><div class="file-path">04-legal-ops/dns-cutover</div></a>
+          <a class="file-row" href="brand-launch/04-legal-ops/trademark-checklist.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Trademark filing checklist</a></div><div class="file-desc">Marks, classes, jurisdictions, defensive domain + handle audit</div></div><div class="file-path">04-legal-ops/trademark-checklist</div></a>
+          <a class="file-row" href="brand-launch/04-legal-ops/entity-update-checklist.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Entity update checklist</a></div><div class="file-desc">Footer audit, customer-facing copy, compliance docs, public listings</div></div><div class="file-path">04-legal-ops/entity-update-checklist</div></a>
+        </div>
+      </article>
+
+      <!-- 05 -->
+      <article class="sec-card">
+        <div class="sec-tab">
+          <div>
+            <div class="sec-num">05 · seo</div>
+            <h3 class="sec-title">SEO &amp; redirects</h3>
+          </div>
+          <div class="sec-owner">// eng + marketing</div>
+        </div>
+        <div class="sec-files">
+          <div class="sec-desc">301 redirect map across 60+ old URLs, full SEO meta-template library with structured data, and verification scripts for the redirect set.</div>
+          <a class="file-row" href="brand-launch/05-seo-redirects/301-redirect-map.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>301 redirect map</a></div><div class="file-desc">Old → new URL mapping with Cloudflare + Vercel implementation</div></div><div class="file-path">05-seo-redirects/301-redirect-map</div></a>
+          <a class="file-row" href="brand-launch/05-seo-redirects/seo-meta-template.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>SEO meta templates</a></div><div class="file-desc">Per-page head tags + JSON-LD for Organization, Product, Article, Breadcrumb</div></div><div class="file-path">05-seo-redirects/seo-meta-template</div></a>
+        </div>
+      </article>
+
+      <!-- 06 -->
+      <article class="sec-card">
+        <div class="sec-tab">
+          <div>
+            <div class="sec-num">06 · trust</div>
+            <h3 class="sec-title">Trust Center</h3>
+          </div>
+          <div class="sec-owner">// security + marketing</div>
+        </div>
+        <div class="sec-files">
+          <div class="sec-desc">Verbatim copy for the public Trust Center page (SOC 2, ISO 27001, GDPR posture), and the outline for the long-form security whitepaper sent to enterprise customers under NDA.</div>
+          <a class="file-row" href="brand-launch/06-trust-center/trust-center-copy.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Trust Center page copy</a></div><div class="file-desc">Hero, compliance, architecture, sub-processors, VDP, contact</div></div><div class="file-path">06-trust-center/trust-center-copy</div></a>
+          <a class="file-row" href="brand-launch/06-trust-center/security-whitepaper.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Security whitepaper outline</a></div><div class="file-desc">12-page section structure, scope, what to include and what NOT to</div></div><div class="file-path">06-trust-center/security-whitepaper</div></a>
+        </div>
+      </article>
+
+      <!-- 07 -->
+      <article class="sec-card">
+        <div class="sec-tab">
+          <div>
+            <div class="sec-num">07 · product</div>
+            <h3 class="sec-title">In-app rebrand</h3>
+          </div>
+          <div class="sec-owner">// product + eng</div>
+        </div>
+        <div class="sec-files">
+          <div class="sec-desc">Tier-1/2/3 product surface checklist, and three brand-correct transactional email templates (welcome, invite, password reset) ready to drop into the email service.</div>
+          <a class="file-row" href="brand-launch/07-product-rebrand/product-rebrand-checklist.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Product rebrand checklist</a></div><div class="file-desc">Login, header, empty states, charts, mobile, browser ext, three tiers</div></div><div class="file-path">07-product-rebrand/product-rebrand-checklist</div></a>
+          <a class="file-row" href="brand-launch/07-product-rebrand/transactional-emails/welcome.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Welcome email template</a></div><div class="file-desc">Onboarding sequence with brand-correct paper/ink/orange treatment</div></div><div class="file-path">07-product-rebrand/transactional-emails/welcome</div></a>
+          <a class="file-row" href="brand-launch/07-product-rebrand/transactional-emails/invite.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Workspace invite email</a></div><div class="file-desc">Inviter card + accept CTA, brand-coherent</div></div><div class="file-path">07-product-rebrand/transactional-emails/invite</div></a>
+          <a class="file-row" href="brand-launch/07-product-rebrand/transactional-emails/password-reset.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Password reset email</a></div><div class="file-desc">Reset CTA, security-aware copy, fallback URL display</div></div><div class="file-path">07-product-rebrand/transactional-emails/password-reset</div></a>
+        </div>
+      </article>
+
+      <!-- 08 -->
+      <article class="sec-card">
+        <div class="sec-tab">
+          <div>
+            <div class="sec-num">08 · launch-day</div>
+            <h3 class="sec-title">Launch-day operations</h3>
+          </div>
+          <div class="sec-owner">// eng + founder</div>
+        </div>
+        <div class="sec-files">
+          <div class="sec-desc">The dashboards and metrics to watch in 5-minute intervals, and the severity-tiered incident response playbook for when a number goes red.</div>
+          <a class="file-row" href="brand-launch/08-launch-day/monitoring-checklist.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Monitoring checklist</a></div><div class="file-desc">Tier 1/2/3 metrics, dashboard URLs, baseline capture, response SLAs</div></div><div class="file-path">08-launch-day/monitoring-checklist</div></a>
+          <a class="file-row" href="brand-launch/08-launch-day/incident-response.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Incident response playbook</a></div><div class="file-desc">SEV-1/2/3 framework, status page templates, decision tree</div></div><div class="file-path">08-launch-day/incident-response</div></a>
+        </div>
+      </article>
+
+      <!-- 09 -->
+      <article class="sec-card">
+        <div class="sec-tab">
+          <div>
+            <div class="sec-num">09 · post-launch</div>
+            <h3 class="sec-title">First week and beyond</h3>
+          </div>
+          <div class="sec-owner">// all</div>
+        </div>
+        <div class="sec-files">
+          <div class="sec-desc">Day-by-day week-1 checklist, the retrospective template that runs at T+10, and the metrics-dashboard spec that drives reporting through T+90.</div>
+          <a class="file-row" href="brand-launch/09-post-launch/week1-checklist.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Week-1 checklist</a></div><div class="file-desc">Daily routines + EoW review meeting agenda + per-team task lists</div></div><div class="file-path">09-post-launch/week1-checklist</div></a>
+          <a class="file-row" href="brand-launch/09-post-launch/retro-template.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Retro template</a></div><div class="file-desc">Async pulse → 90-min meeting → published doc with action items</div></div><div class="file-path">09-post-launch/retro-template</div></a>
+          <a class="file-row" href="brand-launch/09-post-launch/metrics-dashboard.html"><div class="file-tag html">HTML</div><div class="file-info"><div class="file-name"><a>Metrics dashboard spec</a></div><div class="file-desc">10 dimensions, what to track, baselines, red thresholds</div></div><div class="file-path">09-post-launch/metrics-dashboard</div></a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ PENDING ============ -->
+<section class="pending">
+  <div class="container">
+    <div class="meta" style="font-family:var(--mono);font-size:11px;color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px;margin:0 0 18px"><span style="width:10px;height:10px;background:var(--zop-orange)"></span>// what's pending · real-world execution</div>
+    <h2>The playbook is <em>done</em>. The doing isn't.</h2>
+    <p class="sub">The 38 artifacts above are the playbook, written, brand-correct, ready. These are the real-world tasks that still need to happen between now and T+0. Group by who owns it.</p>
+
+    <div class="pending-grid">
+
+      <div class="pending-block">
+        <div class="pb-num">01 · legal &amp; trademark</div>
+        <div class="pb-title">Filings and entity</div>
+        <ul class="pb-list">
+          <li>Trademark filings actually submitted (India, US, EU, UK)</li>
+          <li>Defensive domain audit + acquisition (zopdev.com, .ai, .io, typo-squats)</li>
+          <li>Social handle holds (@zopdev across X, LinkedIn, GitHub, YouTube, Threads, Bluesky)</li>
+          <li>SOC 2 Type II audit firm name + report dates filled into Trust Center copy</li>
+          <li>ISO 27001 cert number + certifying body verified</li>
+          <li>EU representative appointed for GDPR</li>
+          <li>Sub-processor list reviewed and dated by compliance lead</li>
+          <li>Privacy / ToS / DPA reviewed by external counsel for new positioning</li>
+        </ul>
+      </div>
+
+      <div class="pending-block">
+        <div class="pb-num">02 · infrastructure</div>
+        <div class="pb-title">DNS, SSL, mail</div>
+        <ul class="pb-list">
+          <li>DNS provider chosen and 2FA + recovery codes confirmed</li>
+          <li>Pre-launch DNS state captured + rollback records pre-staged</li>
+          <li>DNS TTLs lowered to 60s at least 48h before T+0</li>
+          <li>SSL certs verified on root, www, app, docs, status, api, mail subdomains</li>
+          <li>SPF / DKIM / DMARC verified live for new domain</li>
+          <li>CDN purge path tested on staging</li>
+          <li>Old-site backup tag preserved (commit SHA recorded)</li>
+        </ul>
+      </div>
+
+      <div class="pending-block">
+        <div class="pb-num">03 · site build-out</div>
+        <div class="pb-title">Pages still to build</div>
+        <ul class="pb-list">
+          <li>Live <code>/trust</code> page built from copy in 06-trust-center</li>
+          <li>Live <code>/press</code> kit page with logo pack downloads</li>
+          <li>Individual capability pages: Atlas, Posture, Schedule, Remediate, Showback</li>
+          <li>Customer story pages for each of Zopping, Linarc, Flexflow, ZopSmart, Pragmatic Leaders</li>
+          <li>Privacy / Terms / DPA / Cookies pages live with new entity references</li>
+          <li>Sitemap.xml + robots.txt deployed</li>
+          <li>301 redirect rules implemented at edge per the redirect map</li>
+          <li>OG images produced at 1200×630 for every page</li>
+          <li>Favicon set generated (16/32/180/192/512 + manifest)</li>
+          <li>Cookie consent banner live and tested across regions</li>
+        </ul>
+      </div>
+
+      <div class="pending-block">
+        <div class="pb-num">04 · content with permission</div>
+        <div class="pb-title">Real customer assets</div>
+        <ul class="pb-list">
+          <li>Written permission from Zopping, Linarc, Flexflow, ZopSmart, Pragmatic Leaders to use logos</li>
+          <li>Recorded customer quote from at least 1 named flagship for press release</li>
+          <li>Real outcome stat per customer (e.g., 87% deploy-time reduction at Zopping), verified</li>
+          <li>Talvinder headshot for press kit + LinkedIn post</li>
+          <li>Team photo for "behind the brand" content</li>
+          <li>Real anonymized product screenshots for capability pages</li>
+        </ul>
+      </div>
+
+      <div class="pending-block">
+        <div class="pb-num">05 · product surface</div>
+        <div class="pb-title">In-app rebrand</div>
+        <ul class="pb-list">
+          <li>Login screen rebranded with new wordmark + paper/ink palette</li>
+          <li>App header logo updated</li>
+          <li>Favicon for app subdomain updated</li>
+          <li>Empty-state illustrations refreshed (top 5)</li>
+          <li>Transactional emails uploaded to Postmark / SendGrid</li>
+          <li>In-app announcement banner built and ready to enable</li>
+          <li>Browser tab title text updated</li>
+          <li>Splash / loading screen updated</li>
+        </ul>
+      </div>
+
+      <div class="pending-block">
+        <div class="pb-num">06 · marketing tooling</div>
+        <div class="pb-title">Wired and ready to fire</div>
+        <ul class="pb-list">
+          <li>Customer email segment built in marketing tool</li>
+          <li>Customer email deliverability tested (Gmail, Apple Mail, Outlook)</li>
+          <li>Press list compiled (real journalists, real emails)</li>
+          <li>Embargo emails T-14 actually sent</li>
+          <li>X thread loaded into Typefully or scheduled</li>
+          <li>LinkedIn posts scheduled (company + Talvinder)</li>
+          <li>Blog post staged in CMS, scheduled for T+0</li>
+          <li>UTM convention applied to every link</li>
+          <li>Analytics (GA4 / Plausible) firing on every page</li>
+          <li>Form-to-CRM (Zoho) integration tested end-to-end</li>
+        </ul>
+      </div>
+
+      <div class="pending-block">
+        <div class="pb-num">07 · sales &amp; cs</div>
+        <div class="pb-title">Team enabled</div>
+        <ul class="pb-list">
+          <li>Sales deck designed from outline (master + per-vertical custom slides)</li>
+          <li>One-pager designed PDF, A4 + digital</li>
+          <li>Battlecards uploaded to CRM for sales team access</li>
+          <li>Email signatures rolled out to every employee</li>
+          <li>Top 50 active deals: rep assigned for personal outreach at T+1h</li>
+          <li>CSM list with top 50 customers + escalation paths</li>
+          <li>FAQ doc shared in #all-team and pinned</li>
+          <li>Demo flow re-rehearsed with new slide-1</li>
+        </ul>
+      </div>
+
+      <div class="pending-block">
+        <div class="pb-num">08 · qa &amp; performance</div>
+        <div class="pb-title">Verified, not assumed</div>
+        <ul class="pb-list">
+          <li>Lighthouse: ≥90 perf, ≥95 a11y, 100 best-practices on top 10 pages</li>
+          <li>WCAG AA contrast pass on all interactive surfaces</li>
+          <li>Keyboard navigation through entire site</li>
+          <li>Screen reader spot-check on homepage + pricing</li>
+          <li>Cross-browser: Chrome, Safari, Firefox, Edge (mobile + desktop)</li>
+          <li>Mobile sweep: iPhone SE, iPhone 15 Pro, Pixel 8, iPad</li>
+          <li>4G / Slow 4G page load test</li>
+          <li>OG card preview verified on Twitter, LinkedIn, Facebook validators</li>
+        </ul>
+      </div>
+
+      <div class="pending-block">
+        <div class="pb-num">09 · launch-day team</div>
+        <div class="pb-title">People in seats</div>
+        <ul class="pb-list">
+          <li>War-room channel created with all roles invited</li>
+          <li>Zoom bridge tested + calendar invites sent</li>
+          <li>Roles assigned (Captain, Eng, Marketing, CS, Comms) + backups</li>
+          <li>On-call rotation for T+0 → T+24h assigned</li>
+          <li>No critical team member on PTO during launch window</li>
+          <li>All-hands meeting actually held T-3</li>
+          <li>Investor / advisor pre-briefing done T-7</li>
+          <li>Incident response drill run on staging T-3</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta">
+  <div class="container">
+    <h2>Ship the new ZopDev. <em>Together.</em></h2>
+    <p>The artifacts are written, brand-correct, and HTML-ready. The pending list is what stands between today and T+0.</p>
+    <div class="btn-row">
+      <a href="brand-launch/00-runbook/PRE-LAUNCH-CHECKLIST.html" class="btn btn-primary">Open the Master Checklist</a>
+      <a href="brand-launch/00-runbook/LAUNCH-DAY-RUNBOOK.html" class="btn btn-ghost">Launch-day runbook</a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /.page -->
+
+<script src="chrome-footer.js" defer></script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="logo-zopdev" viewBox="0 0 715 276">
+      <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+      <rect x="537" width="89" height="89" fill="#2A4494"/>
+      <rect x="626" width="89" height="89" fill="#F58549"/>
+      <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+    </symbol>
+  </defs>
+</svg>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="walkthrough.html">Product guide</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developers.html">Documentation</a></li>
+        <li><a href="developers.html">API reference</a></li>
+        <li><a href="developers.html">MCP server</a></li>
+        <li><a href="developers.html">SDK &amp; CLI</a></li>
+        <li><a href="developers.html">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-globe">
+      <div class="foot-globe-left">
+        <a href="/" class="foot-globe-mark" aria-label="ZopDev">
+          <svg class="foot-globe-logo" viewBox="0 0 715 276" aria-hidden="true">
+            <use href="#logo-zopdev"/>
+          </svg>
+        </a>
+      </div>
+      <div class="foot-globe-right">
+        <div class="foot-regions-v2" id="foot-regions-v2">
+          <canvas id="foot-regions-map"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom foot-bottom-3">
+      <div class="foot-copy">© <span data-year>2026</span> ZopDev · <a href="trust.html">privacy</a> · <a href="trust.html">terms</a></div>
+      <div class="foot-mid">made with <svg viewBox="0 0 7 6" aria-hidden="true"><rect x="1" y="0" width="1" height="1"/><rect x="2" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="0" y="1" width="7" height="1"/><rect x="0" y="2" width="7" height="1"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg> by <a href="https://zop.dev" target="_blank" rel="noopener">zop.dev</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
