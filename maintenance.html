@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<title>Maintenance · ZopDev</title>
+<meta name="description" content="Planned maintenance window. Read-only access is still available."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="chrome.css"/>
+<style>
+/* no-italic-site-wide */ em,i,cite,dfn,var,address,blockquote{font-style:normal}
+.err{ padding:var(--sp-16) 0; border-bottom:1px solid var(--line); min-height:calc(100vh - 108px - 220px); display:flex; align-items:center; }
+.err-inner{ max-width:var(--max); margin:0 auto; padding:0 var(--gutter); display:grid; grid-template-columns:1.3fr 1fr; gap:var(--sp-14); align-items:center; }
+.err-figure{ font-size:clamp(120px, 18vw, 280px); font-weight:700; color:#4A66D4; line-height:.85; letter-spacing:-.06em; font-variant-numeric:tabular-nums; display:inline-block; position:relative; margin-bottom:var(--sp-6); }
+.err-figure::after{ content:''; position:absolute; right:-10px; top:22px; width:40px; height:40px; background:var(--zop-green); }
+.err-copy .meta{ font-family:var(--mono); font-size:11px; color:#4A66D4; letter-spacing:.14em; text-transform:uppercase; margin-bottom:16px; display:inline-flex; align-items:center; gap:8px; }
+.err-copy .meta::before{ content:''; width:10px; height:10px; background:#4A66D4; }
+.err-copy h1{ font-size:clamp(40px,4.5vw,64px); font-weight:700; letter-spacing:-.05em; line-height:1.05; margin:0 0 20px; }
+.err-copy h1 em{ font-style:normal; color:#4A66D4; }
+.err-copy p{ font-size:17px; color:var(--ink-3); line-height:1.55; margin:0 0 32px; max-width:540px; }
+.err-copy p strong{ color:var(--ink); font-weight:500; }
+.err-actions{ display:flex; gap:12px; flex-wrap:wrap; }
+.err-detail{ margin-top:var(--sp-10); padding-top:var(--sp-5); border-top:1px solid var(--line); font-family:var(--mono); font-size:11px; color:var(--ink-4); letter-spacing:.04em; }
+.err-detail .k{ color:var(--ink-3); }
+@media (max-width:960px){ .err-inner{ grid-template-columns:1fr; gap:var(--sp-8); } }
+</style>
+<link rel="stylesheet" href="homepage-chrome.css"/>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs><symbol id="logo-zopdev" viewBox="0 0 715 276">
+    <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+    <rect x="537" width="89" height="89" fill="var(--logo-blue, #2A4494)"/>
+    <rect x="626" width="89" height="89" fill="#F58549"/>
+    <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+  </symbol></defs>
+</svg>
+
+<!-- announcement bar -->
+<div class="ann-bar" id="ann-bar">
+  <div class="ann-inner">
+    <a href="developers.html" class="ann-chip">
+      <span class="ann-dot"></span>
+      <strong>MCP Server</strong>, live in Claude &amp; Codex
+      <span class="ann-arrow">→</span>
+    </a>
+    <a href="changelog.html" class="ann-link">Changelog →</a>
+    <button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     LIVE STATUS STRIP. Cloud-ops signal strip
+     ============================================================ -->
+<div class="live-strip" aria-live="polite">
+  <!-- Anchored pill: live market-open indicator + uptime & UTC clock. Stays
+       put on the right while the ticker runs under it. -->
+  <div class="ls-anchor">
+    <span class="ls-live"><span class="ls-livedot"></span>LIVE</span>
+    <span class="ls-sep"></span>
+    <span class="ls-kpi"><em>UPT</em><b>99.98%</b></span>
+    <span class="ls-sep"></span>
+    <span class="ls-kpi"><em>UTC</em><b id="live-clock">--:--:--</b></span>
+  </div>
+
+  <!-- Marquee track: two identical rails side-by-side create a seamless loop.
+       Each item reads as a plain-English headline with a change indicator. -->
+  <div class="ls-track" role="presentation" aria-hidden="true">
+    <div class="ls-rail">
+      <span class="lt-row"><b id="live-saved">$48,210</b> saved this month <span class="lt-chg up">▲ $812 today</span></span>
+      <span class="lt-row"><b id="live-resources">10,401</b> cloud resources monitored <span class="lt-chg up">▲ 42 new</span></span>
+      <span class="lt-row"><b id="live-remediations">17</b> issues fixed today <span class="lt-chg up">▲ 3 in last hour</span></span>
+      <span class="lt-row"><b>847</b> idle instances reclaimed <span class="lt-chg up">▲ 31 this week</span></span>
+      <span class="lt-row"><b>99.98%</b> uptime across <b>47</b> regions</span>
+      <span class="lt-row"><b>3</b> anomalies open <span class="lt-chg dn">▼ 1 auto-resolved</span></span>
+      <span class="lt-row"><b>142</b> schedules running <span class="lt-chg up">▲ 12 this week</span></span>
+      <span class="lt-row"><b>$2.8M</b> monthly run-rate <span class="lt-chg dn">▼ 8% vs last month</span></span>
+      <span class="lt-row"><b>67%</b> average utilization <span class="lt-chg up">▲ 2 pts</span></span>
+      <span class="lt-row"><b>4m 12s</b> mean time to remediate <span class="lt-chg dn">▼ 22s faster</span></span>
+      <span class="lt-row"><b>0</b> incidents · <b>5-day</b> clean streak</span>
+      <span class="lt-row"><b>23%</b> savings rate <span class="lt-chg up">▲ 5 pts QoQ</span></span>
+    </div>
+    <div class="ls-rail" aria-hidden="true">
+      <span class="lt-row"><b>$48,210</b> saved this month <span class="lt-chg up">▲ $812 today</span></span>
+      <span class="lt-row"><b>10,401</b> cloud resources monitored <span class="lt-chg up">▲ 42 new</span></span>
+      <span class="lt-row"><b>17</b> issues fixed today <span class="lt-chg up">▲ 3 in last hour</span></span>
+      <span class="lt-row"><b>847</b> idle instances reclaimed <span class="lt-chg up">▲ 31 this week</span></span>
+      <span class="lt-row"><b>99.98%</b> uptime across <b>47</b> regions</span>
+      <span class="lt-row"><b>3</b> anomalies open <span class="lt-chg dn">▼ 1 auto-resolved</span></span>
+      <span class="lt-row"><b>142</b> schedules running <span class="lt-chg up">▲ 12 this week</span></span>
+      <span class="lt-row"><b>$2.8M</b> monthly run-rate <span class="lt-chg dn">▼ 8% vs last month</span></span>
+      <span class="lt-row"><b>67%</b> average utilization <span class="lt-chg up">▲ 2 pts</span></span>
+      <span class="lt-row"><b>4m 12s</b> mean time to remediate <span class="lt-chg dn">▼ 22s faster</span></span>
+      <span class="lt-row"><b>0</b> incidents · <b>5-day</b> clean streak</span>
+      <span class="lt-row"><b>23%</b> savings rate <span class="lt-chg up">▲ 5 pts QoQ</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo-lockup sm" aria-label="ZopDev">
+      <svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <div class="nav-item" data-menu="product">
+        <a>Product <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <div class="nav-item" data-menu="resources">
+        <a>Resources <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="pricing.html">Pricing</a>
+      <div class="nav-item" data-menu="company">
+        <a>Company <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="community.html">Community</a>
+    </div>
+
+    <!-- Shared dropdown overlay. Content crossfades, panel slides left/right -->
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+      <div class="nav-panes" id="nav-panes">
+
+        <!-- ═══════ PRODUCT · 3 sub-products ═══════ -->
+        <div class="nav-pane" data-pane="product">
+          <!-- 3 equal cells. Inline grid-template-columns overrides the
+               default 1.3fr 1fr 1fr (which is built for a featured-hero
+               layout). All three products are equal here — no hero — so
+               no empty grid slots and no card stretches taller than its
+               siblings. -->
+          <div class="np-bento" style="grid-template-columns:1fr 1fr 1fr;">
+            <a class="np-cell" href="zopnight.html">
+              <span class="np-badge live">live</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopNight</h3>
+              <p class="np-cell-desc">Cloud cost optimization on autopilot. AWS, Azure, GCP.</p>
+            </a>
+            <a class="np-cell" href="zopday.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#F58549"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopDay</h3>
+              <p class="np-cell-desc">Deployment orchestration and release management.</p>
+            </a>
+            <a class="np-cell" href="zopcloud.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><rect x="12" y="8" width="8" height="6" fill="#FFFFFF"/><rect x="6" y="14" width="20" height="10" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopCloud</h3>
+              <p class="np-cell-desc">Multi-cloud resource graph and topology view.</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Live in Claude &amp; Codex</strong> · run ZopNight from your MCP client</span>
+            <a href="developers.html">Try MCP →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ RESOURCES · 9 cells in a 3×3 grid ═══════ -->
+        <div class="nav-pane" data-pane="resources">
+          <div class="np-bento np-bento--grid">
+            <a class="np-cell" href="blog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Blog</h3>
+              <p class="np-cell-desc">Engineering + cost optimization notes</p>
+            </a>
+            <a class="np-cell" href="free-ebooks.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 4h7v13H3zM10 4h7v13h-7z" stroke="currentColor" stroke-width="1.5"/><path d="M10 4v13" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Ebooks</h3>
+              <p class="np-cell-desc">Free playbooks · FinOps, K8s, CDCR</p>
+            </a>
+            <a class="np-cell" href="customers.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 16c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Case studies</h3>
+              <p class="np-cell-desc">42-67% cuts, real teams</p>
+            </a>
+            <a class="np-cell" href="solutions.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Use cases by industry</h3>
+              <p class="np-cell-desc">SaaS · fintech · retail · health</p>
+            </a>
+            <a class="np-cell" href="product-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M8 7l4 3-4 3z" fill="currentColor"/></svg>
+              </div>
+              <h3 class="np-cell-title">Product documentation</h3>
+              <p class="np-cell-desc">Walkthroughs · video tours</p>
+            </a>
+            <a class="np-cell" href="kubernetes-guide.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2l7 4v8l-7 4-7-4V6z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
+              </div>
+              <h3 class="np-cell-title">Kubernetes guide</h3>
+              <p class="np-cell-desc">From cluster basics to right-sizing</p>
+            </a>
+            <a class="np-cell" href="changelog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Changelog</h3>
+              <p class="np-cell-desc">What shipped this week</p>
+            </a>
+            <a class="np-cell" href="developer-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 6L3 10l4 4M13 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 class="np-cell-title">Developer documentation</h3>
+              <p class="np-cell-desc">REST API · SDKs · webhooks · MCP</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Weekly digest</strong> · waste signals, wins, war stories</span>
+            <a href="blog.html">Subscribe →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ COMPANY · 2 items ═══════ -->
+        <div class="nav-pane" data-pane="company">
+          <div class="np-bento" style="grid-template-columns:1fr 1fr;">
+            <a class="np-cell" href="about.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#0A0A0A"/><rect x="6" y="6" width="8" height="20" fill="#F0EBDB"/><rect x="18" y="12" width="8" height="14" fill="#F58549"/></svg>
+              </div>
+              <h3 class="np-cell-title">About</h3>
+              <p class="np-cell-desc">Founded 2024. The autopilot for multi-cloud cost.</p>
+            </a>
+            <a class="np-cell" href="careers.html">
+              <span class="np-badge">hiring</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="6" width="14" height="11" stroke="currentColor" stroke-width="1.5"/><path d="M7 6V4h6v2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Careers</h3>
+              <p class="np-cell-desc">Open roles · engineering, design, GTM</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>We're hiring</strong> · remote-first · 12 open roles</span>
+            <a href="careers.html">See roles →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="nav-cta">
+      <!-- Status pill · live dot · links to /status.html. Mirrors the
+           project's "always-on" identity (the live-ops strip above the
+           nav). Pulses green when all systems are operational. -->
+      <a class="nav-status" href="status.html" aria-label="System status">
+        <span class="nav-status-dot" aria-hidden="true"></span>
+        <span class="nav-status-text">Status</span>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" role="switch">
+        <span class="tt-opt tt-sun" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="8" cy="8" r="3" fill="currentColor" stroke="none"/>
+            <path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.9.9M11.7 11.7l.9.9M3.4 12.6l.9-.9M11.7 4.3l.9-.9"/>
+          </svg>
+        </span>
+        <span class="tt-opt tt-moon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M12.8 10.1a5.5 5.5 0 0 1-7-7 .5.5 0 0 0-.7-.6A6.5 6.5 0 1 0 13.4 10.8a.5.5 0 0 0-.6-.7z"/>
+          </svg>
+        </span>
+      </button>
+      <a class="chip-playground" href="playground.html"><span>Playground</span></a>
+      <a class="sign" href="signin.html">Sign In</a>
+      <a class="btn btn-accent" href="demo.html"><span>Book a Demo</span> <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<section class="err">
+  <div class="err-inner">
+    <div class="err-copy">
+      <div class="err-figure" aria-hidden="true">Brb.</div>
+      <div class="meta">status &middot; scheduled maintenance</div>
+      <h1>Planned <em>maintenance.</em></h1>
+      <p>
+        We&rsquo;re pushing a CDCR engine upgrade. <strong>Read-only access is still
+        available</strong> &mdash; your dashboards, Showback reports, and audit log keep
+        working. Remediation queue is paused. Back at 14:00 UTC.
+      </p>
+      <div class="err-actions">
+        <a class="btn btn-accent" href="status.html"><span>See Status</span> <span class="arrow">&#8594;</span></a>
+        <a class="btn btn-secondary" href="changelog.html"><span>Changelog</span></a>
+      </div>
+      <div class="err-detail">
+        <span class="k">window:</span> 13:00 &ndash; 14:00 UTC &nbsp;&middot;&nbsp;
+        <span class="k">scope:</span> CDCR engine v4.2 upgrade &nbsp;&middot;&nbsp;
+        <span class="k">read-only:</span> available
+      </div>
+    </div>
+    <div></div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <a href="/" class="brand" aria-label="ZopDev home">
+        <svg class="logo" viewBox="0 0 715 276" role="img" aria-hidden="true"><use href="#logo-zopdev"/></svg>
+      </a>
+      <p>The Continuous CloudOps platform. See everything. Find what's wrong. Fix it in one click.</p>
+    </div>
+
+    <div class="foot-col">
+      <h3>product</h3>
+      <ul>
+        <li><a href="/product/zopnight/atlas.html">Atlas</a></li>
+        <li><a href="/product/zopnight/mcp.html">MCP Server</a></li>
+        <li><a href="/product/zopnight/schedule.html">Schedule</a></li>
+        <li><a href="/product/zopnight/showback.html">Showback</a></li>
+        <li><a href="/product/zopnight/recommendation.html">Recommendations</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+      </ul>
+    </div>
+
+    <div class="foot-col">
+      <h3>solutions</h3>
+      <ul>
+        <li><a href="/solutions/finops.html">For FinOps</a></li>
+        <li><a href="/solutions/devops.html">For DevOps</a></li>
+        <li><a href="/solutions/cfo.html">For CFOs</a></li>
+        <li><a href="/solutions/aws.html">AWS</a></li>
+        <li><a href="/solutions/kubernetes.html">Kubernetes</a></li>
+        <li><a href="/solutions/rightsizing.html">Rightsizing</a></li>
+        <li><a href="/solutions/anomaly-detection.html">Anomaly detection</a></li>
+      </ul>
+    </div>
+
+    <div class="foot-col">
+      <h3>resources</h3>
+      <ul>
+        <li><a href="customers.html">Customers</a></li>
+        <li><a href="/resources/benchmarks.html">State of Cloud Waste</a></li>
+        <li><a href="/resources/blog.html">Blog</a></li>
+        <li><a href="/resources/glossary.html">Glossary</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li>
+        <li><a href="developers.html">Developers</a></li>
+      </ul>
+    </div>
+
+    <div class="foot-col">
+      <h3>company</h3>
+      <ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="/company/leadership.html">Leadership</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="trust.html">Trust center</a></li>
+        <li><a href="partners.html">Partners</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="foot-trust">
+    <span class="badge">SOC 2 Type II</span>
+    <span class="badge">ISO 27001</span>
+    <span class="badge o">HIPAA</span>
+    <span class="badge g">GDPR · CCPA</span>
+    <span class="badge k">AWS Marketplace</span>
+    <a href="status.html" class="status"><span class="badge ok" style="border:0; padding:0; color:transparent; width:7px; height:7px"></span> All systems operational</a>
+  </div>
+
+  <div class="foot-legal-rail">
+    <a href="trust.html">Privacy</a>
+    <a href="trust.html">Terms</a>
+    <a href="/legal/cookies.html">Cookies</a>
+    <a href="/trust/dpa.html">DPA</a>
+    <a href="/trust/subprocessors.html">Subprocessors</a>
+    <a href="/trust/sla.html">SLA</a>
+    <a href="/trust/ai-policy.html">AI policy</a>
+    <a href="/company/accessibility.html">Accessibility</a>
+    <a href="/sitemap.xml">Sitemap</a>
+  </div>
+
+  <div class="foot-bottom">
+    <div>© <span data-year>2026</span> ZopDev, Inc. · san francisco · all rights reserved</div>
+    <div>the Continuous CloudOps platform · see · find · fix</div>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    document.querySelectorAll('[data-year]').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+    var ann = document.getElementById('ann-bar');
+    var btn = document.getElementById('ann-close');
+    if(!ann || !btn) return;
+    var key = 'zop-ann-2026-mcp';
+    try{ if(localStorage.getItem(key) === '1') ann.style.display = 'none'; }catch(e){}
+    btn.addEventListener('click', function(){
+      ann.style.display = 'none';
+      try{ localStorage.setItem(key, '1'); }catch(e){}
+    });
+  })();
+</script>
+<script src="chrome-darkfold.js" defer></script>
+<script src="chrome-mobilenav.js" defer></script>
+</body>
+</html>

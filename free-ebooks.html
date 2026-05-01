@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+
+<title>Free Ebooks · Free Ebooks · ZopDev</title>
+<meta name="description" content="Download free ebooks on DevOps, Kubernetes, CI/CD, infrastructure as code, and platform engineering. Practical guides for engineering teams."/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="homepage-chrome.css"/>
+<link rel="stylesheet" href="chrome-footer.css">
+
+<style>
+/* no-italic-site-wide */ em,i,cite,dfn,var,address,blockquote{font-style:normal}
+.page{ padding:0; }
+.page > section{ padding:var(--sec-pad) 0; border-bottom:1px solid var(--line); }
+.page > section:last-child{ border-bottom:0; }
+
+.crumb{
+  padding:var(--sp-7) 0 var(--sp-4);
+  max-width:var(--max); margin:0 auto;
+  padding-left:var(--gutter); padding-right:var(--gutter);
+  font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4);
+  letter-spacing:var(--ls-meta-tight); text-transform:uppercase;
+}
+.crumb a{ color:var(--ink-3); }
+.crumb a:hover{ color:var(--ink); }
+.crumb .sep{ color:var(--ink-5); margin:0 var(--sp-2); }
+
+.page-head{
+  padding:var(--sp-10) 0 var(--sp-12);
+  max-width:var(--max); margin:0 auto;
+  padding-left:var(--gutter); padding-right:var(--gutter);
+  border-bottom:1px solid var(--line);
+}
+.page-head .meta{
+  font-family:var(--mono); font-size:var(--t-11);
+  color:var(--zop-orange); letter-spacing:var(--ls-meta);
+  text-transform:uppercase; margin-bottom:var(--sp-4);
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+}
+.page-head .meta::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
+.page-head h1{
+  font-size:clamp(40px,5vw,72px);
+  font-weight:var(--fw-bold); letter-spacing:var(--ls-display);
+  line-height:var(--lh-display);
+  max-width:960px; margin:0 0 var(--sp-5);
+}
+.page-head p.lede{
+  font-size:var(--t-20); color:var(--ink-3);
+  max-width:720px; line-height:1.45; margin:0;
+}
+
+.sec-meta{
+  font-family:var(--mono); font-size:var(--t-11);
+  color:var(--zop-orange); letter-spacing:var(--ls-meta);
+  text-transform:uppercase; margin-bottom:var(--sp-6);
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+}
+.sec-meta::before{ content:''; width:10px; height:10px; background:var(--zop-orange); flex-shrink:0; }
+
+.sec-head-row{
+  display:flex; align-items:flex-end; justify-content:space-between; gap:var(--sp-8);
+  margin-bottom:var(--sp-8); padding-bottom:var(--sp-5); border-bottom:1px solid var(--line);
+}
+.sec-head-row h2{
+  font-size:clamp(28px,3.2vw,44px); letter-spacing:var(--ls-display);
+  line-height:var(--lh-heading); margin:0; max-width:720px;
+}
+.sec-head-row .sub{
+  color:var(--ink-3); font-size:var(--t-15); max-width:320px;
+  line-height:1.55; margin:0 0 6px; text-align:right;
+}
+@media(max-width:760px){
+  .sec-head-row{ flex-direction:column; align-items:flex-start; gap:var(--sp-4); }
+  .sec-head-row .sub{ max-width:100%; text-align:left; margin:0; }
+}
+
+/* Category chips */
+.cat-chip{
+  font-family:var(--mono); font-size:var(--t-10); letter-spacing:var(--ls-meta);
+  text-transform:uppercase; padding:3px 10px;
+  display:inline-flex; align-items:center; gap:var(--sp-1);
+  width:fit-content; border-radius:0;
+}
+.cat-eng{ background:rgba(42,68,148,.15); color:var(--zop-blue); border:1px solid rgba(42,68,148,.3); }
+.cat-finops{ background:rgba(127,178,54,.12); color:var(--zop-green); border:1px solid rgba(127,178,54,.25); }
+.cat-strategy{ background:rgba(245,133,73,.1); color:var(--zop-orange); border:1px solid rgba(245,133,73,.2); }
+.cat-guide{ background:rgba(240,235,219,.08); color:var(--ink-3); border:1px solid var(--line); }
+
+/* Thumbnail placeholder, abstract gridlines on g-50 */
+.thumb-ph{
+  background:var(--g-50, #F0EBDB); border:1px solid var(--line);
+  position:relative; overflow:hidden;
+  background-image:
+    var(--line),
+    var(--line);
+  background-size:32px 32px;
+}
+.thumb-ph::before{
+  content:""; position:absolute; left:0; right:0; top:0; bottom:0;
+  background:
+    transparent no-repeat,
+    transparent no-repeat;
+  background-size:100% 100%;
+  opacity:.55;
+}
+.thumb-ph::after{
+  content:attr(data-mark);
+  position:absolute; right:14px; bottom:10px;
+  font-family:var(--mono); font-size:11px; color:var(--ink-4);
+  letter-spacing:var(--ls-meta); text-transform:uppercase;
+}
+
+/* Featured post */
+.featured-post{
+  background:var(--bg-2); border:1px solid var(--line); border-left:4px solid var(--zop-orange);
+  display:grid; grid-template-columns:1fr 1.05fr; gap:0;
+  margin-top:var(--sp-8);
+  transition:transform var(--dur-med, 250ms) var(--ease-out, cubic-bezier(.22,1,.36,1)),
+             box-shadow var(--dur-med, 250ms) var(--ease-out, cubic-bezier(.22,1,.36,1));
+}
+.featured-post:hover{
+  transform:translateY(-4px);
+  box-shadow:0 8px 0 -4px var(--ink);
+}
+.featured-post .thumb-ph{ min-height:340px; border:0; border-right:1px solid var(--line); }
+.featured-post .body{ padding:var(--sp-10); display:flex; flex-direction:column; gap:var(--sp-4); }
+.featured-post h2{ font-size:clamp(26px,3vw,40px); letter-spacing:var(--ls-display); margin:var(--sp-2) 0 var(--sp-2); line-height:var(--lh-heading); }
+.featured-post h2 a{ color:var(--ink); }
+.featured-post h2 a:hover{ color:var(--zop-orange); }
+.featured-post p.excerpt{ font-size:var(--t-17); color:var(--ink-3); line-height:1.55; margin:0; }
+.post-meta-row{
+  display:flex; align-items:center; gap:var(--sp-5); flex-wrap:wrap;
+  font-family:var(--mono); font-size:var(--t-12); color:var(--ink-4);
+  letter-spacing:var(--ls-meta-tight);
+}
+.read-link{
+  font-family:var(--mono); font-size:var(--t-12); color:var(--zop-orange);
+  letter-spacing:var(--ls-meta-tight); display:inline-flex; align-items:center; gap:4px;
+  transition:gap var(--dur-fast, 160ms) ease;
+  text-transform:uppercase;
+}
+.read-link:hover{ gap:8px; }
+
+/* Secondary post grid (2 cols × 2 rows = 4 cards) */
+.post-grid{
+  display:grid; grid-template-columns:repeat(2, 1fr); gap:var(--sp-7);
+  margin-top:var(--sp-2);
+}
+.post-card{
+  background:var(--bg-2); border:1px solid var(--line);
+  display:flex; flex-direction:column;
+  transition:transform var(--dur-med, 250ms) var(--ease-out, cubic-bezier(.22,1,.36,1)),
+             border-color var(--dur-med, 250ms) ease,
+             box-shadow var(--dur-med, 250ms) ease;
+}
+.post-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 8px 0 -4px var(--ink);
+  border-color:var(--ink);
+}
+.post-card .thumb-ph{ min-height:200px; border:0; border-bottom:1px solid var(--line); }
+.post-card .body{ padding:var(--sp-7); display:flex; flex-direction:column; gap:var(--sp-3); flex:1; }
+.post-card h3{ font-size:var(--t-22, 22px); font-weight:var(--fw-bold); margin:var(--sp-2) 0 0; line-height:var(--lh-tight, 1.15); letter-spacing:var(--ls-heading, -0.02em); }
+.post-card h3 a{ color:var(--ink); }
+.post-card h3 a:hover{ color:var(--zop-orange); }
+.post-card p.excerpt{
+  font-size:var(--t-14); color:var(--ink-3); margin:0; line-height:1.55;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.post-card-foot{
+  margin-top:auto; padding-top:var(--sp-4);
+  display:flex; align-items:center; justify-content:space-between; gap:var(--sp-3);
+  font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4);
+  letter-spacing:var(--ls-meta-tight);
+}
+
+/* More posts row (3 col) on post pages */
+.more-row{
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:var(--sp-6); margin-top:var(--sp-2);
+}
+.more-row .post-card .thumb-ph{ min-height:160px; }
+.more-row .post-card .body{ padding:var(--sp-6); }
+.more-row .post-card h3{ font-size:var(--t-17, 17px); }
+
+/* Single post chrome */
+.post-hero{
+  padding:var(--sp-10) 0 var(--sp-10);
+  max-width:780px; margin:0 auto;
+  padding-left:var(--gutter); padding-right:var(--gutter);
+  border-bottom:1px solid var(--line);
+}
+.post-hero .meta-line{
+  display:flex; align-items:center; gap:var(--sp-4); flex-wrap:wrap;
+  margin-bottom:var(--sp-5);
+}
+.post-hero h1{
+  font-size:clamp(34px,4.4vw,60px);
+  font-weight:var(--fw-bold); letter-spacing:var(--ls-display);
+  line-height:1.08; margin:0 0 var(--sp-5);
+}
+.post-hero p.sub{
+  font-size:var(--t-19, 19px); color:var(--ink-3); line-height:1.5;
+  margin:0 0 var(--sp-7);
+}
+.post-byline{
+  padding-top:var(--sp-5); border-top:1px solid var(--line);
+  display:flex; align-items:center; gap:var(--sp-5); flex-wrap:wrap;
+  font-family:var(--mono); font-size:var(--t-12); color:var(--ink-3);
+  letter-spacing:var(--ls-meta-tight);
+}
+.post-byline strong{ color:var(--ink); font-weight:var(--fw-semibold); }
+.post-byline .dot{ width:4px; height:4px; background:var(--ink-5, var(--line)); }
+
+/* Article body */
+.post-body{
+  max-width:720px; margin:0 auto;
+  padding:var(--sp-10) var(--gutter);
+}
+.post-body > * + *{ margin-top:var(--sp-5); }
+.post-body h2{
+  font-size:clamp(22px,2.4vw,30px); font-weight:var(--fw-bold);
+  letter-spacing:var(--ls-heading, -0.02em); line-height:1.2;
+  margin-top:var(--sp-10); margin-bottom:var(--sp-3);
+  padding-top:var(--sp-3); border-top:1px solid var(--line);
+}
+.post-body h3{
+  font-size:var(--t-20, 20px); font-weight:var(--fw-semibold);
+  margin-top:var(--sp-8); margin-bottom:var(--sp-2);
+}
+.post-body p{ font-size:var(--t-16, 16px); line-height:1.7; color:var(--ink-2, var(--ink)); margin:0; }
+.post-body ul, .post-body ol{
+  font-size:var(--t-16, 16px); line-height:1.65; color:var(--ink-2, var(--ink));
+  padding-left:var(--sp-6); margin:0;
+}
+.post-body li{ margin:var(--sp-2) 0; }
+.post-body li::marker{ color:var(--zop-orange); }
+.post-body strong{ font-weight:var(--fw-semibold); color:var(--ink); }
+.post-body a{ color:var(--zop-blue); border-bottom:1px solid currentColor; }
+.post-body a:hover{ color:var(--zop-orange); }
+.post-body code{
+  font-family:var(--mono); font-size:0.92em;
+  background:var(--bg-3); padding:1px 6px; border:1px solid var(--line);
+}
+.post-body blockquote{
+  margin:0; padding:var(--sp-4) var(--sp-6);
+  border-left:3px solid var(--zop-orange);
+  background:var(--bg-2);
+  color:var(--ink-2, var(--ink)); font-size:var(--t-17, 17px); line-height:1.55;
+  font-style:normal;
+}
+.post-body blockquote p{ margin:0; }
+
+/* Code block */
+.post-code{
+  background:var(--bg-3); border:1px solid var(--line);
+  position:relative; overflow:hidden;
+}
+.post-code .code-lang{
+  position:absolute; top:0; right:0;
+  padding:4px 10px;
+  font-family:var(--mono); font-size:10px; letter-spacing:var(--ls-meta);
+  text-transform:uppercase; color:var(--ink-4);
+  background:var(--bg-4, var(--bg-2)); border-left:1px solid var(--line); border-bottom:1px solid var(--line);
+}
+.post-code pre{
+  margin:0; padding:var(--sp-5);
+  font-family:var(--mono); font-size:var(--t-13, 13px); line-height:1.6;
+  color:var(--ink); background:transparent;
+  overflow-x:auto;
+}
+.post-code pre code{ background:none; border:0; padding:0; font-size:inherit; }
+
+/* Tables in body */
+.post-tbl-wrap{ overflow-x:auto; border:1px solid var(--line); }
+.post-tbl{ width:100%; border-collapse:collapse; font-size:var(--t-14, 14px); }
+.post-tbl th{
+  background:var(--bg-3); text-align:left;
+  font-family:var(--mono); font-size:var(--t-11, 11px); letter-spacing:var(--ls-meta);
+  text-transform:uppercase; color:var(--ink-3);
+  padding:var(--sp-3) var(--sp-4); border-bottom:1px solid var(--line); font-weight:var(--fw-medium, 500);
+}
+.post-tbl td{ padding:var(--sp-3) var(--sp-4); border-bottom:1px solid var(--line); vertical-align:top; line-height:1.55; color:var(--ink-2, var(--ink)); }
+.post-tbl tr:last-child td{ border-bottom:0; }
+
+/* Math fallback */
+.post-math{
+  background:var(--bg-3); border:1px solid var(--line);
+  padding:var(--sp-5); font-family:var(--mono); font-size:var(--t-13, 13px);
+  color:var(--ink-2, var(--ink)); line-height:1.5; white-space:pre-wrap;
+}
+
+/* Callouts */
+.callout{
+  border:1px solid var(--line); background:var(--bg-2);
+  display:grid; grid-template-columns:auto 1fr; gap:var(--sp-5);
+  padding:var(--sp-5) var(--sp-6); align-items:start;
+}
+.callout-tag{
+  font-family:var(--mono); font-size:10px; letter-spacing:var(--ls-meta);
+  text-transform:uppercase; padding:4px 8px; color:var(--paper); background:var(--ink);
+  font-weight:var(--fw-semibold); align-self:start;
+}
+.callout-body > * + *{ margin-top:var(--sp-3); }
+.callout-body p{ margin:0; font-size:var(--t-15, 15px); line-height:1.6; color:var(--ink-2, var(--ink)); }
+.callout-info{ border-left:3px solid var(--zop-blue); }
+.callout-info .callout-tag{ background:var(--zop-blue); }
+.callout-warn{ border-left:3px solid var(--zop-orange); }
+.callout-warn .callout-tag{ background:var(--zop-orange); }
+.callout-danger{ border-left:3px solid #c0392b; }
+.callout-danger .callout-tag{ background:#c0392b; }
+
+/* Pagination */
+.post-pag{
+  display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-6);
+  max-width:960px; margin:0 auto;
+  padding:var(--sp-8) var(--gutter);
+  border-top:1px solid var(--line);
+}
+.pag-card{
+  background:var(--bg-2); border:1px solid var(--line);
+  padding:var(--sp-6); display:flex; flex-direction:column; gap:var(--sp-2);
+  transition:transform var(--dur-med, 250ms) var(--ease-out, cubic-bezier(.22,1,.36,1)),
+             box-shadow var(--dur-med, 250ms) ease;
+}
+.pag-card:hover{ transform:translateY(-4px); box-shadow:0 8px 0 -4px var(--ink); }
+.pag-card .lab{ font-family:var(--mono); font-size:var(--t-11, 11px); letter-spacing:var(--ls-meta); text-transform:uppercase; color:var(--ink-4); }
+.pag-card .ttl{ font-size:var(--t-17, 17px); font-weight:var(--fw-semibold); color:var(--ink); line-height:1.3; }
+.pag-card.next{ text-align:right; }
+.pag-card.disabled{ opacity:.4; pointer-events:none; }
+
+/* Subscribe block (used by listing + benchmarks) */
+.subscribe-block{
+  background:var(--bg-2); border:1px solid var(--line); padding:var(--sp-10);
+  display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-10); align-items:center;
+  margin-top:var(--sp-2);
+}
+.subscribe-block h2{ font-size:clamp(24px,3vw,40px); letter-spacing:var(--ls-display); margin:0 0 var(--sp-4); }
+.subscribe-block p{ font-size:var(--t-15); color:var(--ink-3); margin:0; line-height:1.55; }
+.sub-form{ display:flex; flex-direction:column; gap:var(--sp-4); }
+.sub-form label{ font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); letter-spacing:var(--ls-meta); text-transform:uppercase; }
+.sub-form input{
+  background:var(--bg-4, var(--bg-3)); border:1px solid var(--line); color:var(--ink);
+  font-family:var(--mono); font-size:var(--t-14);
+  padding:12px var(--sp-5); outline:none; width:100%;
+}
+.sub-form input:focus{ border-color:var(--zop-orange); }
+
+@media(max-width:960px){
+  .featured-post{ grid-template-columns:1fr; }
+  .featured-post .thumb-ph{ border-right:0; border-bottom:1px solid var(--line); }
+  .post-grid{ grid-template-columns:1fr; }
+  .more-row{ grid-template-columns:1fr; }
+  .subscribe-block{ grid-template-columns:1fr; }
+  .post-pag{ grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+        <symbol id="mark-zopdev" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="16" height="16" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="16" y="0" width="16" height="16" fill="#F58549"/>
+      <rect x="16" y="16" width="16" height="16" fill="#7FB236"/>
+    </symbol>
+<symbol id="logo-zopdev" viewBox="0 0 715 276">
+      <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+      <rect x="537" width="89" height="89" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="626" width="89" height="89" fill="#F58549"/>
+      <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+    </symbol>
+  </defs>
+</svg><div class="ann-bar" id="ann-bar">
+  <div class="ann-inner">
+    <a href="developers.html" class="ann-chip">
+      <span class="ann-dot"></span>
+      <strong>MCP Server</strong> &mdash; live in Claude &amp; Codex
+      <span class="ann-arrow">→</span>
+    </a>
+    <a href="changelog.html" class="ann-link">Changelog →</a>
+    <button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     LIVE STATUS STRIP. Cloud-ops signal strip
+     ============================================================ -->
+<!-- ============================================================
+     SAVINGS CALCULATOR STRIP. Single CTA, links to the calculator.
+     ============================================================ -->
+<a class="live-strip live-strip-cta" href="#calculator" aria-label="Open the savings calculator">
+  <span class="ls-cta-anchor">
+    <span class="ls-live"><span class="ls-livedot"></span>Calculator</span>
+  </span>
+  <span class="ls-cta-msg">See how much your cloud is wasting right now.</span>
+  <span class="ls-cta-arrow">Try it <span class="ls-arrow">&rarr;</span></span>
+</a>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo-lockup sm" aria-label="ZopDev">
+      <svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <div class="nav-item" data-menu="product">
+        <a>Product <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <div class="nav-item" data-menu="resources">
+        <a>Resources <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="pricing.html">Pricing</a>
+      <div class="nav-item" data-menu="company">
+        <a>Company <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="community.html">Community</a>
+    </div>
+
+    <!-- Shared dropdown overlay. Content crossfades, panel slides left/right -->
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+      <div class="nav-panes" id="nav-panes">
+
+        <!-- ═══════ PRODUCT · 3 sub-products ═══════ -->
+        <div class="nav-pane" data-pane="product">
+          <!-- 3 equal cells. Inline grid-template-columns overrides the
+               default 1.3fr 1fr 1fr (which is built for a featured-hero
+               layout). All three products are equal here — no hero — so
+               no empty grid slots and no card stretches taller than its
+               siblings. -->
+          <div class="np-bento" style="grid-template-columns:1fr 1fr 1fr;">
+            <a class="np-cell" href="zopnight.html">
+              <span class="np-badge live">live</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopNight</h3>
+              <p class="np-cell-desc">Cloud cost optimization on autopilot. AWS, Azure, GCP.</p>
+            </a>
+            <a class="np-cell" href="zopday.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#F58549"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopDay</h3>
+              <p class="np-cell-desc">Deployment orchestration and release management.</p>
+            </a>
+            <a class="np-cell" href="zopcloud.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><rect x="12" y="8" width="8" height="6" fill="#FFFFFF"/><rect x="6" y="14" width="20" height="10" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopCloud</h3>
+              <p class="np-cell-desc">Multi-cloud resource graph and topology view.</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Live in Claude &amp; Codex</strong> · run ZopNight from your MCP client</span>
+            <a href="developers.html">Try MCP →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ RESOURCES · 9 cells in a 3×3 grid ═══════ -->
+        <div class="nav-pane" data-pane="resources">
+          <div class="np-bento np-bento--grid">
+            <a class="np-cell" href="blog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Blog</h3>
+              <p class="np-cell-desc">Engineering + cost optimization notes</p>
+            </a>
+            <a class="np-cell" href="free-ebooks.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 4h7v13H3zM10 4h7v13h-7z" stroke="currentColor" stroke-width="1.5"/><path d="M10 4v13" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Ebooks</h3>
+              <p class="np-cell-desc">Free playbooks · FinOps, K8s, CDCR</p>
+            </a>
+            <a class="np-cell" href="customers.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 16c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Case studies</h3>
+              <p class="np-cell-desc">42-67% cuts, real teams</p>
+            </a>
+            <a class="np-cell" href="solutions.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Use cases by industry</h3>
+              <p class="np-cell-desc">SaaS · fintech · retail · health</p>
+            </a>
+            <a class="np-cell" href="product-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M8 7l4 3-4 3z" fill="currentColor"/></svg>
+              </div>
+              <h3 class="np-cell-title">Product documentation</h3>
+              <p class="np-cell-desc">Walkthroughs · video tours</p>
+            </a>
+            <a class="np-cell" href="kubernetes-guide.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2l7 4v8l-7 4-7-4V6z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
+              </div>
+              <h3 class="np-cell-title">Kubernetes guide</h3>
+              <p class="np-cell-desc">From cluster basics to right-sizing</p>
+            </a>
+            <a class="np-cell" href="changelog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Changelog</h3>
+              <p class="np-cell-desc">What shipped this week</p>
+            </a>
+            <a class="np-cell" href="developer-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 6L3 10l4 4M13 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 class="np-cell-title">Developer documentation</h3>
+              <p class="np-cell-desc">REST API · SDKs · webhooks · MCP</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Weekly digest</strong> · waste signals, wins, war stories</span>
+            <a href="blog.html">Subscribe →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ COMPANY · 2 items ═══════ -->
+        <div class="nav-pane" data-pane="company">
+          <div class="np-bento" style="grid-template-columns:1fr 1fr;">
+            <a class="np-cell" href="about.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#0A0A0A"/><rect x="6" y="6" width="8" height="20" fill="#F0EBDB"/><rect x="18" y="12" width="8" height="14" fill="#F58549"/></svg>
+              </div>
+              <h3 class="np-cell-title">About</h3>
+              <p class="np-cell-desc">Founded 2024. The autopilot for multi-cloud cost.</p>
+            </a>
+            <a class="np-cell" href="careers.html">
+              <span class="np-badge">hiring</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="6" width="14" height="11" stroke="currentColor" stroke-width="1.5"/><path d="M7 6V4h6v2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Careers</h3>
+              <p class="np-cell-desc">Open roles · engineering, design, GTM</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>We're hiring</strong> · remote-first · 12 open roles</span>
+            <a href="careers.html">See roles →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="nav-cta">
+      <!-- Status pill · live dot · links to /status.html. Mirrors the
+           project's "always-on" identity (the live-ops strip above the
+           nav). Pulses green when all systems are operational. -->
+      <a class="nav-status" href="status.html" aria-label="System status">
+        <span class="nav-status-dot" aria-hidden="true"></span>
+        <span class="nav-status-text">Status</span>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" role="switch">
+        <span class="tt-opt tt-sun" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="8" cy="8" r="3" fill="currentColor" stroke="none"/>
+            <path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.9.9M11.7 11.7l.9.9M3.4 12.6l.9-.9M11.7 4.3l.9-.9"/>
+          </svg>
+        </span>
+        <span class="tt-opt tt-moon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M12.8 10.1a5.5 5.5 0 0 1-7-7 .5.5 0 0 0-.7-.6A6.5 6.5 0 1 0 13.4 10.8a.5.5 0 0 0-.6-.7z"/>
+          </svg>
+        </span>
+      </button>
+      <a class="chip-playground" href="playground.html"><span>Playground</span></a>
+      <a class="sign" href="signin.html">Sign In</a>
+      <a class="btn btn-accent" href="demo.html"><span>Book a Demo</span> <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+<main class="page">
+<div class="crumb"><a href="/">home</a> <span class="sep">/</span> ebooks</div>
+
+<style>
+/* ── Ebook library page · listing of every free PDF ──────────────── */
+.eblib-hero{ padding:var(--sp-12) 0 var(--sp-10); border-bottom:1px solid var(--line); }
+.eblib-hero .container{ max-width:var(--max); margin:0 auto; padding:0 var(--gutter); }
+.eblib-hero .meta{
+  font-family:var(--mono); font-size:var(--t-11); color:var(--zop-orange);
+  letter-spacing:var(--ls-meta); text-transform:uppercase; margin-bottom:var(--sp-4);
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+}
+.eblib-hero .meta::before{ content:''; width:8px; height:8px; background:var(--zop-orange); }
+.eblib-hero h1{
+  font-size:clamp(40px,5.6vw,80px); font-weight:var(--fw-bold);
+  letter-spacing:var(--ls-display); line-height:var(--lh-display);
+  margin:0 0 var(--sp-5); max-width:920px;
+}
+.eblib-hero h1 em{ color:var(--zop-orange); font-style:normal; }
+.eblib-hero .sub{
+  font-size:var(--t-17); color:var(--ink-3); line-height:1.55;
+  margin:0; max-width:680px;
+}
+.eblib-hero .sub strong{ color:var(--ink); font-weight:var(--fw-medium); }
+
+/* Section grid */
+.eblib-section{ padding:var(--sp-14) 0; border-bottom:1px solid var(--line); }
+.eblib-section:last-child{ border-bottom:0; }
+.eblib-section .container{ max-width:var(--max); margin:0 auto; padding:0 var(--gutter); }
+.eblib-sec-head{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  margin-bottom:var(--sp-8); gap:var(--sp-6);
+}
+.eblib-sec-head h2{
+  font-size:clamp(28px,3.6vw,44px); margin:0;
+  letter-spacing:var(--ls-heading); line-height:1.15;
+}
+.eblib-sec-head .count{
+  font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4);
+  letter-spacing:var(--ls-meta); text-transform:uppercase;
+}
+
+/* Featured · 2-col big card · cover on the left like a real book */
+.eblib-featured{
+  display:grid; grid-template-columns:auto 1fr;
+  gap:0; border:1px solid var(--line);
+  align-items:stretch;
+}
+@media (max-width:980px){ .eblib-featured{ grid-template-columns:1fr; } }
+.eblib-featured-cover-wrap{
+  padding:var(--sp-10);
+  display:flex; align-items:center; justify-content:center;
+  border-right:1px solid var(--line); background:var(--bg-1);
+}
+@media (max-width:980px){ .eblib-featured-cover-wrap{ border-right:0; border-bottom:1px solid var(--line); } }
+/* The book itself · portrait 3:4, dark cover, hover lifts with hard offset shadow */
+.eblib-cover{
+  width:280px; aspect-ratio:3/4;
+  background:#0A0A0A; border:1px solid var(--line);
+  position:relative; overflow:hidden;
+  transition:transform .25s var(--ease-out), box-shadow .25s var(--ease-out);
+  flex-shrink:0;
+}
+.eblib-cover:hover{ transform:translate(-4px, -4px); box-shadow:8px 8px 0 0 var(--zop-orange); }
+.eblib-cover svg{ width:100%; height:100%; display:block; }
+@media (max-width:980px){ .eblib-cover{ width:200px; } }
+@media (max-width:560px){ .eblib-cover{ width:140px; } .eblib-featured-cover-wrap{ padding:var(--sp-7); } }
+.eblib-featured-body{
+  padding:var(--sp-10) var(--sp-10) var(--sp-10) var(--sp-12);   /* extra left padding so text doesn't kiss the divider */
+  display:flex; flex-direction:column; gap:var(--sp-4); justify-content:center;
+  min-width:0;
+}
+.eblib-featured-body .tag{
+  font-family:var(--mono); font-size:var(--t-10); color:var(--zop-orange);
+  letter-spacing:var(--ls-meta); text-transform:uppercase;
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+}
+.eblib-featured-body .tag::before{ content:''; width:8px; height:8px; background:var(--zop-orange); }
+.eblib-featured-body h3{
+  font-size:clamp(28px,3.2vw,40px); margin:0;
+  letter-spacing:var(--ls-heading); line-height:1.15;
+}
+.eblib-featured-body h3 a{ color:var(--ink); }
+.eblib-featured-body h3 a:hover{ color:var(--zop-orange); }
+.eblib-featured-body p{ color:var(--ink-3); font-size:var(--t-15); line-height:var(--lh-body); margin:0; max-width:520px; }
+.eblib-featured-body .meta-row{
+  display:flex; flex-wrap:wrap; gap:var(--sp-3);
+  font-family:var(--mono); font-size:var(--t-11);
+  color:var(--ink-4); letter-spacing:var(--ls-meta-tight);
+  padding-top:var(--sp-3);
+}
+.eblib-featured-body .meta-row strong{ color:var(--ink-2); font-weight:var(--fw-medium); }
+.eblib-featured-body .cta{
+  font-family:var(--mono); font-size:var(--t-11); font-weight:var(--fw-semibold);
+  letter-spacing:var(--ls-meta); text-transform:uppercase;
+  color:var(--zop-orange);
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+  margin-top:var(--sp-3);
+}
+.eblib-featured-body .cta::after{ content:'→'; transition:transform .14s; }
+.eblib-featured:hover .cta::after{ transform:translateX(4px); }
+
+/* Card grid · 3-column */
+.eblib-grid{
+  display:grid; grid-template-columns:repeat(3, 1fr);
+  gap:0; border:1px solid var(--line); background:var(--line);
+}
+@media (max-width:980px){ .eblib-grid{ grid-template-columns:repeat(2, 1fr); } }
+@media (max-width:560px){ .eblib-grid{ grid-template-columns:1fr; } }
+.eblib-card{
+  background:var(--bg-1); padding:var(--sp-7);
+  display:flex; flex-direction:column; gap:var(--sp-4);
+  text-decoration:none; color:inherit;
+  transition:background .14s var(--ease-out);
+}
+.eblib-card:hover{ background:var(--bg-2); }
+/* Mini book covers · portrait 3:4 · hover lifts with hard offset shadow.
+   The card hover triggers the cover lift via the descendant selector. */
+.eblib-card .cover{
+  aspect-ratio:3/4; background:#0A0A0A;
+  border:1px solid var(--line);
+  position:relative; overflow:hidden;
+  align-self:center; max-width:200px; width:100%;
+  transition:transform .25s var(--ease-out), box-shadow .25s var(--ease-out);
+}
+.eblib-card:hover .cover{ transform:translate(-3px, -3px); box-shadow:6px 6px 0 0 var(--zop-orange); }
+.eblib-card .cover svg{ width:100%; height:100%; display:block; }
+.eblib-card .cat{
+  font-family:var(--mono); font-size:var(--t-10); color:var(--zop-orange);
+  letter-spacing:var(--ls-meta); text-transform:uppercase;
+}
+.eblib-card h3{ font-size:var(--t-17); margin:0; letter-spacing:var(--ls-heading); line-height:1.25; }
+.eblib-card h3 a{ color:var(--ink); }
+.eblib-card h3 a:hover{ color:var(--zop-orange); }
+.eblib-card p{ color:var(--ink-3); font-size:var(--t-13); line-height:1.55; margin:0; flex:1; }
+.eblib-card .when{
+  font-family:var(--mono); font-size:var(--t-10); color:var(--ink-4);
+  letter-spacing:var(--ls-meta-tight); padding-top:var(--sp-3);
+  margin-top:auto; border-top:1px solid var(--line);
+  display:flex; justify-content:space-between;
+}
+
+/* Subscribe strip */
+.eblib-sub{
+  background:var(--bg-1); border:1px solid var(--line);
+  padding:var(--sp-10); display:grid; grid-template-columns:1fr 1fr;
+  gap:var(--sp-8); align-items:center;
+}
+@media (max-width:780px){ .eblib-sub{ grid-template-columns:1fr; padding:var(--sp-7); } }
+.eblib-sub h2{ font-size:clamp(24px,2.8vw,36px); margin:0 0 var(--sp-3); letter-spacing:var(--ls-heading); }
+.eblib-sub h2 em{ color:var(--zop-orange); font-style:normal; }
+.eblib-sub p{ color:var(--ink-3); margin:0; font-size:var(--t-14); }
+.eblib-sub-form{ display:flex; gap:var(--sp-2); }
+.eblib-sub-form input{ flex:1; padding:var(--sp-3) var(--sp-4); background:var(--bg-2); border:1px solid var(--line); color:var(--ink); font-family:var(--font); font-size:var(--t-14); }
+.eblib-sub-form input::placeholder{ color:var(--ink-5); }
+.eblib-sub-form input:focus{ outline:none; border-color:var(--zop-orange); }
+.eblib-sub-form button{ padding:var(--sp-3) var(--sp-5); background:var(--zop-orange); color:#0A0A0A; font-family:var(--mono); font-size:var(--t-11); letter-spacing:var(--ls-meta); text-transform:uppercase; font-weight:var(--fw-semibold); cursor:pointer; border:0; transition:transform .14s, box-shadow .14s; }
+.eblib-sub-form button:hover{ transform:translateY(-2px); box-shadow:0 8px 0 -4px var(--ink); }
+</style>
+
+<!-- HERO -->
+<header class="eblib-hero">
+  <div class="container">
+    <div class="meta">free ebooks · library</div>
+    <h1>Field-tested playbooks. <em>No card required.</em></h1>
+    <p class="sub"><strong>20+ free PDFs</strong> on FinOps, Kubernetes, CDCR, and the boring engineering details that actually save you money. Written by people who've shipped this in production.</p>
+  </div>
+</header>
+
+<!-- FEATURED EBOOK · State of Cloud Waste 2026 -->
+<section class="eblib-section">
+  <div class="container">
+    <div class="eblib-sec-head">
+      <h2>Featured release</h2>
+      <span class="count">just dropped · Apr 2026</span>
+    </div>
+
+    <a class="eblib-featured" href="state-of-cloud-waste-2026.html">
+      <div class="eblib-featured-cover-wrap">
+        <div class="eblib-cover">
+          <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <rect width="300" height="400" fill="#0A0A0A"/>
+            <rect x="40" y="240" width="28" height="100" fill="#F58549"/>
+            <rect x="78" y="200" width="28" height="140" fill="#F58549" opacity="0.85"/>
+            <rect x="116" y="160" width="28" height="180" fill="#F58549" opacity="0.7"/>
+            <rect x="154" y="120" width="28" height="220" fill="#F58549" opacity="0.55"/>
+            <rect x="192" y="180" width="28" height="160" fill="#F58549" opacity="0.4"/>
+            <rect x="230" y="220" width="28" height="120" fill="#F58549" opacity="0.25"/>
+            <text x="40" y="80" font-family="Space Grotesk" font-size="28" font-weight="700" fill="#F0EBDB" letter-spacing="-1">State of</text>
+            <text x="40" y="112" font-family="Space Grotesk" font-size="28" font-weight="700" fill="#F0EBDB" letter-spacing="-1">Cloud Waste</text>
+            <text x="40" y="146" font-family="JetBrains Mono" font-size="14" fill="#F58549" letter-spacing="3">2026</text>
+            <text x="40" y="378" font-family="JetBrains Mono" font-size="9" fill="#A8A195" letter-spacing="2">ZOPDEV RESEARCH</text>
+          </svg>
+        </div>
+      </div>
+      <div class="eblib-featured-body">
+        <span class="tag">Annual report · ZopDev research</span>
+        <h3>State of Cloud Waste 2026</h3>
+        <p>We analysed <strong>4,200 production accounts</strong> across AWS, GCP, and Azure. Non-prod runs 24/7 in 71% of them. Right-sizing alone left $312M on the table. The full per-pattern breakdown.</p>
+        <div class="meta-row">
+          <span><strong>PDF</strong></span><span>·</span>
+          <span><strong>64</strong> pages</span><span>·</span>
+          <span><strong>~28</strong> min read</span><span>·</span>
+          <span>By Priya Mittal + the data team</span>
+        </div>
+        <span class="cta">Read the report</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- LIBRARY · 6 cards -->
+<section class="eblib-section">
+  <div class="container">
+    <div class="eblib-sec-head">
+      <h2>The full library</h2>
+      <span class="count">21 ebooks · all free</span>
+    </div>
+
+    <div class="eblib-grid">
+
+      <article class="eblib-card">
+        <div class="cover">
+          <svg viewBox="0 0 240 160" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <rect width="240" height="160" fill="#0E0E12"/>
+            <rect x="40" y="40" width="40" height="80" fill="#7FB236"/>
+            <rect x="90" y="60" width="40" height="60" fill="#7FB236" opacity="0.7"/>
+            <rect x="140" y="30" width="40" height="90" fill="#7FB236" opacity="0.5"/>
+            <text x="120" y="20" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#A8A195" letter-spacing="2">FINOPS PLAYBOOK</text>
+          </svg>
+        </div>
+        <span class="cat">FinOps · 48 pages</span>
+        <h3><a href="#">The FinOps playbook for series-B engineering teams</a></h3>
+        <p>How to set up showback, run monthly cost reviews, and not become the bottleneck.</p>
+        <div class="when"><span>Released · Mar 2026</span><span>~22 min</span></div>
+      </article>
+
+      <article class="eblib-card">
+        <div class="cover">
+          <svg viewBox="0 0 240 160" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <rect width="240" height="160" fill="#0E0E12"/>
+            <polygon points="120,30 180,60 180,120 120,150 60,120 60,60" fill="none" stroke="#2A4494" stroke-width="3"/>
+            <circle cx="120" cy="90" r="14" fill="#2A4494"/>
+            <text x="120" y="20" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#A8A195" letter-spacing="2">K8S COST GUIDE</text>
+          </svg>
+        </div>
+        <span class="cat">Kubernetes · 52 pages</span>
+        <h3><a href="#">Kubernetes cost optimization · the operator's guide</a></h3>
+        <p>VPA, HPA, Karpenter, spot pools, and the configuration choices that pay back week one.</p>
+        <div class="when"><span>Released · Feb 2026</span><span>~26 min</span></div>
+      </article>
+
+      <article class="eblib-card">
+        <div class="cover">
+          <svg viewBox="0 0 240 160" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <rect width="240" height="160" fill="#0E0E12"/>
+            <circle cx="80" cy="80" r="35" fill="none" stroke="#F58549" stroke-width="3"/>
+            <path d="M 65 80 L 80 95 L 110 65" stroke="#F58549" stroke-width="4" fill="none"/>
+            <text x="160" y="60" font-family="Space Grotesk" font-size="22" font-weight="700" fill="#F0EBDB">CDCR</text>
+            <text x="160" y="82" font-family="JetBrains Mono" font-size="10" fill="#A8A195">FIELD GUIDE</text>
+          </svg>
+        </div>
+        <span class="cat">Autonomous cloud · 36 pages</span>
+        <h3><a href="#">CDCR field guide · the autonomous loop, demystified</a></h3>
+        <p>Detect, evaluate, remediate, audit. The dispositions that drive it. The exemptions that protect you.</p>
+        <div class="when"><span>Released · Jan 2026</span><span>~18 min</span></div>
+      </article>
+
+      <article class="eblib-card">
+        <div class="cover">
+          <svg viewBox="0 0 240 160" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <rect width="240" height="160" fill="#0E0E12"/>
+            <path d="M40 100 L80 60 L120 90 L160 50 L200 80" stroke="#F58549" stroke-width="3" fill="none"/>
+            <line x1="40" y1="120" x2="200" y2="120" stroke="#5A5A62" stroke-width="1"/>
+            <text x="120" y="20" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#A8A195" letter-spacing="2">RIGHT-SIZING HANDBOOK</text>
+          </svg>
+        </div>
+        <span class="cat">Cost optimization · 44 pages</span>
+        <h3><a href="#">The right-sizing handbook · family by family</a></h3>
+        <p>T3, M5, R5, C7g — the burstable trap and how to spot it. With confidence intervals, not vibes.</p>
+        <div class="when"><span>Released · Dec 2025</span><span>~22 min</span></div>
+      </article>
+
+      <article class="eblib-card">
+        <div class="cover">
+          <svg viewBox="0 0 240 160" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <rect width="240" height="160" fill="#0E0E12"/>
+            <rect x="50" y="60" width="40" height="60" stroke="#2A4494" stroke-width="2" fill="none"/>
+            <rect x="100" y="60" width="40" height="60" stroke="#2A4494" stroke-width="2" fill="none"/>
+            <rect x="150" y="60" width="40" height="60" stroke="#2A4494" stroke-width="2" fill="none"/>
+            <line x1="90" y1="90" x2="100" y2="90" stroke="#F58549" stroke-width="2"/>
+            <line x1="140" y1="90" x2="150" y2="90" stroke="#F58549" stroke-width="2"/>
+            <text x="120" y="20" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#A8A195" letter-spacing="2">MULTI-CLOUD ARCHITECTURE</text>
+          </svg>
+        </div>
+        <span class="cat">Architecture · 56 pages</span>
+        <h3><a href="#">Multi-cloud architecture · without doubling your bill</a></h3>
+        <p>When multi-cloud actually pays off and when it just doubles your operational surface area.</p>
+        <div class="when"><span>Released · Nov 2025</span><span>~28 min</span></div>
+      </article>
+
+      <article class="eblib-card">
+        <div class="cover">
+          <svg viewBox="0 0 240 160" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <rect width="240" height="160" fill="#0E0E12"/>
+            <circle cx="80" cy="80" r="30" fill="none" stroke="#7FB236" stroke-width="2"/>
+            <circle cx="160" cy="80" r="30" fill="none" stroke="#7FB236" stroke-width="2"/>
+            <line x1="110" y1="80" x2="130" y2="80" stroke="#F58549" stroke-width="2"/>
+            <text x="120" y="20" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#A8A195" letter-spacing="2">CI/CD COST PATTERNS</text>
+          </svg>
+        </div>
+        <span class="cat">CI/CD · 38 pages</span>
+        <h3><a href="#">CI/CD cost patterns · spot fleets &amp; ephemeral runners</a></h3>
+        <p>The 73% cost cut from moving non-critical CI to spot. Plus the failure-handling pattern that makes it safe.</p>
+        <div class="when"><span>Released · Oct 2025</span><span>~19 min</span></div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- SUBSCRIBE -->
+<section class="eblib-section">
+  <div class="container">
+    <div class="eblib-sub">
+      <div>
+        <h2>Get notified when a new ebook <em>drops.</em></h2>
+        <p>One email per release. No drip campaigns. Unsubscribe with one click — we'd rather lose subscribers than waste their inbox.</p>
+      </div>
+      <form class="eblib-sub-form" onsubmit="event.preventDefault(); var b=this.querySelector('button'); b.textContent='✓ subscribed'; b.disabled=true;">
+        <input type="email" placeholder="you@team.com" required/>
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+<!-- FINAL CTA · canonical homepage block, shared across marketing pages -->
+<section class="final">
+  <div class="container">
+    <a class="final-mark" href="/" aria-label="ZopDev">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#mark-zopdev"/></svg>
+    </a>
+    <div class="final-grid">
+      <div>
+        <div class="sec-meta" style="color:var(--zop-orange); margin-bottom:20px">end · ready when you are</div>
+        <h2>Stop watching the waste.<br/>Start cutting it.</h2>
+        <p class="final-tag">See. Find. Fix. Automatic.</p>
+        <p>Connect your first cloud account in under 5 minutes. See your first remediation in under 7. No credit card required.</p>
+        <div class="final-cta">
+          <a class="btn btn-primary" href="signin.html">Start Free →</a>
+          <a class="btn btn-secondary" href="demo.html">Book a Demo</a>
+        </div>
+      </div>
+      <div class="final-stats">
+        <div><strong>5 min</strong>connect time</div>
+        <div><strong>7 min</strong>first remediation</div>
+        <div><strong>42%</strong>avg. waste cut in 30 days</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRIDGE MARQUEE · cream slab between dark CTA and dark footer -->
+<section class="bridge-marquee" aria-label="ZopDev brand statement">
+  <div class="bridge-track">
+    <span>Multi-cloud automation</span><span class="acc">·</span>
+    <span>Production-ready in 30 min</span><span class="acc">·</span>
+    <span>SOC 2 · ISO 27001 · zero-trust</span><span class="acc">·</span>
+    <span>30% average cloud cost cut</span><span class="acc">·</span>
+    <span>4 platforms · 1 console</span><span class="acc">·</span>
+    <span>Multi-cloud automation</span><span class="acc">·</span>
+    <span>Production-ready in 30 min</span><span class="acc">·</span>
+    <span>SOC 2 · ISO 27001 · zero-trust</span><span class="acc">·</span>
+    <span>30% average cloud cost cut</span><span class="acc">·</span>
+    <span>4 platforms · 1 console</span><span class="acc">·</span>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="walkthrough.html">Product guide</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developers.html">Documentation</a></li>
+        <li><a href="developers.html">API reference</a></li>
+        <li><a href="developers.html">MCP server</a></li>
+        <li><a href="developers.html">SDK &amp; CLI</a></li>
+        <li><a href="developers.html">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-globe">
+      <div class="foot-globe-left">
+        <a href="/" class="foot-globe-mark" aria-label="ZopDev">
+          <svg class="foot-globe-logo" viewBox="0 0 715 276" aria-hidden="true">
+            <use href="#logo-zopdev"/>
+          </svg>
+        </a>
+      </div>
+      <div class="foot-globe-right">
+        <div class="foot-regions-v2" id="foot-regions-v2">
+          <canvas id="foot-regions-map"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom foot-bottom-3">
+      <div class="foot-copy">© <span data-year>2026</span> ZopDev · <a href="trust.html">privacy</a> · <a href="trust.html">terms</a></div>
+      <div class="foot-mid">made with <svg viewBox="0 0 7 6" aria-hidden="true"><rect x="1" y="0" width="1" height="1"/><rect x="2" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="0" y="1" width="7" height="1"/><rect x="0" y="2" width="7" height="1"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg> by <a href="https://zop.dev" target="_blank" rel="noopener">zop.dev</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+(function(){
+  document.querySelectorAll('[data-year]').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+  var ann = document.getElementById('ann-bar');
+  var btn = document.getElementById('ann-close');
+  if(!ann || !btn) return;
+  var key = 'zop-ann-2026-mcp';
+  try{ if(localStorage.getItem(key) === '1') ann.style.display = 'none'; }catch(e){}
+  btn.addEventListener('click', function(){
+    ann.style.display = 'none';
+    try{ localStorage.setItem(key, '1'); }catch(e){}
+  });
+})();
+</script>
+
+<!-- homepage-chrome init: theme toggle + nav megamenu + scroll hide + section reveal -->
+<script>
+(function(){
+  /* Theme toggle */
+  var html = document.documentElement;
+  if(!html.getAttribute('data-theme')) html.setAttribute('data-theme','light');
+  var btn = document.getElementById('theme-toggle');
+  if(btn){
+      /* click handler moved to chrome-mobilenav.js (global) */
+  }
+})();
+
+(function(){
+  /* Nav megamenu */
+  var overlay = document.getElementById('nav-overlay');
+  var navLinks = document.getElementById('nav-links');
+  if(!overlay || !navLinks) return;
+  var panes = {};
+  overlay.querySelectorAll('.nav-pane').forEach(function(p){ panes[p.dataset.pane] = p; });
+  var activeMenu = null;
+  var closeTimer = null;
+  function getLeft(navItem){
+    var navInner = navItem.closest('.nav-inner');
+    var niRect = navItem.getBoundingClientRect();
+    var innerRect = navInner.getBoundingClientRect();
+    var left = niRect.left - innerRect.left;
+    var overlayW = overlay.offsetWidth || 720;
+    var maxLeft = innerRect.width - overlayW - 16;
+    return Math.max(0, Math.min(left, maxLeft));
+  }
+  function showMenu(menuName, navItem){
+    clearTimeout(closeTimer);
+    overlay.style.left = getLeft(navItem) + 'px';
+    if(activeMenu !== menuName){
+      Object.keys(panes).forEach(function(k){ panes[k].classList.remove('active'); });
+      var incoming = panes[menuName];
+      if(incoming){
+        incoming.classList.add('active');
+        var panesEl = overlay.querySelector('.nav-panes');
+        if(panesEl) panesEl.style.height = incoming.offsetHeight + 'px';
+      }
+      activeMenu = menuName;
+    }
+    navLinks.querySelectorAll('.nav-item').forEach(function(ni){
+      ni.classList.toggle('open', ni.dataset.menu === menuName);
+    });
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden','false');
+  }
+  function hideMenu(){
+    closeTimer = setTimeout(function(){
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden','true');
+      navLinks.querySelectorAll('.nav-item').forEach(function(ni){ ni.classList.remove('open'); });
+      activeMenu = null;
+    }, 120);
+  }
+  navLinks.querySelectorAll('.nav-item').forEach(function(item){
+    item.addEventListener('mouseenter', function(){ showMenu(item.dataset.menu, item); });
+    item.addEventListener('mouseleave', hideMenu);
+    var a = item.querySelector('a');
+    if(a){
+      a.addEventListener('focus', function(){ showMenu(item.dataset.menu, item); });
+      a.addEventListener('blur', hideMenu);
+    }
+  });
+  overlay.addEventListener('mouseenter', function(){ clearTimeout(closeTimer); });
+  overlay.addEventListener('mouseleave', hideMenu);
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){ clearTimeout(closeTimer); hideMenu(); }
+  });
+})();
+
+(function(){
+  /* Nav scroll hide/show */
+  var nav = document.querySelector('.nav');
+  if(!nav) return;
+  var lastY = 0, delta = 0, hidden = false, ticking = false;
+  var HIDE_AT = 72, SHOW_AT = 10;
+  function update(){
+    ticking = false;
+    var y = window.pageYOffset;
+    var diff = y - lastY;
+    lastY = y;
+    if(y <= 0){
+      if(hidden){ nav.classList.remove('nav--hidden'); hidden = false; }
+      delta = 0; return;
+    }
+    if(diff > 0){
+      delta = (delta > 0 ? delta : 0) + diff;
+      if(!hidden && delta > HIDE_AT){
+        var ov = document.getElementById('nav-overlay');
+        if(ov) ov.classList.remove('open');
+        nav.classList.add('nav--hidden'); hidden = true; delta = 0;
+      }
+    } else {
+      delta = (delta < 0 ? delta : 0) + diff;
+      if(hidden && Math.abs(delta) > SHOW_AT){
+        nav.classList.remove('nav--hidden'); hidden = false; delta = 0;
+      }
+    }
+  }
+  window.addEventListener('scroll', function(){
+    if(!ticking){ requestAnimationFrame(update); ticking = true; }
+  }, {passive:true});
+})();
+
+(function(){
+  /* Section reveal on scroll */
+  var sections = document.querySelectorAll('.section');
+  if(!sections.length || !('IntersectionObserver' in window)){
+    sections.forEach(function(s){ s.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {rootMargin:'-10% 0px -10% 0px', threshold:0.05});
+  sections.forEach(function(s){ io.observe(s); });
+})();
+</script>
+
+<script src="chrome-darkfold.js" defer></script>
+<script src="chrome-mobilenav.js" defer></script>
+<script src="chrome-footer.js" defer></script>
+</body>
+</html>
+</body>
+</html>

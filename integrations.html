@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+
+<title>Integrations Hub · ZopDev</title>
+<meta name="description" content="ZopNight connects to your cloud providers, IaC tools, alerting channels, and CI/CD pipelines, in minutes, not months."/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="homepage-chrome.css"/>
+<link rel="stylesheet" href="chrome-footer.css">
+
+<style>
+/* no-italic-site-wide */ em,i,cite,dfn,var,address,blockquote{font-style:normal}
+/* ===== page base ===== */
+.page{ padding:0; }
+.page > section{ padding:var(--sec-pad) 0; border-bottom:1px solid var(--line); }
+.page > section:last-child{ border-bottom:0; }
+
+/* ===== crumb ===== */
+.crumb{
+  padding:var(--sp-7) 0 var(--sp-4);
+  max-width:var(--max); margin:0 auto;
+  padding-left:var(--gutter); padding-right:var(--gutter);
+  font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4);
+  letter-spacing:var(--ls-meta-tight); text-transform:uppercase;
+}
+.crumb a{ color:var(--ink-3); }
+.crumb a:hover{ color:var(--ink); }
+.crumb .sep{ color:var(--ink-5); margin:0 var(--sp-2); }
+
+/* ===== page head ===== */
+.page-head{
+  padding:var(--sp-10) 0 var(--sp-12);
+  max-width:var(--max); margin:0 auto;
+  padding-left:var(--gutter); padding-right:var(--gutter);
+  border-bottom:1px solid var(--line);
+}
+.page-head .meta{
+  font-family:var(--mono); font-size:var(--t-11);
+  color:var(--zop-orange); letter-spacing:var(--ls-meta);
+  text-transform:uppercase; margin-bottom:var(--sp-4);
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+}
+.page-head .meta::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
+.page-head h1{
+  font-size:clamp(48px, 6vw, 88px);
+  font-weight:var(--fw-bold); letter-spacing:var(--ls-display);
+  line-height:var(--lh-display);
+  max-width:1000px; margin:0 0 var(--sp-5);
+}
+.page-head h1 em{ font-style:normal; color:var(--zop-orange); }
+.page-head p.lede{
+  font-size:var(--t-20); color:var(--ink-3);
+  max-width:720px; line-height:1.45; margin:0;
+}
+
+/* ===== sec-meta ===== */
+.sec-meta{
+  font-family:var(--mono); font-size:var(--t-11);
+  color:var(--zop-orange); letter-spacing:var(--ls-meta);
+  text-transform:uppercase; margin-bottom:var(--sp-6);
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+}
+.sec-meta::before{ content:''; width:10px; height:10px; background:var(--zop-orange); flex-shrink:0; }
+
+/* ===== 01 diagram ===== */
+.diagram-wrap{
+  max-width:960px; margin:0 auto;
+  border:1px solid var(--line);
+  box-shadow:4px 4px 0 0 var(--zop-orange);
+  background:var(--bg-1); overflow:hidden;
+}
+
+/* ===== 02 cloud cards ===== */
+.cloud-grid{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:var(--sp-6);
+  margin-top:var(--sp-8);
+}
+.cloud-card{
+  border:1px solid var(--line); background:var(--bg-2); padding:var(--sp-8);
+  transition:transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out), border-color var(--dur-med) var(--ease-out);
+}
+.cloud-card:hover{ transform:translateY(-4px); box-shadow:0 8px 0 -4px var(--zop-blue); border-color:var(--zop-blue); }
+.cloud-card .cloud-name{ font-size:var(--t-28); font-weight:var(--fw-bold); letter-spacing:var(--ls-heading); margin-bottom:var(--sp-3); }
+.setup-badge{
+  font-family:var(--mono); font-size:var(--t-11); text-transform:uppercase;
+  letter-spacing:var(--ls-meta-tight); color:var(--zop-green);
+  display:inline-flex; align-items:center; gap:var(--sp-1); margin-bottom:var(--sp-4);
+}
+.setup-badge::before{ content:''; width:7px; height:7px; background:var(--zop-green); border-radius:50%; }
+.svc-tags{ display:flex; flex-wrap:wrap; gap:var(--sp-2); margin:0 0 var(--sp-5); }
+.svc-tag{
+  font-family:var(--mono); font-size:var(--t-10); letter-spacing:var(--ls-meta-tight);
+  text-transform:uppercase; color:var(--ink-4); padding:3px 8px; border:1px solid var(--line);
+}
+.card-link{
+  font-size:var(--t-13); color:var(--zop-blue); font-weight:var(--fw-medium);
+  display:inline-flex; align-items:center; gap:4px;
+  transition:gap var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.card-link:hover{ gap:8px; color:var(--zop-orange); }
+
+/* ===== 03 integration grid ===== */
+.int-cat{ margin-bottom:var(--sp-10); }
+.int-cat:last-child{ margin-bottom:0; }
+.cat-head{
+  font-family:var(--mono); font-size:var(--t-11); text-transform:uppercase;
+  letter-spacing:var(--ls-meta); color:var(--ink-4);
+  padding:var(--sp-3) 0; border-bottom:1px solid var(--line); margin-bottom:var(--sp-5);
+}
+.int-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:var(--sp-4);
+}
+.int-card{
+  background:var(--bg-2); border:1px solid var(--line);
+  padding:var(--sp-5); display:flex; flex-direction:column; gap:var(--sp-2);
+  transition:transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out), border-color var(--dur-med) var(--ease-out);
+}
+.int-card:hover{ transform:translateY(-4px); box-shadow:0 8px 0 -4px var(--zop-orange); border-color:var(--line-b); }
+.int-name{ font-size:var(--t-15); font-weight:var(--fw-semibold); }
+.int-desc{ font-size:var(--t-13); color:var(--ink-3); line-height:var(--lh-tight); flex:1; }
+.pill{
+  font-family:var(--mono); font-size:var(--t-10); text-transform:uppercase;
+  letter-spacing:var(--ls-meta-tight); padding:3px 10px;
+  border-radius:var(--r-pill); display:inline-flex; align-items:center;
+  gap:5px; width:fit-content; margin-top:var(--sp-1);
+}
+.pill-live{ background:rgba(127,178,54,.14); color:var(--zop-green); border:1px solid rgba(127,178,54,.28); }
+.pill-live::before{ content:''; width:5px; height:5px; background:var(--zop-green); border-radius:50%; }
+.pill-soon{ background:rgba(245,133,73,.1); color:var(--zop-orange); border:1px solid rgba(245,133,73,.2); }
+.pill-soon::before{ content:''; width:5px; height:5px; background:var(--zop-orange); border-radius:50%; }
+
+/* ===== 04 MCP ===== */
+.mcp-layout{ display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-12); align-items:center; }
+.mcp-text h2{
+  font-size:clamp(var(--t-32),3.5vw,var(--t-52));
+  font-weight:var(--fw-bold); letter-spacing:var(--ls-heading); line-height:var(--lh-heading);
+  margin:0 0 var(--sp-5);
+}
+.mcp-text h2 em{ font-style:normal; color:var(--zop-orange); }
+.mcp-text p{ color:var(--ink-3); font-size:var(--t-17); line-height:var(--lh-body); margin:0 0 var(--sp-6); max-width:480px; }
+.mcp-code{
+  background:var(--bg-2); border:1px solid var(--line);
+  padding:var(--sp-6); font-family:var(--mono); font-size:12px;
+  color:var(--ink-3); line-height:1.7; box-shadow:4px 4px 0 0 var(--zop-blue);
+  white-space:pre; overflow-x:auto;
+}
+.kw{ color:var(--zop-orange); }
+.str{ color:var(--zop-green); }
+.cm{ color:var(--ink-5); }
+
+/* ===== 05 request ===== */
+.req-layout{ display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-12); align-items:start; }
+.req-text h2{
+  font-size:clamp(var(--t-32),3.5vw,var(--t-52));
+  font-weight:var(--fw-bold); letter-spacing:var(--ls-heading); line-height:var(--lh-heading);
+  margin:0 0 var(--sp-5);
+}
+.req-text p{ color:var(--ink-3); font-size:var(--t-17); line-height:var(--lh-body); margin:0 0 var(--sp-5); }
+.req-note{
+  font-family:var(--mono); font-size:var(--t-11); letter-spacing:var(--ls-meta-tight);
+  color:var(--ink-4); border-left:2px solid var(--zop-orange);
+  padding:var(--sp-3) var(--sp-4); margin-top:var(--sp-2);
+}
+.form-mock{
+  background:var(--bg-2); border:1px solid var(--line);
+  padding:var(--sp-7); box-shadow:4px 4px 0 0 var(--zop-orange);
+  display:flex; flex-direction:column; gap:var(--sp-5);
+}
+.form-field{ display:flex; flex-direction:column; gap:6px; }
+.form-label{
+  font-family:var(--mono); font-size:var(--t-11); text-transform:uppercase;
+  letter-spacing:var(--ls-meta); color:var(--ink-4);
+}
+.f-input{
+  background:var(--bg-3); border:1px solid var(--line);
+  color:var(--ink); font-family:var(--font); font-size:var(--t-14);
+  padding:10px 12px; outline:none; width:100%;
+  transition:border-color var(--dur-fast) var(--ease-out);
+}
+.f-input:focus{ border-color:var(--zop-orange); }
+.f-input::placeholder{ color:var(--ink-5); }
+
+/* ===== 06 CTA ===== */
+.cta-wrap{
+  max-width:700px; margin:0 auto; text-align:center;
+  padding:var(--sp-14) var(--gutter);
+}
+.cta-wrap h2{
+  font-size:clamp(var(--t-36),4.5vw,var(--t-60));
+  font-weight:var(--fw-bold); letter-spacing:var(--ls-display); line-height:var(--lh-display);
+  margin:0 0 var(--sp-6);
+}
+.cta-btns{ display:flex; justify-content:center; gap:var(--sp-4); flex-wrap:wrap; }
+
+/* ===== responsive ===== */
+@media (max-width:960px){
+  .cloud-grid{ grid-template-columns:1fr; }
+  .mcp-layout, .req-layout{ grid-template-columns:1fr; }
+}
+@media (max-width:768px){
+  .page > section{ padding:var(--sec-pad-sm) 0; }
+  .int-grid{ grid-template-columns:1fr 1fr; }
+}
+@media (max-width:480px){
+  .int-grid{ grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SVG defs ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mark-zopdev" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="16" height="16" fill="var(--logo-blue,#2A4494)"/>
+      <rect x="16" y="0" width="16" height="16" fill="#F58549"/>
+      <rect x="16" y="16" width="16" height="16" fill="#7FB236"/>
+    </symbol>
+    <symbol id="mark-zopnight" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="32" height="32" fill="var(--logo-blue,#2A4494)"/>
+      <circle cx="16" cy="16" r="8" fill="#FFFFFF"/>
+    </symbol>
+    <symbol id="mark-zopday" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="32" height="32" fill="#F58549"/>
+      <circle cx="16" cy="16" r="8" fill="#FFFFFF"/>
+    </symbol>
+    <symbol id="mark-zopcloud" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="10" height="10" fill="var(--logo-blue,#2A4494)"/>
+      <rect x="11" y="0" width="10" height="10" fill="#F58549"/>
+      <rect x="22" y="11" width="10" height="10" fill="#7FB236"/>
+      <rect x="11" y="11" width="10" height="10" fill="#0A0A0A"/>
+      <rect x="0" y="22" width="10" height="10" fill="#7FB236"/>
+      <rect x="11" y="22" width="10" height="10" fill="var(--logo-blue,#2A4494)"/>
+    </symbol>
+    <symbol id="logo-zopdev" viewBox="0 0 715 276">
+      <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+      <rect x="537" width="89" height="89" fill="var(--logo-blue,#2A4494)"/>
+      <rect x="626" width="89" height="89" fill="#F58549"/>
+      <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- announcement bar -->
+<div class="ann-bar" id="ann-bar">
+  <div class="ann-inner">
+    <a href="developers.html" class="ann-chip">
+      <span class="ann-dot"></span>
+      <strong>MCP Server</strong>, live in Claude &amp; Codex
+      <span class="ann-arrow">→</span>
+    </a>
+    <a href="changelog.html" class="ann-link">Changelog →</a>
+    <button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button>
+  </div>
+</div>
+
+<!-- live-ops strip -->
+<!-- ============================================================
+     LIVE STATUS STRIP. Cloud-ops signal strip
+     ============================================================ -->
+<!-- ============================================================
+     SAVINGS CALCULATOR STRIP. Single CTA, links to the calculator.
+     ============================================================ -->
+<a class="live-strip live-strip-cta" href="#calculator" aria-label="Open the savings calculator">
+  <span class="ls-cta-anchor">
+    <span class="ls-live"><span class="ls-livedot"></span>Calculator</span>
+  </span>
+  <span class="ls-cta-msg">See how much your cloud is wasting right now.</span>
+  <span class="ls-cta-arrow">Try it <span class="ls-arrow">&rarr;</span></span>
+</a>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo-lockup sm" aria-label="ZopDev">
+      <svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <div class="nav-item" data-menu="product">
+        <a>Product <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <div class="nav-item" data-menu="resources">
+        <a>Resources <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="pricing.html">Pricing</a>
+      <div class="nav-item" data-menu="company">
+        <a>Company <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="community.html">Community</a>
+    </div>
+
+    <!-- Shared dropdown overlay. Content crossfades, panel slides left/right -->
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+      <div class="nav-panes" id="nav-panes">
+
+        <!-- ═══════ PRODUCT · 3 sub-products ═══════ -->
+        <div class="nav-pane" data-pane="product">
+          <!-- 3 equal cells. Inline grid-template-columns overrides the
+               default 1.3fr 1fr 1fr (which is built for a featured-hero
+               layout). All three products are equal here — no hero — so
+               no empty grid slots and no card stretches taller than its
+               siblings. -->
+          <div class="np-bento" style="grid-template-columns:1fr 1fr 1fr;">
+            <a class="np-cell" href="zopnight.html">
+              <span class="np-badge live">live</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopNight</h3>
+              <p class="np-cell-desc">Cloud cost optimization on autopilot. AWS, Azure, GCP.</p>
+            </a>
+            <a class="np-cell" href="zopday.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#F58549"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopDay</h3>
+              <p class="np-cell-desc">Deployment orchestration and release management.</p>
+            </a>
+            <a class="np-cell" href="zopcloud.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><rect x="12" y="8" width="8" height="6" fill="#FFFFFF"/><rect x="6" y="14" width="20" height="10" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopCloud</h3>
+              <p class="np-cell-desc">Multi-cloud resource graph and topology view.</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Live in Claude &amp; Codex</strong> · run ZopNight from your MCP client</span>
+            <a href="developers.html">Try MCP →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ RESOURCES · 9 cells in a 3×3 grid ═══════ -->
+        <div class="nav-pane" data-pane="resources">
+          <div class="np-bento np-bento--grid">
+            <a class="np-cell" href="blog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Blog</h3>
+              <p class="np-cell-desc">Engineering + cost optimization notes</p>
+            </a>
+            <a class="np-cell" href="free-ebooks.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 4h7v13H3zM10 4h7v13h-7z" stroke="currentColor" stroke-width="1.5"/><path d="M10 4v13" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Ebooks</h3>
+              <p class="np-cell-desc">Free playbooks · FinOps, K8s, CDCR</p>
+            </a>
+            <a class="np-cell" href="customers.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 16c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Case studies</h3>
+              <p class="np-cell-desc">42-67% cuts, real teams</p>
+            </a>
+            <a class="np-cell" href="solutions.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Use cases by industry</h3>
+              <p class="np-cell-desc">SaaS · fintech · retail · health</p>
+            </a>
+            <a class="np-cell" href="product-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M8 7l4 3-4 3z" fill="currentColor"/></svg>
+              </div>
+              <h3 class="np-cell-title">Product documentation</h3>
+              <p class="np-cell-desc">Walkthroughs · video tours</p>
+            </a>
+            <a class="np-cell" href="kubernetes-guide.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2l7 4v8l-7 4-7-4V6z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
+              </div>
+              <h3 class="np-cell-title">Kubernetes guide</h3>
+              <p class="np-cell-desc">From cluster basics to right-sizing</p>
+            </a>
+            <a class="np-cell" href="changelog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Changelog</h3>
+              <p class="np-cell-desc">What shipped this week</p>
+            </a>
+            <a class="np-cell" href="developer-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 6L3 10l4 4M13 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 class="np-cell-title">Developer documentation</h3>
+              <p class="np-cell-desc">REST API · SDKs · webhooks · MCP</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Weekly digest</strong> · waste signals, wins, war stories</span>
+            <a href="blog.html">Subscribe →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ COMPANY · 2 items ═══════ -->
+        <div class="nav-pane" data-pane="company">
+          <div class="np-bento" style="grid-template-columns:1fr 1fr;">
+            <a class="np-cell" href="about.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#0A0A0A"/><rect x="6" y="6" width="8" height="20" fill="#F0EBDB"/><rect x="18" y="12" width="8" height="14" fill="#F58549"/></svg>
+              </div>
+              <h3 class="np-cell-title">About</h3>
+              <p class="np-cell-desc">Founded 2024. The autopilot for multi-cloud cost.</p>
+            </a>
+            <a class="np-cell" href="careers.html">
+              <span class="np-badge">hiring</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="6" width="14" height="11" stroke="currentColor" stroke-width="1.5"/><path d="M7 6V4h6v2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Careers</h3>
+              <p class="np-cell-desc">Open roles · engineering, design, GTM</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>We're hiring</strong> · remote-first · 12 open roles</span>
+            <a href="careers.html">See roles →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="nav-cta">
+      <!-- Status pill · live dot · links to /status.html. Mirrors the
+           project's "always-on" identity (the live-ops strip above the
+           nav). Pulses green when all systems are operational. -->
+      <a class="nav-status" href="status.html" aria-label="System status">
+        <span class="nav-status-dot" aria-hidden="true"></span>
+        <span class="nav-status-text">Status</span>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" role="switch">
+        <span class="tt-opt tt-sun" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="8" cy="8" r="3" fill="currentColor" stroke="none"/>
+            <path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.9.9M11.7 11.7l.9.9M3.4 12.6l.9-.9M11.7 4.3l.9-.9"/>
+          </svg>
+        </span>
+        <span class="tt-opt tt-moon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M12.8 10.1a5.5 5.5 0 0 1-7-7 .5.5 0 0 0-.7-.6A6.5 6.5 0 1 0 13.4 10.8a.5.5 0 0 0-.6-.7z"/>
+          </svg>
+        </span>
+      </button>
+      <a class="chip-playground" href="playground.html"><span>Playground</span></a>
+      <a class="sign" href="signin.html">Sign In</a>
+      <a class="btn btn-accent" href="demo.html"><span>Book a Demo</span> <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+
+  <div class="crumb">
+    <a href="index.html">home</a>
+    <span class="sep">/</span>
+    <a href="zopnight.html">product</a>
+    <span class="sep">/</span>
+    integrations
+  </div>
+
+  <header class="page-head">
+    <div class="meta">integrations · connect</div>
+    <h1>Works with your stack. <em>All of it.</em></h1>
+    <p class="lede">ZopNight connects to your cloud providers, IaC tools, alerting channels, and CI/CD pipelines, in minutes, not months.</p>
+  </header>
+
+  <!-- 01 · diagram -->
+  <section id="s01">
+    <div class="container">
+      <div class="sec-meta">01 · diagram</div>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 960 560" xmlns="http://www.w3.org/2000/svg" role="img"
+             aria-label="ZopNight integration architecture: center node connected to Cloud, IaC, Alerting, Monitoring, CI/CD, and Identity providers">
+
+          <!-- canvas -->
+          <rect width="960" height="560" fill="#0E0E12"/>
+
+          <!-- subtle grid -->
+          <defs>
+            <pattern id="g40" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M40 0H0V40" fill="none" stroke="#1C1C24" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="960" height="560" fill="url(#g40)"/>
+
+          <!-- ── CENTER NODE ─────────────────────── -->
+          <rect x="396" y="216" width="168" height="128" fill="#2A4494" stroke="#4A66D4" stroke-width="2"/>
+          <text x="480" y="268" fill="#F0EBDB" font-family="JetBrains Mono,monospace" font-size="15" font-weight="700" text-anchor="middle" letter-spacing="0.06em">ZopNight</text>
+          <text x="480" y="289" fill="#A8A195" font-family="JetBrains Mono,monospace" font-size="9" text-anchor="middle" letter-spacing="0.12em">CLOUD OPS</text>
+          <!-- mini mark -->
+          <rect x="461" y="304" width="11" height="11" fill="#4A66D4"/>
+          <rect x="473" y="304" width="11" height="11" fill="#F58549"/>
+          <rect x="473" y="316" width="11" height="11" fill="#7FB236"/>
+
+          <!-- ── CLOUD GROUP (top-left), blue spokes ─── -->
+          <!-- spokes -->
+          <line x1="396" y1="248" x2="218" y2="96" stroke="#2A4494" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="396" y1="260" x2="96" y2="180" stroke="#2A4494" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="420" y1="216" x2="280" y2="56" stroke="#2A4494" stroke-width="1.5" stroke-dasharray="5 4"/>
+
+          <!-- AWS -->
+          <rect x="234" y="34" width="84" height="44" fill="#15151A" stroke="#2A4494" stroke-width="1.5"/>
+          <text x="276" y="56" fill="#F58549" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" text-anchor="middle">AWS</text>
+          <text x="276" y="70" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">CLOUD</text>
+
+          <!-- Azure -->
+          <rect x="162" y="68" width="88" height="44" fill="#15151A" stroke="#2A4494" stroke-width="1.5"/>
+          <text x="206" y="90" fill="#4A9FFF" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" text-anchor="middle">AZURE</text>
+          <text x="206" y="104" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">CLOUD</text>
+
+          <!-- GCP -->
+          <rect x="52" y="158" width="84" height="44" fill="#15151A" stroke="#2A4494" stroke-width="1.5"/>
+          <text x="94" y="180" fill="#7FB236" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" text-anchor="middle">GCP</text>
+          <text x="94" y="194" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">CLOUD</text>
+
+          <text x="200" y="22" fill="#4A66D4" font-family="JetBrains Mono,monospace" font-size="9" text-anchor="middle" letter-spacing="0.14em">CLOUD PROVIDERS</text>
+
+          <!-- ── IaC GROUP (top-right), blue spokes ─── -->
+          <line x1="564" y1="248" x2="700" y2="96" stroke="#2A4494" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="548" y1="216" x2="680" y2="56" stroke="#2A4494" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="564" y1="260" x2="824" y2="140" stroke="#2A4494" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="564" y1="270" x2="840" y2="210" stroke="#2A4494" stroke-width="1.5" stroke-dasharray="5 4"/>
+
+          <!-- Terraform -->
+          <rect x="648" y="34" width="100" height="44" fill="#15151A" stroke="#2A4494" stroke-width="1.5"/>
+          <text x="698" y="56" fill="#7B42BC" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" text-anchor="middle">TERRAFORM</text>
+          <text x="698" y="70" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">IaC</text>
+
+          <!-- Pulumi -->
+          <rect x="644" y="68" width="84" height="44" fill="#15151A" stroke="#2A4494" stroke-width="1.5"/>
+          <text x="686" y="88" fill="#F26E1D" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" text-anchor="middle">PULUMI</text>
+          <text x="686" y="102" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">IaC</text>
+
+          <!-- Ansible -->
+          <rect x="776" y="118" width="88" height="44" fill="#15151A" stroke="#2A4494" stroke-width="1.5"/>
+          <text x="820" y="140" fill="#EE0000" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" text-anchor="middle">ANSIBLE</text>
+          <text x="820" y="154" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">IaC</text>
+
+          <!-- AWS CDK -->
+          <rect x="796" y="188" width="92" height="44" fill="#15151A" stroke="#2A4494" stroke-width="1.5"/>
+          <text x="842" y="210" fill="#F58549" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" text-anchor="middle">AWS CDK</text>
+          <text x="842" y="224" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">IaC</text>
+
+          <text x="750" y="22" fill="#4A66D4" font-family="JetBrains Mono,monospace" font-size="9" text-anchor="middle" letter-spacing="0.14em">IaC TOOLS</text>
+
+          <!-- ── ALERTING GROUP (right), orange spokes ─── -->
+          <line x1="564" y1="300" x2="808" y2="286" stroke="#F58549" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="564" y1="316" x2="808" y2="350" stroke="#F58549" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="564" y1="330" x2="796" y2="414" stroke="#F58549" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="564" y1="336" x2="784" y2="464" stroke="#F58549" stroke-width="1.5" stroke-dasharray="5 4"/>
+
+          <!-- Slack -->
+          <rect x="808" y="264" width="84" height="44" fill="#15151A" stroke="#F58549" stroke-width="1.5"/>
+          <text x="850" y="286" fill="#E01E5A" font-family="JetBrains Mono,monospace" font-size="12" font-weight="700" text-anchor="middle">SLACK</text>
+          <text x="850" y="300" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">ALERTING</text>
+
+          <!-- PagerDuty -->
+          <rect x="808" y="328" width="104" height="44" fill="#15151A" stroke="#F58549" stroke-width="1.5"/>
+          <text x="860" y="350" fill="#06AC38" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" text-anchor="middle">PAGERDUTY</text>
+          <text x="860" y="364" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">ALERTING</text>
+
+          <!-- Opsgenie -->
+          <rect x="796" y="392" width="100" height="44" fill="#15151A" stroke="#F58549" stroke-width="1.5"/>
+          <text x="846" y="414" fill="#FF6B35" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" text-anchor="middle">OPSGENIE</text>
+          <text x="846" y="428" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">ALERTING</text>
+
+          <!-- MS Teams -->
+          <rect x="784" y="442" width="104" height="44" fill="#15151A" stroke="#F58549" stroke-width="1.5"/>
+          <text x="836" y="464" fill="#5059C9" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" text-anchor="middle">MS TEAMS</text>
+          <text x="836" y="478" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">ALERTING</text>
+
+          <text x="880" y="252" fill="#F58549" font-family="JetBrains Mono,monospace" font-size="9" text-anchor="middle" letter-spacing="0.14em">ALERTING</text>
+
+          <!-- ── MONITORING GROUP (bottom), green spokes ─── -->
+          <line x1="480" y1="344" x2="360" y2="472" stroke="#7FB236" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="480" y1="344" x2="480" y2="480" stroke="#7FB236" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="480" y1="344" x2="220" y2="490" stroke="#7FB236" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="480" y1="344" x2="600" y2="480" stroke="#7FB236" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="480" y1="344" x2="100" y2="460" stroke="#7FB236" stroke-width="1.5" stroke-dasharray="5 4"/>
+
+          <!-- Datadog -->
+          <rect x="316" y="468" width="88" height="44" fill="#15151A" stroke="#7FB236" stroke-width="1.5"/>
+          <text x="360" y="490" fill="#774AA4" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" text-anchor="middle">DATADOG</text>
+          <text x="360" y="504" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">MONITORING</text>
+
+          <!-- Grafana -->
+          <rect x="436" y="480" width="88" height="44" fill="#15151A" stroke="#7FB236" stroke-width="1.5"/>
+          <text x="480" y="502" fill="#F46800" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" text-anchor="middle">GRAFANA</text>
+          <text x="480" y="516" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">MONITORING</text>
+
+          <!-- CloudWatch -->
+          <rect x="168" y="468" width="104" height="44" fill="#15151A" stroke="#7FB236" stroke-width="1.5"/>
+          <text x="220" y="490" fill="#F58549" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" text-anchor="middle">CLOUDWATCH</text>
+          <text x="220" y="504" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">MONITORING</text>
+
+          <!-- Prometheus -->
+          <rect x="556" y="468" width="104" height="44" fill="#15151A" stroke="#7FB236" stroke-width="1.5"/>
+          <text x="608" y="490" fill="#E6522C" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" text-anchor="middle">PROMETHEUS</text>
+          <text x="608" y="504" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">MONITORING</text>
+
+          <!-- New Relic -->
+          <rect x="52" y="438" width="92" height="44" fill="#15151A" stroke="#7FB236" stroke-width="1.5"/>
+          <text x="98" y="460" fill="#00AC69" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" text-anchor="middle">NEW RELIC</text>
+          <text x="98" y="474" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">MONITORING</text>
+
+          <text x="400" y="544" fill="#7FB236" font-family="JetBrains Mono,monospace" font-size="9" text-anchor="middle" letter-spacing="0.14em">MONITORING</text>
+
+          <!-- ── CI/CD GROUP (left-bottom), blue spokes ─── -->
+          <line x1="396" y1="316" x2="148" y2="340" stroke="#2A4494" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <line x1="396" y1="330" x2="60" y2="348" stroke="#2A4494" stroke-width="1.5" stroke-dasharray="5 4"/>
+
+          <!-- GitHub Actions -->
+          <rect x="52" y="296" width="112" height="44" fill="#15151A" stroke="#2A4494" stroke-width="1.5"/>
+          <text x="108" y="316" fill="#F0EBDB" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" text-anchor="middle">GITHUB ACTIONS</text>
+          <text x="108" y="330" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">CI/CD</text>
+
+          <!-- GitLab CI -->
+          <rect x="52" y="356" width="100" height="44" fill="#15151A" stroke="#2A4494" stroke-width="1.5"/>
+          <text x="102" y="378" fill="#FC6D26" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" text-anchor="middle">GITLAB CI</text>
+          <text x="102" y="392" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">CI/CD</text>
+
+          <text x="90" y="284" fill="#4A66D4" font-family="JetBrains Mono,monospace" font-size="9" text-anchor="middle" letter-spacing="0.14em">CI/CD</text>
+
+          <!-- ── IDENTITY GROUP (top-center), blue spokes ─── -->
+          <line x1="450" y1="216" x2="390" y2="90" stroke="#2A4494" stroke-width="1" stroke-dasharray="3 4" opacity="0.7"/>
+          <line x1="500" y1="216" x2="520" y2="90" stroke="#2A4494" stroke-width="1" stroke-dasharray="3 4" opacity="0.7"/>
+
+          <!-- Okta -->
+          <rect x="336" y="52" width="80" height="40" fill="#15151A" stroke="#2A4494" stroke-width="1"/>
+          <text x="376" y="72" fill="#007DC1" font-family="JetBrains Mono,monospace" font-size="12" font-weight="700" text-anchor="middle">OKTA</text>
+          <text x="376" y="85" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">IDENTITY</text>
+
+          <!-- Google WS -->
+          <rect x="480" y="52" width="104" height="40" fill="#15151A" stroke="#2A4494" stroke-width="1"/>
+          <text x="532" y="72" fill="#34A853" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" text-anchor="middle">GOOGLE WS</text>
+          <text x="532" y="85" fill="#5A5A62" font-family="JetBrains Mono,monospace" font-size="8" text-anchor="middle" letter-spacing="0.1em">IDENTITY</text>
+
+          <text x="460" y="40" fill="#4A66D4" font-family="JetBrains Mono,monospace" font-size="9" text-anchor="middle" letter-spacing="0.14em">IDENTITY / SSO</text>
+
+          <!-- ── LEGEND ───────────────────────── -->
+          <rect x="24" y="516" width="10" height="10" fill="none" stroke="#4A66D4" stroke-width="1.5"/>
+          <text x="40" y="526" fill="#8A8378" font-family="JetBrains Mono,monospace" font-size="9">Cloud · IaC · CI/CD · Identity</text>
+          <rect x="240" y="516" width="10" height="10" fill="none" stroke="#F58549" stroke-width="1.5"/>
+          <text x="256" y="526" fill="#8A8378" font-family="JetBrains Mono,monospace" font-size="9">Alerting</text>
+          <rect x="340" y="516" width="10" height="10" fill="none" stroke="#7FB236" stroke-width="1.5"/>
+          <text x="356" y="526" fill="#8A8378" font-family="JetBrains Mono,monospace" font-size="9">Monitoring</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · cloud providers -->
+  <section id="s02">
+    <div class="container">
+      <div class="sec-meta">02 · cloud providers</div>
+      <h2 style="font-size:clamp(var(--t-32),3.5vw,var(--t-52));font-weight:var(--fw-bold);letter-spacing:var(--ls-heading);line-height:var(--lh-heading);margin:0 0 var(--sp-3)">Multi-cloud from day one.</h2>
+      <p style="color:var(--ink-3);font-size:var(--t-17);max-width:600px;line-height:var(--lh-body);margin:0 0 var(--sp-2)">Connect every major cloud provider in one session. ZopNight normalizes cost and resource data across clouds into a single unified view, no manual reconciliation.</p>
+      <div class="cloud-grid">
+
+        <!-- AWS -->
+        <div class="cloud-card">
+          <div class="cloud-name">AWS</div>
+          <div class="setup-badge">5 minutes setup</div>
+          <p style="color:var(--ink-3);font-size:var(--t-14);line-height:var(--lh-body);margin:0 0 var(--sp-4)">Connects via read-only IAM role. Automatically discovers compute, storage, database, serverless, and network resources. Cost data pulled from AWS Cost Explorer API with tag-level granularity.</p>
+          <div class="svc-tags">
+            <span class="svc-tag">EC2</span><span class="svc-tag">RDS</span><span class="svc-tag">S3</span>
+            <span class="svc-tag">Lambda</span><span class="svc-tag">EKS</span><span class="svc-tag">CloudFront</span>
+            <span class="svc-tag">ElastiCache</span><span class="svc-tag">+40 services</span>
+          </div>
+          <a href="solutions/aws.html" class="card-link">AWS deep dive <span>→</span></a>
+        </div>
+
+        <!-- Azure -->
+        <div class="cloud-card">
+          <div class="cloud-name" style="color:var(--zop-blue)">Azure</div>
+          <div class="setup-badge">5 minutes setup</div>
+          <p style="color:var(--ink-3);font-size:var(--t-14);line-height:var(--lh-body);margin:0 0 var(--sp-4)">Integrates via Azure Service Principal with Reader role. Covers VMs, managed databases, Kubernetes, App Service, serverless functions, and Cosmos DB. Cost data from Azure Cost Management API.</p>
+          <div class="svc-tags">
+            <span class="svc-tag">Virtual Machines</span><span class="svc-tag">Azure SQL</span>
+            <span class="svc-tag">Blob Storage</span><span class="svc-tag">AKS</span>
+            <span class="svc-tag">App Service</span><span class="svc-tag">Functions</span>
+            <span class="svc-tag">Cosmos DB</span>
+          </div>
+          <a href="solutions.html" class="card-link">Azure solutions <span>→</span></a>
+        </div>
+
+        <!-- GCP -->
+        <div class="cloud-card">
+          <div class="cloud-name" style="color:var(--zop-green)">GCP</div>
+          <div class="setup-badge">5 minutes setup</div>
+          <p style="color:var(--ink-3);font-size:var(--t-14);line-height:var(--lh-body);margin:0 0 var(--sp-4)">Connects via GCP Service Account with Viewer permissions. Covers Compute Engine, Cloud SQL, GKE, Cloud Run, BigQuery, and Pub/Sub. Billing data flows from Cloud Billing Export directly into ZopNight.</p>
+          <div class="svc-tags">
+            <span class="svc-tag">Compute Engine</span><span class="svc-tag">Cloud SQL</span>
+            <span class="svc-tag">Cloud Storage</span><span class="svc-tag">GKE</span>
+            <span class="svc-tag">Cloud Run</span><span class="svc-tag">BigQuery</span>
+          </div>
+          <a href="solutions.html" class="card-link">GCP solutions <span>→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · integrations grid -->
+  <section id="s03">
+    <div class="container">
+      <div class="sec-meta">03 · integrations grid</div>
+      <h2 style="font-size:clamp(var(--t-32),3.5vw,var(--t-52));font-weight:var(--fw-bold);letter-spacing:var(--ls-heading);line-height:var(--lh-heading);margin:0 0 var(--sp-3)">Every tool in your workflow.</h2>
+      <p style="color:var(--ink-3);font-size:var(--t-17);max-width:580px;line-height:var(--lh-body);margin:0 0 var(--sp-10)">ZopNight meets your team where they already work. Browse integrations by category below, new ones ship every sprint.</p>
+
+      <!-- IaC -->
+      <div class="int-cat">
+        <div class="cat-head">Infrastructure as Code</div>
+        <div class="int-grid">
+          <div class="int-card">
+            <div class="int-name">Terraform</div>
+            <div class="int-desc">Import Terraform state to map IaC definitions to live cost data. Detect drift between declared and actual spend.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+          <div class="int-card">
+            <div class="int-name">Pulumi</div>
+            <div class="int-desc">Pull Pulumi stack outputs and resource graphs to correlate your programs with cloud costs in real time.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+          <div class="int-card">
+            <div class="int-name">Ansible</div>
+            <div class="int-desc">Trigger Ansible playbooks as remediation actions directly from ZopNight recommendations with one click.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+          <div class="int-card">
+            <div class="int-name">AWS CDK</div>
+            <div class="int-desc">Map CDK construct outputs to provisioned resources and trace cost anomalies back to their construct origin.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alerting -->
+      <div class="int-cat">
+        <div class="cat-head">Alerting &amp; Notifications</div>
+        <div class="int-grid">
+          <div class="int-card">
+            <div class="int-name">Slack</div>
+            <div class="int-desc">Receive anomaly alerts, remediation digests, and budget threshold warnings directly in any Slack channel.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+          <div class="int-card">
+            <div class="int-name">PagerDuty</div>
+            <div class="int-desc">Escalate critical cost spikes or compliance violations to PagerDuty on-call rotations automatically with full context.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+          <div class="int-card">
+            <div class="int-name">Opsgenie</div>
+            <div class="int-desc">Route ZopNight alerts to Opsgenie teams with resource ID, estimated spend impact, and a direct remediation link.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+          <div class="int-card">
+            <div class="int-name">Microsoft Teams</div>
+            <div class="int-desc">Post cost reports and remediation summaries to Teams channels via webhook or the ZopNight Teams app.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monitoring -->
+      <div class="int-cat">
+        <div class="cat-head">Monitoring &amp; Observability</div>
+        <div class="int-grid">
+          <div class="int-card">
+            <div class="int-name">Datadog</div>
+            <div class="int-desc">Overlay cost metrics on Datadog dashboards. Correlate latency spikes with cost anomalies in one unified view.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+          <div class="int-card">
+            <div class="int-name">Grafana</div>
+            <div class="int-desc">Native ZopNight data source plugin. Drop cost panels into existing observability dashboards without any extra config.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+          <div class="int-card">
+            <div class="int-name">CloudWatch</div>
+            <div class="int-desc">Pull CloudWatch metrics to validate remediation impact, confirm rightsized instances maintain SLA targets.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+          <div class="int-card">
+            <div class="int-name">New Relic</div>
+            <div class="int-desc">Ingest ZopNight cost events into New Relic for unified APM and FinOps observability in a single platform.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+          <div class="int-card">
+            <div class="int-name">Prometheus</div>
+            <div class="int-desc">Expose ZopNight cost metrics via a Prometheus-compatible /metrics endpoint for scraping into any observability stack.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CI/CD -->
+      <div class="int-cat">
+        <div class="cat-head">CI/CD Pipelines</div>
+        <div class="int-grid">
+          <div class="int-card">
+            <div class="int-name">GitHub Actions</div>
+            <div class="int-desc">Add cost impact checks to pull requests. Block deploys that would breach budget thresholds before they ship.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+          <div class="int-card">
+            <div class="int-name">GitLab CI</div>
+            <div class="int-desc">Add ZopNight cost gates to GitLab pipelines. View projected spend impact in merge request comments automatically.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+          <div class="int-card">
+            <div class="int-name">Jenkins</div>
+            <div class="int-desc">ZopNight Jenkins plugin surfaces cost change previews alongside build results for every infrastructure pipeline run.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Identity/SSO -->
+      <div class="int-cat">
+        <div class="cat-head">Identity &amp; SSO</div>
+        <div class="int-grid">
+          <div class="int-card">
+            <div class="int-name">Okta</div>
+            <div class="int-desc">SAML 2.0 and OIDC SSO via Okta. Provision users and teams automatically with SCIM 2.0 directory sync.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+          <div class="int-card">
+            <div class="int-name">Azure Active Directory</div>
+            <div class="int-desc">Microsoft Entra ID for enterprise SSO and Azure group-based RBAC role assignment at org scale.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+          <div class="int-card">
+            <div class="int-name">Google Workspace</div>
+            <div class="int-desc">Sign in with Google and auto-provision team members from your Workspace org directory via SCIM.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ticketing -->
+      <div class="int-cat">
+        <div class="cat-head">Ticketing &amp; Project Management</div>
+        <div class="int-grid">
+          <div class="int-card">
+            <div class="int-name">Jira</div>
+            <div class="int-desc">Auto-create Jira issues from ZopNight remediation recommendations with full cost context, resource details, and assignee routing.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+          <div class="int-card">
+            <div class="int-name">Linear</div>
+            <div class="int-desc">Push optimization tasks to Linear issues, auto-assigned to the owning team based on resource tags.</div>
+            <span class="pill pill-live">Connected</span>
+          </div>
+          <div class="int-card">
+            <div class="int-name">ServiceNow</div>
+            <div class="int-desc">Enterprise ITSM integration, open change requests and remediation workflows directly from ZopNight recommendations.</div>
+            <span class="pill pill-soon">Coming soon</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BI -->
+      <div class="int-cat">
+        <div class="cat-head">BI &amp; Reporting</div>
+        <div class="int-grid">
+          <div class="int-card">
+            <div class="int-name">Looker</div>
+            <div class="int-desc">ZopNight Looker block with pre-built cost dashboards, showback views, and anomaly detection models ready to fork.</div>
+            <span class="pill pill-soon">Coming soon</span>
+          </div>
+          <div class="int-card">
+            <div class="int-name">Tableau</div>
+            <div class="int-desc">Connect ZopNight's data export API to Tableau for executive-level cloud cost visualization and board-ready reporting.</div>
+            <span class="pill pill-soon">Coming soon</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 04 · MCP -->
+  <section id="s04">
+    <div class="container">
+      <div class="sec-meta">04 · mcp server</div>
+      <div class="mcp-layout">
+        <div class="mcp-text">
+          <h2>ZopNight as an <em>MCP Server.</em></h2>
+          <p>Ask Claude or any LLM to surface your cloud waste, run remediations, and generate cost reports, directly from your AI context. ZopNight exposes a native MCP (Model Context Protocol) server so your AI assistant can query live cloud data, explain anomalies in plain language, and trigger approved remediations without leaving your conversation window.</p>
+          <a href="developers.html" class="btn btn-secondary" style="width:fit-content">Learn about the MCP Server <span class="arrow">→</span></a>
+        </div>
+        <div class="mcp-code" role="region" aria-label="MCP server terminal example"><span class="cm"># Ask Claude, directly from your terminal</span>
+
+<span class="kw">@zopnight</span> what's our biggest cost anomaly this week?
+
+<span class="cm">─── ZopNight ──────────────────────────────────────</span>
+<span class="str">  EC2 · us-east-1 · i-0a3f7e2b94c12d8e</span>
+  <span class="kw">$4,210</span> above 30-day rolling baseline
+  Cause: oversized r6i.4xlarge · avg CPU 3.1%
+  Recommendation: rightsize → r6i.large
+  Estimated monthly savings: <span class="kw">$3,840</span>
+
+  Apply remediation? [y/N] <span class="str">y</span>
+
+<span class="cm">  ✓ Scheduled for next maintenance window</span>
+<span class="cm">─── Applied ──────────────────────────────────────</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 · request -->
+  <section id="s05">
+    <div class="container">
+      <div class="sec-meta">05 · request an integration</div>
+      <div class="req-layout">
+        <div class="req-text">
+          <h2>Don't see your tool?</h2>
+          <p>We add new integrations every sprint. If your stack isn't in the list above, tell us, we'll prioritize based on demand and typically deliver within 3 weeks of confirmation.</p>
+          <div class="req-note">
+            We're adding new integrations every sprint.<br>
+            Current avg time-to-integration: <strong>3 weeks.</strong>
+          </div>
+        </div>
+        <div class="form-mock">
+          <div class="form-field">
+            <label class="form-label" for="req-company">Company name</label>
+            <input class="f-input" id="req-company" type="text" placeholder="Acme Corp" autocomplete="organization"/>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="req-tool">Tool name</label>
+            <input class="f-input" id="req-tool" type="text" placeholder="e.g. Dynatrace, Harness, ArgoCD"/>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="req-email">Your email</label>
+            <input class="f-input" id="req-email" type="email" placeholder="you@company.com" autocomplete="email"/>
+          </div>
+          <a href="demo.html" class="btn btn-accent" style="justify-content:center">Request Integration <span class="arrow">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 · CTA -->
+  <section id="s06" style="padding:0;border-bottom:0">
+    <div class="cta-wrap">
+      <div class="sec-meta" style="justify-content:center;margin-bottom:var(--sp-5)">06 · get started</div>
+      <h2>Ready to connect your stack?</h2>
+      <p style="color:var(--ink-3);font-size:var(--t-17);line-height:1.45;margin:0 0 var(--sp-8)">Plug ZopNight into your cloud in under 5 minutes. No agents. No installs. Read-only until you say otherwise.</p>
+      <div class="cta-btns">
+        <a href="signin.html" class="btn btn-accent">Start Free <span class="arrow">→</span></a>
+        <a href="demo.html" class="btn btn-secondary">Book a Demo</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- footer -->
+<!-- FINAL CTA · canonical homepage block, shared across marketing pages -->
+<section class="final">
+  <div class="container">
+    <a class="final-mark" href="/" aria-label="ZopDev">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#mark-zopdev"/></svg>
+    </a>
+    <div class="final-grid">
+      <div>
+        <div class="sec-meta" style="color:var(--zop-orange); margin-bottom:20px">end · ready when you are</div>
+        <h2>Stop watching the waste.<br/>Start cutting it.</h2>
+        <p class="final-tag">See. Find. Fix. Automatic.</p>
+        <p>Connect your first cloud account in under 5 minutes. See your first remediation in under 7. No credit card required.</p>
+        <div class="final-cta">
+          <a class="btn btn-primary" href="signin.html">Start Free →</a>
+          <a class="btn btn-secondary" href="demo.html">Book a Demo</a>
+        </div>
+      </div>
+      <div class="final-stats">
+        <div><strong>5 min</strong>connect time</div>
+        <div><strong>7 min</strong>first remediation</div>
+        <div><strong>42%</strong>avg. waste cut in 30 days</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRIDGE MARQUEE · cream slab between dark CTA and dark footer -->
+<section class="bridge-marquee" aria-label="ZopDev brand statement">
+  <div class="bridge-track">
+    <span>Multi-cloud automation</span><span class="acc">·</span>
+    <span>Production-ready in 30 min</span><span class="acc">·</span>
+    <span>SOC 2 · ISO 27001 · zero-trust</span><span class="acc">·</span>
+    <span>30% average cloud cost cut</span><span class="acc">·</span>
+    <span>4 platforms · 1 console</span><span class="acc">·</span>
+    <span>Multi-cloud automation</span><span class="acc">·</span>
+    <span>Production-ready in 30 min</span><span class="acc">·</span>
+    <span>SOC 2 · ISO 27001 · zero-trust</span><span class="acc">·</span>
+    <span>30% average cloud cost cut</span><span class="acc">·</span>
+    <span>4 platforms · 1 console</span><span class="acc">·</span>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="walkthrough.html">Product guide</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developers.html">Documentation</a></li>
+        <li><a href="developers.html">API reference</a></li>
+        <li><a href="developers.html">MCP server</a></li>
+        <li><a href="developers.html">SDK &amp; CLI</a></li>
+        <li><a href="developers.html">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-globe">
+      <div class="foot-globe-left">
+        <a href="/" class="foot-globe-mark" aria-label="ZopDev">
+          <svg class="foot-globe-logo" viewBox="0 0 715 276" aria-hidden="true">
+            <use href="#logo-zopdev"/>
+          </svg>
+        </a>
+      </div>
+      <div class="foot-globe-right">
+        <div class="foot-regions-v2" id="foot-regions-v2">
+          <canvas id="foot-regions-map"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom foot-bottom-3">
+      <div class="foot-copy">© <span data-year>2026</span> ZopDev · <a href="trust.html">privacy</a> · <a href="trust.html">terms</a></div>
+      <div class="foot-mid">made with <svg viewBox="0 0 7 6" aria-hidden="true"><rect x="1" y="0" width="1" height="1"/><rect x="2" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="0" y="1" width="7" height="1"/><rect x="0" y="2" width="7" height="1"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg> by <a href="https://zop.dev" target="_blank" rel="noopener">zop.dev</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+(function(){
+  document.querySelectorAll('[data-year]').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+  var ann = document.getElementById('ann-bar');
+  var btn = document.getElementById('ann-close');
+  if(!ann||!btn) return;
+  var key = 'zop-ann-2026-mcp';
+  try{ if(localStorage.getItem(key)==='1') ann.style.display='none'; }catch(e){}
+  btn.addEventListener('click',function(){
+    ann.style.display='none';
+    try{ localStorage.setItem(key,'1'); }catch(e){}
+  });
+})();
+</script>
+
+<!-- homepage-chrome init: theme toggle + nav megamenu + scroll hide + section reveal -->
+<script>
+(function(){
+  /* Theme toggle */
+  var html = document.documentElement;
+  if(!html.getAttribute('data-theme')) html.setAttribute('data-theme','light');
+  var btn = document.getElementById('theme-toggle');
+  if(btn){
+      /* click handler moved to chrome-mobilenav.js (global) */
+  }
+})();
+
+(function(){
+  /* Nav megamenu */
+  var overlay = document.getElementById('nav-overlay');
+  var navLinks = document.getElementById('nav-links');
+  if(!overlay || !navLinks) return;
+  var panes = {};
+  overlay.querySelectorAll('.nav-pane').forEach(function(p){ panes[p.dataset.pane] = p; });
+  var activeMenu = null;
+  var closeTimer = null;
+  function getLeft(navItem){
+    var navInner = navItem.closest('.nav-inner');
+    var niRect = navItem.getBoundingClientRect();
+    var innerRect = navInner.getBoundingClientRect();
+    var left = niRect.left - innerRect.left;
+    var overlayW = overlay.offsetWidth || 720;
+    var maxLeft = innerRect.width - overlayW - 16;
+    return Math.max(0, Math.min(left, maxLeft));
+  }
+  function showMenu(menuName, navItem){
+    clearTimeout(closeTimer);
+    overlay.style.left = getLeft(navItem) + 'px';
+    if(activeMenu !== menuName){
+      Object.keys(panes).forEach(function(k){ panes[k].classList.remove('active'); });
+      var incoming = panes[menuName];
+      if(incoming){
+        incoming.classList.add('active');
+        var panesEl = overlay.querySelector('.nav-panes');
+        if(panesEl) panesEl.style.height = incoming.offsetHeight + 'px';
+      }
+      activeMenu = menuName;
+    }
+    navLinks.querySelectorAll('.nav-item').forEach(function(ni){
+      ni.classList.toggle('open', ni.dataset.menu === menuName);
+    });
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden','false');
+  }
+  function hideMenu(){
+    closeTimer = setTimeout(function(){
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden','true');
+      navLinks.querySelectorAll('.nav-item').forEach(function(ni){ ni.classList.remove('open'); });
+      activeMenu = null;
+    }, 120);
+  }
+  navLinks.querySelectorAll('.nav-item').forEach(function(item){
+    item.addEventListener('mouseenter', function(){ showMenu(item.dataset.menu, item); });
+    item.addEventListener('mouseleave', hideMenu);
+    var a = item.querySelector('a');
+    if(a){
+      a.addEventListener('focus', function(){ showMenu(item.dataset.menu, item); });
+      a.addEventListener('blur', hideMenu);
+    }
+  });
+  overlay.addEventListener('mouseenter', function(){ clearTimeout(closeTimer); });
+  overlay.addEventListener('mouseleave', hideMenu);
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){ clearTimeout(closeTimer); hideMenu(); }
+  });
+})();
+
+(function(){
+  /* Nav scroll hide/show */
+  var nav = document.querySelector('.nav');
+  if(!nav) return;
+  var lastY = 0, delta = 0, hidden = false, ticking = false;
+  var HIDE_AT = 72, SHOW_AT = 10;
+  function update(){
+    ticking = false;
+    var y = window.pageYOffset;
+    var diff = y - lastY;
+    lastY = y;
+    if(y <= 0){
+      if(hidden){ nav.classList.remove('nav--hidden'); hidden = false; }
+      delta = 0; return;
+    }
+    if(diff > 0){
+      delta = (delta > 0 ? delta : 0) + diff;
+      if(!hidden && delta > HIDE_AT){
+        var ov = document.getElementById('nav-overlay');
+        if(ov) ov.classList.remove('open');
+        nav.classList.add('nav--hidden'); hidden = true; delta = 0;
+      }
+    } else {
+      delta = (delta < 0 ? delta : 0) + diff;
+      if(hidden && Math.abs(delta) > SHOW_AT){
+        nav.classList.remove('nav--hidden'); hidden = false; delta = 0;
+      }
+    }
+  }
+  window.addEventListener('scroll', function(){
+    if(!ticking){ requestAnimationFrame(update); ticking = true; }
+  }, {passive:true});
+})();
+
+(function(){
+  /* Section reveal on scroll */
+  var sections = document.querySelectorAll('.section');
+  if(!sections.length || !('IntersectionObserver' in window)){
+    sections.forEach(function(s){ s.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {rootMargin:'-10% 0px -10% 0px', threshold:0.05});
+  sections.forEach(function(s){ io.observe(s); });
+})();
+</script>
+
+<script src="chrome-darkfold.js" defer></script>
+<script src="chrome-mobilenav.js" defer></script>
+<script src="chrome-footer.js" defer></script>
+</body>
+</html>

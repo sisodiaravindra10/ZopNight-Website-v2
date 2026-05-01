@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<title>Icons · ZopDev</title>
+<meta name="description" content="The 28-icon ZopDev system, 24×24 grid, 1.75px stroke, sharp corners, monochrome currentColor."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="chrome.css"/>
+<style>
+/* no-italic-site-wide */ em,i,cite,dfn,var,address,blockquote{font-style:normal}
+/* page */
+.page-head{
+  padding:var(--sec-pad) 0 var(--sp-12);
+  max-width:var(--max); margin:0 auto;
+  padding-left:var(--gutter); padding-right:var(--gutter);
+  border-bottom:1px solid var(--line);
+}
+.crumb{
+  font-family:var(--mono); font-size:11px;
+  color:var(--ink-4); letter-spacing:.14em;
+  text-transform:uppercase; margin-bottom:20px;
+}
+.crumb a{ color:var(--ink-3); }
+.crumb a:hover{ color:var(--ink); }
+.crumb .s{ color:var(--ink-5); margin:0 8px; }
+.page-head .meta{
+  font-family:var(--mono); font-size:11px;
+  color:var(--zop-orange); letter-spacing:.14em;
+  text-transform:uppercase; margin-bottom:16px;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.page-head .meta::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
+.page-head h1{
+  font-size:clamp(48px, 6vw, 88px);
+  font-weight:700; letter-spacing:-.05em;
+  line-height:.98; margin:0 0 24px; max-width:1100px;
+}
+.page-head h1 em{ font-style:normal; color:var(--zop-orange); }
+.page-head p.lede{
+  font-size:20px; color:var(--ink-3);
+  max-width:760px; line-height:1.45; margin:0;
+}
+.page-head p.lede strong{ color:var(--ink); font-weight:500; }
+
+/* icon sprite loading · uses same currentColor system */
+.ico{ width:20px; height:20px; color:var(--ink-2); stroke:currentColor; fill:none; stroke-width:1.75; stroke-linecap:square; stroke-linejoin:miter; flex-shrink:0; }
+.ico.filled{ fill:currentColor; }
+
+/* sections */
+.isec{
+  padding:var(--sec-pad) 0;
+  max-width:var(--max); margin:0 auto;
+  padding-left:var(--gutter); padding-right:var(--gutter);
+  border-bottom:1px solid var(--line);
+}
+.isec:last-of-type{ border-bottom:0; }
+.isec h2{
+  font-family:var(--mono); font-size:11px;
+  color:var(--zop-orange); letter-spacing:.14em;
+  text-transform:uppercase; margin:0 0 12px;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.isec h2::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
+.isec h3{
+  font-size:clamp(28px,3vw,36px);
+  font-weight:700; letter-spacing:-.03em; line-height:1.05;
+  margin:0 0 12px;
+}
+.isec p.lead{
+  font-size:15px; color:var(--ink-3);
+  max-width:720px; line-height:1.55; margin:0 0 var(--sp-10);
+}
+.isec p.lead strong{ color:var(--ink); font-weight:500; }
+
+/* icon grid */
+.igrid{
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));
+  gap:var(--sp-3);
+}
+.icell{
+  background:var(--bg-1); border:1px solid var(--line-2);
+  padding:var(--sp-5) var(--sp-4);
+  display:flex; flex-direction:column; gap:var(--sp-3);
+  align-items:center; justify-content:flex-start;
+  min-height:120px;
+  cursor:pointer;
+  transition:transform var(--dur-med) var(--ease-out), border-color var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out);
+  position:relative;
+}
+.icell::after{
+  content:''; position:absolute; top:0; left:0; width:4px; height:0;
+  background:var(--zop-orange);
+  transition:height var(--dur-med) var(--ease-out);
+}
+.icell:hover{
+  transform:translateY(-4px);
+  border-color:var(--ink);
+  box-shadow:0 8px 0 -4px var(--zop-orange);
+}
+.icell:hover::after{ height:100%; }
+.icell .ico{
+  width:28px; height:28px; color:var(--ink);
+}
+.icell .name{
+  font-family:var(--mono); font-size:10.5px;
+  letter-spacing:.08em;
+  color:var(--ink-3);
+  text-align:center;
+  word-break:break-all;
+}
+.icell .copied{
+  position:absolute; top:6px; right:8px;
+  font-family:var(--mono); font-size:9px;
+  color:var(--ok); letter-spacing:.1em;
+  text-transform:uppercase;
+  opacity:0; transition:opacity 160ms ease-out;
+}
+.icell.show-copied .copied{ opacity:1; }
+
+/* sizes demo */
+.sizes{
+  display:flex; gap:var(--sp-8); align-items:flex-end;
+  padding:var(--sp-8);
+  background:var(--bg-1); border:1px solid var(--line-2);
+}
+.size-cell{ display:flex; flex-direction:column; gap:var(--sp-3); align-items:center; }
+.size-cell .ico{ color:var(--ink); }
+.size-cell .t{ font-family:var(--mono); font-size:10px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase; }
+
+/* colors demo */
+.colors{
+  display:grid; grid-template-columns:repeat(4, 1fr);
+  gap:var(--sp-3);
+}
+.color-cell{
+  padding:var(--sp-7) var(--sp-4);
+  border:1px solid var(--line-2);
+  display:flex; flex-direction:column; gap:var(--sp-3);
+  align-items:center;
+  background:var(--bg-1);
+}
+.color-cell .ico{ width:28px; height:28px; }
+.color-cell.b .ico{ color:#4A66D4; }
+.color-cell.o .ico{ color:var(--zop-orange); }
+.color-cell.g .ico{ color:var(--zop-green); }
+.color-cell.k .ico{ color:var(--ink); }
+.color-cell .l{ font-family:var(--mono); font-size:10px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase; }
+
+/* code */
+.spec-code{
+  margin:var(--sp-6) 0 0;
+  padding:var(--sp-5);
+  background:#0A0A0A; border:1px solid var(--line);
+  font-family:var(--mono); font-size:11.5px;
+  color:var(--ink-3);
+  line-height:1.7; white-space:pre; overflow-x:auto;
+}
+.spec-code .k{ color:var(--zop-orange); }
+.spec-code .v{ color:var(--ink); }
+.spec-code .c{ color:var(--ink-5); }
+
+/* dd */
+.dd{
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:0; border:1px solid var(--line-2);
+}
+.dd > div{ padding:var(--sp-7); }
+.dd .do{ border-right:1px solid var(--line-2); }
+.dd h5{ font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; margin:0 0 16px; display:flex; align-items:center; gap:8px; }
+.dd .do h5{ color:var(--ok); } .dd .do h5::before{ content:'\2713'; font-weight:700; }
+.dd .dont h5{ color:var(--err); } .dd .dont h5::before{ content:'\00d7'; font-weight:700; font-size:16px; }
+.dd ul{ list-style:none; padding:0; margin:0; }
+.dd li{ padding:8px 0; border-bottom:1px dashed var(--line-2); font-size:14px; color:var(--ink-2); }
+.dd li:last-child{ border-bottom:0; }
+.dd .dont li{ color:var(--ink-4); text-decoration:line-through; text-decoration-color:var(--line-b); }
+
+@media (max-width:768px){
+  .sizes{ flex-wrap:wrap; gap:var(--sp-5); }
+  .colors{ grid-template-columns:1fr 1fr; }
+  .dd{ grid-template-columns:1fr; }
+  .dd .do{ border-right:0; border-bottom:1px solid var(--line-2); }
+}
+</style>
+<link rel="stylesheet" href="homepage-chrome.css"/>
+</head>
+<body>
+
+<!-- ======================================================================
+     Inline icon sprite · keeps icons rendering under file:// protocol too.
+     Mirrored from icons.svg (the external asset for download).
+     ====================================================================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+    <symbol id="mark-zopdev" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="16" height="16" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="16" y="0" width="16" height="16" fill="#F58549"/>
+      <rect x="16" y="16" width="16" height="16" fill="#7FB236"/>
+    </symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12 h14 M13 6 l6 6 l-6 6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter"/></symbol>
+<symbol id="i-arrow-up-right" viewBox="0 0 24 24"><path d="M7 17 L17 7 M9 7 h8 v8" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter"/></symbol>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="M9 5 l7 7 l-7 7" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter"/></symbol>
+<symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="M5 9 l7 7 l7 -7" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6 h18 M3 12 h18 M3 18 h18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5 L19 19 M19 5 L5 19" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><rect x="3" y="3" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75"/><path d="M16 16 L21 21" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/></symbol>
+<symbol id="i-external" viewBox="0 0 24 24"><path d="M5 5 h9 v2 H7 v10 h10 v-7 h2 v9 H5 z" fill="currentColor"/><path d="M14 4 h6 v6 M20 4 L12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12 l5 5 l11 -11" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6 L18 18 M18 6 L6 18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/></symbol>
+<symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3 L22 20 H2 Z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="miter"/><path d="M12 9 v5 M12 17 v1" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75"/><path d="M12 10 v7 M12 6 v1" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/></symbol>
+<symbol id="i-dot-live" viewBox="0 0 24 24"><rect x="8" y="8" width="8" height="8" fill="currentColor"/></symbol>
+<symbol id="i-aws" viewBox="0 0 24 24"><rect x="2" y="6" width="4" height="12" fill="currentColor"/><rect x="8" y="3" width="4" height="15" fill="currentColor"/><rect x="14" y="9" width="4" height="9" fill="currentColor"/><rect x="20" y="12" width="2" height="6" fill="currentColor"/></symbol>
+<symbol id="i-azure" viewBox="0 0 24 24"><path d="M2 20 L10 4 L18 20 Z" fill="currentColor"/><path d="M12 20 L22 20 L17 10 Z" fill="currentColor" opacity="0.6"/></symbol>
+<symbol id="i-gcp" viewBox="0 0 24 24"><rect x="2" y="2" width="9" height="9" fill="currentColor"/><rect x="13" y="2" width="9" height="9" fill="currentColor" opacity="0.7"/><rect x="2" y="13" width="9" height="9" fill="currentColor" opacity="0.4"/><rect x="13" y="13" width="9" height="9" fill="currentColor"/></symbol>
+<symbol id="i-cloud" viewBox="0 0 24 24"><path d="M5 18 h14 V11 a5 5 0 0 0 -10 -1 a4 4 0 0 0 -4 4 z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="miter"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="M6 4 L20 12 L6 20 Z" fill="currentColor"/></symbol>
+<symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" fill="currentColor"/><rect x="14" y="4" width="4" height="16" fill="currentColor"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M4 12 a8 8 0 0 1 13.6 -5.7 M20 4 v5 h-5 M20 12 a8 8 0 0 1 -13.6 5.7 M4 20 v-5 h5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="miter" stroke-linecap="square"/></symbol>
+<symbol id="i-apply" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75"/><path d="M7 12 l4 4 l6 -7" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="miter" stroke-linecap="square"/></symbol>
+<symbol id="i-rollback" viewBox="0 0 24 24"><path d="M4 10 h11 a5 5 0 0 1 0 10 H7 M4 10 l5 -5 M4 10 l5 5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7 h16 M9 7 V4 h6 v3 M6 7 l1 13 h10 l1 -13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="miter" stroke-linecap="square"/></symbol>
+<symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" fill="none" stroke="currentColor" stroke-width="1.75"/><rect x="3" y="13" width="18" height="7" fill="none" stroke="currentColor" stroke-width="1.75"/><rect x="6" y="7" width="3" height="1.5" fill="currentColor"/><rect x="6" y="16" width="3" height="1.5" fill="currentColor"/></symbol>
+<symbol id="i-database" viewBox="0 0 24 24"><path d="M4 6 a8 3 0 0 0 16 0 a8 3 0 0 0 -16 0 z" fill="none" stroke="currentColor" stroke-width="1.75"/><path d="M4 6 v6 a8 3 0 0 0 16 0 v-6 M4 12 v6 a8 3 0 0 0 16 0 v-6" fill="none" stroke="currentColor" stroke-width="1.75"/></symbol>
+<symbol id="i-storage" viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="7" fill="currentColor"/><rect x="14" y="4" width="7" height="7" fill="none" stroke="currentColor" stroke-width="1.75"/><rect x="3" y="13" width="7" height="7" fill="none" stroke="currentColor" stroke-width="1.75"/><rect x="14" y="13" width="7" height="7" fill="currentColor"/></symbol>
+<symbol id="i-network" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="currentColor"/><circle cx="4" cy="4" r="2" fill="none" stroke="currentColor" stroke-width="1.75"/><circle cx="20" cy="4" r="2" fill="none" stroke="currentColor" stroke-width="1.75"/><circle cx="4" cy="20" r="2" fill="none" stroke="currentColor" stroke-width="1.75"/><circle cx="20" cy="20" r="2" fill="none" stroke="currentColor" stroke-width="1.75"/><path d="M6 6 L10 10 M18 6 L14 10 M6 18 L10 14 M18 18 L14 14" fill="none" stroke="currentColor" stroke-width="1.25"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><rect x="8" y="4" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.75"/><path d="M3 21 c0 -4 4 -7 9 -7 s9 3 9 7" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="miter"/></symbol>
+<symbol id="i-team" viewBox="0 0 24 24"><rect x="3" y="4" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.75"/><rect x="15" y="4" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.75"/><rect x="9" y="14" width="6" height="6" fill="currentColor"/><path d="M6 10 v4 h12 v-4" fill="none" stroke="currentColor" stroke-width="1.75"/></symbol>
+<symbol id="i-dollar" viewBox="0 0 24 24"><path d="M12 3 v18 M17 7 H10 a3 3 0 0 0 0 6 h4 a3 3 0 0 1 0 6 H7" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter"/></symbol>
+<symbol id="i-chart-bar" viewBox="0 0 24 24"><rect x="4"  y="13" width="4" height="7" fill="currentColor"/><rect x="10" y="8"  width="4" height="12" fill="currentColor"/><rect x="16" y="4"  width="4" height="16" fill="currentColor"/></symbol>
+<symbol id="i-chart-line" viewBox="0 0 24 24"><path d="M3 19 L8 13 L13 16 L21 5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="miter" stroke-linecap="square"/><path d="M3 3 v17 h18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/></symbol>
+<symbol id="i-report" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" fill="none" stroke="currentColor" stroke-width="1.75"/><path d="M8 8 h8 M8 12 h8 M8 16 h5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/></symbol>
+<symbol id="i-zop-mark" viewBox="0 0 24 24"><rect x="0"  y="0"  width="12" height="12" fill="#4A66D4"/><rect x="12" y="0"  width="12" height="12" fill="#F58549"/><rect x="12" y="12" width="12" height="12" fill="#7FB236"/></symbol>
+</defs>
+</svg>
+
+<!-- logo defs -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="logo-zopdev" viewBox="0 0 715 276">
+      <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+      <rect x="537" width="89" height="89" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="626" width="89" height="89" fill="#F58549"/>
+      <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- announcement bar -->
+<div class="ann-bar" id="ann-bar">
+  <div class="ann-inner">
+    <a href="developers.html" class="ann-chip">
+      <span class="ann-dot"></span>
+      <strong>MCP Server</strong>, live in Claude &amp; Codex
+      <span class="ann-arrow">→</span>
+    </a>
+    <a href="changelog.html" class="ann-link">Changelog →</a>
+    <button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     LIVE STATUS STRIP. Cloud-ops signal strip
+     ============================================================ -->
+<div class="live-strip" aria-live="polite">
+  <!-- Anchored pill: live market-open indicator + uptime & UTC clock. Stays
+       put on the right while the ticker runs under it. -->
+  <div class="ls-anchor">
+    <span class="ls-live"><span class="ls-livedot"></span>LIVE</span>
+    <span class="ls-sep"></span>
+    <span class="ls-kpi"><em>UPT</em><b>99.98%</b></span>
+    <span class="ls-sep"></span>
+    <span class="ls-kpi"><em>UTC</em><b id="live-clock">--:--:--</b></span>
+  </div>
+
+  <!-- Marquee track: two identical rails side-by-side create a seamless loop.
+       Each item reads as a plain-English headline with a change indicator. -->
+  <div class="ls-track" role="presentation" aria-hidden="true">
+    <div class="ls-rail">
+      <span class="lt-row"><b id="live-saved">$48,210</b> saved this month <span class="lt-chg up">▲ $812 today</span></span>
+      <span class="lt-row"><b id="live-resources">10,401</b> cloud resources monitored <span class="lt-chg up">▲ 42 new</span></span>
+      <span class="lt-row"><b id="live-remediations">17</b> issues fixed today <span class="lt-chg up">▲ 3 in last hour</span></span>
+      <span class="lt-row"><b>847</b> idle instances reclaimed <span class="lt-chg up">▲ 31 this week</span></span>
+      <span class="lt-row"><b>99.98%</b> uptime across <b>47</b> regions</span>
+      <span class="lt-row"><b>3</b> anomalies open <span class="lt-chg dn">▼ 1 auto-resolved</span></span>
+      <span class="lt-row"><b>142</b> schedules running <span class="lt-chg up">▲ 12 this week</span></span>
+      <span class="lt-row"><b>$2.8M</b> monthly run-rate <span class="lt-chg dn">▼ 8% vs last month</span></span>
+      <span class="lt-row"><b>67%</b> average utilization <span class="lt-chg up">▲ 2 pts</span></span>
+      <span class="lt-row"><b>4m 12s</b> mean time to remediate <span class="lt-chg dn">▼ 22s faster</span></span>
+      <span class="lt-row"><b>0</b> incidents · <b>5-day</b> clean streak</span>
+      <span class="lt-row"><b>23%</b> savings rate <span class="lt-chg up">▲ 5 pts QoQ</span></span>
+    </div>
+    <div class="ls-rail" aria-hidden="true">
+      <span class="lt-row"><b>$48,210</b> saved this month <span class="lt-chg up">▲ $812 today</span></span>
+      <span class="lt-row"><b>10,401</b> cloud resources monitored <span class="lt-chg up">▲ 42 new</span></span>
+      <span class="lt-row"><b>17</b> issues fixed today <span class="lt-chg up">▲ 3 in last hour</span></span>
+      <span class="lt-row"><b>847</b> idle instances reclaimed <span class="lt-chg up">▲ 31 this week</span></span>
+      <span class="lt-row"><b>99.98%</b> uptime across <b>47</b> regions</span>
+      <span class="lt-row"><b>3</b> anomalies open <span class="lt-chg dn">▼ 1 auto-resolved</span></span>
+      <span class="lt-row"><b>142</b> schedules running <span class="lt-chg up">▲ 12 this week</span></span>
+      <span class="lt-row"><b>$2.8M</b> monthly run-rate <span class="lt-chg dn">▼ 8% vs last month</span></span>
+      <span class="lt-row"><b>67%</b> average utilization <span class="lt-chg up">▲ 2 pts</span></span>
+      <span class="lt-row"><b>4m 12s</b> mean time to remediate <span class="lt-chg dn">▼ 22s faster</span></span>
+      <span class="lt-row"><b>0</b> incidents · <b>5-day</b> clean streak</span>
+      <span class="lt-row"><b>23%</b> savings rate <span class="lt-chg up">▲ 5 pts QoQ</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo-lockup sm" aria-label="ZopDev">
+      <svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <div class="nav-item" data-menu="product">
+        <a>Product <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <div class="nav-item" data-menu="resources">
+        <a>Resources <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="pricing.html">Pricing</a>
+      <div class="nav-item" data-menu="company">
+        <a>Company <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="community.html">Community</a>
+    </div>
+
+    <!-- Shared dropdown overlay. Content crossfades, panel slides left/right -->
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+      <div class="nav-panes" id="nav-panes">
+
+        <!-- ═══════ PRODUCT · 3 sub-products ═══════ -->
+        <div class="nav-pane" data-pane="product">
+          <!-- 3 equal cells. Inline grid-template-columns overrides the
+               default 1.3fr 1fr 1fr (which is built for a featured-hero
+               layout). All three products are equal here — no hero — so
+               no empty grid slots and no card stretches taller than its
+               siblings. -->
+          <div class="np-bento" style="grid-template-columns:1fr 1fr 1fr;">
+            <a class="np-cell" href="zopnight.html">
+              <span class="np-badge live">live</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopNight</h3>
+              <p class="np-cell-desc">Cloud cost optimization on autopilot. AWS, Azure, GCP.</p>
+            </a>
+            <a class="np-cell" href="zopday.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#F58549"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopDay</h3>
+              <p class="np-cell-desc">Deployment orchestration and release management.</p>
+            </a>
+            <a class="np-cell" href="zopcloud.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><rect x="12" y="8" width="8" height="6" fill="#FFFFFF"/><rect x="6" y="14" width="20" height="10" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopCloud</h3>
+              <p class="np-cell-desc">Multi-cloud resource graph and topology view.</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Live in Claude &amp; Codex</strong> · run ZopNight from your MCP client</span>
+            <a href="developers.html">Try MCP →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ RESOURCES · 9 cells in a 3×3 grid ═══════ -->
+        <div class="nav-pane" data-pane="resources">
+          <div class="np-bento np-bento--grid">
+            <a class="np-cell" href="blog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Blog</h3>
+              <p class="np-cell-desc">Engineering + cost optimization notes</p>
+            </a>
+            <a class="np-cell" href="free-ebooks.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 4h7v13H3zM10 4h7v13h-7z" stroke="currentColor" stroke-width="1.5"/><path d="M10 4v13" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Ebooks</h3>
+              <p class="np-cell-desc">Free playbooks · FinOps, K8s, CDCR</p>
+            </a>
+            <a class="np-cell" href="customers.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 16c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Case studies</h3>
+              <p class="np-cell-desc">42-67% cuts, real teams</p>
+            </a>
+            <a class="np-cell" href="solutions.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Use cases by industry</h3>
+              <p class="np-cell-desc">SaaS · fintech · retail · health</p>
+            </a>
+            <a class="np-cell" href="product-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M8 7l4 3-4 3z" fill="currentColor"/></svg>
+              </div>
+              <h3 class="np-cell-title">Product documentation</h3>
+              <p class="np-cell-desc">Walkthroughs · video tours</p>
+            </a>
+            <a class="np-cell" href="kubernetes-guide.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2l7 4v8l-7 4-7-4V6z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
+              </div>
+              <h3 class="np-cell-title">Kubernetes guide</h3>
+              <p class="np-cell-desc">From cluster basics to right-sizing</p>
+            </a>
+            <a class="np-cell" href="changelog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Changelog</h3>
+              <p class="np-cell-desc">What shipped this week</p>
+            </a>
+            <a class="np-cell" href="developer-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 6L3 10l4 4M13 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 class="np-cell-title">Developer documentation</h3>
+              <p class="np-cell-desc">REST API · SDKs · webhooks · MCP</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Weekly digest</strong> · waste signals, wins, war stories</span>
+            <a href="blog.html">Subscribe →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ COMPANY · 2 items ═══════ -->
+        <div class="nav-pane" data-pane="company">
+          <div class="np-bento" style="grid-template-columns:1fr 1fr;">
+            <a class="np-cell" href="about.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#0A0A0A"/><rect x="6" y="6" width="8" height="20" fill="#F0EBDB"/><rect x="18" y="12" width="8" height="14" fill="#F58549"/></svg>
+              </div>
+              <h3 class="np-cell-title">About</h3>
+              <p class="np-cell-desc">Founded 2024. The autopilot for multi-cloud cost.</p>
+            </a>
+            <a class="np-cell" href="careers.html">
+              <span class="np-badge">hiring</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="6" width="14" height="11" stroke="currentColor" stroke-width="1.5"/><path d="M7 6V4h6v2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Careers</h3>
+              <p class="np-cell-desc">Open roles · engineering, design, GTM</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>We're hiring</strong> · remote-first · 12 open roles</span>
+            <a href="careers.html">See roles →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="nav-cta">
+      <!-- Status pill · live dot · links to /status.html. Mirrors the
+           project's "always-on" identity (the live-ops strip above the
+           nav). Pulses green when all systems are operational. -->
+      <a class="nav-status" href="status.html" aria-label="System status">
+        <span class="nav-status-dot" aria-hidden="true"></span>
+        <span class="nav-status-text">Status</span>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" role="switch">
+        <span class="tt-opt tt-sun" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="8" cy="8" r="3" fill="currentColor" stroke="none"/>
+            <path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.9.9M11.7 11.7l.9.9M3.4 12.6l.9-.9M11.7 4.3l.9-.9"/>
+          </svg>
+        </span>
+        <span class="tt-opt tt-moon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M12.8 10.1a5.5 5.5 0 0 1-7-7 .5.5 0 0 0-.7-.6A6.5 6.5 0 1 0 13.4 10.8a.5.5 0 0 0-.6-.7z"/>
+          </svg>
+        </span>
+      </button>
+      <a class="chip-playground" href="playground.html"><span>Playground</span></a>
+      <a class="sign" href="signin.html">Sign In</a>
+      <a class="btn btn-accent" href="demo.html"><span>Book a Demo</span> <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="crumb"><a href="/">home</a><span class="s">/</span><a href="brand-guidelines.html">brand</a><span class="s">/</span>icons</div>
+  <div class="meta">&#167; 12 &middot; icon system</div>
+  <h1>28 icons.<br>One <em>grammar.</em></h1>
+  <p class="lede">Every icon in the ZopDev system is drawn on a <strong>24&times;24 grid</strong> with a <strong>1.75px stroke</strong>, <strong>square caps</strong>, and <strong>miter joins</strong>. No rounded corners. No duotone. Monochrome via <code style="background:#0A0A0A; padding:1px 5px">currentColor</code> so they inherit from the surrounding text. Click any icon to copy its <code style="background:#0A0A0A; padding:1px 5px">&lt;use&gt;</code> reference.</p>
+</header>
+
+
+<!-- ======== ARROWS ======== -->
+<section class="isec">
+  <h2>&#167; 01 &middot; arrows</h2>
+  <h3>Arrows + chevrons.</h3>
+  <p class="lead">Four directions, two weights. Use chevrons for <strong>affordance</strong> (accordion, nav trail), arrows for <strong>action</strong> (CTA, go-to).</p>
+  <div class="igrid">
+    <div class="icell" data-name="i-arrow-right"><svg class="ico"><use href="#i-arrow-right"/></svg><span class="name">i-arrow-right</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-arrow-up-right"><svg class="ico"><use href="#i-arrow-up-right"/></svg><span class="name">i-arrow-up-right</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-chevron-right"><svg class="ico"><use href="#i-chevron-right"/></svg><span class="name">i-chevron-right</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-chevron-down"><svg class="ico"><use href="#i-chevron-down"/></svg><span class="name">i-chevron-down</span><span class="copied">copied</span></div>
+  </div>
+</section>
+
+
+<!-- ======== NAV / UI ======== -->
+<section class="isec">
+  <h2>&#167; 02 &middot; nav &amp; ui</h2>
+  <h3>Nav &amp; interface.</h3>
+  <p class="lead">Search is a rectangle + handle, sharp corners. External-link uses a solid page with a stroke arrow breaking out, communicates "leaves this domain".</p>
+  <div class="igrid">
+    <div class="icell" data-name="i-menu"><svg class="ico"><use href="#i-menu"/></svg><span class="name">i-menu</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-close"><svg class="ico"><use href="#i-close"/></svg><span class="name">i-close</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-search"><svg class="ico"><use href="#i-search"/></svg><span class="name">i-search</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-external"><svg class="ico filled"><use href="#i-external"/></svg><span class="name">i-external</span><span class="copied">copied</span></div>
+  </div>
+</section>
+
+
+<!-- ======== STATE ======== -->
+<section class="isec">
+  <h2>&#167; 03 &middot; state</h2>
+  <h3>Status icons.</h3>
+  <p class="lead">The <em style="color:var(--ok); font-style:normal">ok</em> / <em style="color:var(--warn); font-style:normal">warn</em> / <em style="color:var(--err); font-style:normal">err</em> triad uses its CSS tint colors. <strong>i-dot-live</strong> is a solid square block, pair it with the <code>live-pulse</code> animation from tokens.css.</p>
+  <div class="igrid">
+    <div class="icell" data-name="i-check"><svg class="ico" style="color:var(--ok)"><use href="#i-check"/></svg><span class="name">i-check</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-x"><svg class="ico" style="color:var(--err)"><use href="#i-x"/></svg><span class="name">i-x</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-warn"><svg class="ico" style="color:var(--warn)"><use href="#i-warn"/></svg><span class="name">i-warn</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-info"><svg class="ico" style="color:var(--ink-3)"><use href="#i-info"/></svg><span class="name">i-info</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-dot-live"><svg class="ico filled" style="color:var(--ok)"><use href="#i-dot-live"/></svg><span class="name">i-dot-live</span><span class="copied">copied</span></div>
+  </div>
+</section>
+
+
+<!-- ======== CLOUDS ======== -->
+<section class="isec">
+  <h2>&#167; 04 &middot; clouds</h2>
+  <h3>Cloud providers.</h3>
+  <p class="lead">Geometric abstractions, <strong>not vendor trademarks</strong>. For partner-tier logos (actual AWS, Azure, GCP marks), use official vendor assets per their brand guidelines. These are internal symbols for table rows and filter chips.</p>
+  <div class="igrid">
+    <div class="icell" data-name="i-aws"><svg class="ico filled" style="color:#FF9900"><use href="#i-aws"/></svg><span class="name">i-aws</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-azure"><svg class="ico filled" style="color:#4A66D4"><use href="#i-azure"/></svg><span class="name">i-azure</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-gcp"><svg class="ico filled" style="color:var(--ink-2)"><use href="#i-gcp"/></svg><span class="name">i-gcp</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-cloud"><svg class="ico" style="color:var(--ink-3)"><use href="#i-cloud"/></svg><span class="name">i-cloud</span><span class="copied">copied</span></div>
+  </div>
+</section>
+
+
+<!-- ======== ACTIONS ======== -->
+<section class="isec">
+  <h2>&#167; 05 &middot; actions</h2>
+  <h3>Action icons.</h3>
+  <p class="lead">The verbs, <strong>apply</strong> (the core ZopDev action), <strong>rollback</strong> (the safety rail), <strong>refresh</strong>, <strong>pause</strong>, <strong>trash</strong>. Apply gets the signature check-inside-a-square, matching the remediation queue chrome.</p>
+  <div class="igrid">
+    <div class="icell" data-name="i-play"><svg class="ico filled"><use href="#i-play"/></svg><span class="name">i-play</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-pause"><svg class="ico filled"><use href="#i-pause"/></svg><span class="name">i-pause</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-refresh"><svg class="ico"><use href="#i-refresh"/></svg><span class="name">i-refresh</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-apply"><svg class="ico" style="color:var(--zop-green)"><use href="#i-apply"/></svg><span class="name">i-apply</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-rollback"><svg class="ico" style="color:var(--zop-orange)"><use href="#i-rollback"/></svg><span class="name">i-rollback</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-trash"><svg class="ico"><use href="#i-trash"/></svg><span class="name">i-trash</span><span class="copied">copied</span></div>
+  </div>
+</section>
+
+
+<!-- ======== RESOURCES ======== -->
+<section class="isec">
+  <h2>&#167; 06 &middot; resources</h2>
+  <h3>Cloud resources.</h3>
+  <p class="lead">Server, database, storage, network, the four primitive resource types that Atlas shows in row tables. Use these as the row-leading icon. Keep them at 16-20px in tables.</p>
+  <div class="igrid">
+    <div class="icell" data-name="i-server"><svg class="ico"><use href="#i-server"/></svg><span class="name">i-server</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-database"><svg class="ico"><use href="#i-database"/></svg><span class="name">i-database</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-storage"><svg class="ico filled"><use href="#i-storage"/></svg><span class="name">i-storage</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-network"><svg class="ico"><use href="#i-network"/></svg><span class="name">i-network</span><span class="copied">copied</span></div>
+  </div>
+</section>
+
+
+<!-- ======== PEOPLE + MONEY ======== -->
+<section class="isec">
+  <h2>&#167; 07 &middot; people + money</h2>
+  <h3>Identity &amp; finance.</h3>
+  <p class="lead">Attribution is central to Showback, <strong>i-team</strong> appears on every attributed $ in reports. <strong>i-dollar</strong> and the chart icons live in pricing, the three-numbers header, and any figure block.</p>
+  <div class="igrid">
+    <div class="icell" data-name="i-user"><svg class="ico"><use href="#i-user"/></svg><span class="name">i-user</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-team"><svg class="ico"><use href="#i-team"/></svg><span class="name">i-team</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-dollar"><svg class="ico"><use href="#i-dollar"/></svg><span class="name">i-dollar</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-chart-bar"><svg class="ico filled" style="color:var(--zop-orange)"><use href="#i-chart-bar"/></svg><span class="name">i-chart-bar</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-chart-line"><svg class="ico" style="color:var(--zop-green)"><use href="#i-chart-line"/></svg><span class="name">i-chart-line</span><span class="copied">copied</span></div>
+    <div class="icell" data-name="i-report"><svg class="ico"><use href="#i-report"/></svg><span class="name">i-report</span><span class="copied">copied</span></div>
+  </div>
+</section>
+
+
+<!-- ======== ZOP-SPECIFIC ======== -->
+<section class="isec">
+  <h2>&#167; 08 &middot; zop</h2>
+  <h3>The mark as icon.</h3>
+  <p class="lead"><strong>i-zop-mark</strong> is the only colored icon, three tiles forming the signature L-shape. Use exactly where the full logo is too much but branding is needed (favicon fallback, compact rows, inline references in copy).</p>
+  <div class="igrid">
+    <div class="icell" data-name="i-zop-mark"><svg class="ico" style="width:32px; height:32px"><use href="#i-zop-mark"/></svg><span class="name">i-zop-mark</span><span class="copied">copied</span></div>
+  </div>
+</section>
+
+
+<!-- ======== SIZES ======== -->
+<section class="isec">
+  <h2>&#167; 09 &middot; sizes</h2>
+  <h3>Four sizes. Nothing in between.</h3>
+  <p class="lead">Pick a size from the ladder, don't invent 19px or 22px.</p>
+  <div class="sizes">
+    <div class="size-cell"><svg class="ico" style="width:14px; height:14px"><use href="#i-check"/></svg><span class="t">14px &middot; inline</span></div>
+    <div class="size-cell"><svg class="ico" style="width:18px; height:18px"><use href="#i-check"/></svg><span class="t">18px &middot; table row</span></div>
+    <div class="size-cell"><svg class="ico" style="width:22px; height:22px"><use href="#i-check"/></svg><span class="t">22px &middot; ui default</span></div>
+    <div class="size-cell"><svg class="ico" style="width:32px; height:32px"><use href="#i-check"/></svg><span class="t">32px &middot; card header</span></div>
+    <div class="size-cell"><svg class="ico" style="width:48px; height:48px"><use href="#i-check"/></svg><span class="t">48px &middot; hero</span></div>
+  </div>
+</section>
+
+
+<!-- ======== COLORS ======== -->
+<section class="isec">
+  <h2>&#167; 10 &middot; coloring</h2>
+  <h3>Tint via currentColor.</h3>
+  <p class="lead">All icons use <code style="background:#0A0A0A; padding:1px 5px">stroke:currentColor</code> or <code style="background:#0A0A0A; padding:1px 5px">fill:currentColor</code>. Change their color by changing the surrounding text color.</p>
+  <div class="colors">
+    <div class="color-cell b"><svg class="ico"><use href="#i-apply"/></svg><span class="l">pillar blue</span></div>
+    <div class="color-cell o"><svg class="ico"><use href="#i-refresh"/></svg><span class="l">pillar orange</span></div>
+    <div class="color-cell g"><svg class="ico"><use href="#i-check"/></svg><span class="l">pillar green</span></div>
+    <div class="color-cell k"><svg class="ico"><use href="#i-database"/></svg><span class="l">ink</span></div>
+  </div>
+  <pre class="spec-code"><span class="c">/* usage */</span>
+<span class="k">&lt;svg class=</span><span class="v">"ico"</span><span class="k">&gt;&lt;use href=</span><span class="v">"icons.svg#i-check"</span><span class="k">/&gt;&lt;/svg&gt;</span>
+
+<span class="c">/* tokens.css · shared class */</span>
+<span class="k">.ico</span>{
+  <span class="k">width</span>:<span class="v">20px</span>; <span class="k">height</span>:<span class="v">20px</span>;
+  <span class="k">color</span>:<span class="v">var(--ink-2)</span>;
+  <span class="k">stroke</span>:<span class="v">currentColor</span>;
+  <span class="k">fill</span>:<span class="v">none</span>;
+  <span class="k">stroke-width</span>:<span class="v">1.75</span>;
+  <span class="k">stroke-linecap</span>:<span class="v">square</span>;
+  <span class="k">stroke-linejoin</span>:<span class="v">miter</span>;
+}
+<span class="k">.ico.filled</span>{ <span class="k">fill</span>:<span class="v">currentColor</span>; }</pre>
+</section>
+
+
+<!-- ======== DO/DON'T ======== -->
+<section class="isec">
+  <h2>&#167; 11 &middot; rules</h2>
+  <h3>Do · Don't.</h3>
+  <div class="dd">
+    <div class="do">
+      <h5>DO</h5>
+      <ul>
+        <li>Draw on the 24&times;24 grid · stay within it</li>
+        <li>1.75px stroke · square caps · miter joins</li>
+        <li>Tint with CSS <code>currentColor</code>; inherit from text</li>
+        <li>Stick to the 4-size ladder: 14 · 18 · 22 · 32</li>
+        <li>Use status tints (ok/warn/err) for state icons</li>
+        <li>Use <code>fill:currentColor</code> for solid-block glyphs (filled class)</li>
+      </ul>
+    </div>
+    <div class="dont">
+      <h5>DON'T</h5>
+      <ul>
+        <li>No rounded corners · no stroke-linecap:round</li>
+        <li>No duotone · no gradients · no shadows</li>
+        <li>No invented sizes (19px / 26px / 40px)</li>
+        <li>No hardcoded fills, always <code>currentColor</code></li>
+        <li>No custom icons outside this sprite without a PR</li>
+        <li>No redrawing the Zop mark at icon size, use <code>i-zop-mark</code></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- footer -->
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="product-documentation.html">Product documentation</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developer-documentation.html">Documentation</a></li>
+        <li><a href="developer-documentation.html#endpoints">API reference</a></li>
+        <li><a href="developer-documentation.html#mcp-server">MCP server</a></li>
+        <li><a href="developer-documentation.html#sdks">SDK &amp; CLI</a></li>
+        <li><a href="developer-documentation.html#webhooks">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-bottom" style="padding-top:20px; border-top:1px solid var(--line);">
+      <div>© <span data-year>2026</span> ZopDev, Inc. · all rights reserved · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">privacy</a> · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">terms</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(){
+    document.querySelectorAll('[data-year]').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+    var ann = document.getElementById('ann-bar');
+    var btn = document.getElementById('ann-close');
+    if(!ann || !btn) return;
+    var key = 'zop-ann-2026-mcp';
+    try{ if(localStorage.getItem(key) === '1') ann.style.display = 'none'; }catch(e){}
+    btn.addEventListener('click', function(){
+      ann.style.display = 'none';
+      try{ localStorage.setItem(key, '1'); }catch(e){}
+    });
+  })();
+</script>
+
+<script>
+/* click-to-copy the <use> snippet */
+document.querySelectorAll('.icell').forEach(cell => {
+  cell.addEventListener('click', () => {
+    const name = cell.getAttribute('data-name');
+    const snippet = '<svg class="ico"><use href="#' + name + '"/></svg>';
+    navigator.clipboard?.writeText(snippet);
+    cell.classList.add('show-copied');
+    setTimeout(() => cell.classList.remove('show-copied'), 1100);
+  });
+});
+</script>
+
+<script src="chrome-darkfold.js" defer></script>
+<script src="chrome-mobilenav.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,1656 @@
+/* =========================================================================
+   ZopDev · homepage-chrome.css
+   -------------------------------------------------------------------------
+   Shared chrome for every subpage — extracted verbatim from index.html so
+   the homepage's nav megamenu, theme toggle, variants dropdown, button
+   system, section transitions and footer behave identically across every
+   user-facing page.
+
+   Load order on any subpage:
+     <link rel="stylesheet" href="tokens.css"/>          (optional)
+     <link rel="stylesheet" href="homepage-chrome.css"/>
+     <style>...page-specific CSS...</style>
+
+   To change cross-site nav/footer/CTA chrome, change it HERE.
+   ========================================================================= */
+
+:root{
+  --zop-blue:#2A4494; --zop-orange:#F58549; --zop-green:#7FB236;
+  --zop-black:#0A0A0A; --zop-white:#FAF7EC; --zop-cream:#F5F2E8;
+  --paper:#FAF7EC; --ink:#0A0A0A;
+  --g-900:#111111; --g-700:#2a2a2a; --g-600:#525252; --g-500:#707070;
+  /* --g-400 bumped from #A3A3A3 (~2.4:1 on cream) to #6F6F6F (~4.9:1) for AA body */
+  --g-400:#6F6F6F; --g-300:#C9C4B5; --g-200:#E2DDCD; --g-100:#ECE7D7; --g-50:#F0EBDB;
+  --font:'Space Grotesk',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --line:#D9D3BF;
+  --max:1200px;
+
+  /* logo-blue stays canonical on paper; lift is only applied where the lockup
+     lands on a dark surface (footer, promo bands) via a scoped override. */
+  --logo-blue:#2A4494;
+
+  /* motion tokens — shared with the rest of the brand system */
+  --ease-out:cubic-bezier(.22, 1, .36, 1);
+  --ease-in-out:cubic-bezier(.65, 0, .35, 1);
+  --ease-spring:cubic-bezier(.2, .9, .3, 1.05);
+  --ease-snap:cubic-bezier(.19, 1, .22, 1);
+  --dur-fast:160ms;
+  --dur-med:250ms;
+  --dur-slow:400ms;
+  /* MOTION duration scale · matches the JS MOTION.dur block in
+     index.html so canvas + CSS animations share one timing language. */
+  --dur-xs:  240ms;
+  --dur-sm:  400ms;
+  --dur-md:  640ms;
+  --dur-lg:  1000ms;
+  --dur-xl:  1600ms;
+  --dur-xxl: 2560ms;
+}
+*,*::before,*::after{box-sizing:border-box; border-radius:0}
+html{scroll-behavior:smooth}
+body{
+  margin:0; font-family:var(--font); color:var(--ink);
+  background:var(--paper); letter-spacing:-0.02em;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  font-size:15px; line-height:1.55;
+  transition: background-color 800ms cubic-bezier(.4,0,.2,1), color 800ms cubic-bezier(.4,0,.2,1);
+}
+
+/* Site-wide rule · no italic anywhere. Semantic emphasis tags keep their
+   markup (for screen readers / SEO) but render upright. Override every
+   user-agent default plus any inline style="font-style:italic" via the
+   global selector. */
+em, i, cite, dfn, var, address, blockquote{ font-style: normal; }
+
+/* Cross-page transitions — native View Transitions API + fallback fade-in */
+@view-transition { navigation: auto; }
+::view-transition-old(root), ::view-transition-new(root){
+  animation-duration: 360ms; animation-timing-function: cubic-bezier(.22, 1, .36, 1);
+}
+::view-transition-old(root){ animation-name: zop-fade-out; }
+::view-transition-new(root){ animation-name: zop-fade-in; }
+@keyframes zop-fade-out { to { opacity: 0; transform: translateY(-6px); } }
+@keyframes zop-fade-in  { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: no-preference){
+  body{ animation: zop-page-enter 420ms cubic-bezier(.22, 1, .36, 1); }
+}
+@keyframes zop-page-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* smooth theme-switch transitions on key surfaces */
+.nav, .nav-inner{
+  transition: background-color 800ms cubic-bezier(.4,0,.2,1), border-color 800ms cubic-bezier(.4,0,.2,1);
+}
+/* scroll-hide nav */
+.nav{
+  transition:
+    background-color 800ms cubic-bezier(.4,0,.2,1),
+    border-color 800ms cubic-bezier(.4,0,.2,1),
+    transform 320ms cubic-bezier(.4,0,.2,1);
+}
+.nav.nav--hidden{
+  transform:translateY(-110%);
+}
+.live-strip{
+  transition: background-color 800ms cubic-bezier(.4,0,.2,1);
+}
+
+img,svg{max-width:100%; display:block}
+a{color:inherit; text-decoration:none}
+button{font-family:inherit; cursor:pointer; border:0; background:none; letter-spacing:inherit}
+h1,h2,h3,h4{margin:0; letter-spacing:-0.03em; font-weight:700; line-height:1.05}
+p{margin:0}
+code, .mono{font-family:var(--mono); letter-spacing:0}
+
+/* Container — bordered grid column */
+.container{max-width:var(--max); margin:0 auto; padding:0 32px; position:relative}
+.container.bordered{border-left:1px solid var(--line); border-right:1px solid var(--line)}
+
+/* Section frame with inset grid lines */
+.section{padding:88px 0; position:relative}
+.section.tight{padding:56px 0}
+.section + .section{border-top:1px solid var(--line)}
+
+/* Section head — meta on top, then heading (left) + description (right)
+   on the same row; all left edges line up with the separator line below */
+.sec-head{display:flex; flex-direction:column; align-items:flex-start;
+  gap:14px; margin-bottom:48px; padding-bottom:24px; border-bottom:1px solid var(--line)}
+.sec-meta{font-family:var(--mono); font-size:11px; font-weight:500; color:var(--g-500);
+  text-transform:uppercase; letter-spacing:.14em; flex-shrink:0;
+  display:flex; gap:10px; align-items:center}
+.sec-meta::before{content:''; width:10px; height:10px; background:var(--zop-orange)}
+.sec-head > div:not(.sec-meta){
+  width:100%;
+  display:flex; align-items:flex-end; justify-content:space-between; gap:48px;
+}
+.sec-head h2{font-size:clamp(28px,3.2vw,44px); font-weight:700; max-width:720px; letter-spacing:-0.03em; margin:0}
+.sec-head .sub{color:var(--g-600); font-size:15px; max-width:360px; line-height:1.55; flex-shrink:0; margin:0 0 8px; text-align:right}
+@media(max-width:760px){
+  .sec-head > div:not(.sec-meta){ flex-direction:column; align-items:flex-start; gap:14px; }
+  .sec-head .sub{ max-width:100%; text-align:left; margin:0 }
+}
+
+/* =========================================================================
+   BUTTONS — three tiers, one consistent geometry
+   ========================================================================= */
+.btn{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:12px 20px; font-weight:600; font-size:14px;
+  border:1px solid; cursor:pointer;
+  letter-spacing:-0.02em; font-family:var(--font);
+  position:relative;
+  transition:
+    transform var(--dur-med) var(--ease-out),
+    border-color var(--dur-med) var(--ease-out),
+    box-shadow var(--dur-med) var(--ease-out),
+    background var(--dur-med) var(--ease-out);
+}
+/* primary — ink fill */
+.btn-primary{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.btn-primary:hover{
+  transform:translateY(-4px);
+  border-color:var(--ink);
+  box-shadow:0 8px 0 -4px var(--zop-orange);
+}
+/* accent — orange fill (nav CTA, key conversion points)
+   Black text on orange · ~7:1 (AAA) vs the cream-on-orange ~2.4:1 we had before. */
+.btn-accent{ background:var(--zop-orange); color:#0A0A0A; border-color:var(--zop-orange); font-weight:700; }
+.btn-accent:hover{
+  transform:translateY(-4px);
+  border-color:var(--zop-orange);
+  box-shadow:0 8px 0 -4px var(--ink);
+}
+/* secondary — outline */
+.btn-secondary{ background:transparent; color:var(--ink); border-color:var(--line); }
+.btn-secondary:hover{
+  transform:translateY(-4px);
+  border-color:var(--ink);
+  box-shadow:0 8px 0 -4px var(--zop-orange);
+  /* Theme-safe lift · was var(--zop-white) (#FAF7EC) which clashed with cream
+     --ink in dark mode, making text invisible on hover. Use a translucent tint
+     so the bg never matches the text colour in either theme. */
+  background:rgba(0,0,0,.04);
+}
+/* ghost / tertiary — text link with underline */
+.btn-ghost{
+  border:0; border-bottom:1px solid var(--ink);
+  padding:10px 0; color:var(--ink);
+  font-weight:600; font-size:14px; letter-spacing:-0.02em;
+  transition:color var(--dur-med) var(--ease-out), border-color var(--dur-med) var(--ease-out);
+}
+.btn-ghost:hover{ color:var(--zop-blue); border-bottom-color:var(--zop-blue); }
+/* arrow slide */
+.btn .arrow,.btn-ghost .arrow{ display:inline-block; transition:transform var(--dur-med) var(--ease-out); }
+.btn:hover .arrow,.btn-ghost:hover .arrow{ transform:translateX(4px); }
+
+/* Logo lockup utility */
+.logo-lockup{display:inline-block; color:var(--ink); line-height:0}
+.logo-lockup svg{display:block; height:100%; width:auto; max-width:none; aspect-ratio:715/276}
+.logo-lockup.on-dark{color:var(--paper)}
+.logo-lockup.sm{height:42px}
+.logo-lockup.md{height:52px}
+
+/* =================================================================
+   NAV
+   ================================================================= */
+.nav{position:sticky; top:0; z-index:50; background:rgba(250,247,236,.85);
+  backdrop-filter:saturate(180%) blur(12px); border-bottom:1px solid var(--line);
+  view-transition-name: site-nav;}
+.nav-inner{display:flex; align-items:center; justify-content:space-between;
+  max-width:var(--max); margin:0 auto; padding:14px 32px; gap:32px; position:relative}
+.nav-links{display:flex; align-items:center; gap:28px}
+.nav-links a{font-weight:500; font-size:14px; color:var(--g-700)}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{display:flex; align-items:center; gap:10px; white-space:nowrap}
+.nav-cta > *{ white-space:nowrap; flex-shrink:0 }
+.nav-cta a.sign{
+  font-weight:500; font-size:14px; color:var(--g-700);
+  height:36px; padding:0 8px;
+  display:inline-flex; align-items:center;
+  box-sizing:border-box;
+}
+.nav-cta a.sign:hover{ color:var(--ink) }
+.nav-cta .btn{padding:9px 16px; font-size:13px; font-weight:600; height:36px; display:inline-flex; align-items:center; gap:6px; line-height:1}
+.nav-cta .btn .arrow{ font-size:14px; transition:transform var(--dur-fast) var(--ease-out) }
+.nav-cta .btn:hover .arrow{ transform:translateX(2px) }
+/* Playground chip */
+.nav-cta .chip-playground{
+  font-family:var(--mono); font-size:11px; letter-spacing:.04em;
+  color:var(--ink); padding:0 12px; border:1px solid var(--line); border-radius:0;
+  display:inline-flex; align-items:center; gap:7px; height:36px; line-height:1;
+  transition:border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+}
+.nav-cta .chip-playground::before{
+  content:''; width:7px; height:7px; background:var(--zop-green); box-shadow:0 0 6px rgba(127,178,54,.5);
+}
+.nav-cta .chip-playground:hover{
+  transform:translateY(-4px); border-color:var(--ink);
+  box-shadow:0 8px 0 -4px var(--zop-orange);
+}
+html[data-theme="dark"] .nav-cta .chip-playground:hover{ background:transparent; }
+/* Variants dropdown · 36px pill, square corners */
+.nav-cta .nav-variants > summary{ height:36px; padding:0 12px; border-radius:0; box-sizing:border-box; }
+.nav-cta .nav-variants-menu{ border-radius:0; }
+/* Theme toggle · square container with a square sliding thumb */
+.nav-cta .theme-toggle{ height:36px; padding:4px; border-radius:0; }
+.nav-cta .theme-toggle::before{ top:4px; left:4px; width:26px; height:26px; border-radius:0; }
+.nav-cta .theme-toggle .tt-opt{ width:26px; height:26px; border-radius:0; }
+
+/* ── Nav items that trigger dropdowns ── */
+.nav-item{position:static; display:flex; align-items:center}
+.nav-item > a{display:flex; align-items:center; gap:4px; cursor:pointer}
+.nav-caret{
+  display:inline-block; width:8px; height:8px; opacity:0.5;
+  border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor;
+  transform:rotate(45deg) translateY(-2px);
+  transition:transform 0.18s, opacity 0.18s;
+  margin-top:1px;
+}
+.nav-item.open > a .nav-caret{ transform:rotate(-135deg) translateY(-2px); opacity:0.8; }
+
+/* ── Shared dropdown overlay — ONE panel, content crossfades inside ── */
+.nav-overlay{
+  position:absolute;
+  top:calc(100% + 6px);
+  background:var(--paper);
+  border:1px solid var(--line);
+  box-shadow:0 20px 60px -8px rgba(0,0,0,0.12), 0 4px 14px rgba(0,0,0,0.05);
+  width:720px;
+  max-width:calc(100vw - 48px);
+  opacity:0; visibility:hidden;
+  transform:translateY(-8px) scale(0.98);
+  transform-origin:top center;
+  transition:
+    opacity 0.20s cubic-bezier(.22,1,.36,1),
+    transform 0.20s cubic-bezier(.22,1,.36,1),
+    left 0.26s cubic-bezier(.22,1,.36,1),
+    visibility 0s linear 0.20s;
+  pointer-events:none;
+  z-index:200;
+  overflow:hidden;
+}
+.nav-overlay.open{
+  opacity:1; visibility:visible;
+  transform:translateY(0) scale(1);
+  pointer-events:auto;
+  transition:
+    opacity 0.20s cubic-bezier(.22,1,.36,1),
+    transform 0.20s cubic-bezier(.22,1,.36,1),
+    left 0.26s cubic-bezier(.22,1,.36,1),
+    visibility 0s;
+}
+
+.nav-panes{ position:relative; }
+.nav-pane{
+  position:absolute; top:0; left:0; width:100%;
+  opacity:0; pointer-events:none;
+  transition:opacity 0.14s cubic-bezier(.22,1,.36,1);
+  padding:0;
+}
+.nav-pane.active{
+  position:relative;
+  opacity:1; pointer-events:auto;
+}
+
+/* ══ Bento grid · 3 columns · hero spans 2 rows on left ══ */
+.np-bento{
+  display:grid;
+  grid-template-columns:1.3fr 1fr 1fr;
+  grid-template-rows:auto auto;
+  gap:0;
+  background:var(--line);
+  border-bottom:1px solid var(--line);
+}
+.np-cell, .np-hero, .np-promo{
+  background:var(--paper);
+  padding:14px 18px;
+  text-decoration:none; color:inherit;
+  display:flex; flex-direction:column; gap:5px;
+  position:relative;
+  transition:background .14s var(--ease-out);
+  min-height:84px;
+}
+.np-cell:hover, .np-hero:hover, .np-promo:hover{
+  background:var(--g-50);
+}
+html[data-theme="dark"] .np-cell, html[data-theme="dark"] .np-hero, html[data-theme="dark"] .np-promo{ background:#1a1a1e; }
+html[data-theme="dark"] .np-cell:hover, html[data-theme="dark"] .np-hero:hover, html[data-theme="dark"] .np-promo:hover{ background:#22222a; }
+html[data-theme="dark"] .np-bento{ background:#2a2a30; border-bottom-color:#2a2a30; }
+
+/* Hero · spans 2 rows */
+.np-hero{
+  grid-column:1; grid-row:1 / span 2;
+  padding:18px 20px 16px;
+  justify-content:space-between;
+  min-height:180px;
+  position:relative; overflow:hidden;
+}
+.np-hero-icon{
+  width:44px; height:44px; flex-shrink:0; display:flex;
+  align-items:center; justify-content:center;
+}
+.np-hero-title{ font-size:17px; font-weight:700; letter-spacing:-0.015em; color:var(--ink); margin:0; }
+.np-hero-desc{ font-size:12.5px; color:var(--g-600); line-height:1.5; margin:0; max-width:260px; }
+.np-hero-cta{
+  font-family:var(--mono); font-size:10px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--zop-orange); font-weight:600;
+  display:inline-flex; align-items:center; gap:5px;
+  margin-top:8px;
+}
+.np-hero-cta::after{ content:'→'; transition:transform .14s; }
+.np-hero:hover .np-hero-cta::after{ transform:translateX(3px); }
+
+/* Featured badge */
+.np-badge{
+  position:absolute; top:16px; right:16px;
+  font-family:var(--mono); font-size:9px; letter-spacing:.12em;
+  text-transform:uppercase; font-weight:700;
+  padding:3px 7px; background:var(--zop-orange); color:#0a0a0c;
+}
+.np-badge.live{ background:var(--zop-green); color:#0a0a0c; }
+.np-badge.new{ background:var(--zop-blue); color:var(--paper); }
+
+/* Compact cell */
+.np-cell{ gap:10px; }
+.np-cell-icon{
+  width:28px; height:28px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--line);
+  background:var(--g-50);
+}
+html[data-theme="dark"] .np-cell-icon{ background:#0f0f12; border-color:#2a2a30; }
+.np-cell-title{ font-size:13.5px; font-weight:600; color:var(--ink); letter-spacing:-0.005em; margin:0; }
+.np-cell-desc{ font-size:11.5px; color:var(--g-500); line-height:1.5; margin:0; }
+.np-cell:hover .np-cell-title{ color:var(--zop-orange); }
+
+/* Promo strip */
+.np-promo-row{
+  display:grid; grid-template-columns:1fr auto;
+  align-items:center; gap:14px;
+  padding:14px 20px;
+  background:var(--paper);
+  border-top:1px solid var(--line);
+  font-family:var(--mono); font-size:11px;
+  color:var(--g-600); letter-spacing:.04em;
+}
+html[data-theme="dark"] .np-promo-row{ background:#0f0f12; border-top-color:#2a2a30; }
+.np-promo-row strong{ color:var(--ink); font-weight:600; font-family:var(--font); letter-spacing:-0.01em; font-size:12px; }
+.np-promo-row a{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink); font-weight:600;
+  border:1px solid var(--ink); padding:7px 12px;
+  transition:background .14s, color .14s;
+  display:inline-flex; align-items:center; gap:6px;
+}
+.np-promo-row a:hover{ background:var(--ink); color:var(--paper); }
+html[data-theme="dark"] .np-promo-row a{ color:var(--paper); border-color:var(--paper); }
+html[data-theme="dark"] .np-promo-row a:hover{ background:var(--paper); color:var(--ink); }
+
+/* ══ Bento variants ══
+   --stack2: Product · 1.3fr 1fr · hero spans rows 1-2 in col 1, two
+             cells stack in col 2 (3 items, no empty slots).
+   --grid:   Resources · 3 equal cols, N rows of equal cells (no hero,
+             so every cell sits at natural content height).
+   --narrow: Company · 1.3fr 1fr · hero on left, single cell on right
+             (2 items, side-by-side). */
+.np-bento.np-bento--stack2{
+  grid-template-columns:1.3fr 1fr;
+  grid-template-rows:1fr 1fr;
+}
+.np-bento.np-bento--stack2 .np-hero{ grid-column:1; grid-row:1 / span 2; }
+.np-bento.np-bento--stack2 .np-cell{ grid-column:2; min-height:0; }
+
+.np-bento.np-bento--grid{
+  grid-template-columns:repeat(4, 1fr);
+  grid-auto-rows:auto;
+}
+.np-bento.np-bento--grid .np-cell{ min-height:96px; }
+
+.np-bento.np-bento--narrow{
+  grid-template-columns:1.3fr 1fr;
+  grid-template-rows:auto;
+}
+.np-bento.np-bento--narrow .np-hero{ grid-column:1; grid-row:1; min-height:160px; }
+.np-bento.np-bento--narrow .np-cell{ grid-column:2; grid-row:1; min-height:0; }
+
+/* Company pane — 2 square cells. Narrows the overlay so 1fr 1fr
+   gives ~180px cells (square) rather than stretching across 720px. */
+.nav-overlay:has([data-pane="company"].active){ width:360px; }
+.nav-pane[data-pane="company"] .np-cell{ min-height:174px; }
+
+@media (max-width:720px){
+  .nav-overlay{ width:92vw; }
+  .np-bento,
+  .np-bento.np-bento--stack2,
+  .np-bento.np-bento--grid,
+  .np-bento.np-bento--narrow{ grid-template-columns:1fr; grid-template-rows:auto; }
+  .np-hero,
+  .np-bento.np-bento--stack2 .np-hero,
+  .np-bento.np-bento--narrow .np-hero{ grid-column:1; grid-row:1; min-height:auto; }
+  .np-bento.np-bento--stack2 .np-cell,
+  .np-bento.np-bento--narrow .np-cell{ grid-column:1; }
+}
+
+/* ══ Nav status pill ══
+   Lives in .nav-cta · live-dot + "Status" label · links to /status.html.
+   Echoes the live-ops strip identity without competing with the primary
+   "Book a demo" CTA. Hover lifts the dot scale and shifts the bg one
+   notch warmer. Solid fills only — no glow, per token rules. */
+.nav-status{
+  display:inline-flex; align-items:center; gap:7px;
+  height:36px; padding:0 12px;
+  box-sizing:border-box;
+  font-family:var(--mono); font-size:11px; font-weight:600;
+  letter-spacing:.04em;
+  color:var(--ink);
+  background:transparent;
+  border:1px solid var(--line);
+  text-decoration:none;
+  transition:background .14s var(--ease-out), border-color .14s var(--ease-out);
+}
+.nav-status:hover{
+  transform:translateY(-4px); border-color:var(--ink);
+  box-shadow:0 8px 0 -4px var(--zop-orange);
+}
+/* Dark mode · cream text on the dark canvas (was var(--paper) which is
+   #0F0F12 in dark mode — invisible). Border picks up a slightly elevated
+   line so the pill still reads as a tappable shape. */
+html[data-theme="dark"] .nav-status{ color:var(--ink); border-color:#3A3A46; }
+html[data-theme="dark"] .nav-status:hover{ background:transparent; border-color:var(--ink); color:var(--ink); }
+.nav-status-dot{
+  width:7px; height:7px; border-radius:var(--r-pill);
+  background:var(--ok, #34d399);
+  box-shadow:0 0 0 3px rgba(52,211,153,.18);
+  flex-shrink:0;
+}
+@media (prefers-reduced-motion: no-preference){
+  .nav-status-dot{ animation:nav-status-pulse 2.4s ease-in-out infinite; }
+  @keyframes nav-status-pulse{
+    0%, 100%{ box-shadow:0 0 0 3px rgba(52,211,153,.18); }
+    50%     { box-shadow:0 0 0 5px rgba(52,211,153,.08); }
+  }
+}
+@media (max-width:980px){
+  .nav-status{ padding:7px 9px; }
+  .nav-status-text{ display:none; }
+}
+
+/* =================================================================
+   FOOTER · theme-locked dark on every page
+   -----------------------------------------------------------------
+   Pinned to ink hex (#0A0A0A) regardless of theme so the footer +
+   eclipse-stripe wordmark below it read as one continuous brand
+   anchor. This was previously `background:var(--paper)`, which made
+   the footer flip cream in light mode while chrome.css's higher-
+   specificity child rules stayed cream-on-cream and went invisible.
+   The homepage's own inline `<style>` already locks it dark; this
+   brings every subpage in line.
+   ================================================================= */
+/* All footer text colors are theme-locked cream/cream-grey to match the
+   theme-locked dark background. Without this lock, `var(--g-700)` etc.
+   resolve to dark grey in light mode and the column links go invisible
+   on the dark footer (the bug that prompted the lock). */
+footer{background:#0A0A0A; color:#F0EBDB; padding:56px 0 28px}
+.foot-grid{display:grid; grid-template-columns:2fr 1fr 1fr 1fr 1fr; gap:40px; margin-bottom:40px}
+.foot-brand .logo-lockup{margin-bottom:18px}
+.foot-brand p{color:#9C9588; font-size:13px; max-width:300px; line-height:1.55}
+.foot-col h3{font-family:var(--mono); font-size:10px; font-weight:600; color:#9C9588;
+  letter-spacing:.16em; text-transform:uppercase; margin-bottom:18px}
+.foot-col ul{list-style:none; padding:0; margin:0}
+.foot-col li{padding:5px 0}
+/* Footer column links · slight hover slide + brand-orange accent.
+   Uses a pseudo-element arrow that grows in on hover instead of a
+   stale text-decoration underline. */
+.foot-col a{
+  color:#D4CDB5; font-size:13px;
+  position:relative; display:inline-block;
+  transition:color .18s var(--ease-out), transform .18s var(--ease-out);
+}
+.foot-col a::after{
+  content:'→';
+  position:absolute; left:100%;
+  margin-left:6px; opacity:0;
+  color:var(--zop-orange);
+  transform:translateX(-4px);
+  transition:opacity .18s var(--ease-out), transform .18s var(--ease-out);
+}
+.foot-col a:hover{
+  color:#F0EBDB;
+  transform:translateX(2px);
+}
+.foot-col a:hover::after{
+  opacity:1; transform:translateX(0);
+}
+.foot-bottom{display:flex; justify-content:space-between; padding-top:24px; border-top:1px solid rgba(255,255,255,.08);
+  font-family:var(--mono); font-size:11px; color:#9C9588; letter-spacing:.05em; flex-wrap:wrap; gap:16px}
+
+/* =========================================================================
+   FIRST-FOLD DARK MODE · scoped via `[data-theme="dark"]` attribute.
+
+   How it works:
+   - The same dark tokens that `html[data-theme="dark"]` already defines
+     are also defined on `[data-theme="dark"]` (no `html` prefix), so any
+     element that gets the attribute applies dark tokens to its scope.
+   - CSS variables cascade · descendants pick up dark `--paper`, `--ink`,
+     `--g-*`, `--line` automatically, so existing rules using those tokens
+     adapt without per-element overrides.
+   - The companion `chrome-darkfold.js` adds the attribute to subpage hero
+     headers (`.page-head`, `.pi-head`, `.fp-head`, `.ds-pagehead`) on
+     load, so this is automatic across the site.
+   - The homepage `.hero` is intentionally NOT dark-folded · it has the
+     globe canvas + complex backdrop tuned for paper that doesn't migrate
+     cleanly.
+   ========================================================================= */
+[data-theme="dark"]{
+  --paper:#0F0F12;
+  --ink:#F0EBDB;
+  --g-900:#F5F2E8;
+  --g-700:#D4CDB5;
+  --g-600:#B8B0A0;
+  --g-500:#9C9588;
+  --g-400:#A09988; /* bumped from #8A8378 (5.2:1) to #A09988 (~7.1:1) for AA-comfortable body */
+  --g-300:#4a4a4e;
+  --g-200:#2e2e33;
+  --g-100:#1e1e22;
+  --g-50:#18181c;
+  --line:#3a3a42;
+  --line-strong:#55555e;
+  /* The dark scope sets its own bg + color so it visually flips */
+  background:var(--paper);
+  color:var(--ink);
+}
+/* Inline links within a dark-scoped section need lift back to paper */
+[data-theme="dark"] a{ color:inherit; }
+/* Buttons inside a dark scope · primary becomes paper-on-ink, secondary
+   gets a light outline. Override the chrome's paper-mode defaults. */
+[data-theme="dark"] .btn-primary{
+  background:var(--ink); color:var(--paper); border-color:var(--ink);
+}
+[data-theme="dark"] .btn-primary:hover{
+  background:var(--zop-orange); border-color:var(--zop-orange); color:#0a0a0c;
+}
+/* =========================================================================
+   PRODUCT-PAGE TINT · saturated brand band that wraps nav + hero on
+   /product/zopnight, zopday, zopcloud. Toggled by IntersectionObserver
+   in each product page's inline init script — `is-tinted` while the
+   hero is in view, removed once it scrolls out so the rest of the page
+   reverts to paper. ZopNight + ZopCloud share blue (differentiated by
+   the big mark in the hero, per spec); ZopDay is orange.
+   ========================================================================= */
+body[data-product="zopnight"]{
+  --product-bg:#2A4494; --product-ink:#FAF7EC;
+  --product-meta:rgba(250,247,236,.7); --product-line:rgba(255,255,255,.18);
+  --product-strong:rgba(255,255,255,.10);
+}
+body[data-product="zopday"]{
+  --product-bg:#F58549; --product-ink:#0A0A0A;
+  --product-meta:rgba(10,10,10,.72); --product-line:rgba(0,0,0,.36);
+  --product-strong:rgba(0,0,0,.08);
+}
+body[data-product="zopcloud"]{
+  --product-bg:#2A4494; --product-ink:#FAF7EC;
+  --product-meta:rgba(250,247,236,.7); --product-line:rgba(255,255,255,.18);
+  --product-strong:rgba(255,255,255,.10);
+}
+
+body[data-product]{ transition:background-color 480ms cubic-bezier(.4,0,.2,1); }
+body[data-product].is-tinted{
+  background:var(--product-bg);
+  color:var(--product-ink);
+}
+
+/* Nav stays in its default site theme on tinted product pages — only the
+   page body + hero pick up the brand tint. Keeping the nav neutral was a
+   readability call (saturated brand bg made chips, sign-in, and the
+   hamburger toggle hard to read). The hero band below carries the brand
+   color; the nav looks identical to every other page. */
+body.is-tinted .ann-bar{
+  background:var(--product-strong); color:var(--product-ink);
+  border-bottom-color:var(--product-line);
+}
+body.is-tinted .live-strip{
+  background:var(--product-strong); color:var(--product-ink);
+  border-bottom-color:var(--product-line);
+}
+
+/* Hero · sit on the brand bg, no extra elevation/border. */
+body.is-tinted .zn-hero,
+body.is-tinted .zd-hero,
+body.is-tinted .zc-hero{
+  background:transparent; border-bottom:0; color:var(--product-ink);
+  position:relative; overflow:hidden;
+}
+body.is-tinted .crumb,
+body.is-tinted .crumb a{ color:var(--product-meta); }
+body.is-tinted .crumb a:hover{ color:var(--product-ink); }
+body.is-tinted .crumb .sep{ color:var(--product-line); }
+
+body.is-tinted .zn-tag,
+body.is-tinted .zd-tag,
+body.is-tinted .zc-tag{ color:var(--product-ink); opacity:.85; }
+body.is-tinted .zn-tag::before,
+body.is-tinted .zd-tag::before,
+body.is-tinted .zc-tag::before{ background:var(--product-ink); }
+
+body.is-tinted .zn-hero h1,
+body.is-tinted .zd-hero h1,
+body.is-tinted .zc-hero h1{ color:var(--product-ink); }
+/* Neutralize the orange `<em>` highlight — on a saturated bg the
+   accent color clashes (orange-on-orange on ZopDay especially). Keep
+   the emphasis as a softer tint of product-ink so the headline still
+   rhythms but the contrast stays AA. */
+body.is-tinted .zn-hero h1 em,
+body.is-tinted .zd-hero h1 em,
+body.is-tinted .zc-hero h1 em{
+  color:var(--product-ink); opacity:.65; font-style:normal;
+}
+body.is-tinted .zn-hero .lead,
+body.is-tinted .zd-hero .lead,
+body.is-tinted .zc-hero .lead{ color:var(--product-meta); }
+body.is-tinted .zn-hero .lead strong,
+body.is-tinted .zd-hero .lead strong,
+body.is-tinted .zc-hero .lead strong{ color:var(--product-ink); }
+
+/* Hero CTA buttons re-skinned for the saturated bg */
+body.is-tinted .zn-hero .btn-primary,
+body.is-tinted .zd-hero .btn-primary,
+body.is-tinted .zc-hero .btn-primary{
+  background:var(--product-ink); color:var(--product-bg); border-color:var(--product-ink);
+}
+body.is-tinted .zn-hero .btn-primary:hover,
+body.is-tinted .zd-hero .btn-primary:hover,
+body.is-tinted .zc-hero .btn-primary:hover{
+  background:transparent; color:var(--product-ink);
+}
+body.is-tinted .zn-hero .btn-secondary,
+body.is-tinted .zd-hero .btn-secondary,
+body.is-tinted .zc-hero .btn-secondary{
+  border-color:var(--product-line); color:var(--product-ink); background:transparent;
+}
+body.is-tinted .zn-hero .btn-secondary:hover,
+body.is-tinted .zd-hero .btn-secondary:hover,
+body.is-tinted .zc-hero .btn-secondary:hover{
+  border-color:var(--product-ink); background:var(--product-strong);
+}
+
+/* Hero side panels · stay readable on the brand bg */
+body.is-tinted .zn-savings,
+body.is-tinted .zd-waitlist,
+body.is-tinted .zc-graph{
+  background:var(--product-strong); border-color:var(--product-line); color:var(--product-ink);
+}
+body.is-tinted .zn-savings .lab,
+body.is-tinted .zd-waitlist .lab,
+body.is-tinted .zc-graph .lab{ color:var(--product-meta); }
+body.is-tinted .zn-savings .row{ border-color:var(--product-line); color:var(--product-ink); }
+body.is-tinted .zn-savings .row .v,
+body.is-tinted .zn-savings .row .k{ color:var(--product-ink); }
+body.is-tinted .zn-savings .row.win .v{ color:#7FB236; }
+body.is-tinted .zn-savings .row.delta{
+  background:rgba(255,255,255,.16); border:1px solid var(--product-ink); margin-top:12px;
+}
+body.is-tinted .zn-savings .row.delta .v{ color:var(--product-ink); }
+body.is-tinted .zd-waitlist .num,
+body.is-tinted .zd-waitlist h3,
+body.is-tinted .zd-waitlist p{ color:var(--product-ink); }
+body.is-tinted .zd-waitlist input{
+  background:var(--product-strong); border:1px solid var(--product-line); color:var(--product-ink);
+}
+body.is-tinted .zd-waitlist input::placeholder{ color:var(--product-meta); }
+body.is-tinted .zd-waitlist button,
+body.is-tinted .zc-graph + form button,
+body.is-tinted .zc-form button{
+  background:var(--product-ink); color:var(--product-bg); border:1px solid var(--product-ink);
+}
+
+/* Big product mark behind the hero · the visual differentiator for
+   ZopCloud (which shares blue with ZopNight). Each product page
+   inserts a `.product-hero-mark` SVG. */
+.product-hero-mark{
+  position:absolute;
+  top:50%; right:max(2vw, 32px);
+  transform:translateY(-50%);
+  width:clamp(220px, 28vw, 420px);
+  height:auto; opacity:.14;
+  pointer-events:none; z-index:0;
+}
+.product-hero-mark svg{ width:100%; height:auto; display:block; }
+.zn-hero-inner, .zd-hero-inner, .zc-hero-inner{ position:relative; z-index:1; }
+@media (max-width:980px){ .product-hero-mark{ display:none; } }
+
+/* Btn mark · small product icon prefixed to primary CTAs */
+.btn-mark{ width:14px; height:14px; flex-shrink:0; display:inline-block; margin-right:6px; vertical-align:-2px; }
+.btn .btn-mark{ margin-right:8px; }
+
+
+[data-theme="dark"] .btn-secondary{
+  border-color:rgba(240,235,219,.3); color:var(--ink);
+}
+[data-theme="dark"] .btn-secondary:hover{
+  background:rgba(240,235,219,.08); border-color:var(--ink);
+}
+
+/* =========================================================================
+   MOTION GRAPHICS · page-wide motion library propagated via chrome.
+   Three layers, all restrained:
+     1. Auto-applied page-head pulse strip · brand-orange beam crosses
+        the bottom of every subpage's hero section.
+     2. Auto-applied section divider · dotted line drifts between major
+        sections so long-form pages feel alive instead of static.
+     3. Opt-in classes · `.mg-bg-grid`, `.mg-pulse-border`, `.mg-orbit`,
+        `.mg-counter`, `.mg-flowing-bars` for richer effects on pages
+        that need them.
+
+   All effects pause under `prefers-reduced-motion`.
+   ========================================================================= */
+
+/* ── 1 · Page-head pulse strip · auto-applied to every subpage hero ── */
+.page-head,
+.pi-head,
+.fp-head,
+.ds-pagehead{
+  position:relative;
+  overflow:hidden;
+}
+/* page-head bottom gradient strip removed — wasn't part of the design
+   system, read as decorative noise. Page-head still gets a clean
+   1px var(--line) bottom border from its own rule. */
+
+/* ── 2 · Section divider (removed — orange drift line was decorative noise) ── */
+
+/* ── 3 · Opt-in: dotted grid background pulsing softly. Add to any
+   element via `class="mg-bg-grid"`. Layer behind text content for a
+   tech-aesthetic backdrop. ── */
+.mg-bg-grid{
+  position:relative;
+}
+.mg-bg-grid::before{
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(circle, var(--g-300) 0.8px, transparent 1px) 0 0/24px 24px;
+  opacity:.3;
+  animation:mg-grid-breathe 6s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes mg-grid-breathe{
+  0%, 100% { opacity:.25; }
+  50%      { opacity:.5; }
+}
+
+/* ── 4 · Opt-in: pulsing orange border on hover or in-view. Add to
+   any element via `class="mg-pulse-border"`. ── */
+.mg-pulse-border{
+  position:relative;
+}
+.mg-pulse-border::before,
+.mg-pulse-border::after{
+  content:''; position:absolute; inset:0;
+  border:1px solid var(--zop-orange);
+  pointer-events:none;
+  animation:mg-pulse-ring 2.4s ease-out infinite;
+}
+.mg-pulse-border::after{ animation-delay:1.2s; }
+@keyframes mg-pulse-ring{
+  0%   { transform:scale(1);    opacity:.8; }
+  100% { transform:scale(1.04); opacity:0; }
+}
+
+/* ── 5 · Opt-in: animated bar chart · 5 vertical bars breathing in
+   sequence. Add via `<div class="mg-flowing-bars"></div>`. Pure CSS,
+   no JS required. ── */
+.mg-flowing-bars{
+  display:flex; gap:6px; align-items:flex-end;
+  height:60px; width:fit-content;
+}
+.mg-flowing-bars::before{
+  content:''; display:block;
+  width:6px; height:100%;
+  background:linear-gradient(180deg, var(--zop-orange) 0%, var(--zop-orange) 60%, var(--g-200) 60%);
+  animation:mg-bar 1.4s cubic-bezier(.4, 0, .6, 1) infinite alternate;
+}
+.mg-flowing-bars::after{
+  content:''; display:block;
+  width:6px; height:100%;
+  background:linear-gradient(180deg, var(--zop-blue) 0%, var(--zop-blue) 80%, var(--g-200) 80%);
+  animation:mg-bar 1.4s cubic-bezier(.4, 0, .6, 1) infinite alternate-reverse;
+  animation-delay:.2s;
+}
+@keyframes mg-bar{
+  0%   { transform:scaleY(.4); }
+  100% { transform:scaleY(1);  }
+}
+
+/* ── 6 · Opt-in: orbiting accent dot · use as decorative element.
+   Add via `<span class="mg-orbit"><span></span></span>`. ── */
+.mg-orbit{
+  display:inline-block; position:relative;
+  width:80px; height:80px;
+}
+.mg-orbit::before{
+  content:''; position:absolute; inset:0;
+  border:1px dashed var(--line);
+  border-radius:50%;
+  animation:mg-spin 12s linear infinite;
+}
+.mg-orbit > *{
+  position:absolute; top:-3px; left:calc(50% - 3px);
+  width:6px; height:6px;
+  background:var(--zop-orange);
+  border-radius:50%;
+  transform-origin:3px 43px;
+  animation:mg-orbit-rev 8s linear infinite;
+}
+@keyframes mg-spin    { to { transform:rotate(360deg); } }
+@keyframes mg-orbit-rev{ to { transform:rotate(360deg); } }
+
+/* ── 7 · Opt-in: count-up animation · animates a number from 0 to
+   target when in view. Add `<span class="mg-counter" data-to="847">0</span>`
+   and the script at the bottom of the chrome wires up an IntersectionObserver. ── */
+.mg-counter{
+  font-variant-numeric:tabular-nums;
+  display:inline-block;
+}
+
+/* ── 8 · Opt-in: scanning beam · a vertical line sweeps across the
+   element. Use as a backdrop accent on any section.
+   `<div class="mg-scan-host"><div class="mg-scan"></div>...</div>` ── */
+.mg-scan-host{ position:relative; overflow:hidden; }
+.mg-scan-host > .mg-scan{
+  content:''; position:absolute; top:0; bottom:0; left:-2%;
+  width:2px;
+  background:linear-gradient(180deg, transparent 0%, var(--zop-orange) 50%, transparent 100%);
+  filter:drop-shadow(0 0 12px rgba(245,133,73,.4));
+  animation:mg-scan 7s linear infinite;
+  pointer-events:none; z-index:0;
+}
+@keyframes mg-scan{
+  0%   { left:-2%; opacity:0; }
+  6%   { opacity:1; }
+  94%  { opacity:1; }
+  100% { left:102%; opacity:0; }
+}
+
+/* ── 9 · Opt-in: floating particles · 8 small dots drift upward
+   continuously. Use as background motion on a section.
+   `<div class="mg-particles"></div>` (no children needed) ── */
+.mg-particles{
+  position:absolute; inset:0;
+  pointer-events:none; overflow:hidden;
+  z-index:0;
+}
+.mg-particles::before,
+.mg-particles::after{
+  content:''; position:absolute; bottom:-8px;
+  width:4px; height:4px; border-radius:50%;
+  background:var(--zop-orange); opacity:.5;
+  animation:mg-float 9s ease-in infinite;
+}
+.mg-particles::before{ left:18%; animation-delay:0s;  }
+.mg-particles::after { left:72%; animation-delay:4s; background:var(--zop-blue); }
+@keyframes mg-float{
+  0%   { transform:translateY(0)     scale(1);  opacity:0; }
+  10%  { opacity:.6; }
+  90%  { opacity:.6; }
+  100% { transform:translateY(-120%) scale(.6); opacity:0; }
+}
+
+/* Reduced motion · pause every motion-graphic loop */
+@media (prefers-reduced-motion: reduce){
+  .section + .section::before,
+  .mg-bg-grid::before,
+  .mg-pulse-border::before, .mg-pulse-border::after,
+  .mg-flowing-bars::before, .mg-flowing-bars::after,
+  .mg-orbit::before, .mg-orbit > *,
+  .mg-scan-host > .mg-scan,
+  .mg-particles::before, .mg-particles::after{
+    animation:none;
+  }
+}
+
+/* =========================================================================
+   UNIVERSAL CARD-LIFT HOVER · canonical bento signature from the homepage
+   features section. Applied across every card-like class on every subpage
+   so hover behaviour is consistent site-wide.
+
+   Signature: 4px lift + ink hard-offset shadow + orange 4px left stripe
+   that draws top→bottom. Same as `.feature:hover` on the homepage.
+
+   Uses :is() so the long selector list is defined exactly once per rule.
+   Browser support: 94%+ globally (Chrome/Edge/Firefox/Safari all green).
+   ========================================================================= */
+:is(.feature, .cb-small, .cb-big, .fp-feature, .feat-allfeatures,
+    .number-tile, .value-card, .plan-card, .deploy-card, .calc-card,
+    .topo-node, .integ-group, .testimonial, .case-card, .post-card,
+    .leader-card, .partner-card, .pillar-card, .role-card, .team-card,
+    .office-card, .culture-card, .guarantee-card, .safety-card,
+    .trust-card, .usecase-card, .feature-tile, .find-tile, .outcome-tile,
+    .tier-card, .baseline-card, .entry-card, .doc-card, .bp-card,
+    .gs-cloud-card, .gs-deploy-card, .gs-repeat-card, .cert-card,
+    .compare-card, .contact-card, .next-card, .never-card, .item-card,
+    .right-card, .feat-card, .post-card, .ai-use-card, .anomaly-card,
+    .asset-card, .cloud-card, .gauge-card, .gl-card, .int-card,
+    .lang-card, .option-card, .posture-card, .prob-card, .sev-card,
+    .status-card, .subpage-card, .blog-card, .ebook-card, .preso-card,
+    .resource-card){
+  position:relative;
+  transition:transform var(--dur-med) var(--ease-out),
+             box-shadow var(--dur-med) var(--ease-out);
+}
+:is(.feature, .cb-small, .cb-big, .fp-feature, .feat-allfeatures,
+    .number-tile, .value-card, .plan-card, .deploy-card, .calc-card,
+    .topo-node, .integ-group, .testimonial, .case-card, .post-card,
+    .leader-card, .partner-card, .pillar-card, .role-card, .team-card,
+    .office-card, .culture-card, .guarantee-card, .safety-card,
+    .trust-card, .usecase-card, .feature-tile, .find-tile, .outcome-tile,
+    .tier-card, .baseline-card, .entry-card, .doc-card, .bp-card,
+    .gs-cloud-card, .gs-deploy-card, .gs-repeat-card, .cert-card,
+    .compare-card, .contact-card, .next-card, .never-card, .item-card,
+    .right-card, .feat-card, .ai-use-card, .anomaly-card,
+    .asset-card, .cloud-card, .gauge-card, .gl-card, .int-card,
+    .lang-card, .option-card, .posture-card, .prob-card, .sev-card,
+    .status-card, .subpage-card, .blog-card, .ebook-card, .preso-card,
+    .resource-card)::after{
+  content:''; position:absolute; top:0; left:0; width:4px; height:0;
+  background:var(--zop-orange);
+  transition:height var(--dur-med) var(--ease-out);
+  pointer-events:none; z-index:2;
+}
+:is(.feature, .cb-small, .cb-big, .fp-feature, .feat-allfeatures,
+    .number-tile, .value-card, .plan-card, .deploy-card, .calc-card,
+    .topo-node, .integ-group, .testimonial, .case-card, .post-card,
+    .leader-card, .partner-card, .pillar-card, .role-card, .team-card,
+    .office-card, .culture-card, .guarantee-card, .safety-card,
+    .trust-card, .usecase-card, .feature-tile, .find-tile, .outcome-tile,
+    .tier-card, .baseline-card, .entry-card, .doc-card, .bp-card,
+    .gs-cloud-card, .gs-deploy-card, .gs-repeat-card, .cert-card,
+    .compare-card, .contact-card, .next-card, .never-card, .item-card,
+    .right-card, .feat-card, .ai-use-card, .anomaly-card,
+    .asset-card, .cloud-card, .gauge-card, .gl-card, .int-card,
+    .lang-card, .option-card, .posture-card, .prob-card, .sev-card,
+    .status-card, .subpage-card, .blog-card, .ebook-card, .preso-card,
+    .resource-card):hover{
+  transform:translateY(-4px);
+  box-shadow:0 8px 0 -4px var(--ink);
+}
+:is(.feature, .cb-small, .cb-big, .fp-feature, .feat-allfeatures,
+    .number-tile, .value-card, .plan-card, .deploy-card, .calc-card,
+    .topo-node, .integ-group, .testimonial, .case-card, .post-card,
+    .leader-card, .partner-card, .pillar-card, .role-card, .team-card,
+    .office-card, .culture-card, .guarantee-card, .safety-card,
+    .trust-card, .usecase-card, .feature-tile, .find-tile, .outcome-tile,
+    .tier-card, .baseline-card, .entry-card, .doc-card, .bp-card,
+    .gs-cloud-card, .gs-deploy-card, .gs-repeat-card, .cert-card,
+    .compare-card, .contact-card, .next-card, .never-card, .item-card,
+    .right-card, .feat-card, .ai-use-card, .anomaly-card,
+    .asset-card, .cloud-card, .gauge-card, .gl-card, .int-card,
+    .lang-card, .option-card, .posture-card, .prob-card, .sev-card,
+    .status-card, .subpage-card, .blog-card, .ebook-card, .preso-card,
+    .resource-card):hover::after{
+  height:100%;
+}
+.foot-social{display:flex; gap:14px}
+.foot-social a{
+  color:var(--g-500);
+  transition:color .18s var(--ease-out), transform .18s var(--ease-out);
+}
+.foot-social a:hover{
+  color:var(--zop-orange);
+  transform:translateY(-2px);
+}
+
+/* trust + legal rails — used by chrome.css subpages, kept for compatibility */
+.foot-trust{
+  max-width:var(--max); margin:0 auto;
+  padding:24px 32px 20px;
+  border-top:1px solid var(--line);
+  display:flex; flex-wrap:wrap; gap:20px 28px; align-items:center;
+}
+.foot-trust .badge{
+  font-family:var(--mono); font-size:10px;
+  letter-spacing:.16em; text-transform:uppercase;
+  color:var(--g-600); padding:5px 10px; border:1px solid var(--line);
+  display:inline-flex; align-items:center; gap:6px;
+}
+.foot-trust .badge::before{
+  content:''; width:7px; height:7px; background:var(--zop-blue);
+}
+.foot-trust .badge.ok::before{ background:#34d399; }
+.foot-trust .badge.o::before{  background:var(--zop-orange); }
+.foot-trust .badge.g::before{  background:var(--zop-green); }
+.foot-trust .badge.k::before{  background:var(--ink); }
+.foot-trust .status{
+  margin-left:auto;
+  color:var(--g-600); font-family:var(--mono); font-size:11px;
+  letter-spacing:.05em;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.foot-trust .status:hover{ color:var(--ink); }
+.foot-legal-rail{
+  max-width:var(--max); margin:0 auto;
+  padding:0 32px 20px;
+  display:flex; flex-wrap:wrap; gap:20px;
+  font-family:var(--mono); font-size:11px;
+  color:var(--g-500); letter-spacing:.05em;
+}
+.foot-legal-rail a{
+  color:var(--g-500);
+  position:relative;
+  transition:color .18s var(--ease-out);
+}
+.foot-legal-rail a::before{
+  content:'';
+  position:absolute; left:0; right:0; bottom:-3px;
+  height:1px; background:currentColor;
+  transform:scaleX(0); transform-origin:right;
+  transition:transform .22s var(--ease-out);
+}
+.foot-legal-rail a:hover{ color:var(--ink); }
+.foot-legal-rail a:hover::before{
+  transform:scaleX(1); transform-origin:left;
+}
+
+/* =================================================================
+   DARK-MODE — chrome-only overrides
+   ================================================================= */
+html[data-theme="dark"]{
+  --paper:#0F0F12; --ink:#F0EBDB;
+  --g-900:#F5F2E8;
+  --g-700:#D4CDB5;
+  --g-600:#B8B0A0;
+  --g-500:#9C9588;
+  --g-400:#A09988; /* bumped from #8A8378 (5.2:1) to #A09988 (~7.1:1) for AA-comfortable body */
+  --g-300:#4a4a4e;
+  --g-200:#2e2e33;
+  --g-100:#1e1e22;
+  --g-50:#18181c;
+  --line:#3a3a42;
+  --line-strong:#55555e;
+  --zop-green:#B4E083;
+}
+html[data-theme="dark"] body{background:var(--paper); color:var(--ink)}
+html[data-theme="dark"] .nav{background:rgba(15,15,18,.85); border-bottom:1px solid var(--line)}
+html[data-theme="dark"] footer{background:#0F0F12}
+html[data-theme="dark"] .btn-primary{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+html[data-theme="dark"] .btn-primary:hover{background:transparent; color:var(--ink)}
+html[data-theme="dark"] .btn-secondary{border-color:var(--line); color:var(--ink)}
+html[data-theme="dark"] .btn-secondary:hover{border-color:var(--ink); background:#1a1a1e}
+html[data-theme="dark"] .live-strip{background:#0a0a0c}
+html[data-theme="dark"] .nav-cta a.sign,
+html[data-theme="dark"] .nav-links a{color:var(--g-700)}
+html[data-theme="dark"] .nav-links a:hover{color:var(--ink)}
+/* Logo must stay ink-coloured even when body.is-tinted sets color:#0a0a0a
+   via the higher-specificity [data-theme="dark"] a{color:inherit} rule */
+html[data-theme="dark"] .nav .logo-lockup{color:var(--ink)}
+html[data-theme="dark"] .sec-meta::before{background:var(--zop-orange)}
+html[data-theme="dark"] .btn-secondary{border-color:var(--line-strong)}
+/* dark-theme adapt for theme-toggle handled in the .theme-toggle block
+   above — keep this slot empty so the edgy hover (orange + offset
+   shadow) isn't overwritten on dark canvases. */
+html[data-theme="dark"] .foot-bottom{border-top-color:var(--line)}
+
+/* The 3-dot overflow nav menu (.nav-more) was removed: theme toggle,
+   Playground, and Sign in are now inlined directly in .nav-cta on every
+   page so each secondary action is one click away. The legacy
+   .nav-more / .nmm-* CSS lived here and has been deleted. */
+
+/* =================================================================
+   VARIANTS DROPDOWN
+   ================================================================= */
+.nav-variants{ position:relative; font-family:var(--mono); }
+.nav-variants > summary{
+  list-style:none; cursor:pointer; user-select:none;
+  padding:6px 10px; border:1px solid var(--line); color:var(--g-600);
+  font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+  display:inline-flex; align-items:center; gap:6px;
+  transition:border-color .15s, color .15s;
+}
+.nav-variants > summary::-webkit-details-marker{ display:none; }
+.nav-variants > summary::after{
+  content:''; width:0; height:0; margin-left:2px;
+  border:3px solid transparent; border-top-color:currentColor; transform:translateY(2px);
+  transition:transform .2s;
+}
+.nav-variants[open] > summary::after{ transform:translateY(-1px) rotate(180deg); }
+.nav-variants > summary:hover,
+.nav-variants[open] > summary{ border-color:var(--ink); color:var(--ink); }
+.nav-variants-menu{
+  position:absolute; top:calc(100% + 8px); right:0;
+  min-width:280px; z-index:100;
+  background:var(--paper); border:1px solid var(--line);
+  box-shadow:0 12px 32px rgba(0,0,0,.08); padding:6px;
+}
+html[data-theme="dark"] .nav-variants-menu{
+  background:#1a1a1e; box-shadow:0 12px 32px rgba(0,0,0,.45);
+}
+.nav-variants-menu a{
+  display:block; padding:11px 14px; color:var(--ink); text-decoration:none;
+  border-left:2px solid transparent;
+  font-family:var(--font); text-transform:none; letter-spacing:normal;
+  transition:background .15s, border-color .15s;
+}
+.nav-variants-menu .nv-label{ display:block; font-size:13px; font-weight:600; line-height:1.3; }
+.nav-variants-menu .nv-desc{ display:block; font-size:11px; color:var(--g-500); margin-top:2px; line-height:1.4; }
+.nav-variants-menu a:hover{ background:rgba(245,133,73,.08); border-left-color:var(--zop-orange); }
+.nav-variants-menu a.current{ border-left-color:var(--zop-orange); background:rgba(245,133,73,.04); }
+
+/* =================================================================
+   THEME TOGGLE — edgy single-icon square button
+   -----------------------------------------------------------------
+   Compact 36px square showing only the "switch to" target icon:
+     · light mode → moon (click to go dark)
+     · dark mode  → sun (click to go light)
+   Sharp brand treatment: ink border, orange accent on hover, hard
+   offset shadow on lift (matches the rest of the system).
+   ================================================================= */
+.theme-toggle{
+  position:relative; display:inline-flex;
+  align-items:center; justify-content:center;
+  width:36px; height:36px; padding:0;
+  border:1px solid var(--line); background:transparent;
+  color:var(--zop-orange); cursor:pointer; line-height:0;
+  transition:transform .14s var(--ease-out),
+             border-color .14s var(--ease-out),
+             color .14s var(--ease-out),
+             box-shadow .14s var(--ease-out);
+}
+.theme-toggle:hover{
+  border-color:var(--ink); color:var(--zop-orange);
+  transform:translateY(-4px);
+  box-shadow:0 8px 0 -4px var(--zop-orange);
+}
+.theme-toggle:focus-visible{ outline:2px solid var(--zop-orange); outline-offset:2px; }
+.theme-toggle:active{ transform:translate(0,0); box-shadow:1px 1px 0 -1px var(--zop-orange); }
+.theme-toggle .tt-opt{ display:none; line-height:0; align-items:center; justify-content:center; }
+.theme-toggle .tt-opt svg{ display:block; width:18px; height:18px; }
+html[data-theme="light"] .theme-toggle .tt-moon{ display:inline-flex; }
+html[data-theme="dark"] .theme-toggle .tt-sun{ display:inline-flex; }
+
+/* =================================================================
+   LIVE-OPS STRIP — stock-exchange ticker (homepage variant)
+   Always rendered on a dark surface regardless of site theme.
+   ================================================================= */
+.live-strip{
+  position:relative;
+  background:#0a0a0c;
+  color:#e8e8ea;
+  font-family:var(--mono);
+  font-size:11.5px;
+  letter-spacing:.02em;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  height:30px;
+  display:flex; align-items:stretch;
+  overflow:hidden;
+}
+.ls-anchor{
+  order:2;
+  display:inline-flex; align-items:center; gap:12px;
+  padding:0 16px;
+  background:#0a0a0c;
+  border-left:1px solid rgba(255,255,255,0.08);
+  z-index:2;
+  box-shadow:-16px 0 20px -10px #0a0a0c;
+}
+.ls-live{
+  display:inline-flex; align-items:center; gap:6px;
+  color:#34d399;
+  font-weight:700; letter-spacing:0.14em; font-size:10.5px;
+}
+.ls-livedot{
+  width:6px; height:6px; background:#34d399;
+  box-shadow:0 0 0 0 rgba(52,211,153,0.55);
+  animation:ls-pulse 1.8s infinite;
+}
+@keyframes ls-pulse{
+  0%  { box-shadow:0 0 0 0 rgba(52,211,153,0.55); }
+  70% { box-shadow:0 0 0 6px rgba(52,211,153,0); }
+  100%{ box-shadow:0 0 0 0 rgba(52,211,153,0); }
+}
+.ls-sep{ width:1px; height:12px; background:rgba(255,255,255,0.14); }
+.ls-kpi{
+  display:inline-flex; align-items:center; gap:6px;
+  color:#e8e8ea; font-variant-numeric:tabular-nums;
+}
+.ls-kpi em{
+  font-style:normal; color:#8d8d96;
+  letter-spacing:0.12em; font-size:10px;
+}
+.ls-kpi b{ font-weight:500; }
+
+.ls-track{
+  order:1;
+  flex:1; min-width:0;
+  display:flex; align-items:center;
+  overflow:hidden;
+  -webkit-mask:linear-gradient(90deg, transparent 0, #000 40px, #000 calc(100% - 12px), transparent 100%);
+  mask:linear-gradient(90deg, transparent 0, #000 40px, #000 calc(100% - 12px), transparent 100%);
+}
+.ls-rail{
+  flex-shrink:0;
+  display:inline-flex; align-items:center;
+  padding-right:40px;
+  animation:ls-scroll 80s linear infinite;
+  white-space:nowrap;
+  will-change:transform;
+}
+@keyframes ls-scroll{
+  from{ transform:translateX(0); }
+  to  { transform:translateX(-100%); }
+}
+.live-strip:hover .ls-rail{ animation-play-state:paused; }
+
+.lt-row{
+  display:inline-flex; align-items:baseline; gap:6px;
+  color:#b5b5bb;
+  font-variant-numeric:tabular-nums;
+  padding:0 26px;
+  position:relative;
+}
+.lt-row + .lt-row::before{
+  content:'·';
+  position:absolute; left:-4px; top:50%; transform:translateY(-50%);
+  color:#4a4a52;
+  font-weight:700;
+}
+.lt-row b{
+  color:#f5f5f7;
+  font-weight:600;
+  margin-right:2px;
+}
+.lt-chg{
+  margin-left:6px;
+  font-weight:500;
+  letter-spacing:0.02em;
+  display:inline-flex; align-items:baseline; gap:3px;
+}
+.lt-chg.up  { color:#34d399; }
+.lt-chg.dn  { color:#f87171; }
+.lt-chg.flat{ color:#6b6b73; }
+
+html[data-theme="dark"] body:not(.is-tinted) .live-strip,
+html[data-theme="dark"] body:not(.is-tinted) .ls-anchor{ background:#0a0a0c; }
+html[data-theme="dark"] body:not(.is-tinted) .live-strip{ border-bottom-color:rgba(255,255,255,0.08); }
+
+@media (max-width:640px){
+  .ls-anchor{ gap:8px; padding:0 10px; }
+  .ls-kpi em{ display:none; }
+  .ls-sep{ height:10px; }
+  .lt-sym{ font-size:10px; }
+}
+@media (prefers-reduced-motion:reduce){
+  .ls-rail{ animation:none; transform:translateX(0); }
+  .ls-livedot{ animation:none; }
+}
+
+/* Compatibility shim: subpages that used the old chrome.css live-strip
+   markup (.live-inner/.live-seg/.live-dot) keep rendering correctly
+   inside the new dark .live-strip surface. */
+.live-strip .live-inner{
+  max-width:var(--max); margin:0 auto;
+  padding:6px 32px;
+  display:flex; gap:28px; align-items:center; flex-wrap:wrap;
+  width:100%;
+}
+.live-strip .live-seg{ display:inline-flex; align-items:center; gap:8px; color:#b5b5bb; }
+.live-strip .live-seg strong{ color:#f5f5f7; font-weight:500; }
+.live-strip .live-dot{
+  width:7px; height:7px; background:#34d399;
+  box-shadow:0 0 0 0 rgba(52,211,153,.6);
+  animation:ls-pulse 2.4s infinite;
+  flex-shrink:0;
+}
+.live-strip .live-dot.b{ background:var(--zop-blue); }
+.live-strip .live-dot.o{ background:var(--zop-orange); }
+.live-strip .live-sep{ width:1px; height:12px; background:rgba(255,255,255,.14); }
+.live-strip .live-right{ margin-left:auto; color:#8d8d96; }
+
+/* Announcement bar — kept for subpages that include it */
+.ann-bar{
+  background:var(--paper);
+  border-bottom:1px solid var(--line);
+  font-family:var(--mono); font-size:11px;
+  letter-spacing:.05em;
+  color:var(--ink);
+}
+.ann-inner{
+  max-width:var(--max); margin:0 auto;
+  padding:8px 32px;
+  display:flex; gap:20px; align-items:center; flex-wrap:wrap;
+}
+.ann-chip{
+  display:inline-flex; align-items:center; gap:8px;
+  color:var(--ink);
+}
+.ann-chip .ann-dot{
+  width:7px; height:7px; background:#34d399;
+  flex-shrink:0;
+  animation:ls-pulse 2.4s infinite;
+}
+.ann-chip strong{ color:var(--ink); font-weight:600; }
+.ann-chip:hover{ color:var(--zop-blue); }
+.ann-chip:hover .ann-arrow{ transform:translateX(3px); }
+.ann-arrow{ display:inline-block; transition:transform var(--dur-fast) var(--ease-out); margin-left:4px; }
+.ann-link{
+  margin-left:auto; color:var(--g-600);
+  display:inline-flex; align-items:center; gap:4px;
+}
+.ann-link:hover{ color:var(--ink); }
+.ann-close{
+  background:transparent; border:0; color:var(--g-500); cursor:pointer;
+  padding:0 4px; font-family:var(--mono); font-size:13px;
+}
+.ann-close:hover{ color:var(--ink); }
+
+/* =================================================================
+   SECTION REVEAL ON SCROLL (homepage-style)
+   ================================================================= */
+.section{
+  opacity:0; transform:translateY(24px);
+  transition:opacity 520ms var(--ease-out), transform 520ms var(--ease-out);
+}
+.section.in{ opacity:1; transform:translateY(0); }
+.section.hero, .hero{ opacity:1; transform:translateY(0); }
+
+/* =========================================================================
+   MOBILE NAV · hamburger + drawer
+   -------------------------------------------------------------------------
+   Markup is injected at runtime by chrome-mobilenav.js so we don't have to
+   patch every subpage's <nav> block. Visible only ≤960px; on larger screens
+   .nav-links remains the navigation surface.
+   - Sharp corners, paper bg on light theme, ink slab on dark theme
+   - Hard offset shadow on focus / hover, never blurred
+   - Slides in from the right; scrim covers everything underneath
+   - ESC closes; click-scrim closes; first link gets focus on open
+   ========================================================================= */
+.mob-nav-toggle{
+  display:none; align-items:center; justify-content:center;
+  width:40px; height:40px; padding:0;
+  background:transparent; border:1px solid var(--line);
+  color:var(--ink); cursor:pointer;
+  transition:background var(--dur-fast),border-color var(--dur-fast);
+}
+.mob-nav-toggle:hover{ background:var(--g-100); border-color:var(--ink); }
+.mob-nav-toggle:focus-visible{ outline:2px solid var(--zop-orange); outline-offset:2px; }
+.mob-nav-toggle .bars{ display:flex; flex-direction:column; gap:5px; }
+.mob-nav-toggle .bars span{
+  display:block; width:18px; height:2px; background:currentColor;
+  transition:transform var(--dur-med) var(--ease-out), opacity var(--dur-fast);
+}
+.mob-nav-toggle[aria-expanded="true"] .bars span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+.mob-nav-toggle[aria-expanded="true"] .bars span:nth-child(2){ opacity:0; }
+.mob-nav-toggle[aria-expanded="true"] .bars span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+/* Scrim covers viewport behind the drawer */
+.mob-nav-scrim{
+  position:fixed; inset:0; z-index:60;
+  background:rgba(10,10,10,0.36);
+  opacity:0; pointer-events:none;
+  transition:opacity var(--dur-med) var(--ease-out);
+}
+.mob-nav-scrim.open{ opacity:1; pointer-events:auto; }
+
+/* Drawer slides in from the right */
+.mob-nav{
+  position:fixed; top:0; right:0; bottom:0; z-index:61;
+  width:88vw; max-width:380px;
+  background:var(--paper);
+  border-left:1px solid var(--line);
+  transform:translateX(100%);
+  transition:transform var(--dur-slow) var(--ease-out);
+  display:flex; flex-direction:column;
+  overflow:hidden;
+}
+.mob-nav.open{ transform:translateX(0); }
+
+.mob-nav-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 24px;
+  border-bottom:1px solid var(--line);
+  flex-shrink:0;
+}
+.mob-nav-head .mob-wm{
+  font-family:var(--font); font-weight:700; font-size:18px;
+  letter-spacing:-0.025em; color:var(--ink);
+}
+.mob-nav-head .mob-wm em{ font-style:normal; color:var(--zop-orange); }
+.mob-nav-close{
+  width:36px; height:36px; padding:0;
+  background:transparent; border:1px solid var(--line);
+  color:var(--ink); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:background var(--dur-fast),border-color var(--dur-fast);
+}
+.mob-nav-close:hover{ background:var(--g-100); border-color:var(--ink); }
+.mob-nav-close:focus-visible{ outline:2px solid var(--zop-orange); outline-offset:2px; }
+.mob-nav-close svg{ width:14px; height:14px; }
+
+.mob-nav-body{ flex:1; overflow-y:auto; overscroll-behavior:contain; }
+
+.mob-nav-section{ border-bottom:1px solid var(--line); padding:8px 0; }
+.mob-nav-section:last-of-type{ border-bottom:0; }
+.mob-nav-section-label{
+  font-family:var(--mono); font-size:10px;
+  color:var(--g-500); letter-spacing:.14em; text-transform:uppercase;
+  padding:14px 24px 8px;
+  display:flex; align-items:center; gap:10px;
+}
+.mob-nav-section-label::before{
+  content:''; display:inline-block; width:8px; height:8px;
+  background:var(--zop-orange); flex-shrink:0;
+}
+
+.mob-nav-link{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 24px;
+  font-size:16px; font-weight:500; color:var(--ink);
+  border-left:3px solid transparent;
+  transition:background var(--dur-fast),border-color var(--dur-fast),color var(--dur-fast);
+  min-height:44px; box-sizing:border-box;
+}
+.mob-nav-link:hover{ background:var(--g-100); border-left-color:var(--zop-orange); }
+.mob-nav-link:focus-visible{ outline:none; background:var(--g-100); border-left-color:var(--zop-orange); }
+.mob-nav-link[aria-current="page"]{
+  color:var(--zop-orange); border-left-color:var(--zop-orange);
+}
+.mob-nav-link .arrow{
+  font-family:var(--mono); color:var(--g-500); font-size:14px;
+  transition:transform var(--dur-fast),color var(--dur-fast);
+}
+.mob-nav-link:hover .arrow{ color:var(--zop-orange); transform:translateX(3px); }
+
+.mob-nav-foot{
+  padding:20px 24px;
+  border-top:1px solid var(--line);
+  display:flex; flex-direction:column; gap:12px;
+  background:var(--g-50);
+  flex-shrink:0;
+}
+.mob-nav-foot .btn-primary{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 18px;
+  background:var(--ink); color:var(--paper);
+  font-weight:600; font-size:14px;
+  letter-spacing:.04em; text-transform:uppercase;
+  border:1px solid var(--ink);
+  transition:transform var(--dur-fast),box-shadow var(--dur-fast);
+}
+.mob-nav-foot .btn-primary:hover{
+  transform:translate(-2px,-2px);
+  box-shadow:4px 4px 0 0 var(--zop-orange);
+}
+.mob-nav-foot .btn-primary:focus-visible{
+  outline:2px solid var(--zop-orange); outline-offset:2px;
+}
+.mob-nav-foot .meta{
+  font-family:var(--mono); font-size:11px;
+  color:var(--g-500); letter-spacing:.06em;
+  margin-top:4px;
+}
+
+/* SHOW the toggle, prevent body scroll, etc. — only ≤960px */
+@media (max-width:960px){
+  .mob-nav-toggle{ display:inline-flex; }
+  body.mob-nav-open{ overflow:hidden; }
+  /* Hide desktop nav-links + dropdown overlay; the drawer carries them. */
+  .nav .nav-links{ display:none !important; }
+  .nav .nav-overlay{ display:none !important; }
+  /* Inside the right-side cluster, hide everything except "Book a demo".
+     The hamburger sits next to it. Status / theme / playground / sign-in
+     all live in the drawer. */
+  .nav-cta .nav-status,
+  .nav-cta .theme-toggle,
+  .nav-cta .chip-playground,
+  .nav-cta .sign{ display:none !important; }
+  /* Tighten nav-inner so it fits the smaller surface */
+  .nav-inner{ padding-left:16px; padding-right:16px; gap:10px; }
+  /* Push the right-side cluster (Book a demo + hamburger toggle, which
+     gets appended after .nav-cta by chrome-mobilenav.js) to the far right
+     so the layout reads logo|space|demo+toggle instead of evenly spaced. */
+  .nav-cta{ gap:8px; margin-left:auto; }
+  .nav-cta .btn-accent{ padding:8px 12px; font-size:12px; height:36px; }
+  .nav-cta .btn-accent .arrow{ display:none; }   /* save horizontal room */
+}
+@media (max-width:520px){
+  /* On the smallest screens, even Book a demo collapses to icon-only
+     so the row never overflows. The drawer's footer still has the full
+     CTA so users have an easy way to act. */
+  .nav-cta .btn-accent span:first-child{
+    /* "Book a demo" → "Demo" */
+    font-size:12px;
+  }
+}
+
+/* prefers-reduced-motion: collapse drawer slide */
+@media (prefers-reduced-motion:reduce){
+  .mob-nav, .mob-nav-scrim{ transition-duration:.01ms; }
+}
+
+/* dark theme — when [data-theme="dark"] is on .page-head, the drawer
+   stays paper-themed because the drawer is fixed and lives outside that
+   scope. Explicit override only for ::before/scrim contrast on dark fold */
+html[data-theme="dark"] .mob-nav-toggle{ color:var(--ink); }
+
+/* =================================================================
+   FINAL CTA · `.final` slab · theme-locked dark on every page
+   ----------------------------------------------------------------
+   Lifted out of index.html so any page that drops `<section class="final">`
+   gets the same dark slab + grid + stat column without inlining the
+   ~50 lines of CSS. Theme-locked dark intentionally — the slab sits
+   above the (also theme-locked) footer and reads as one continuous
+   brand anchor.
+   ================================================================= */
+.final{
+  background:#0A0A0A;
+  color:#F0EBDB;
+  padding:96px 0;
+  border:0;
+  position:relative;
+}
+.final h2{
+  color:#F0EBDB;
+  font-size:clamp(36px,4vw,56px); font-weight:700;
+  line-height:1; letter-spacing:-0.04em; margin-bottom:20px;
+}
+.final p{ font-size:16px; color:#B8B0A0; max-width:460px; margin-bottom:28px; }
+.final .final-tag{ color:#F0EBDB; }
+.final-grid{ display:grid; grid-template-columns:2fr 1fr; gap:60px; align-items:center; }
+.final .final-cta{ display:flex; gap:12px; flex-wrap:wrap; }
+.final .btn-primary{ background:#F0EBDB; color:#0A0A0A; border-color:#F0EBDB; }
+.final .btn-primary:hover{ background:transparent; color:#F0EBDB; }
+.final .btn-secondary{ border-color:rgba(255,255,255,.3); color:#F0EBDB; }
+.final .btn-secondary:hover{ border-color:#F0EBDB; background:rgba(255,255,255,.05); }
+.final-stats{
+  display:flex; flex-direction:column; gap:20px;
+  font-family:var(--mono); font-size:12px;
+  border-left:1px solid rgba(255,255,255,.18); padding-left:32px;
+}
+.final-stats div{ color:#9C9588; letter-spacing:.05em; }
+.final-stats strong{
+  display:block; color:#F0EBDB; font-size:24px;
+  letter-spacing:-0.02em; font-family:var(--font); font-weight:700;
+  margin-bottom:4px;
+}
+.final-mark{
+  position:absolute; top:0; right:0;
+  width:88px; height:88px;
+  display:flex; align-items:center; justify-content:center;
+  z-index:2;
+  transition:opacity var(--dur-med);
+}
+.final-mark svg{ width:100%; height:100%; display:block; }
+.final-mark:hover{ opacity:0.85; }
+.final-mark:focus-visible{ outline:2px solid var(--zop-orange); outline-offset:-2px; }
+
+@media (max-width:760px){
+  .final{ padding:64px 0; }
+  .final-grid{ grid-template-columns:1fr; gap:32px; }
+  .final-stats{ border-left:0; border-top:1px solid rgba(255,255,255,.18); padding-left:0; padding-top:24px; }
+  .final-mark{ width:64px; height:64px; }
+}
+
+/* =================================================================
+   BRIDGE MARQUEE · cream slab between dark CTA and dark footer
+   ================================================================= */
+.bridge-marquee{
+  background:#F0EBDB;
+  color:#0A0A0A;
+  height:56px;
+  display:flex; align-items:center; overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg, transparent 0%, #000 4%, #000 96%, transparent 100%);
+          mask-image:linear-gradient(90deg, transparent 0%, #000 4%, #000 96%, transparent 100%);
+}
+.bridge-track{
+  display:flex; gap:32px; align-items:center; width:max-content;
+  animation:bridge-roll 24s linear infinite;
+  font-family:var(--mono); font-size:14px; letter-spacing:.06em;
+  white-space:nowrap;
+  padding:0 32px;
+}
+.bridge-marquee:hover .bridge-track{ animation-play-state:paused; }
+.bridge-track .acc{ color:var(--zop-orange); font-weight:700; }
+@keyframes bridge-roll{
+  from{ transform:translateX(0); }
+  to{ transform:translateX(calc(-50% - 16px)); }
+}
+@media (prefers-reduced-motion:reduce){
+  .bridge-track{ animation:none; }
+}
+@media (max-width:760px){
+  .bridge-marquee{ height:44px; }
+  .bridge-track{ font-size:12px; gap:24px; padding:0 16px; }
+}
+
+/* =================================================================
+   ECLIPSE-STRIPE WORDMARK · last section of every page
+   ================================================================= */
+.eclipse-stripe{
+  position:relative;
+  background:#0A0A0A;
+  padding:0 32px;
+  height:300px;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.eclipse-mark{
+  position:relative; z-index:1;
+  font-family:var(--font);
+  font-size:clamp(120px, 20vw, 340px);
+  font-weight:700;
+  letter-spacing:-.055em; line-height:.85;
+  margin:0; color:#F0EBDB;
+  pointer-events:none;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  display:inline-flex; align-items:center; gap:.06em;
+}
+.eclipse-mark .eclipse-word{ display:inline-block; }
+.eclipse-mark .eclipse-glyph{
+  display:inline-block;
+  width:0.72em; height:0.72em;
+  flex-shrink:0;
+  margin-left:.04em; margin-bottom:-.02em;
+  vertical-align:baseline;
+}
+@media (max-width:760px){
+  .eclipse-stripe{ height:160px; padding:0 16px; }
+  .eclipse-mark{ font-size:clamp(72px, 18vw, 120px); }
+}

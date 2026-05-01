@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  =====================================================================
+  ZopDev · icons.svg · canonical SVG sprite
+  ---------------------------------------------------------------------
+  28 icons on a 24×24 grid · 1.75px stroke · sharp corners · no fills
+  except where a solid block is the metaphor itself (the mark).
+  All icons render in currentColor so you can tint them via CSS.
+
+  USAGE:
+    <svg class="ico"><use href="icons.svg#i-check"/></svg>
+    .ico{ width:20px; height:20px; color:var(--ink-3); stroke:currentColor; fill:none; stroke-width:1.75; stroke-linecap:square; stroke-linejoin:miter; }
+
+  NAMING:
+    i-<category>-<name> (or just i-<name> for universal)
+    categories: arrow · nav · state · cloud · action · resource · people · money
+
+  Sharp-corner rule: stroke-linecap="square" · stroke-linejoin="miter"
+  — never round. Matches the brand posture.
+  =====================================================================
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+
+<!-- ========== ARROWS + CHEVRONS ========== -->
+<symbol id="i-arrow-right" viewBox="0 0 24 24">
+  <path d="M5 12 h14 M13 6 l6 6 l-6 6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter"/>
+</symbol>
+<symbol id="i-arrow-up-right" viewBox="0 0 24 24">
+  <path d="M7 17 L17 7 M9 7 h8 v8" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter"/>
+</symbol>
+<symbol id="i-chevron-right" viewBox="0 0 24 24">
+  <path d="M9 5 l7 7 l-7 7" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter"/>
+</symbol>
+<symbol id="i-chevron-down" viewBox="0 0 24 24">
+  <path d="M5 9 l7 7 l7 -7" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter"/>
+</symbol>
+
+<!-- ========== NAV / UI ========== -->
+<symbol id="i-menu" viewBox="0 0 24 24">
+  <path d="M3 6 h18 M3 12 h18 M3 18 h18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/>
+</symbol>
+<symbol id="i-close" viewBox="0 0 24 24">
+  <path d="M5 5 L19 19 M19 5 L5 19" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/>
+</symbol>
+<symbol id="i-search" viewBox="0 0 24 24">
+  <rect x="3" y="3" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75"/>
+  <path d="M16 16 L21 21" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/>
+</symbol>
+<symbol id="i-external" viewBox="0 0 24 24">
+  <path d="M5 5 h9 v2 H7 v10 h10 v-7 h2 v9 H5 z" fill="currentColor"/>
+  <path d="M14 4 h6 v6 M20 4 L12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/>
+</symbol>
+
+<!-- ========== STATE ========== -->
+<symbol id="i-check" viewBox="0 0 24 24">
+  <path d="M4 12 l5 5 l11 -11" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter"/>
+</symbol>
+<symbol id="i-x" viewBox="0 0 24 24">
+  <path d="M6 6 L18 18 M18 6 L6 18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/>
+</symbol>
+<symbol id="i-warn" viewBox="0 0 24 24">
+  <path d="M12 3 L22 20 H2 Z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="miter"/>
+  <path d="M12 9 v5 M12 17 v1" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/>
+</symbol>
+<symbol id="i-info" viewBox="0 0 24 24">
+  <rect x="3" y="3" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75"/>
+  <path d="M12 10 v7 M12 6 v1" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/>
+</symbol>
+<symbol id="i-dot-live" viewBox="0 0 24 24">
+  <rect x="8" y="8" width="8" height="8" fill="currentColor"/>
+</symbol>
+
+<!-- ========== CLOUDS ========== -->
+<symbol id="i-aws" viewBox="0 0 24 24">
+  <rect x="2" y="6" width="4" height="12" fill="currentColor"/>
+  <rect x="8" y="3" width="4" height="15" fill="currentColor"/>
+  <rect x="14" y="9" width="4" height="9" fill="currentColor"/>
+  <rect x="20" y="12" width="2" height="6" fill="currentColor"/>
+</symbol>
+<symbol id="i-azure" viewBox="0 0 24 24">
+  <path d="M2 20 L10 4 L18 20 Z" fill="currentColor"/>
+  <path d="M12 20 L22 20 L17 10 Z" fill="currentColor" opacity="0.6"/>
+</symbol>
+<symbol id="i-gcp" viewBox="0 0 24 24">
+  <rect x="2" y="2" width="9" height="9" fill="currentColor"/>
+  <rect x="13" y="2" width="9" height="9" fill="currentColor" opacity="0.7"/>
+  <rect x="2" y="13" width="9" height="9" fill="currentColor" opacity="0.4"/>
+  <rect x="13" y="13" width="9" height="9" fill="currentColor"/>
+</symbol>
+<symbol id="i-cloud" viewBox="0 0 24 24">
+  <path d="M5 18 h14 V11 a5 5 0 0 0 -10 -1 a4 4 0 0 0 -4 4 z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="miter"/>
+</symbol>
+
+<!-- ========== ACTIONS ========== -->
+<symbol id="i-play" viewBox="0 0 24 24">
+  <path d="M6 4 L20 12 L6 20 Z" fill="currentColor"/>
+</symbol>
+<symbol id="i-pause" viewBox="0 0 24 24">
+  <rect x="6" y="4" width="4" height="16" fill="currentColor"/>
+  <rect x="14" y="4" width="4" height="16" fill="currentColor"/>
+</symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24">
+  <path d="M4 12 a8 8 0 0 1 13.6 -5.7 M20 4 v5 h-5 M20 12 a8 8 0 0 1 -13.6 5.7 M4 20 v-5 h5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="miter" stroke-linecap="square"/>
+</symbol>
+<symbol id="i-apply" viewBox="0 0 24 24">
+  <rect x="3" y="3" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75"/>
+  <path d="M7 12 l4 4 l6 -7" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="miter" stroke-linecap="square"/>
+</symbol>
+<symbol id="i-rollback" viewBox="0 0 24 24">
+  <path d="M4 10 h11 a5 5 0 0 1 0 10 H7 M4 10 l5 -5 M4 10 l5 5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter"/>
+</symbol>
+<symbol id="i-trash" viewBox="0 0 24 24">
+  <path d="M4 7 h16 M9 7 V4 h6 v3 M6 7 l1 13 h10 l1 -13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="miter" stroke-linecap="square"/>
+</symbol>
+
+<!-- ========== RESOURCES ========== -->
+<symbol id="i-server" viewBox="0 0 24 24">
+  <rect x="3" y="4" width="18" height="7" fill="none" stroke="currentColor" stroke-width="1.75"/>
+  <rect x="3" y="13" width="18" height="7" fill="none" stroke="currentColor" stroke-width="1.75"/>
+  <rect x="6" y="7" width="3" height="1.5" fill="currentColor"/>
+  <rect x="6" y="16" width="3" height="1.5" fill="currentColor"/>
+</symbol>
+<symbol id="i-database" viewBox="0 0 24 24">
+  <path d="M4 6 a8 3 0 0 0 16 0 a8 3 0 0 0 -16 0 z" fill="none" stroke="currentColor" stroke-width="1.75"/>
+  <path d="M4 6 v6 a8 3 0 0 0 16 0 v-6 M4 12 v6 a8 3 0 0 0 16 0 v-6" fill="none" stroke="currentColor" stroke-width="1.75"/>
+</symbol>
+<symbol id="i-storage" viewBox="0 0 24 24">
+  <rect x="3" y="4" width="7" height="7" fill="currentColor"/>
+  <rect x="14" y="4" width="7" height="7" fill="none" stroke="currentColor" stroke-width="1.75"/>
+  <rect x="3" y="13" width="7" height="7" fill="none" stroke="currentColor" stroke-width="1.75"/>
+  <rect x="14" y="13" width="7" height="7" fill="currentColor"/>
+</symbol>
+<symbol id="i-network" viewBox="0 0 24 24">
+  <circle cx="12" cy="12" r="3" fill="currentColor"/>
+  <circle cx="4" cy="4" r="2" fill="none" stroke="currentColor" stroke-width="1.75"/>
+  <circle cx="20" cy="4" r="2" fill="none" stroke="currentColor" stroke-width="1.75"/>
+  <circle cx="4" cy="20" r="2" fill="none" stroke="currentColor" stroke-width="1.75"/>
+  <circle cx="20" cy="20" r="2" fill="none" stroke="currentColor" stroke-width="1.75"/>
+  <path d="M6 6 L10 10 M18 6 L14 10 M6 18 L10 14 M18 18 L14 14" fill="none" stroke="currentColor" stroke-width="1.25"/>
+</symbol>
+
+<!-- ========== PEOPLE ========== -->
+<symbol id="i-user" viewBox="0 0 24 24">
+  <rect x="8" y="4" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.75"/>
+  <path d="M3 21 c0 -4 4 -7 9 -7 s9 3 9 7" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="miter"/>
+</symbol>
+<symbol id="i-team" viewBox="0 0 24 24">
+  <rect x="3" y="4" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.75"/>
+  <rect x="15" y="4" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.75"/>
+  <rect x="9" y="14" width="6" height="6" fill="currentColor"/>
+  <path d="M6 10 v4 h12 v-4" fill="none" stroke="currentColor" stroke-width="1.75"/>
+</symbol>
+
+<!-- ========== MONEY + CHARTS ========== -->
+<symbol id="i-dollar" viewBox="0 0 24 24">
+  <path d="M12 3 v18 M17 7 H10 a3 3 0 0 0 0 6 h4 a3 3 0 0 1 0 6 H7" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter"/>
+</symbol>
+<symbol id="i-chart-bar" viewBox="0 0 24 24">
+  <rect x="4"  y="13" width="4" height="7" fill="currentColor"/>
+  <rect x="10" y="8"  width="4" height="12" fill="currentColor"/>
+  <rect x="16" y="4"  width="4" height="16" fill="currentColor"/>
+</symbol>
+<symbol id="i-chart-line" viewBox="0 0 24 24">
+  <path d="M3 19 L8 13 L13 16 L21 5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="miter" stroke-linecap="square"/>
+  <path d="M3 3 v17 h18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/>
+</symbol>
+<symbol id="i-report" viewBox="0 0 24 24">
+  <rect x="5" y="3" width="14" height="18" fill="none" stroke="currentColor" stroke-width="1.75"/>
+  <path d="M8 8 h8 M8 12 h8 M8 16 h5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/>
+</symbol>
+
+<!-- ========== ZOP-SPECIFIC · the mark as icon ========== -->
+<symbol id="i-zop-mark" viewBox="0 0 24 24">
+  <rect x="0"  y="0"  width="12" height="12" fill="#4A66D4"/>
+  <rect x="12" y="0"  width="12" height="12" fill="#F58549"/>
+  <rect x="12" y="12" width="12" height="12" fill="#7FB236"/>
+</symbol>
+
+</defs>
+</svg>
