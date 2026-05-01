@@ -1,0 +1,823 @@
+/* =========================================================================
+   ZopDev · chrome.css
+   -------------------------------------------------------------------------
+   Shared page-chrome styles — live-ops strip, nav, footer, buttons.
+   Every subpage loads this file after tokens.css. Homepage (index.html)
+   keeps its chrome inlined until a migration pass folds it into this file.
+
+   Load order on any subpage:
+     <link rel="stylesheet" href="tokens.css"/>
+     <link rel="stylesheet" href="chrome.css"/>
+     <style> ...page-specific CSS... </style>
+
+   To change the nav links / footer columns / CTA copy system-wide,
+   change it HERE and rebuild — never in individual pages.
+   ========================================================================= */
+
+/* ------------------------------------------------------------------------
+   Cross-page transitions
+   - Modern browsers: native View Transitions API gives a cross-fade on nav
+   - Fallback / all browsers: body fades + lifts in on every page load, so
+     the page never pops in jarringly
+   ------------------------------------------------------------------------ */
+@view-transition { navigation: auto; }
+::view-transition-old(root),
+::view-transition-new(root){
+  animation-duration: 360ms;
+  animation-timing-function: cubic-bezier(.22, 1, .36, 1);
+}
+::view-transition-old(root){
+  animation-name: zop-fade-out;
+}
+::view-transition-new(root){
+  animation-name: zop-fade-in;
+}
+@keyframes zop-fade-out {
+  to { opacity: 0; transform: translateY(-6px); }
+}
+@keyframes zop-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* Fallback for browsers without View Transitions — body just fades in once */
+@media (prefers-reduced-motion: no-preference){
+  body{
+    animation: zop-page-enter 420ms cubic-bezier(.22, 1, .36, 1);
+  }
+}
+@keyframes zop-page-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* =========================================================================
+   1 · LIVE-OPS STRIP — the top status ticker
+   ========================================================================= */
+.live-strip{
+  background:#0A0A0A;
+  color:var(--ink);
+  font-family:var(--mono);
+  font-size:var(--t-11);
+  letter-spacing:var(--ls-meta-tight);
+  border-bottom:1px solid var(--line);
+}
+.live-inner{
+  max-width:var(--max); margin:0 auto;
+  padding:var(--sp-2) var(--gutter);
+  display:flex; gap:var(--sp-7); align-items:center; flex-wrap:wrap;
+}
+.live-seg{ display:inline-flex; align-items:center; gap:var(--sp-2); color:var(--ink-3); }
+.live-seg strong{ color:var(--ink); font-weight:var(--fw-medium); }
+.live-dot{
+  width:7px; height:7px;
+  background:var(--ok);
+  box-shadow:0 0 0 0 rgba(52,211,153,.6);
+  animation:live-pulse 2.4s infinite;
+  flex-shrink:0;
+}
+.live-dot.b{ background:var(--zop-blue); }
+.live-dot.o{ background:var(--zop-orange); }
+.live-sep{ width:1px; height:12px; background:rgba(255,255,255,.1); }
+.live-right{ margin-left:auto; color:var(--ink-4); }
+@keyframes live-pulse{
+  0%  { box-shadow:0 0 0 0 rgba(52,211,153,.5); }
+  70% { box-shadow:0 0 0 6px rgba(52,211,153,0); }
+  100%{ box-shadow:0 0 0 0 rgba(52,211,153,0); }
+}
+
+
+/* =========================================================================
+   1.5 · ANNOUNCEMENT BAR — above the live-strip, product news
+   ------------------------------------------------------------------------
+   Slim strip that surfaces changelog + MCP-server shipping moments.
+   Content pulled from CMS in production; in this static build the
+   copy is inlined and the bar is dismissable via localStorage.
+   ========================================================================= */
+.ann-bar{
+  background:var(--paper);
+  border-bottom:1px solid var(--line);
+  font-family:var(--mono); font-size:var(--t-11);
+  letter-spacing:var(--ls-meta-tight);
+  color:var(--ink);
+}
+.ann-inner{
+  max-width:var(--max); margin:0 auto;
+  padding:var(--sp-2) var(--gutter);
+  display:flex; gap:var(--sp-5); align-items:center; flex-wrap:wrap;
+}
+.ann-chip{
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+  color:var(--ink);
+}
+.ann-chip .ann-dot{
+  width:7px; height:7px; background:var(--ok, #34d399);
+  flex-shrink:0;
+  animation:live-pulse 2.4s infinite;
+}
+.ann-chip strong{ color:var(--ink); font-weight:var(--fw-semibold); }
+.ann-chip:hover{ color:var(--zop-blue); }
+.ann-chip:hover .ann-arrow{ transform:translateX(3px); }
+.ann-arrow{ display:inline-block; transition:transform var(--dur-fast) var(--ease-out); margin-left:var(--sp-1); }
+.ann-link{
+  margin-left:auto; color:var(--ink-3);
+  display:inline-flex; align-items:center; gap:var(--sp-1);
+}
+.ann-link:hover{ color:var(--ink); }
+.ann-close{
+  background:transparent; border:0; color:var(--ink-4); cursor:pointer;
+  padding:0 var(--sp-1); font-family:var(--mono); font-size:var(--t-13);
+}
+.ann-close:hover{ color:var(--ink); }
+
+/* =========================================================================
+   2 · NAV — sticky top bar with logo + links + CTAs
+   Matches homepage nav visuals so cross-page transitions feel seamless.
+   ========================================================================= */
+.nav{
+  position:sticky; top:0; z-index:var(--z-nav);
+  background:var(--bg-0); border-bottom:1px solid var(--line);
+  /* View Transitions API: keep nav identity stable across page navigation */
+  view-transition-name: site-nav;
+}
+.nav-inner{
+  max-width:var(--max); margin:0 auto;
+  padding:16px var(--gutter);
+  display:flex; justify-content:space-between; align-items:center; gap:var(--sp-7);
+}
+
+/* logo lockup · lifted blue for dark canvas */
+.nav-brand, .foot-brand .brand{ --logo-blue:#4A66D4; }
+.nav-brand{ display:inline-flex; align-items:center; color:var(--ink); }
+.nav-brand .logo{ height:44px; width:auto; color:currentColor; display:block; }
+
+.nav-links{ display:flex; gap:var(--sp-7); font-size:15px; color:var(--ink-3); font-weight:var(--fw-medium); }
+.nav-links a{
+  position:relative;
+  padding:var(--sp-1) 0;
+  transition:color var(--dur-fast) var(--ease-out);
+}
+.nav-links a:hover{ color:var(--ink); }
+.nav-links a.active{ color:var(--ink); }
+.nav-links a.active::after{
+  content:''; position:absolute; left:0; right:0; bottom:-14px;
+  height:2px; background:var(--zop-orange);
+}
+
+.nav-cta{ display:flex; align-items:center; gap:var(--sp-4); }
+
+/* Variants dropdown — lets users jump between design variants from any page.
+   Uses native <details>/<summary> so it needs no JS. */
+.nav-variants{ position:relative; font-family:var(--mono, monospace); }
+.nav-variants > summary{
+  list-style:none; cursor:pointer; user-select:none;
+  padding:6px 10px 6px 10px;
+  border:1px solid var(--line); color:var(--ink-3);
+  font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+  display:inline-flex; align-items:center; gap:6px;
+  transition:border-color .15s, color .15s;
+}
+.nav-variants > summary::-webkit-details-marker{ display:none; }
+.nav-variants > summary::after{
+  content:''; width:0; height:0; margin-left:2px;
+  border:3px solid transparent; border-top-color:currentColor; transform:translateY(2px);
+  transition:transform .2s;
+}
+.nav-variants[open] > summary::after{ transform:translateY(-1px) rotate(180deg); }
+.nav-variants > summary:hover,
+.nav-variants[open] > summary{ border-color:var(--ink); color:var(--ink); }
+.nav-variants-menu{
+  position:absolute; top:calc(100% + 8px); right:0;
+  min-width:280px; z-index:100;
+  background:var(--bg-0, #0F0F12);
+  border:1px solid var(--line); box-shadow:0 12px 32px rgba(0,0,0,.35);
+  padding:6px;
+}
+.nav-variants-menu a{
+  display:block; padding:11px 14px;
+  color:var(--ink); text-decoration:none;
+  border-left:2px solid transparent;
+  font-family:var(--font, sans-serif); text-transform:none; letter-spacing:normal;
+  transition:background .15s, border-color .15s;
+}
+.nav-variants-menu .nv-label{ display:block; font-size:13px; font-weight:600; line-height:1.3; }
+.nav-variants-menu .nv-desc{ display:block; font-size:11px; color:var(--ink-3); margin-top:2px; line-height:1.4; }
+.nav-variants-menu a:hover{ background:rgba(245,133,73,.10); border-left-color:var(--zop-orange); }
+.nav-variants-menu a.current{ border-left-color:var(--zop-orange); background:rgba(245,133,73,.05); }
+
+/* =========================================================================
+   UNIFIED FOOTER — matches homepage footer structure.
+   Applies to bare <footer> on subpages (after migration) as well as
+   any remaining <footer class="site-foot"> usage.
+   ========================================================================= */
+footer.unified, footer.site-foot{
+  background:var(--bg-0); border-top:1px solid var(--line);
+  padding:56px 0 28px; margin-top:auto;
+}
+footer.unified .foot-inner,
+footer.site-foot .foot-inner{
+  max-width:var(--max); margin:0 auto; padding:0 var(--gutter);
+}
+.nav-cta .sign{ font-size:var(--t-13); color:var(--ink-3); font-weight:var(--fw-medium); }
+.nav-cta .sign:hover{ color:var(--ink); }
+.nav-cta .chip-playground{
+  font-family:var(--mono); font-size:var(--t-11);
+  letter-spacing:.04em;
+  color:var(--ink); padding:5px 10px; border:1px solid var(--line);
+  display:inline-flex; align-items:center; gap:var(--sp-1);
+  transition:transform var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+.nav-cta .chip-playground::before{
+  content:''; width:7px; height:7px; background:var(--zop-green, #7FB236);
+}
+.nav-cta .chip-playground:hover{
+  transform:translateY(-4px); border-color:var(--ink);
+  box-shadow:0 8px 0 -4px var(--zop-orange);
+}
+
+
+/* =========================================================================
+   3 · BUTTONS — shared primary / accent / secondary
+   -------------------------------------------------------------------------
+   Hover signature = the same card-lift used by every tile, card, and
+   node across the system:
+     · translateY(-4px)
+     · hard offset block shadow in a contrasting pillar color
+     · border brightens to --ink
+   Offset-block color rule: contrasts with the button's own fill.
+     primary (ink)     → orange block
+     accent  (orange)  → cream block  (white/ink — stands against dark canvas
+                                       without fighting the orange for attention)
+     secondary (empty) → orange block
+   ========================================================================= */
+.btn{
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+  padding:13px 22px;
+  font-weight:var(--fw-semibold); font-size:var(--t-14);
+  letter-spacing:var(--ls-body);
+  border:1px solid;
+  cursor:pointer;
+  font-family:var(--font);
+  position:relative;
+  transition:
+    transform var(--dur-med) var(--ease-out),
+    border-color var(--dur-med) var(--ease-out),
+    box-shadow  var(--dur-med) var(--ease-out);
+}
+
+.btn-primary{ background:var(--ink); color:var(--bg-0); border-color:var(--ink); }
+.btn-primary:hover{
+  transform:translateY(-4px);
+  border-color:var(--ink);
+  box-shadow:var(--shadow-hover-orange);
+}
+
+.btn-accent,
+html[data-theme="dark"] .btn-accent,
+html[data-theme="light"] .btn-accent{
+  background:var(--zop-orange); color:#0A0A0A;
+  border-color:var(--zop-orange); font-weight:var(--fw-bold);
+}
+.btn-accent .arrow,
+html[data-theme="dark"] .btn-accent .arrow,
+html[data-theme="light"] .btn-accent .arrow{ color:#0A0A0A; }
+.btn-accent:hover{
+  transform:translateY(-4px);
+  border-color:var(--zop-orange);
+  box-shadow:0 8px 0 -4px var(--ink);   /* cream block — stays out of the orange's way */
+}
+
+.btn-secondary{
+  background:transparent; color:var(--ink);
+  border-color:var(--line-b);
+}
+.btn-secondary:hover{
+  transform:translateY(-4px);
+  border-color:var(--ink);
+  box-shadow:var(--shadow-hover-orange);
+}
+
+.btn .arrow{ display:inline-block; transition:transform var(--dur-med) var(--ease-out); }
+.btn:hover .arrow{ transform:translateX(4px); }
+
+
+/* =========================================================================
+   4 · FOOTER — 5-column brand + product + for + trust + company
+   ========================================================================= */
+footer.site-foot{
+  padding:var(--sp-14) 0 var(--sp-7);
+  border-top:1px solid var(--line);
+  background:#0A0A0A;
+}
+/* All rules below scoped to .site-foot so they don't bleed into plain
+   `<footer>` (which is the homepage-style markup used by every real
+   user-facing page). The plain-footer rules live in the next block. */
+.site-foot .foot-grid{
+  display:grid; grid-template-columns:2fr 1fr 1fr 1fr 1fr;
+  gap:var(--sp-10);
+  max-width:var(--max); margin:0 auto;
+  padding:0 var(--gutter) var(--sp-10);
+}
+.site-foot .foot-brand{ display:flex; flex-direction:column; gap:var(--sp-3); }
+.site-foot .foot-brand .brand{ display:inline-flex; align-items:center; color:var(--ink); }
+.site-foot .foot-brand .brand .logo{ height:32px; width:auto; color:currentColor; display:block; }
+.site-foot .foot-brand p{
+  color:var(--ink-3); font-size:var(--t-13);
+  max-width:280px; line-height:var(--lh-body); margin:0;
+}
+
+.site-foot .foot-col h4{
+  font-family:var(--mono); font-size:var(--t-10);
+  color:var(--ink-4); letter-spacing:var(--ls-meta);
+  text-transform:uppercase; margin-bottom:var(--sp-4);
+  font-weight:var(--fw-medium);
+}
+.site-foot .foot-col ul{ list-style:none; padding:0; margin:0; }
+.site-foot .foot-col li{ padding:5px 0; }
+.site-foot .foot-col a{ color:var(--ink-3); font-size:var(--t-13); transition:color var(--dur-fast) var(--ease-out); }
+.site-foot .foot-col a:hover{ color:var(--ink); }
+
+.site-foot .foot-trust{
+  max-width:var(--max); margin:0 auto;
+  padding:var(--sp-6) var(--gutter) var(--sp-5);
+  border-top:1px solid var(--line);
+  display:flex; flex-wrap:wrap; gap:var(--sp-5) var(--sp-7); align-items:center;
+}
+.site-foot .foot-trust .badge{
+  font-family:var(--mono); font-size:var(--t-10);
+  letter-spacing:var(--ls-meta); text-transform:uppercase;
+  color:var(--ink-3); padding:5px 10px; border:1px solid var(--line);
+  display:inline-flex; align-items:center; gap:var(--sp-1);
+}
+.site-foot .foot-trust .badge::before{
+  content:''; width:7px; height:7px; background:var(--zop-blue);
+}
+.site-foot .foot-trust .badge.ok::before{ background:var(--ok, #34d399); animation:live-pulse 2.4s infinite; }
+.site-foot .foot-trust .badge.o::before{  background:var(--zop-orange); }
+.site-foot .foot-trust .badge.g::before{  background:var(--zop-green, #7FB236); }
+.site-foot .foot-trust .badge.k::before{  background:var(--ink); }
+.site-foot .foot-trust .status{
+  margin-left:auto;
+  color:var(--ink-3); font-family:var(--mono); font-size:var(--t-11);
+  letter-spacing:var(--ls-meta-tight);
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+}
+.site-foot .foot-trust .status:hover{ color:var(--ink); }
+
+.site-foot .foot-legal-rail{
+  max-width:var(--max); margin:0 auto;
+  padding:0 var(--gutter) var(--sp-5);
+  display:flex; flex-wrap:wrap; gap:var(--sp-5);
+  font-family:var(--mono); font-size:var(--t-11);
+  color:var(--ink-4); letter-spacing:var(--ls-meta-tight);
+}
+.site-foot .foot-legal-rail a{ color:var(--ink-4); }
+.site-foot .foot-legal-rail a:hover{ color:var(--ink); }
+
+.site-foot .foot-bottom{
+  max-width:var(--max); margin:0 auto;
+  padding:var(--sp-6) var(--gutter) 0;
+  border-top:1px solid var(--line);
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:var(--sp-4);
+  font-family:var(--mono); font-size:var(--t-11);
+  color:var(--ink-4); letter-spacing:var(--ls-meta-tight);
+}
+
+/* =========================================================================
+   FOOTER · plain `<footer>` (homepage-style, no class)
+   -------------------------------------------------------------------------
+   The homepage uses `<footer>` (no class) with `.foot-grid--equal` for a
+   4-column equal-width layout, no brand block (the eclipse-stripe wordmark
+   below carries the brand). These rules ensure every subpage that uses
+   the same markup renders identically to the homepage. Theme-locked dark
+   slab so it blends with whatever sits beneath (eclipse-stripe on home,
+   page bg on subpages).
+   ========================================================================= */
+footer{ background:#0A0A0A; padding:56px 0 28px; color:#F0EBDB; }
+footer .container{ max-width:var(--max); margin:0 auto; padding:0 var(--gutter); }
+
+footer .foot-grid.foot-grid--equal{
+  display:grid; grid-template-columns:repeat(4, 1fr);
+  gap:48px; margin-bottom:32px;
+}
+@media (max-width:760px){
+  footer .foot-grid.foot-grid--equal{ grid-template-columns:repeat(2, 1fr); gap:32px; }
+}
+@media (max-width:480px){
+  footer .foot-grid.foot-grid--equal{ grid-template-columns:1fr; gap:24px; }
+}
+
+/* column headers · mono caps eyebrow grey */
+footer .foot-col h3{
+  font-family:var(--mono); font-size:10px; font-weight:600;
+  color:#9C9588;
+  letter-spacing:.16em; text-transform:uppercase; margin:0 0 18px;
+}
+footer .foot-col ul{ list-style:none; padding:0; margin:0; }
+footer .foot-col li{ padding:5px 0; }
+footer .foot-col a{
+  color:#D4CDB5; font-size:13px;
+  transition:color var(--dur-fast) var(--ease-out);
+}
+footer .foot-col a:hover{ color:#F0EBDB; }
+
+/* bottom row · copyright + social */
+footer .foot-bottom{
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px;
+  padding-top:20px;
+  border-top:1px solid rgba(255,255,255,.08);
+  font-family:var(--mono); font-size:11px;
+  color:#9C9588; letter-spacing:.05em;
+  max-width:none; margin:0;   /* override .foot-bottom from .site-foot block above */
+}
+footer .foot-bottom a{
+  color:inherit;
+  border-bottom:1px solid rgba(255,255,255,.18);
+  padding-bottom:1px;
+  transition:color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+footer .foot-bottom a:hover{ color:#F0EBDB; border-bottom-color:#F0EBDB; }
+footer .foot-social{ display:flex; gap:14px; }
+footer .foot-social a{
+  color:#9C9588; border-bottom:0;
+  transition:color var(--dur-fast) var(--ease-out);
+}
+footer .foot-social a:hover{ color:#F0EBDB; }
+
+
+/* =========================================================================
+   ECLIPSE-STRIPE · the massive ZopDev wordmark + brand glyph that sits
+   below the footer on every page. Theme-locked dark slab, blends with
+   the footer above (same #0A0A0A canvas). Ported from index.backup.html
+   so subpages get the same anchor.
+   ========================================================================= */
+.eclipse-stripe{
+  position:relative;
+  background:#0A0A0A;
+  padding:0 32px;
+  height:300px;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.eclipse-mark{
+  position:relative; z-index:1;
+  font-family:var(--font);
+  font-size:clamp(120px, 20vw, 340px);
+  font-weight:700;
+  letter-spacing:-.055em; line-height:.85;
+  margin:0; color:#F0EBDB;
+  pointer-events:none;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  display:inline-flex; align-items:center; gap:.06em;
+}
+.eclipse-mark .eclipse-word{ display:inline-block; }
+.eclipse-mark .eclipse-glyph{
+  display:inline-block;
+  width:0.72em; height:0.72em;
+  flex-shrink:0;
+  margin-left:.04em;
+  margin-bottom:-.02em;
+  vertical-align:baseline;
+}
+@media (max-width:760px){
+  .eclipse-stripe{ height:200px; padding:0 20px; }
+}
+
+
+/* =========================================================================
+   FAQ ACCORDION · canonical · ported from index.backup.html so every page
+   that needs an FAQ can use the same markup:
+     <div class="faq-list">
+       <details>
+         <summary>Question? <span class="faq-chevron">+</span></summary>
+         <div class="faq-body"><p>Answer.</p></div>
+       </details>
+       ...
+     </div>
+   ========================================================================= */
+.faq-list{
+  display:flex; flex-direction:column;
+  border:1px solid var(--line);
+}
+.faq-list details{ border-bottom:1px solid var(--line); }
+.faq-list details:last-child{ border-bottom:0; }
+.faq-list summary{
+  padding:20px 24px;
+  font-size:15px; font-weight:600; font-family:var(--font);
+  cursor:pointer; list-style:none;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  color:var(--ink); user-select:none; line-height:1.4;
+  transition:background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.faq-list summary::-webkit-details-marker{ display:none; }
+.faq-list summary:hover{ background:rgba(0,0,0,.025); }
+html[data-theme="dark"] .faq-list summary:hover{ background:rgba(255,255,255,.04); }
+.faq-list details[open] summary{ color:var(--zop-orange); }
+.faq-chevron{
+  width:22px; height:22px; flex-shrink:0;
+  border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; color:var(--ink-4); font-family:var(--mono); font-weight:500;
+  transition:transform var(--dur-fast) var(--ease-out),
+             color var(--dur-fast) var(--ease-out),
+             border-color var(--dur-fast) var(--ease-out);
+}
+.faq-list details[open] .faq-chevron{
+  transform:rotate(45deg);
+  color:var(--zop-orange);
+  border-color:var(--zop-orange);
+}
+.faq-body{
+  padding:0 24px 20px;
+  font-size:13.5px; color:var(--ink-3); line-height:1.7;
+}
+.faq-body p{ margin:0 0 10px; }
+.faq-body p:last-child{ margin:0; }
+.faq-body strong{ color:var(--ink); }
+.faq-body a{ color:var(--zop-blue); }
+
+
+/* =========================================================================
+   5 · CHROME RESPONSIVE
+   ========================================================================= */
+@media (max-width:960px){
+  .nav-links{ display:none; }
+  .live-inner{ gap:var(--sp-4); }
+  .live-sep{ display:none; }
+  .foot-grid{ grid-template-columns:1fr 1fr; gap:var(--sp-7); }
+  .foot-brand{ grid-column:span 2; }
+}
+
+@media (max-width:560px){
+  .foot-grid{ grid-template-columns:1fr; }
+  .foot-brand{ grid-column:span 1; }
+  .nav-inner{ padding:10px var(--gutter); }
+  .nav-cta .sign{ display:none; }
+}
+
+
+/* =========================================================================
+   6 · UNIVERSAL INTERACTIVE STATES
+   -------------------------------------------------------------------------
+   One canonical hover signature for every card, tile, and interactive
+   element across the entire site. Loaded after tokens.css so all vars
+   resolve. Page-specific <style> blocks come AFTER this file, so they
+   can add background/color tweaks without clobbering the lift.
+
+   Card-lift rule (matches homepage exactly):
+     · translateY(-4px) on hover
+     · hard-offset block shadow  → 0 8px 0 -4px var(--zop-orange)
+     · border brightens          → var(--line-b)
+     · transition on everything  → var(--dur-med) var(--ease-out)
+
+   Focus rule (keyboard accessibility):
+     · focus-visible outline in --zop-orange, 2px offset
+     · no outline on mouse click (focus-visible only)
+   ========================================================================= */
+
+/* ── transition base: applied to every interactive card/tile/chip ─────── */
+.feat-card,
+.int-card,
+.cloud-card,
+.posture-card,
+.cert-card,
+.subpage-card,
+.outcome-tile,
+.role-card,
+.usecase-card,
+.value-card,
+.stat-card,
+.stat-tile,
+.number-tile,
+.post-card,
+.team-card,
+.pillar-card,
+.prob-card,
+.flow-step,
+.item-card,
+.chart-card,
+.safety-card,
+.dl-card,
+.right-card,
+.gl-card,
+.integ-card,
+.deploy-card,
+.tl-card,
+.tp,
+.pg-sb-btn,
+.case,
+.proof-stat,
+.doc-section,
+.contact-card,
+.role-col,
+.cta-card,
+.phase-card,
+.feature-card,
+.entry-card,
+.finding-card,
+.nav-card {
+  transition:
+    transform    var(--dur-med) var(--ease-out),
+    box-shadow   var(--dur-med) var(--ease-out),
+    border-color var(--dur-med) var(--ease-out),
+    background   var(--dur-fast) var(--ease-out);
+}
+
+/* ── card lift: orange hard-offset shadow ──────────────────────────────── */
+.feat-card:hover,
+.int-card:hover,
+.posture-card:hover,
+.cert-card:hover,
+.subpage-card:hover,
+.outcome-tile:hover,
+.role-card:hover,
+.usecase-card:hover,
+.value-card:hover,
+.stat-card:hover,
+.stat-tile:hover,
+.number-tile:hover,
+.post-card:hover,
+.team-card:hover,
+.pillar-card:hover,
+.prob-card:hover,
+.item-card:hover,
+.chart-card:hover,
+.safety-card:hover,
+.dl-card:hover,
+.right-card:hover,
+.gl-card:hover,
+.integ-card:hover,
+.deploy-card:hover,
+.tl-card:hover,
+.tp:hover,
+.doc-section:hover,
+.contact-card:hover,
+.role-col:hover,
+.cta-card:hover,
+.phase-card:hover,
+.feature-card:hover,
+.entry-card:hover,
+.finding-card:hover,
+.nav-card:hover {
+  transform:  translateY(-4px);
+  box-shadow: var(--shadow-hover-orange);  /* 0 8px 0 -4px var(--zop-orange) */
+  border-color: var(--line-b);
+}
+
+/* ── cloud cards: blue lift (product/cloud-provider context) ───────────── */
+.cloud-card:hover {
+  transform:    translateY(-4px);
+  box-shadow:   var(--shadow-hover-blue);  /* 0 8px 0 -4px var(--zop-blue) */
+  border-color: var(--zop-blue);
+}
+
+/* ── case study cards: lift + keep image flush ─────────────────────────── */
+.case:hover {
+  transform:    translateY(-4px);
+  box-shadow:   var(--shadow-hover-orange);
+  border-color: var(--line-b);
+}
+
+/* ── proof stats: subtle ink lift (no orange — they're neutral facts) ──── */
+.proof-stat:hover {
+  transform:    translateY(-2px);
+  box-shadow:   var(--shadow-hover-ink);  /* 0 4px 0 -2px var(--ink) */
+  border-color: var(--line-b);
+}
+
+/* ── flow steps: horizontal slide instead of lift ─────────────────────── */
+.flow-step:hover {
+  transform:    translateX(4px);
+  box-shadow:   4px 0 0 0 var(--zop-orange);
+  border-color: var(--line-b);
+}
+
+/* ── playground sidebar buttons ───────────────────────────────────────── */
+.pg-sb-btn:hover {
+  transform:    translateY(-2px);
+  box-shadow:   var(--shadow-hover-orange);
+}
+
+/* ── timeline cards: lift + orange left accent ─────────────────────────── */
+.tl-card.is-active {
+  box-shadow: -4px 0 0 0 var(--zop-orange);
+}
+
+/* ── ghost / text link buttons (btn-ghost, btn-link, card "Read →" links) */
+.btn-ghost,
+a.btn-link,
+.card-link,
+a.read-link {
+  display:inline-flex; align-items:center; gap:var(--sp-2);
+  font-weight:var(--fw-medium);
+  color:var(--ink);
+  transition: color var(--dur-fast) var(--ease-out), gap var(--dur-fast) var(--ease-out);
+}
+.btn-ghost:hover,
+a.btn-link:hover,
+.card-link:hover,
+a.read-link:hover {
+  color:var(--zop-orange);
+  gap: var(--sp-3);
+}
+
+/* ── inline text-link underline (body copy links) ──────────────────────── */
+.page a:not([class]) {
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+  transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.page a:not([class]):hover {
+  color: var(--zop-orange);
+  border-color: var(--zop-orange);
+}
+
+/* ── comparison table rows ─────────────────────────────────────────────── */
+.cmp-table tbody tr,
+.matrix tbody tr {
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+/* ── sec-meta orange dot pulse on section scroll-in ────────────────────── */
+.sec-meta::before {
+  transition: transform var(--dur-med) var(--ease-spring);
+}
+
+/* ── focus-visible ring — universal keyboard nav indicator ─────────────── */
+:focus-visible {
+  outline: 2px solid var(--zop-orange);
+  outline-offset: 3px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ── reduced-motion: collapse all transitions/animations ───────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration:   0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration:  0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================================
+   calc-CTA strip · single-CTA variant of .live-strip used site-wide above the
+   nav. Sits in the same 30px bar position the live-ops ticker would occupy.
+   ============================================================================ */
+a.live-strip-cta{
+  text-decoration:none; color:inherit;
+  display:flex; align-items:stretch; justify-content:center; gap:14px;
+  cursor:pointer; transition:background .18s ease;
+  overflow:hidden;
+}
+a.live-strip-cta:hover{ background:#16161a; }
+a.live-strip-cta .ls-cta-anchor{
+  display:inline-flex; align-items:center; gap:12px;
+  padding:0 14px;
+  border-right:1px solid rgba(255,255,255,0.08);
+}
+a.live-strip-cta .ls-cta-msg{
+  display:inline-flex; align-items:center;
+  color:#e8e8ea; font-size:11.5px;
+}
+a.live-strip-cta .ls-cta-arrow{
+  display:inline-flex; align-items:center; gap:6px;
+  color:var(--zop-orange);
+  font-weight:600; letter-spacing:.04em; font-size:11px;
+}
+a.live-strip-cta .ls-arrow{ transition:transform .18s ease; }
+a.live-strip-cta:hover .ls-arrow{ transform:translateX(4px); }
+@media (max-width: 600px){
+  a.live-strip-cta .ls-cta-msg{ display:none; }
+}
+
+/* ============================================================================
+   UNIVERSAL ORANGE BUTTON CONTRAST · any button/link with the orange brand
+   fill (.btn-accent or [style*="background:var(--zop-orange)"]) gets ink-black
+   text + arrow regardless of theme. Solves cream-on-orange legibility issues.
+   ============================================================================ */
+.btn-accent,
+.btn-accent:visited,
+.btn-accent:active,
+html[data-theme="dark"] .btn-accent,
+html[data-theme="light"] .btn-accent,
+[data-theme="dark"] a.btn-accent,
+.nav-cta .btn-accent,
+.nav-cta a.btn-accent{
+  color:#0A0A0A !important;
+}
+.btn-accent .arrow,
+.btn-accent span,
+html[data-theme="dark"] .btn-accent .arrow,
+html[data-theme="dark"] .btn-accent span,
+html[data-theme="light"] .btn-accent .arrow,
+html[data-theme="light"] .btn-accent span,
+.nav-cta .btn-accent .arrow,
+.nav-cta .btn-accent span{
+  color:#0A0A0A !important;
+}

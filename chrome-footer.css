@@ -1,0 +1,153 @@
+/* ============================================================================
+   chrome-footer.css
+   ----------------------------------------------------------------------------
+   Premium footer additions: ZopDev wordmark + interactive globe canvas, and
+   the 3-column "made with ♥" bottom row. Pairs with chrome-footer.js (which
+   renders the dotted world map and arc animations) and the base footer rules
+   already in chrome.css (.foot-grid, .foot-col, .foot-bottom, .foot-social).
+   ============================================================================ */
+
+/* ────────────────────────────────────────────────
+   Region-ghost · cursor-tracked landfall pin
+   used by the interactive globe in the footer.
+   ──────────────────────────────────────────────── */
+.region-ghost{
+  position:absolute; z-index:3; pointer-events:none;
+  transform:translate(-50%,-50%);
+  display:flex; align-items:center; gap:6px;
+  opacity:0;
+  transition:opacity .22s var(--ease-out), transform .22s var(--ease-out);
+}
+.region-ghost.show{ opacity:1; }
+.region-ghost.locked{
+  opacity:1;
+  animation:rg-lockfade 2.2s var(--ease-out) forwards;
+}
+@keyframes rg-lockfade{
+  0%{ opacity:1; transform:translate(-50%,-50%) scale(1); }
+  10%{ opacity:1; transform:translate(-50%,-50%) scale(1.18); }
+  100%{ opacity:0; transform:translate(-50%,-50%) scale(1); }
+}
+.region-ghost-dot{
+  width:11px; height:11px; border-radius:50%;
+  background:transparent; border:1.5px dashed var(--ink);
+  flex-shrink:0;
+}
+html[data-theme="dark"] .region-ghost-dot{ border-color:var(--paper); }
+.region-ghost.locked .region-ghost-dot{
+  background:var(--zop-orange); border-color:var(--zop-orange); border-style:solid;
+}
+.region-ghost-label{
+  font-family:var(--mono); font-size:10px; font-weight:600;
+  color:var(--ink); letter-spacing:.04em;
+  background:var(--paper); border:1px dashed var(--line);
+  padding:3px 7px; white-space:nowrap; line-height:1.3;
+  text-transform:uppercase;
+}
+html[data-theme="dark"] .region-ghost-label{
+  background:#1a1a1e; color:var(--paper); border-color:#3a3a40;
+}
+.region-ghost.locked .region-ghost-label{
+  border-style:solid; border-color:var(--zop-orange);
+}
+.region-ghost.flash .region-ghost-dot{
+  animation:rg-flash-dot .36s var(--ease-out, cubic-bezier(.22,1,.36,1));
+}
+.region-ghost.flash .region-ghost-label{
+  animation:rg-flash-label .36s var(--ease-out, cubic-bezier(.22,1,.36,1));
+}
+@keyframes rg-flash-dot{
+  0%   { background:transparent; border-color:var(--zop-orange); transform:scale(1); }
+  40%  { background:var(--zop-orange); border-color:var(--zop-orange); border-style:solid; transform:scale(1.4); }
+  100% { background:transparent; border-color:var(--ink); border-style:dashed; transform:scale(1); }
+}
+@keyframes rg-flash-label{
+  0%, 100% { border-color:var(--line); }
+  40%      { border-color:var(--zop-orange); border-style:solid; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   FOOTER BOTTOM PANEL · ZopDev wordmark + dotted world map
+   ════════════════════════════════════════════════════════════ */
+.foot-globe{
+  margin-top:48px; padding-top:32px;
+  border-top:1px solid var(--line);
+  display:grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap:48px;
+  align-items:center;
+}
+.foot-globe-left{
+  display:flex; flex-direction:column; gap:18px;
+  align-self:center;
+}
+.foot-globe-mark{ display:inline-block; line-height:0; }
+.foot-globe-logo{
+  width:380px; max-width:100%; height:auto;
+  display:block;
+  transition:transform var(--dur-med, 250ms) var(--ease-out, cubic-bezier(.22,1,.36,1));
+}
+.foot-globe-mark:hover .foot-globe-logo{ transform:translateX(2px); }
+.foot-globe-right{ min-width:0; }
+.foot-regions-v2{
+  position:relative;
+  width:100%;
+  aspect-ratio: 1200 / 600;
+  border:none;
+  background:transparent;
+  overflow:hidden;
+}
+/* No theme override · footer map stays dark in both modes */
+#foot-regions-map{ width:100%; height:100%; display:block; }
+
+@media (max-width: 820px){
+  .foot-globe{ grid-template-columns:1fr; gap:24px; }
+  .foot-globe-logo{ width:240px; }
+  .foot-globe-left{ align-items:center; text-align:center; }
+}
+
+/* ────────────────────────────────────────────────
+   FOOT-BOTTOM 3-col · copyright · sign-off · social
+   ──────────────────────────────────────────────── */
+.foot-bottom-3{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  padding-top:20px;
+  border-top:1px solid var(--line);
+  margin-top:24px;
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px; letter-spacing:.04em;
+  color:var(--g-500);
+  flex-wrap:nowrap;
+  white-space:nowrap;
+}
+.foot-bottom-3 > *{ flex:1 1 0; min-width:0; }
+.foot-bottom-3 .foot-copy{ text-align:left; }
+.foot-bottom-3 .foot-mid{
+  display:inline-flex; align-items:center; gap:6px;
+  color:var(--g-500); justify-content:center;
+}
+.foot-bottom-3 .foot-social{ display:inline-flex; gap:14px; justify-content:flex-end; }
+.foot-bottom-3 a{ color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px; }
+.foot-bottom-3 a:hover{ color:var(--zop-orange); border-bottom-color:var(--zop-orange); }
+.foot-bottom-3 .foot-mid svg{
+  width:11px; height:11px; display:inline-block;
+  vertical-align:middle; flex-shrink:0;
+  fill:var(--zop-orange);
+  animation: foot-heart-pulse 1.8s ease-in-out infinite;
+}
+@keyframes foot-heart-pulse{
+  0%, 100% { transform:scale(1); }
+  20%      { transform:scale(1.18); }
+  40%      { transform:scale(1); }
+  60%      { transform:scale(1.12); }
+}
+@media (max-width: 720px){
+  .foot-bottom-3{ flex-direction:column; text-align:center; gap:10px; white-space:normal; }
+  .foot-bottom-3 > *{ flex:none; }
+  .foot-bottom-3 .foot-copy,
+  .foot-bottom-3 .foot-mid,
+  .foot-bottom-3 .foot-social{ text-align:center; justify-content:center; }
+}

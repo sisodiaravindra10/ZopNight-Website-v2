@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+
+<title>Community · Builders, operators, and the people who run the bill · ZopDev</title>
+<meta name="description" content="Join the ZopDev community: 4,200+ FinOps and platform engineers in Discord, an active GitHub, monthly office hours, and open-source tooling you can fork today."/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="chrome.css"/>
+<link rel="stylesheet" href="chrome-footer.css">
+
+<style>
+em,i,cite,dfn,var,address,blockquote{font-style:normal}
+.page{ padding:0; }
+.page > section{ padding:var(--sec-pad) 0; border-bottom:1px solid var(--line); }
+.page > section:last-child{ border-bottom:0; }
+
+.crumb{ padding:var(--sp-7) 0 var(--sp-4); max-width:var(--max); margin:0 auto; padding-left:var(--gutter); padding-right:var(--gutter); font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); letter-spacing:var(--ls-meta-tight); text-transform:uppercase; }
+.crumb a{ color:var(--ink-3); }
+.crumb a:hover{ color:var(--ink); }
+.crumb .sep{ color:var(--ink-5); margin:0 var(--sp-2); }
+
+.cm-hero{ background:var(--bg-1); border-bottom:1px solid var(--line); padding:var(--sp-16) 0 var(--sp-14); }
+.cm-tag{ display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:var(--t-11); letter-spacing:var(--ls-meta); text-transform:uppercase; color:var(--zop-orange); margin-bottom:var(--sp-5); }
+.cm-tag::before{ content:''; width:8px; height:8px; background:var(--zop-orange); }
+.cm-hero h1{ font-size:clamp(48px, 6.4vw, 88px); line-height:var(--lh-display); letter-spacing:var(--ls-display); margin:0 0 var(--sp-5); max-width:920px; }
+.cm-hero h1 em{ color:var(--zop-orange); font-style:normal; }
+.cm-hero p.lead{ font-size:var(--t-20); color:var(--ink-3); max-width:680px; line-height:1.5; margin:0; }
+.cm-hero p.lead strong{ color:var(--ink); font-weight:var(--fw-medium); }
+
+.cm-stats{ display:grid; grid-template-columns:repeat(4, 1fr); gap:var(--sp-8); margin-top:var(--sp-10); padding-top:var(--sp-8); border-top:1px solid var(--line); }
+@media (max-width:768px){ .cm-stats{ grid-template-columns:repeat(2, 1fr); } }
+.cm-stat .v{ font-family:var(--mono); font-size:clamp(28px, 3.6vw, 44px); font-weight:var(--fw-bold); color:var(--ink); line-height:1; font-variant-numeric:tabular-nums; margin-bottom:var(--sp-2); }
+.cm-stat .v em{ color:var(--zop-orange); font-style:normal; }
+.cm-stat .l{ font-family:var(--mono); font-size:var(--t-10); letter-spacing:var(--ls-meta); text-transform:uppercase; color:var(--ink-4); }
+
+.cm-sec-head{ display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:var(--sp-12); gap:var(--sp-8); }
+.cm-sec-head .meta{ font-family:var(--mono); font-size:var(--t-11); letter-spacing:var(--ls-meta); text-transform:uppercase; color:var(--zop-orange); margin-bottom:var(--sp-3); display:inline-flex; align-items:center; gap:8px; }
+.cm-sec-head .meta::before{ content:''; width:8px; height:8px; background:var(--zop-orange); }
+.cm-sec-head h2{ font-size:clamp(32px, 4.4vw, 56px); letter-spacing:var(--ls-heading); line-height:var(--lh-heading); margin:0; max-width:780px; }
+.cm-sec-head h2 em{ color:var(--zop-orange); font-style:normal; }
+.cm-sec-head .sub{ color:var(--ink-3); font-size:var(--t-15); max-width:380px; }
+@media (max-width:768px){ .cm-sec-head{ flex-direction:column; align-items:flex-start; } }
+
+/* Channel cards · 4 across */
+.cm-channels{ display:grid; grid-template-columns:repeat(4, 1fr); gap:0; border:1px solid var(--line); background:var(--line); }
+@media (max-width:980px){ .cm-channels{ grid-template-columns:repeat(2, 1fr); } }
+@media (max-width:560px){ .cm-channels{ grid-template-columns:1fr; } }
+.cm-channel{ background:var(--bg-1); padding:var(--sp-7); display:flex; flex-direction:column; gap:var(--sp-4); transition:background .14s, transform .14s; text-decoration:none; color:inherit; }
+.cm-channel:hover{ background:var(--bg-2); transform:translateY(-2px); }
+.cm-channel-icon{ width:36px; height:36px; display:flex; align-items:center; justify-content:center; background:var(--bg-3); border:1px solid var(--line-2); }
+.cm-channel h3{ font-size:var(--t-22); margin:0; letter-spacing:var(--ls-heading); }
+.cm-channel p{ margin:0; color:var(--ink-3); font-size:var(--t-13); line-height:var(--lh-body); flex:1; }
+.cm-channel .count{ font-family:var(--mono); font-size:var(--t-10); letter-spacing:var(--ls-meta); text-transform:uppercase; color:var(--zop-orange); padding-top:var(--sp-3); margin-top:auto; border-top:1px solid var(--line); }
+
+/* Events */
+.cm-events{ display:flex; flex-direction:column; }
+.cm-event{ display:grid; grid-template-columns:140px 1fr auto; gap:var(--sp-6); padding:var(--sp-6) 0; border-top:1px solid var(--line); align-items:center; transition:background .14s; }
+.cm-event:first-child{ border-top:0; }
+.cm-event:hover{ background:var(--bg-1); }
+.cm-event .when{ font-family:var(--mono); font-size:var(--t-11); color:var(--ink-3); letter-spacing:var(--ls-meta-tight); text-transform:uppercase; }
+.cm-event .when .day{ display:block; font-family:var(--font); font-size:var(--t-17); color:var(--ink); margin-bottom:2px; letter-spacing:0; text-transform:none; }
+.cm-event h3{ font-size:var(--t-20); margin:0 0 var(--sp-2); letter-spacing:var(--ls-heading); }
+.cm-event p{ margin:0; color:var(--ink-3); font-size:var(--t-13); line-height:var(--lh-body); }
+.cm-event .where{ display:inline-block; margin-top:var(--sp-3); font-family:var(--mono); font-size:var(--t-10); color:var(--ink-4); letter-spacing:var(--ls-meta); text-transform:uppercase; border:1px solid var(--line); padding:2px 6px; }
+.cm-event .rsvp{ font-family:var(--mono); font-size:var(--t-11); letter-spacing:var(--ls-meta); text-transform:uppercase; font-weight:var(--fw-semibold); padding:var(--sp-3) var(--sp-5); border:1px solid var(--ink); color:var(--ink); transition:background .14s, color .14s; align-self:start; }
+.cm-event .rsvp:hover{ background:var(--ink); color:var(--bg-0); }
+@media (max-width:768px){ .cm-event{ grid-template-columns:1fr; } }
+
+/* Repos · 3 across */
+.cm-repos{ display:grid; grid-template-columns:repeat(3, 1fr); gap:0; border:1px solid var(--line); background:var(--line); }
+@media (max-width:980px){ .cm-repos{ grid-template-columns:1fr; } }
+.cm-repo{ background:var(--bg-1); padding:var(--sp-7); display:flex; flex-direction:column; gap:var(--sp-3); transition:background .14s; text-decoration:none; color:inherit; }
+.cm-repo:hover{ background:var(--bg-2); }
+.cm-repo .name{ font-family:var(--mono); font-size:var(--t-15); color:var(--ink); }
+.cm-repo .name span{ color:var(--ink-4); }
+.cm-repo p{ margin:0; color:var(--ink-3); font-size:var(--t-13); line-height:var(--lh-body); }
+.cm-repo .stars{ font-family:var(--mono); font-size:var(--t-10); letter-spacing:var(--ls-meta-tight); color:var(--ink-4); padding-top:var(--sp-3); margin-top:auto; border-top:1px solid var(--line); display:flex; gap:var(--sp-4); }
+.cm-repo .stars span strong{ color:var(--zop-orange); font-weight:var(--fw-semibold); }
+
+/* Contributors */
+.cm-contribs{ display:grid; grid-template-columns:repeat(8, 1fr); gap:var(--sp-3); }
+@media (max-width:768px){ .cm-contribs{ grid-template-columns:repeat(4, 1fr); } }
+.cm-contrib{ background:var(--bg-1); border:1px solid var(--line); padding:var(--sp-4); display:flex; flex-direction:column; align-items:center; gap:var(--sp-2); transition:background .14s, transform .14s; }
+.cm-contrib:hover{ background:var(--bg-2); transform:translateY(-2px); }
+.cm-contrib .av{ width:40px; height:40px; background:var(--bg-3); border:1px solid var(--line-2); display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:var(--t-13); color:var(--zop-orange); font-weight:var(--fw-semibold); }
+.cm-contrib .nm{ font-family:var(--mono); font-size:var(--t-11); color:var(--ink-2); letter-spacing:var(--ls-meta-tight); text-align:center; }
+
+/* Final CTA */
+.cm-final{ background:var(--bg-1); border-top:1px solid var(--line); }
+.cm-final .container{ text-align:center; padding:var(--sp-20) 0; }
+.cm-final h2{ font-size:clamp(40px, 5.6vw, 80px); letter-spacing:var(--ls-display); line-height:var(--lh-display); margin:0 0 var(--sp-5); max-width:780px; margin-inline:auto; }
+.cm-final h2 em{ color:var(--zop-orange); font-style:normal; }
+.cm-final p{ font-size:var(--t-17); color:var(--ink-3); max-width:560px; margin:0 auto var(--sp-8); }
+.cm-final .cta-row{ display:flex; gap:var(--sp-3); justify-content:center; flex-wrap:wrap; }
+.cm-final .cta-row a{ font-family:var(--mono); font-size:var(--t-12); letter-spacing:var(--ls-meta); text-transform:uppercase; font-weight:var(--fw-semibold); padding:var(--sp-4) var(--sp-7); border:1px solid var(--ink); color:var(--ink); transition:background .14s, color .14s, transform .14s; }
+.cm-final .cta-row a:hover{ background:var(--ink); color:var(--bg-0); transform:translateY(-2px); }
+.cm-final .cta-row a.primary{ background:var(--zop-orange); border-color:var(--zop-orange); color:#0A0A0A; }
+.cm-final .cta-row a.primary:hover{ box-shadow:var(--shadow-hover-ink); }
+
+@media (max-width:768px){ .page > section{ padding:var(--sec-pad-sm) 0; } }
+</style>
+<link rel="stylesheet" href="homepage-chrome.css"/>
+<script src="chrome-mobilenav.js" defer></script>
+<script src="chrome-footer.js" defer></script>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+        <symbol id="mark-zopdev" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="16" height="16" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="16" y="0" width="16" height="16" fill="#F58549"/>
+      <rect x="16" y="16" width="16" height="16" fill="#7FB236"/>
+    </symbol>
+<symbol id="logo-zopdev" viewBox="0 0 715 276">
+      <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+      <rect x="537" width="89" height="89" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="626" width="89" height="89" fill="#F58549"/>
+      <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="ann-bar" id="ann-bar"><div class="ann-inner"><a href="developers.html" class="ann-chip"><span class="ann-dot"></span><strong>MCP Server</strong>, live in Claude &amp; Codex<span class="ann-arrow">→</span></a><a href="changelog.html" class="ann-link">Changelog →</a><button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button></div></div>
+
+<!-- ============================================================
+     SAVINGS CALCULATOR STRIP. Single CTA, links to the calculator.
+     ============================================================ -->
+<a class="live-strip live-strip-cta" href="#calculator" aria-label="Open the savings calculator">
+  <span class="ls-cta-anchor">
+    <span class="ls-live"><span class="ls-livedot"></span>Calculator</span>
+  </span>
+  <span class="ls-cta-msg">See how much your cloud is wasting right now.</span>
+  <span class="ls-cta-arrow">Try it <span class="ls-arrow">&rarr;</span></span>
+</a>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo-lockup sm" aria-label="ZopDev">
+      <svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <div class="nav-item" data-menu="product">
+        <a>Product <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <div class="nav-item" data-menu="resources">
+        <a>Resources <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="pricing.html">Pricing</a>
+      <div class="nav-item" data-menu="company">
+        <a>Company <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="community.html">Community</a>
+    </div>
+
+    <!-- Shared dropdown overlay. Content crossfades, panel slides left/right -->
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+      <div class="nav-panes" id="nav-panes">
+
+        <!-- ═══════ PRODUCT · 3 sub-products ═══════ -->
+        <div class="nav-pane" data-pane="product">
+          <!-- 3 equal cells. Inline grid-template-columns overrides the
+               default 1.3fr 1fr 1fr (which is built for a featured-hero
+               layout). All three products are equal here — no hero — so
+               no empty grid slots and no card stretches taller than its
+               siblings. -->
+          <div class="np-bento" style="grid-template-columns:1fr 1fr 1fr;">
+            <a class="np-cell" href="zopnight.html">
+              <span class="np-badge live">live</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopNight</h3>
+              <p class="np-cell-desc">Cloud cost optimization on autopilot. AWS, Azure, GCP.</p>
+            </a>
+            <a class="np-cell" href="zopday.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#F58549"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopDay</h3>
+              <p class="np-cell-desc">Deployment orchestration and release management.</p>
+            </a>
+            <a class="np-cell" href="zopcloud.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><rect x="12" y="8" width="8" height="6" fill="#FFFFFF"/><rect x="6" y="14" width="20" height="10" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopCloud</h3>
+              <p class="np-cell-desc">Multi-cloud resource graph and topology view.</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Live in Claude &amp; Codex</strong> · run ZopNight from your MCP client</span>
+            <a href="developers.html">Try MCP →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ RESOURCES · 9 cells in a 3×3 grid ═══════ -->
+        <div class="nav-pane" data-pane="resources">
+          <div class="np-bento np-bento--grid">
+            <a class="np-cell" href="blog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Blog</h3>
+              <p class="np-cell-desc">Engineering + cost optimization notes</p>
+            </a>
+            <a class="np-cell" href="free-ebooks.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 4h7v13H3zM10 4h7v13h-7z" stroke="currentColor" stroke-width="1.5"/><path d="M10 4v13" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Ebooks</h3>
+              <p class="np-cell-desc">Free playbooks · FinOps, K8s, CDCR</p>
+            </a>
+            <a class="np-cell" href="customers.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 16c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Case studies</h3>
+              <p class="np-cell-desc">42-67% cuts, real teams</p>
+            </a>
+            <a class="np-cell" href="solutions.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Use cases by industry</h3>
+              <p class="np-cell-desc">SaaS · fintech · retail · health</p>
+            </a>
+            <a class="np-cell" href="product-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M8 7l4 3-4 3z" fill="currentColor"/></svg>
+              </div>
+              <h3 class="np-cell-title">Product documentation</h3>
+              <p class="np-cell-desc">Walkthroughs · video tours</p>
+            </a>
+            <a class="np-cell" href="kubernetes-guide.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2l7 4v8l-7 4-7-4V6z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
+              </div>
+              <h3 class="np-cell-title">Kubernetes guide</h3>
+              <p class="np-cell-desc">From cluster basics to right-sizing</p>
+            </a>
+            <a class="np-cell" href="changelog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Changelog</h3>
+              <p class="np-cell-desc">What shipped this week</p>
+            </a>
+            <a class="np-cell" href="developer-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 6L3 10l4 4M13 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 class="np-cell-title">Developer documentation</h3>
+              <p class="np-cell-desc">REST API · SDKs · webhooks · MCP</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Weekly digest</strong> · waste signals, wins, war stories</span>
+            <a href="blog.html">Subscribe →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ COMPANY · 2 items ═══════ -->
+        <div class="nav-pane" data-pane="company">
+          <div class="np-bento" style="grid-template-columns:1fr 1fr;">
+            <a class="np-cell" href="about.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#0A0A0A"/><rect x="6" y="6" width="8" height="20" fill="#F0EBDB"/><rect x="18" y="12" width="8" height="14" fill="#F58549"/></svg>
+              </div>
+              <h3 class="np-cell-title">About</h3>
+              <p class="np-cell-desc">Founded 2024. The autopilot for multi-cloud cost.</p>
+            </a>
+            <a class="np-cell" href="careers.html">
+              <span class="np-badge">hiring</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="6" width="14" height="11" stroke="currentColor" stroke-width="1.5"/><path d="M7 6V4h6v2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Careers</h3>
+              <p class="np-cell-desc">Open roles · engineering, design, GTM</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>We're hiring</strong> · remote-first · 12 open roles</span>
+            <a href="careers.html">See roles →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="nav-cta">
+      <!-- Status pill · live dot · links to /status.html. Mirrors the
+           project's "always-on" identity (the live-ops strip above the
+           nav). Pulses green when all systems are operational. -->
+      <a class="nav-status" href="status.html" aria-label="System status">
+        <span class="nav-status-dot" aria-hidden="true"></span>
+        <span class="nav-status-text">Status</span>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" role="switch">
+        <span class="tt-opt tt-sun" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="8" cy="8" r="3" fill="currentColor" stroke="none"/>
+            <path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.9.9M11.7 11.7l.9.9M3.4 12.6l.9-.9M11.7 4.3l.9-.9"/>
+          </svg>
+        </span>
+        <span class="tt-opt tt-moon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M12.8 10.1a5.5 5.5 0 0 1-7-7 .5.5 0 0 0-.7-.6A6.5 6.5 0 1 0 13.4 10.8a.5.5 0 0 0-.6-.7z"/>
+          </svg>
+        </span>
+      </button>
+      <a class="chip-playground" href="playground.html"><span>Playground</span></a>
+      <a class="sign" href="signin.html">Sign In</a>
+      <a class="btn btn-accent" href="demo.html"><span>Book a Demo</span> <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+
+<main class="page">
+  <div class="crumb"><a href="/">home</a> <span class="sep">/</span> community</div>
+
+  <!-- HERO -->
+  <section class="cm-hero">
+    <div class="container">
+      <div class="cm-tag">community · 4,200+ members</div>
+      <h1>Builders, operators, and the people who actually <em>run the bill.</em></h1>
+      <p class="lead">FinOps engineers, platform leads, and the on-call who got paged about cost again. <strong>4,200+ of us</strong> swapping configs, war stories, and the occasional Terraform module that saved someone $40k a month.</p>
+
+      <div class="cm-stats">
+        <div class="cm-stat"><div class="v">4.2<em>k</em></div><div class="l">discord members</div></div>
+        <div class="cm-stat"><div class="v">847</div><div class="l">github stars · zopdev/cdcr</div></div>
+        <div class="cm-stat"><div class="v">12</div><div class="l">events this quarter</div></div>
+        <div class="cm-stat"><div class="v">38<em>+</em></div><div class="l">community contributors</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHANNELS -->
+  <section>
+    <div class="container">
+      <div class="cm-sec-head">
+        <div>
+          <div class="meta">where we hang out</div>
+          <h2>Pick the channel that <em>matches your noise tolerance.</em></h2>
+        </div>
+        <p class="sub">Discord for the chatter. GitHub for the code. Office hours when you want a face. Newsletter when you want quiet.</p>
+      </div>
+
+      <div class="cm-channels">
+
+        <a class="cm-channel" href="https://discord.gg/zopdev">
+          <div class="cm-channel-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.27 5.33A19.61 19.61 0 0 0 14.4 4l-.21.4a18.13 18.13 0 0 1 4.32 1.43A18 18 0 0 0 8.42 5.83a17.36 17.36 0 0 1 4.32-1.43L12.5 4a19.4 19.4 0 0 0-4.86 1.32A20.6 20.6 0 0 0 4 14.62 19.55 19.55 0 0 0 9.93 17.6l.49-.83a13.06 13.06 0 0 1-2-1 1 1 0 0 0 .29-.27 14.05 14.05 0 0 0 11.66 0 1 1 0 0 0 .29.27 13.05 13.05 0 0 1-2 1l.49.83A19.46 19.46 0 0 0 25 14.62a20.51 20.51 0 0 0-3.65-9.32zM10.05 13.16c-.96 0-1.74-.86-1.74-1.92s.78-1.92 1.74-1.92 1.74.87 1.74 1.92-.78 1.92-1.74 1.92zm5.65 0c-.96 0-1.74-.86-1.74-1.92s.78-1.92 1.74-1.92 1.74.87 1.74 1.92-.78 1.92-1.74 1.92z"/></svg>
+          </div>
+          <h3>Discord</h3>
+          <p>The main hangout. Channels for FinOps, K8s, AWS / GCP / Azure, weekly help threads.</p>
+          <span class="count">4,247 members · live now</span>
+        </a>
+
+        <a class="cm-channel" href="https://github.com/zopdev">
+          <div class="cm-channel-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1a9 9 0 0 0-2.84 17.54c.45.08.61-.2.61-.43v-1.5c-2.5.54-3.03-1.2-3.03-1.2-.4-1.04-1-1.32-1-1.32-.82-.56.06-.55.06-.55.9.06 1.38.93 1.38.93.8 1.38 2.1 1 2.6.74.08-.58.31-.98.57-1.2-2-.23-4.1-1-4.1-4.45 0-.98.35-1.78.92-2.41-.1-.23-.4-1.15.08-2.4 0 0 .75-.24 2.47.92a8.5 8.5 0 0 1 4.5 0c1.7-1.16 2.46-.92 2.46-.92.48 1.25.18 2.17.08 2.4.58.63.92 1.43.92 2.41 0 3.45-2.1 4.21-4.1 4.44.32.28.6.82.6 1.66v2.46c0 .23.16.52.62.43A9 9 0 0 0 10 1z"/></svg>
+          </div>
+          <h3>GitHub</h3>
+          <p>The CDCR engine, the Terraform provider, scheduling examples — all open. Issues are a real conversation.</p>
+          <span class="count">12 repos · open issues welcome</span>
+        </a>
+
+        <a class="cm-channel" href="#office-hours">
+          <div class="cm-channel-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 2"/></svg>
+          </div>
+          <h3>Office hours</h3>
+          <p>Every other Wednesday. 30 minutes. Pre-submit your scenario or just listen in. We screen-share the actual product.</p>
+          <span class="count">next · May 7 · 11am PT</span>
+        </a>
+
+        <a class="cm-channel" href="blog.html">
+          <div class="cm-channel-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 5h14v10H3z"/><path d="M3 5l7 5 7-5" stroke-linecap="square"/></svg>
+          </div>
+          <h3>Newsletter</h3>
+          <p>One email a week. Sundays. Last week's wins, this week's open questions, the post we wrote on Friday.</p>
+          <span class="count">2,100 subscribers · 71% open rate</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENTS -->
+  <section id="office-hours">
+    <div class="container">
+      <div class="cm-sec-head">
+        <div>
+          <div class="meta">events · next 60 days</div>
+          <h2>Show up, ask questions, <em>steal what works.</em></h2>
+        </div>
+        <p class="sub">All events recorded. All events free. Most events live in your calendar before they're public — RSVP gets you the link.</p>
+      </div>
+
+      <div class="cm-events">
+
+        <article class="cm-event">
+          <div class="when"><span class="day">May 7</span>11:00 PT · 30 min</div>
+          <div>
+            <h3>Office hours: spot-fleet patterns for non-prod CI</h3>
+            <p>Sam T. walks the actual fleet config we ship internally. Brings the cost graph. Brings the post-mortems. Bring questions.</p>
+            <span class="where">virtual · zoom</span>
+          </div>
+          <a class="rsvp" href="#">RSVP →</a>
+        </article>
+
+        <article class="cm-event">
+          <div class="when"><span class="day">May 14</span>9:00 PT · 60 min</div>
+          <div>
+            <h3>FinOps roundtable: showback that survives the boardroom</h3>
+            <p>Three FinOps leads (Stripe, Notion, Ramp) on the cost-attribution models that hold up under finance scrutiny.</p>
+            <span class="where">virtual · zoom</span>
+          </div>
+          <a class="rsvp" href="#">RSVP →</a>
+        </article>
+
+        <article class="cm-event">
+          <div class="when"><span class="day">May 22</span>18:00 PT · in-person</div>
+          <div>
+            <h3>SF meetup: cost &amp; chaos engineering</h3>
+            <p>Mission Bay office. Talks from the team + a guest engineer from Datadog. Drinks, snacks, the building's good wifi.</p>
+            <span class="where">san francisco · 188 Spear St</span>
+          </div>
+          <a class="rsvp" href="#">RSVP →</a>
+        </article>
+
+        <article class="cm-event">
+          <div class="when"><span class="day">Jun 4</span>11:00 PT · 30 min</div>
+          <div>
+            <h3>Office hours: the new ZopCloud preview</h3>
+            <p>Live demo of the resource graph. Bring a stack diagram you wish was up to date — we'll auto-generate one.</p>
+            <span class="where">virtual · zoom</span>
+          </div>
+          <a class="rsvp" href="#">RSVP →</a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- OPEN-SOURCE REPOS -->
+  <section>
+    <div class="container">
+      <div class="cm-sec-head">
+        <div>
+          <div class="meta">open source</div>
+          <h2>The bits we'd <em>want to fork</em> ourselves.</h2>
+        </div>
+        <p class="sub">Three production-grade tools we built for ZopDev that are useful on their own. MIT licensed.</p>
+      </div>
+
+      <div class="cm-repos">
+
+        <a class="cm-repo" href="https://github.com/zopdev/cdcr">
+          <div class="name">zopdev<span>/</span>cdcr</div>
+          <p>The CDCR (Continuous Discover-Cost-Recommend-Remediate) engine. Plug in a cloud account, get a daily plan. The core of ZopNight, MIT licensed.</p>
+          <div class="stars"><span><strong>★ 847</strong></span><span>Go</span><span>v0.14.2</span></div>
+        </a>
+
+        <a class="cm-repo" href="https://github.com/zopdev/terraform-provider-zopdev">
+          <div class="name">zopdev<span>/</span>terraform-provider-zopdev</div>
+          <p>Manage scheduling rules and cost policies as Terraform resources. Drift-detection plugs straight into your existing pipeline.</p>
+          <div class="stars"><span><strong>★ 312</strong></span><span>Go</span><span>v0.6.1</span></div>
+        </a>
+
+        <a class="cm-repo" href="https://github.com/zopdev/k8s-rightsize">
+          <div class="name">zopdev<span>/</span>k8s-rightsize</div>
+          <p>Standalone Kubernetes right-sizing controller. 14-day p99 lookback, VPA-compatible, no external dependencies.</p>
+          <div class="stars"><span><strong>★ 196</strong></span><span>Go</span><span>v0.3.0</span></div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTRIBUTORS -->
+  <section>
+    <div class="container">
+      <div class="cm-sec-head">
+        <div>
+          <div class="meta">contributors</div>
+          <h2>The names behind <em>the merges.</em></h2>
+        </div>
+        <p class="sub">38 humans have shipped code or docs to a ZopDev repo. Below are the most recent &mdash; all of them deserve a beer.</p>
+      </div>
+
+      <div class="cm-contribs">
+        <div class="cm-contrib"><div class="av">PM</div><div class="nm">priya-m</div></div>
+        <div class="cm-contrib"><div class="av">ML</div><div class="nm">marcusl</div></div>
+        <div class="cm-contrib"><div class="av">JR</div><div class="nm">julesr</div></div>
+        <div class="cm-contrib"><div class="av">AK</div><div class="nm">anyak</div></div>
+        <div class="cm-contrib"><div class="av">DP</div><div class="nm">devonp</div></div>
+        <div class="cm-contrib"><div class="av">ST</div><div class="nm">samt</div></div>
+        <div class="cm-contrib"><div class="av">RH</div><div class="nm">ravih</div></div>
+        <div class="cm-contrib"><div class="av">EO</div><div class="nm">elenao</div></div>
+        <div class="cm-contrib"><div class="av">KW</div><div class="nm">kwong</div></div>
+        <div class="cm-contrib"><div class="av">NB</div><div class="nm">naomib</div></div>
+        <div class="cm-contrib"><div class="av">TF</div><div class="nm">tomf</div></div>
+        <div class="cm-contrib"><div class="av">MS</div><div class="nm">maris</div></div>
+        <div class="cm-contrib"><div class="av">JC</div><div class="nm">josiec</div></div>
+        <div class="cm-contrib"><div class="av">LV</div><div class="nm">leov</div></div>
+        <div class="cm-contrib"><div class="av">AH</div><div class="nm">arifh</div></div>
+        <div class="cm-contrib"><div class="av">SK</div><div class="nm">sofiak</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="cm-final">
+    <div class="container">
+      <h2>Walk in. Be loud. <em>Bring war stories.</em></h2>
+      <p>Discord is the front door. There's no app to install, no membership fee, no DM-only rooms. Just engineers comparing notes.</p>
+      <div class="cta-row">
+        <a href="https://discord.gg/zopdev" class="primary">Join Discord <span aria-hidden="true">→</span></a>
+        <a href="https://github.com/zopdev">Star us on GitHub</a>
+        <a href="blog.html">Subscribe to the newsletter</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+
+<!-- FINAL CTA · canonical homepage block, shared across marketing pages -->
+<section class="final">
+  <div class="container">
+    <a class="final-mark" href="/" aria-label="ZopDev">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#mark-zopdev"/></svg>
+    </a>
+    <div class="final-grid">
+      <div>
+        <div class="sec-meta" style="color:var(--zop-orange); margin-bottom:20px">end · ready when you are</div>
+        <h2>Stop watching the waste.<br/>Start cutting it.</h2>
+        <p class="final-tag">See. Find. Fix. Automatic.</p>
+        <p>Connect your first cloud account in under 5 minutes. See your first remediation in under 7. No credit card required.</p>
+        <div class="final-cta">
+          <a class="btn btn-primary" href="signin.html">Start Free →</a>
+          <a class="btn btn-secondary" href="demo.html">Book a Demo</a>
+        </div>
+      </div>
+      <div class="final-stats">
+        <div><strong>5 min</strong>connect time</div>
+        <div><strong>7 min</strong>first remediation</div>
+        <div><strong>42%</strong>avg. waste cut in 30 days</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRIDGE MARQUEE · cream slab between dark CTA and dark footer -->
+<section class="bridge-marquee" aria-label="ZopDev brand statement">
+  <div class="bridge-track">
+    <span>Multi-cloud automation</span><span class="acc">·</span>
+    <span>Production-ready in 30 min</span><span class="acc">·</span>
+    <span>SOC 2 · ISO 27001 · zero-trust</span><span class="acc">·</span>
+    <span>30% average cloud cost cut</span><span class="acc">·</span>
+    <span>4 platforms · 1 console</span><span class="acc">·</span>
+    <span>Multi-cloud automation</span><span class="acc">·</span>
+    <span>Production-ready in 30 min</span><span class="acc">·</span>
+    <span>SOC 2 · ISO 27001 · zero-trust</span><span class="acc">·</span>
+    <span>30% average cloud cost cut</span><span class="acc">·</span>
+    <span>4 platforms · 1 console</span><span class="acc">·</span>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="walkthrough.html">Product guide</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developers.html">Documentation</a></li>
+        <li><a href="developers.html">API reference</a></li>
+        <li><a href="developers.html">MCP server</a></li>
+        <li><a href="developers.html">SDK &amp; CLI</a></li>
+        <li><a href="developers.html">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-globe">
+      <div class="foot-globe-left">
+        <a href="/" class="foot-globe-mark" aria-label="ZopDev">
+          <svg class="foot-globe-logo" viewBox="0 0 715 276" aria-hidden="true">
+            <use href="#logo-zopdev"/>
+          </svg>
+        </a>
+      </div>
+      <div class="foot-globe-right">
+        <div class="foot-regions-v2" id="foot-regions-v2">
+          <canvas id="foot-regions-map"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom foot-bottom-3">
+      <div class="foot-copy">© <span data-year>2026</span> ZopDev · <a href="trust.html">privacy</a> · <a href="trust.html">terms</a></div>
+      <div class="foot-mid">made with <svg viewBox="0 0 7 6" aria-hidden="true"><rect x="1" y="0" width="1" height="1"/><rect x="2" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="0" y="1" width="7" height="1"/><rect x="0" y="2" width="7" height="1"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg> by <a href="https://zop.dev" target="_blank" rel="noopener">zop.dev</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+(function(){
+  document.querySelectorAll('[data-year]').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+  var ann = document.getElementById('ann-bar');
+  var btn = document.getElementById('ann-close');
+  if(!ann || !btn) return;
+  var key = 'zop-ann-2026-mcp';
+  try{ if(localStorage.getItem(key) === '1') ann.style.display = 'none'; }catch(e){}
+  btn.addEventListener('click', function(){ ann.style.display = 'none'; try{ localStorage.setItem(key, '1'); }catch(e){} });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<title>Data viz · ZopDev</title>
+<meta name="description" content="How ZopDev renders numbers, color semantics, axis rules, sparkline patterns, gauge, big-number, heatmap."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="chrome.css"/>
+<style>
+/* no-italic-site-wide */ em,i,cite,dfn,var,address,blockquote{font-style:normal}
+/* ============ page chrome (shared pattern) ============ */
+.page-head{
+  padding:var(--sec-pad) 0 var(--sp-12);
+  max-width:var(--max); margin:0 auto;
+  padding-left:var(--gutter); padding-right:var(--gutter);
+  border-bottom:1px solid var(--line);
+}
+.crumb{ font-family:var(--mono); font-size:11px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase; margin-bottom:20px; }
+.crumb a{ color:var(--ink-3); } .crumb a:hover{ color:var(--ink); } .crumb .s{ color:var(--ink-5); margin:0 8px; }
+.page-head .meta{ font-family:var(--mono); font-size:11px; color:var(--zop-orange); letter-spacing:.14em; text-transform:uppercase; margin-bottom:16px; display:inline-flex; align-items:center; gap:8px; }
+.page-head .meta::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
+.page-head h1{ font-size:clamp(48px,6vw,88px); font-weight:700; letter-spacing:-.05em; line-height:.98; margin:0 0 24px; max-width:1100px; }
+.page-head h1 em{ font-style:normal; color:var(--zop-orange); }
+.page-head p.lede{ font-size:20px; color:var(--ink-3); max-width:760px; line-height:1.45; margin:0; }
+.page-head p.lede strong{ color:var(--ink); font-weight:500; }
+
+/* section */
+.sec{
+  padding:var(--sec-pad) 0;
+  max-width:var(--max); margin:0 auto;
+  padding-left:var(--gutter); padding-right:var(--gutter);
+  border-bottom:1px solid var(--line);
+}
+.sec:last-of-type{ border-bottom:0; }
+.sec > h2{ font-family:var(--mono); font-size:11px; color:var(--zop-orange); letter-spacing:.14em; text-transform:uppercase; margin:0 0 12px; display:inline-flex; align-items:center; gap:8px; }
+.sec > h2::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
+.sec > h3{ font-size:clamp(28px,3vw,36px); font-weight:700; letter-spacing:-.03em; line-height:1.05; margin:0 0 12px; }
+.sec > p.lead{ font-size:15px; color:var(--ink-3); max-width:720px; line-height:1.55; margin:0 0 var(--sp-10); }
+.sec > p.lead strong{ color:var(--ink); font-weight:500; }
+
+/* spec card shell (reused from styleguide) */
+.spec{ border:1px solid var(--line-2); background:var(--bg-1); margin-bottom:var(--sp-5); }
+.spec-head{ padding:12px 20px; background:#0A0A0A; border-bottom:1px solid var(--line-2); display:flex; justify-content:space-between; align-items:center; font-family:var(--mono); font-size:11px; color:var(--ink-4); letter-spacing:.04em; }
+.spec-head strong{ color:var(--ink-2); font-weight:500; }
+.spec-head .tag{ padding:2px 8px; background:var(--bg-3); color:var(--ink-3); font-size:10px; letter-spacing:.14em; text-transform:uppercase; }
+.spec-body{ padding:var(--sp-8); background:var(--bg-0); }
+.spec-foot{ padding:16px 20px; background:#0A0A0A; border-top:1px solid var(--line); font-family:var(--mono); font-size:11px; color:var(--ink-4); line-height:1.6; }
+.spec-foot strong{ color:var(--ink-2); }
+
+/* ========== color-semantic legend ========== */
+.legend{
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:0; border:1px solid var(--line-2);
+}
+.legend-cell{ padding:var(--sp-7); border-right:1px solid var(--line-2); display:flex; flex-direction:column; gap:12px; min-height:240px; }
+.legend-cell:last-child{ border-right:0; }
+.legend-cell .swatch{ width:40px; height:40px; margin-bottom:4px; }
+.legend-cell.b .swatch{ background:#4A66D4; }
+.legend-cell.o .swatch{ background:var(--zop-orange); }
+.legend-cell.g .swatch{ background:var(--zop-green); }
+.legend-cell .meta{ font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-4); }
+.legend-cell h4{ font-size:22px; font-weight:700; letter-spacing:-.02em; margin:0; }
+.legend-cell.b h4{ color:#4A66D4; }
+.legend-cell.o h4{ color:var(--zop-orange); }
+.legend-cell.g h4{ color:var(--zop-green); }
+.legend-cell p{ font-size:13px; color:var(--ink-3); line-height:1.55; margin:0; }
+.legend-cell p strong{ color:var(--ink); font-weight:500; }
+.legend-cell .list{ border-top:1px solid var(--line); padding-top:12px; font-family:var(--mono); font-size:11px; color:var(--ink-3); line-height:1.8; letter-spacing:0; margin-top:auto; }
+
+/* ========== three-numbers replica ========== */
+.three-nums{ display:grid; grid-template-columns:repeat(3,1fr); border:1px solid var(--line-2); background:var(--bg-1); }
+.three-nums .n{ padding:32px 28px; border-right:1px solid var(--line-2); position:relative; min-height:180px; display:flex; flex-direction:column; gap:8px; }
+.three-nums .n:last-child{ border-right:0; }
+.three-nums .n::before{ content:''; position:absolute; top:0; left:0; width:100%; height:3px; }
+.three-nums .b::before{ background:#4A66D4; }
+.three-nums .o::before{ background:var(--zop-orange); }
+.three-nums .g::before{ background:var(--zop-green); }
+.three-nums .label{ font-family:var(--mono); font-size:10px; color:var(--ink-4); letter-spacing:.18em; text-transform:uppercase; display:flex; align-items:center; gap:8px; }
+.three-nums .label .dot{ width:8px; height:8px; }
+.three-nums .b .label .dot{ background:#4A66D4; }
+.three-nums .o .label .dot{ background:var(--zop-orange); }
+.three-nums .g .label .dot{ background:var(--zop-green); }
+.three-nums .big{ font-size:64px; font-weight:700; letter-spacing:-.04em; line-height:1; font-variant-numeric:tabular-nums; }
+.three-nums .b .big{ color:var(--ink); }
+.three-nums .o .big{ color:var(--zop-orange); }
+.three-nums .g .big{ color:var(--zop-green); }
+.three-nums .sub{ font-size:12px; color:var(--ink-4); font-family:var(--mono); letter-spacing:.02em; margin-top:auto; }
+
+/* ========== bar chart showcase ========== */
+.chart-row{ display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-4); }
+.chart-card{
+  background:var(--bg-1); border:1px solid var(--line-2);
+  padding:var(--sp-6);
+  display:flex; flex-direction:column; gap:var(--sp-4);
+}
+.chart-card .title{ font-family:var(--mono); font-size:10px; color:var(--ink-4); letter-spacing:.16em; text-transform:uppercase; }
+.chart-card .big{ font-size:32px; font-weight:700; letter-spacing:-.03em; font-variant-numeric:tabular-nums; }
+.chart-card svg{ display:block; }
+.chart-card .axis{ display:flex; justify-content:space-between; font-family:var(--mono); font-size:10px; color:var(--ink-4); letter-spacing:.04em; }
+
+/* ========== sparkline row ========== */
+.sparklines{
+  border:1px solid var(--line-2);
+  background:var(--bg-1);
+  font-family:var(--mono); font-size:12px;
+}
+.sparklines .row{
+  display:grid; grid-template-columns:1.6fr 1fr 1fr 80px;
+  gap:var(--sp-4); align-items:center;
+  padding:12px var(--sp-5);
+  border-bottom:1px solid var(--line);
+}
+.sparklines .row:last-child{ border-bottom:0; }
+.sparklines .row.head{ background:#0A0A0A; color:var(--ink-4); text-transform:uppercase; font-size:9.5px; letter-spacing:.14em; padding:10px var(--sp-5); }
+.sparklines .row .id{ color:var(--ink); font-weight:500; letter-spacing:-.02em; font-family:var(--font); font-size:13px; }
+.sparklines .row .money{ color:var(--ink); font-variant-numeric:tabular-nums; }
+.sparklines .row .delta{ font-variant-numeric:tabular-nums; }
+.sparklines .row .delta.up{ color:var(--zop-orange); }
+.sparklines .row .delta.down{ color:var(--ok); }
+.sparklines .row svg.spark{ display:block; margin-left:auto; }
+
+/* ========== heatmap ========== */
+.heatmap{
+  display:grid; grid-template-columns:repeat(12, 1fr);
+  gap:2px;
+  padding:var(--sp-5);
+  background:var(--bg-1); border:1px solid var(--line-2);
+}
+.heatmap .cell{
+  aspect-ratio:1;
+  font-family:var(--mono); font-size:9px;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--ink);
+}
+.heatmap .cell.l0{ background:#15151A; }
+.heatmap .cell.l1{ background:rgba(245,133,73,0.15); }
+.heatmap .cell.l2{ background:rgba(245,133,73,0.35); }
+.heatmap .cell.l3{ background:rgba(245,133,73,0.55); }
+.heatmap .cell.l4{ background:rgba(245,133,73,0.75); color:var(--bg-0); }
+.heatmap .cell.l5{ background:var(--zop-orange); color:var(--bg-0); font-weight:700; }
+
+.hm-legend{ display:flex; align-items:center; gap:16px; padding-top:var(--sp-4); font-family:var(--mono); font-size:10px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase; }
+.hm-legend .scale{ display:flex; height:12px; }
+.hm-legend .scale span{ width:24px; }
+
+/* ========== gauge ========== */
+.gauges{ display:grid; grid-template-columns:repeat(3, 1fr); gap:var(--sp-4); }
+.gauge-card{ background:var(--bg-1); border:1px solid var(--line-2); padding:var(--sp-6); display:flex; flex-direction:column; gap:12px; align-items:center; }
+.gauge-card .t{ font-family:var(--mono); font-size:10px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase; }
+.gauge-card svg{ display:block; }
+.gauge-card .v{ font-size:28px; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+.gauge-card .s{ font-size:11px; color:var(--ink-4); font-family:var(--mono); }
+
+/* ========== axis rules box ========== */
+.axis-spec{
+  border:1px solid var(--line-2); background:var(--bg-1);
+  padding:var(--sp-6);
+  display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-6);
+}
+.axis-spec .k{ font-family:var(--mono); font-size:10px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase; margin-bottom:6px; }
+.axis-spec .v{ font-size:14px; color:var(--ink-2); line-height:1.55; }
+
+/* dd grid */
+.dd{ display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--line-2); }
+.dd > div{ padding:var(--sp-7); }
+.dd .do{ border-right:1px solid var(--line-2); }
+.dd h5{ font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; margin:0 0 16px; display:flex; align-items:center; gap:8px; }
+.dd .do h5{ color:var(--ok); } .dd .do h5::before{ content:'\2713'; font-weight:700; }
+.dd .dont h5{ color:var(--err); } .dd .dont h5::before{ content:'\00d7'; font-weight:700; font-size:16px; }
+.dd ul{ list-style:none; padding:0; margin:0; }
+.dd li{ padding:8px 0; border-bottom:1px dashed var(--line-2); font-size:14px; color:var(--ink-2); }
+.dd li:last-child{ border-bottom:0; }
+.dd .dont li{ color:var(--ink-4); text-decoration:line-through; text-decoration-color:var(--line-b); }
+
+@media (max-width:960px){
+  .legend, .chart-row, .gauges, .axis-spec, .dd{ grid-template-columns:1fr; }
+  .legend-cell{ border-right:0; border-bottom:1px solid var(--line-2); }
+  .legend-cell:last-child{ border-bottom:0; }
+  .three-nums{ grid-template-columns:1fr; }
+  .three-nums .n{ border-right:0; border-bottom:1px solid var(--line-2); }
+  .three-nums .n:last-child{ border-bottom:0; }
+  .heatmap{ grid-template-columns:repeat(6, 1fr); }
+  .dd .do{ border-right:0; border-bottom:1px solid var(--line-2); }
+}
+</style>
+<link rel="stylesheet" href="homepage-chrome.css"/>
+</head>
+<body>
+
+<!-- logo defs -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+        <symbol id="mark-zopdev" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="16" height="16" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="16" y="0" width="16" height="16" fill="#F58549"/>
+      <rect x="16" y="16" width="16" height="16" fill="#7FB236"/>
+    </symbol>
+<symbol id="logo-zopdev" viewBox="0 0 715 276">
+      <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+      <rect x="537" width="89" height="89" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="626" width="89" height="89" fill="#F58549"/>
+      <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- announcement bar -->
+<div class="ann-bar" id="ann-bar">
+  <div class="ann-inner">
+    <a href="developers.html" class="ann-chip">
+      <span class="ann-dot"></span>
+      <strong>MCP Server</strong>, live in Claude &amp; Codex
+      <span class="ann-arrow">→</span>
+    </a>
+    <a href="changelog.html" class="ann-link">Changelog →</a>
+    <button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     LIVE STATUS STRIP. Cloud-ops signal strip
+     ============================================================ -->
+<div class="live-strip" aria-live="polite">
+  <!-- Anchored pill: live market-open indicator + uptime & UTC clock. Stays
+       put on the right while the ticker runs under it. -->
+  <div class="ls-anchor">
+    <span class="ls-live"><span class="ls-livedot"></span>LIVE</span>
+    <span class="ls-sep"></span>
+    <span class="ls-kpi"><em>UPT</em><b>99.98%</b></span>
+    <span class="ls-sep"></span>
+    <span class="ls-kpi"><em>UTC</em><b id="live-clock">--:--:--</b></span>
+  </div>
+
+  <!-- Marquee track: two identical rails side-by-side create a seamless loop.
+       Each item reads as a plain-English headline with a change indicator. -->
+  <div class="ls-track" role="presentation" aria-hidden="true">
+    <div class="ls-rail">
+      <span class="lt-row"><b id="live-saved">$48,210</b> saved this month <span class="lt-chg up">▲ $812 today</span></span>
+      <span class="lt-row"><b id="live-resources">10,401</b> cloud resources monitored <span class="lt-chg up">▲ 42 new</span></span>
+      <span class="lt-row"><b id="live-remediations">17</b> issues fixed today <span class="lt-chg up">▲ 3 in last hour</span></span>
+      <span class="lt-row"><b>847</b> idle instances reclaimed <span class="lt-chg up">▲ 31 this week</span></span>
+      <span class="lt-row"><b>99.98%</b> uptime across <b>47</b> regions</span>
+      <span class="lt-row"><b>3</b> anomalies open <span class="lt-chg dn">▼ 1 auto-resolved</span></span>
+      <span class="lt-row"><b>142</b> schedules running <span class="lt-chg up">▲ 12 this week</span></span>
+      <span class="lt-row"><b>$2.8M</b> monthly run-rate <span class="lt-chg dn">▼ 8% vs last month</span></span>
+      <span class="lt-row"><b>67%</b> average utilization <span class="lt-chg up">▲ 2 pts</span></span>
+      <span class="lt-row"><b>4m 12s</b> mean time to remediate <span class="lt-chg dn">▼ 22s faster</span></span>
+      <span class="lt-row"><b>0</b> incidents · <b>5-day</b> clean streak</span>
+      <span class="lt-row"><b>23%</b> savings rate <span class="lt-chg up">▲ 5 pts QoQ</span></span>
+    </div>
+    <div class="ls-rail" aria-hidden="true">
+      <span class="lt-row"><b>$48,210</b> saved this month <span class="lt-chg up">▲ $812 today</span></span>
+      <span class="lt-row"><b>10,401</b> cloud resources monitored <span class="lt-chg up">▲ 42 new</span></span>
+      <span class="lt-row"><b>17</b> issues fixed today <span class="lt-chg up">▲ 3 in last hour</span></span>
+      <span class="lt-row"><b>847</b> idle instances reclaimed <span class="lt-chg up">▲ 31 this week</span></span>
+      <span class="lt-row"><b>99.98%</b> uptime across <b>47</b> regions</span>
+      <span class="lt-row"><b>3</b> anomalies open <span class="lt-chg dn">▼ 1 auto-resolved</span></span>
+      <span class="lt-row"><b>142</b> schedules running <span class="lt-chg up">▲ 12 this week</span></span>
+      <span class="lt-row"><b>$2.8M</b> monthly run-rate <span class="lt-chg dn">▼ 8% vs last month</span></span>
+      <span class="lt-row"><b>67%</b> average utilization <span class="lt-chg up">▲ 2 pts</span></span>
+      <span class="lt-row"><b>4m 12s</b> mean time to remediate <span class="lt-chg dn">▼ 22s faster</span></span>
+      <span class="lt-row"><b>0</b> incidents · <b>5-day</b> clean streak</span>
+      <span class="lt-row"><b>23%</b> savings rate <span class="lt-chg up">▲ 5 pts QoQ</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo-lockup sm" aria-label="ZopDev">
+      <svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <div class="nav-item" data-menu="product">
+        <a>Product <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <div class="nav-item" data-menu="resources">
+        <a>Resources <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="pricing.html">Pricing</a>
+      <div class="nav-item" data-menu="company">
+        <a>Company <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="community.html">Community</a>
+    </div>
+
+    <!-- Shared dropdown overlay. Content crossfades, panel slides left/right -->
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+      <div class="nav-panes" id="nav-panes">
+
+        <!-- ═══════ PRODUCT · 3 sub-products ═══════ -->
+        <div class="nav-pane" data-pane="product">
+          <!-- 3 equal cells. Inline grid-template-columns overrides the
+               default 1.3fr 1fr 1fr (which is built for a featured-hero
+               layout). All three products are equal here — no hero — so
+               no empty grid slots and no card stretches taller than its
+               siblings. -->
+          <div class="np-bento" style="grid-template-columns:1fr 1fr 1fr;">
+            <a class="np-cell" href="zopnight.html">
+              <span class="np-badge live">live</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopNight</h3>
+              <p class="np-cell-desc">Cloud cost optimization on autopilot. AWS, Azure, GCP.</p>
+            </a>
+            <a class="np-cell" href="zopday.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#F58549"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopDay</h3>
+              <p class="np-cell-desc">Deployment orchestration and release management.</p>
+            </a>
+            <a class="np-cell" href="zopcloud.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><rect x="12" y="8" width="8" height="6" fill="#FFFFFF"/><rect x="6" y="14" width="20" height="10" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopCloud</h3>
+              <p class="np-cell-desc">Multi-cloud resource graph and topology view.</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Live in Claude &amp; Codex</strong> · run ZopNight from your MCP client</span>
+            <a href="developers.html">Try MCP →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ RESOURCES · 9 cells in a 3×3 grid ═══════ -->
+        <div class="nav-pane" data-pane="resources">
+          <div class="np-bento np-bento--grid">
+            <a class="np-cell" href="blog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Blog</h3>
+              <p class="np-cell-desc">Engineering + cost optimization notes</p>
+            </a>
+            <a class="np-cell" href="free-ebooks.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 4h7v13H3zM10 4h7v13h-7z" stroke="currentColor" stroke-width="1.5"/><path d="M10 4v13" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Ebooks</h3>
+              <p class="np-cell-desc">Free playbooks · FinOps, K8s, CDCR</p>
+            </a>
+            <a class="np-cell" href="customers.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 16c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Case studies</h3>
+              <p class="np-cell-desc">42-67% cuts, real teams</p>
+            </a>
+            <a class="np-cell" href="solutions.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Use cases by industry</h3>
+              <p class="np-cell-desc">SaaS · fintech · retail · health</p>
+            </a>
+            <a class="np-cell" href="product-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M8 7l4 3-4 3z" fill="currentColor"/></svg>
+              </div>
+              <h3 class="np-cell-title">Product documentation</h3>
+              <p class="np-cell-desc">Walkthroughs · video tours</p>
+            </a>
+            <a class="np-cell" href="kubernetes-guide.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2l7 4v8l-7 4-7-4V6z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
+              </div>
+              <h3 class="np-cell-title">Kubernetes guide</h3>
+              <p class="np-cell-desc">From cluster basics to right-sizing</p>
+            </a>
+            <a class="np-cell" href="changelog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Changelog</h3>
+              <p class="np-cell-desc">What shipped this week</p>
+            </a>
+            <a class="np-cell" href="developer-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 6L3 10l4 4M13 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 class="np-cell-title">Developer documentation</h3>
+              <p class="np-cell-desc">REST API · SDKs · webhooks · MCP</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Weekly digest</strong> · waste signals, wins, war stories</span>
+            <a href="blog.html">Subscribe →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ COMPANY · 2 items ═══════ -->
+        <div class="nav-pane" data-pane="company">
+          <div class="np-bento" style="grid-template-columns:1fr 1fr;">
+            <a class="np-cell" href="about.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#0A0A0A"/><rect x="6" y="6" width="8" height="20" fill="#F0EBDB"/><rect x="18" y="12" width="8" height="14" fill="#F58549"/></svg>
+              </div>
+              <h3 class="np-cell-title">About</h3>
+              <p class="np-cell-desc">Founded 2024. The autopilot for multi-cloud cost.</p>
+            </a>
+            <a class="np-cell" href="careers.html">
+              <span class="np-badge">hiring</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="6" width="14" height="11" stroke="currentColor" stroke-width="1.5"/><path d="M7 6V4h6v2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Careers</h3>
+              <p class="np-cell-desc">Open roles · engineering, design, GTM</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>We're hiring</strong> · remote-first · 12 open roles</span>
+            <a href="careers.html">See roles →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="nav-cta">
+      <!-- Status pill · live dot · links to /status.html. Mirrors the
+           project's "always-on" identity (the live-ops strip above the
+           nav). Pulses green when all systems are operational. -->
+      <a class="nav-status" href="status.html" aria-label="System status">
+        <span class="nav-status-dot" aria-hidden="true"></span>
+        <span class="nav-status-text">Status</span>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" role="switch">
+        <span class="tt-opt tt-sun" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="8" cy="8" r="3" fill="currentColor" stroke="none"/>
+            <path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.9.9M11.7 11.7l.9.9M3.4 12.6l.9-.9M11.7 4.3l.9-.9"/>
+          </svg>
+        </span>
+        <span class="tt-opt tt-moon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M12.8 10.1a5.5 5.5 0 0 1-7-7 .5.5 0 0 0-.7-.6A6.5 6.5 0 1 0 13.4 10.8a.5.5 0 0 0-.6-.7z"/>
+          </svg>
+        </span>
+      </button>
+      <a class="chip-playground" href="playground.html"><span>Playground</span></a>
+      <a class="sign" href="signin.html">Sign In</a>
+      <a class="btn btn-accent" href="demo.html"><span>Book a Demo</span> <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+
+<header class="page-head">
+  <div class="crumb"><a href="/">home</a><span class="s">/</span><a href="brand-guidelines.html">brand</a><span class="s">/</span>data viz</div>
+  <div class="meta">&#167; 13 &middot; data visualization</div>
+  <h1>Color is <em>meaning.</em><br>Not decoration.</h1>
+  <p class="lede">Every chart, table, gauge, and sparkline on zop.dev and inside the product uses the same color semantics. <strong>Blue is monitored</strong> (the thing we see). <strong>Orange is at risk</strong> (the thing that's wasting money). <strong>Green is reclaimed</strong> (the thing we fixed). If a chart uses orange for anything other than waste, it's wrong.</p>
+</header>
+
+
+<!-- ======== 1 · color semantics ======== -->
+<section class="sec">
+  <h2>&#167; 01 &middot; color semantics</h2>
+  <h3>Three colors. Three meanings.</h3>
+  <p class="lead">The pillar colors carry semantic weight in every visualization. Don't invent your own mapping, the customer has already learned ours from the three-numbers dashboard.</p>
+
+  <div class="legend">
+    <div class="legend-cell b">
+      <div class="swatch"></div>
+      <div class="meta">01 &middot; blue &middot; #4A66D4</div>
+      <h4>Monitored.</h4>
+      <p>The <strong>total</strong>, the <strong>baseline</strong>, the thing you&rsquo;re <strong>observing</strong>. Spent, resources counted, regions reached. Neutral, accountable. Used on dark canvas with the lifted blue.</p>
+      <div class="list">total spend<br>resources monitored<br>accounts<br>regions<br>uptime baseline</div>
+    </div>
+    <div class="legend-cell o">
+      <div class="swatch"></div>
+      <div class="meta">02 &middot; orange &middot; #F58549</div>
+      <h4>At risk.</h4>
+      <p>The <strong>waste</strong>, the <strong>delta up</strong>, the thing that&rsquo;s <strong>costing you something</strong>. Idle resources, over-provisioned, orphaned, non-prod 24/7. Always the number the customer wants to act on.</p>
+      <div class="list">wasted<br>over-provisioned<br>idle<br>orphan<br>budget anomaly</div>
+    </div>
+    <div class="legend-cell g">
+      <div class="swatch"></div>
+      <div class="meta">03 &middot; green &middot; #7FB236</div>
+      <h4>Reclaimed.</h4>
+      <p>The <strong>fixed</strong>, the <strong>recovered</strong>, the <strong>applied remediation</strong>. Savings, resolved findings, compliance passes, green in dashboards means "done". Never for pending state.</p>
+      <div class="list">reclaimed<br>applied<br>recoverable<br>savings<br>resolved</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ======== 2 · three-numbers ======== -->
+<section class="sec">
+  <h2>&#167; 02 &middot; three numbers</h2>
+  <h3>The signature pattern.</h3>
+  <p class="lead">The three-numbers composition is the canonical way to open any page, report, or dashboard. Always in this order. Always with the 3px pillar strip on top. Always tabular-nums on figures.</p>
+
+  <div class="three-nums">
+    <div class="n b">
+      <span class="label"><span class="dot"></span>01 &middot; spent &middot; monitored</span>
+      <div class="big">$182K</div>
+      <span class="sub">total run-rate · aws + azure + gcp</span>
+    </div>
+    <div class="n o">
+      <span class="label"><span class="dot"></span>02 &middot; wasted &middot; at risk</span>
+      <div class="big">$47K</div>
+      <span class="sub">idle · over-provisioned · orphan · non-prod</span>
+    </div>
+    <div class="n g">
+      <span class="label"><span class="dot"></span>03 &middot; recoverable &middot; reclaimable</span>
+      <div class="big">$38K</div>
+      <span class="sub">applied in one click · 7-day rollback</span>
+    </div>
+  </div>
+
+  <div class="spec-foot" style="background:var(--bg-1); margin-top:var(--sp-4); border:1px solid var(--line-2)">
+    <strong>Rules:</strong>
+    &middot; three columns, this order &middot; always &nbsp;&nbsp;
+    &middot; top 3px bar is the tell · don't skip it &nbsp;&nbsp;
+    &middot; 48&ndash;72px figures depending on container &nbsp;&nbsp;
+    &middot; tabular-nums on every figure &nbsp;&nbsp;
+    &middot; never a fourth number
+  </div>
+</section>
+
+
+<!-- ======== 3 · big number ======== -->
+<section class="sec">
+  <h2>&#167; 03 &middot; big number</h2>
+  <h3>Single metric, headline weight.</h3>
+  <p class="lead">For a single figure on a card (proof tiles, case-study metric, pricing). Weight 700, tracking &minus;0.04em, line-height 1. Follow with a mono caption and a 12-month context bar if relevant.</p>
+
+  <div class="chart-row">
+    <div class="chart-card">
+      <span class="title"> case-study metric</span>
+      <span class="big" style="color:var(--zop-orange); font-size:72px; letter-spacing:-0.05em">42%</span>
+      <span style="font-size:13px; color:var(--ink-3)">median week-1 cloud waste cut. Across 142 deployments.</span>
+    </div>
+    <div class="chart-card">
+      <span class="title"> savings &middot; 12-mo trend</span>
+      <span class="big" style="color:var(--zop-green); font-size:44px">$612K</span>
+      <svg width="100%" height="48" viewBox="0 0 300 48" preserveAspectRatio="none">
+        <rect x="0"   y="34" width="22" height="14" fill="rgba(127,178,54,0.3)"/>
+        <rect x="25"  y="30" width="22" height="18" fill="rgba(127,178,54,0.35)"/>
+        <rect x="50"  y="26" width="22" height="22" fill="rgba(127,178,54,0.45)"/>
+        <rect x="75"  y="22" width="22" height="26" fill="rgba(127,178,54,0.55)"/>
+        <rect x="100" y="18" width="22" height="30" fill="rgba(127,178,54,0.65)"/>
+        <rect x="125" y="14" width="22" height="34" fill="rgba(127,178,54,0.75)"/>
+        <rect x="150" y="12" width="22" height="36" fill="rgba(127,178,54,0.85)"/>
+        <rect x="175" y="10" width="22" height="38" fill="#7FB236"/>
+        <rect x="200" y="8"  width="22" height="40" fill="#7FB236"/>
+        <rect x="225" y="6"  width="22" height="42" fill="#7FB236"/>
+        <rect x="250" y="4"  width="22" height="44" fill="#7FB236"/>
+        <rect x="275" y="2"  width="22" height="46" fill="#7FB236"/>
+      </svg>
+      <div class="axis"><span>may '25</span><span>apr '26</span></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ======== 4 · sparklines in tables ======== -->
+<section class="sec">
+  <h2>&#167; 04 &middot; sparklines</h2>
+  <h3>Tabular context, one row at a time.</h3>
+  <p class="lead">Every resource row carries a 14-day trend sparkline. Color reflects the state: orange for wasteful drift, green for a resource that's stayed efficient, blue for stable-baseline. Delta shown as +/- percentage with tabular-nums.</p>
+
+  <div class="sparklines">
+    <div class="row head">
+      <span>resource</span>
+      <span>$ / mo</span>
+      <span>delta</span>
+      <span>14-day</span>
+    </div>
+    <div class="row">
+      <span class="id">web-prod &middot; i-0abc1234</span>
+      <span class="money">$842</span>
+      <span class="delta down">-2.1%</span>
+      <svg class="spark" width="80" height="24" viewBox="0 0 80 24">
+        <polyline points="0,14 10,16 20,13 30,15 40,12 50,14 60,11 70,13 80,10" fill="none" stroke="#4A66D4" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="row">
+      <span class="id">analytics-rds &middot; db.m5.2xl</span>
+      <span class="money">$1,204</span>
+      <span class="delta up">+18%</span>
+      <svg class="spark" width="80" height="24" viewBox="0 0 80 24">
+        <polyline points="0,18 10,17 20,16 30,15 40,13 50,10 60,8 70,6 80,4" fill="none" stroke="#F58549" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="row">
+      <span class="id">worker-pool-7 &middot; idle 14d</span>
+      <span class="money">$318</span>
+      <span class="delta up">+0%</span>
+      <svg class="spark" width="80" height="24" viewBox="0 0 80 24">
+        <polyline points="0,12 10,12 20,12 30,12 40,12 50,12 60,12 70,12 80,12" fill="none" stroke="#F58549" stroke-width="1.5" stroke-dasharray="3 3"/>
+      </svg>
+    </div>
+    <div class="row">
+      <span class="id">cache-redis-prod &middot; terminated</span>
+      <span class="money">$0</span>
+      <span class="delta down">-$390</span>
+      <svg class="spark" width="80" height="24" viewBox="0 0 80 24">
+        <polyline points="0,10 10,10 20,10 30,10 40,10 50,14 60,18 70,22 80,22" fill="none" stroke="#7FB236" stroke-width="1.5"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="spec-foot" style="background:var(--bg-1); margin-top:var(--sp-4); border:1px solid var(--line-2)">
+    <strong>Line color encodes state:</strong>
+    blue = stable &middot;  orange = drifting up (waste growing) &middot;  green = drifting down (savings applied)
+    <br><strong>Shape:</strong> 80&times;24 viewBox &middot; 1.5px stroke &middot; no fills &middot; no markers
+  </div>
+</section>
+
+
+<!-- ======== 5 · heatmap ======== -->
+<section class="sec">
+  <h2>&#167; 05 &middot; heatmap</h2>
+  <h3>Density with one-color gradient.</h3>
+  <p class="lead">Heatmaps use a <strong>single pillar color at six alpha stops</strong> (0, 15%, 35%, 55%, 75%, 100%). Orange = waste intensity (CPU idle, hours non-prod running). Never two-color diverging maps, they ambiguously read as gain-loss.</p>
+
+  <div class="heatmap">
+    <div class="cell l0">mon</div><div class="cell l1">02</div><div class="cell l2">03</div><div class="cell l2">04</div><div class="cell l3">05</div><div class="cell l3">06</div><div class="cell l4">07</div><div class="cell l4">08</div><div class="cell l5">09</div><div class="cell l5">10</div><div class="cell l4">11</div><div class="cell l3">12</div>
+    <div class="cell l0">tue</div><div class="cell l0">02</div><div class="cell l1">03</div><div class="cell l2">04</div><div class="cell l3">05</div><div class="cell l4">06</div><div class="cell l5">07</div><div class="cell l5">08</div><div class="cell l5">09</div><div class="cell l4">10</div><div class="cell l3">11</div><div class="cell l2">12</div>
+    <div class="cell l0">wed</div><div class="cell l0">02</div><div class="cell l1">03</div><div class="cell l2">04</div><div class="cell l3">05</div><div class="cell l4">06</div><div class="cell l5">07</div><div class="cell l5">08</div><div class="cell l5">09</div><div class="cell l5">10</div><div class="cell l4">11</div><div class="cell l3">12</div>
+    <div class="cell l0">thu</div><div class="cell l0">02</div><div class="cell l1">03</div><div class="cell l2">04</div><div class="cell l3">05</div><div class="cell l4">06</div><div class="cell l5">07</div><div class="cell l5">08</div><div class="cell l5">09</div><div class="cell l4">10</div><div class="cell l4">11</div><div class="cell l3">12</div>
+    <div class="cell l0">fri</div><div class="cell l0">02</div><div class="cell l0">03</div><div class="cell l1">04</div><div class="cell l2">05</div><div class="cell l3">06</div><div class="cell l4">07</div><div class="cell l4">08</div><div class="cell l4">09</div><div class="cell l3">10</div><div class="cell l2">11</div><div class="cell l1">12</div>
+    <div class="cell l1">sat</div><div class="cell l1">02</div><div class="cell l1">03</div><div class="cell l1">04</div><div class="cell l1">05</div><div class="cell l1">06</div><div class="cell l1">07</div><div class="cell l1">08</div><div class="cell l1">09</div><div class="cell l1">10</div><div class="cell l1">11</div><div class="cell l1">12</div>
+    <div class="cell l1">sun</div><div class="cell l1">02</div><div class="cell l1">03</div><div class="cell l1">04</div><div class="cell l1">05</div><div class="cell l1">06</div><div class="cell l1">07</div><div class="cell l1">08</div><div class="cell l1">09</div><div class="cell l1">10</div><div class="cell l1">11</div><div class="cell l1">12</div>
+  </div>
+  <div class="hm-legend">
+    <span>less wasted</span>
+    <div class="scale">
+      <span style="background:#15151A"></span>
+      <span style="background:rgba(245,133,73,0.15)"></span>
+      <span style="background:rgba(245,133,73,0.35)"></span>
+      <span style="background:rgba(245,133,73,0.55)"></span>
+      <span style="background:rgba(245,133,73,0.75)"></span>
+      <span style="background:var(--zop-orange)"></span>
+    </div>
+    <span>more wasted</span>
+  </div>
+</section>
+
+
+<!-- ======== 6 · gauges ======== -->
+<section class="sec">
+  <h2>&#167; 06 &middot; gauges</h2>
+  <h3>Single-metric radial.</h3>
+  <p class="lead">Gauges use SVG <code>stroke-dasharray</code> on a circle. Arc color follows the metric's semantic, orange for waste ratios, green for savings realized, blue for monitored counts. Thickness 8px stroke. Never full 360-ring, 270° arc minimum.</p>
+
+  <div class="gauges">
+    <div class="gauge-card">
+      <span class="t">&middot; waste ratio</span>
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r="58" fill="none" stroke="var(--line-2)" stroke-width="8"/>
+        <circle cx="70" cy="70" r="58" fill="none" stroke="var(--zop-orange)" stroke-width="8" stroke-dasharray="94 270" stroke-dashoffset="0" transform="rotate(-90 70 70)" stroke-linecap="butt"/>
+      </svg>
+      <span class="v" style="color:var(--zop-orange)">26%</span>
+      <span class="s">of $182K monthly bill</span>
+    </div>
+    <div class="gauge-card">
+      <span class="t">&middot; reclaimed</span>
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r="58" fill="none" stroke="var(--line-2)" stroke-width="8"/>
+        <circle cx="70" cy="70" r="58" fill="none" stroke="var(--zop-green)" stroke-width="8" stroke-dasharray="76 270" stroke-dashoffset="0" transform="rotate(-90 70 70)" stroke-linecap="butt"/>
+      </svg>
+      <span class="v" style="color:var(--zop-green)">21%</span>
+      <span class="s">applied &middot; rollback-ready</span>
+    </div>
+    <div class="gauge-card">
+      <span class="t">&middot; uptime</span>
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r="58" fill="none" stroke="var(--line-2)" stroke-width="8"/>
+        <circle cx="70" cy="70" r="58" fill="none" stroke="#4A66D4" stroke-width="8" stroke-dasharray="269 270" stroke-dashoffset="0" transform="rotate(-90 70 70)" stroke-linecap="butt"/>
+      </svg>
+      <span class="v" style="color:var(--ink)">99.98%</span>
+      <span class="s">90-day &middot; SLA threshold 99.9%</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ======== 7 · axis rules ======== -->
+<section class="sec">
+  <h2>&#167; 07 &middot; axis + grid</h2>
+  <h3>The rules behind every chart.</h3>
+  <p class="lead">Axes, grid lines, tick marks. Never show what's noise.</p>
+  <div class="axis-spec">
+    <div>
+      <div class="k">axis line</div>
+      <div class="v">1px solid <code>var(--line)</code> on x-axis only · no y-axis line · y-axis uses labels to their own left.</div>
+    </div>
+    <div>
+      <div class="k">grid lines</div>
+      <div class="v">horizontal only · 1px dashed <code>var(--line)</code> at rgba .5 · 4-5 lines max · never vertical grid.</div>
+    </div>
+    <div>
+      <div class="k">tick labels</div>
+      <div class="v">JetBrains Mono · 10px · <code>var(--ink-4)</code> · letter-spacing 0.04em · lowercase months (<em>jan · feb · mar</em>).</div>
+    </div>
+    <div>
+      <div class="k">axis label</div>
+      <div class="v">usually omitted, title of the chart makes it obvious. If kept: mono 10px uppercase 0.14em tracking.</div>
+    </div>
+    <div>
+      <div class="k">units</div>
+      <div class="v">money in thousands (<em>$182K</em>) · millions (<em>$1.2M</em>) · tabular-nums always. Never raw cents.</div>
+    </div>
+    <div>
+      <div class="k">zero line</div>
+      <div class="v">if chart crosses zero, draw a 1.5px <code>var(--line-b)</code> line at y=0. Labels above / below.</div>
+    </div>
+    <div>
+      <div class="k">annotation</div>
+      <div class="v">mono 10px label · thin 1px line pointing to the datum · offset 12px min clearance.</div>
+    </div>
+    <div>
+      <div class="k">empty state</div>
+      <div class="v">dashed outline of the chart container · centered mono label "no data in range".</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ======== 8 · TIME-SERIES LINE ======== -->
+<section class="sec">
+  <h2>&#167; 08 &middot; time-series line</h2>
+  <h3>12-month spend trend.</h3>
+  <p class="lead">The canonical chart for a cost platform &mdash; a thin line tracking monthly spend across a 12-month window, with a <strong>forecast band</strong> projecting the next 3 months. Annotation arrow at the point ZopDev kicked in. Tabular y-axis in thousands, lowercase month labels on x-axis.</p>
+
+  <div class="chart-card" style="padding:var(--sp-7); background:var(--bg-1); border:1px solid var(--line-2)">
+    <span class="title"> monthly spend · aws + azure + gcp · 12-mo + 3-mo forecast</span>
+    <svg width="100%" height="240" viewBox="0 0 800 240" preserveAspectRatio="none" style="margin-top:12px">
+      <!-- grid lines -->
+      <line x1="0" y1="40"  x2="800" y2="40"  stroke="#2A2A34" stroke-dasharray="2 4"/>
+      <line x1="0" y1="100" x2="800" y2="100" stroke="#2A2A34" stroke-dasharray="2 4"/>
+      <line x1="0" y1="160" x2="800" y2="160" stroke="#2A2A34" stroke-dasharray="2 4"/>
+      <line x1="0" y1="220" x2="800" y2="220" stroke="#2A2A34"/>
+      <!-- y-axis ticks (mono, right-aligned to the left) -->
+      <text x="4" y="44"  fill="#8A8378" font-family="JetBrains Mono" font-size="10" letter-spacing="0.04em">$250K</text>
+      <text x="4" y="104" fill="#8A8378" font-family="JetBrains Mono" font-size="10" letter-spacing="0.04em">$180K</text>
+      <text x="4" y="164" fill="#8A8378" font-family="JetBrains Mono" font-size="10" letter-spacing="0.04em">$110K</text>
+      <text x="4" y="224" fill="#8A8378" font-family="JetBrains Mono" font-size="10" letter-spacing="0.04em">$40K</text>
+      <!-- actual spend line (12 points) -->
+      <polyline points="40,120 100,110 160,105 220,115 280,100 340,90 400,80 460,70 520,78 580,65 640,55 700,50" fill="none" stroke="#4A66D4" stroke-width="2" stroke-linejoin="miter"/>
+      <!-- forecast band (dashed) · 3 points forward -->
+      <polyline points="700,50 740,48 780,45" fill="none" stroke="#4A66D4" stroke-width="2" stroke-dasharray="4 4"/>
+      <!-- data points -->
+      <circle cx="40"  cy="120" r="3" fill="#4A66D4"/>
+      <circle cx="100" cy="110" r="3" fill="#4A66D4"/>
+      <circle cx="160" cy="105" r="3" fill="#4A66D4"/>
+      <circle cx="220" cy="115" r="3" fill="#4A66D4"/>
+      <circle cx="280" cy="100" r="3" fill="#4A66D4"/>
+      <circle cx="340" cy="90"  r="3" fill="#4A66D4"/>
+      <circle cx="400" cy="80"  r="3" fill="#F58549"/>
+      <circle cx="460" cy="70"  r="3" fill="#F58549"/>
+      <circle cx="520" cy="78"  r="3" fill="#F58549"/>
+      <circle cx="580" cy="65"  r="3" fill="#F58549"/>
+      <circle cx="640" cy="55"  r="3" fill="#F58549"/>
+      <circle cx="700" cy="50"  r="3" fill="#F58549"/>
+      <!-- annotation arrow at month 7 (ZopDev starts) -->
+      <line x1="400" y1="80" x2="400" y2="160" stroke="#F58549" stroke-width="1" stroke-dasharray="2 2"/>
+      <text x="410" y="158" fill="#F58549" font-family="JetBrains Mono" font-size="10" letter-spacing="0.04em"> ZopDev connects</text>
+      <text x="410" y="172" fill="#F58549" font-family="JetBrains Mono" font-size="10" letter-spacing="0.04em"> $182K &rarr; $152K in 30 days</text>
+      <!-- x-axis labels -->
+      <text x="40"  y="236" fill="#8A8378" font-family="JetBrains Mono" font-size="10" letter-spacing="0.04em" text-anchor="middle">may</text>
+      <text x="160" y="236" fill="#8A8378" font-family="JetBrains Mono" font-size="10" letter-spacing="0.04em" text-anchor="middle">jul</text>
+      <text x="280" y="236" fill="#8A8378" font-family="JetBrains Mono" font-size="10" letter-spacing="0.04em" text-anchor="middle">sep</text>
+      <text x="400" y="236" fill="#8A8378" font-family="JetBrains Mono" font-size="10" letter-spacing="0.04em" text-anchor="middle">nov</text>
+      <text x="520" y="236" fill="#8A8378" font-family="JetBrains Mono" font-size="10" letter-spacing="0.04em" text-anchor="middle">jan</text>
+      <text x="640" y="236" fill="#8A8378" font-family="JetBrains Mono" font-size="10" letter-spacing="0.04em" text-anchor="middle">mar</text>
+      <text x="740" y="236" fill="#8A8378" font-family="JetBrains Mono" font-size="10" letter-spacing="0.04em" text-anchor="middle">forecast</text>
+    </svg>
+  </div>
+
+  <div class="spec-foot" style="background:var(--bg-1); margin-top:var(--sp-4); border:1px solid var(--line-2)">
+    <strong>Rules:</strong> 2px stroke &middot; solid for actual, dashed for forecast &middot; 3px circle markers at data points &middot; color shifts mid-line when ZopDev connects (blue &rarr; orange = "we changed the trajectory") &middot; annotation line + mono label at inflection point.
+  </div>
+</section>
+
+
+<!-- ======== 9 · MULTI-LINE · per-cloud ======== -->
+<section class="sec">
+  <h2>&#167; 09 &middot; multi-line</h2>
+  <h3>Breakdown by cloud vendor.</h3>
+  <p class="lead">Three lines on one chart &mdash; AWS, Azure, GCP. Each gets its own pillar-adjacent tint. Legend beside the chart, never floating over it. Line weights uniform, no markers (too noisy with 3+ series).</p>
+
+  <div class="chart-row">
+    <div class="chart-card">
+      <span class="title"> spend by cloud · 12 weeks</span>
+      <svg width="100%" height="200" viewBox="0 0 500 200" preserveAspectRatio="none">
+        <line x1="0" y1="50"  x2="500" y2="50"  stroke="#2A2A34" stroke-dasharray="2 4"/>
+        <line x1="0" y1="100" x2="500" y2="100" stroke="#2A2A34" stroke-dasharray="2 4"/>
+        <line x1="0" y1="150" x2="500" y2="150" stroke="#2A2A34" stroke-dasharray="2 4"/>
+        <line x1="0" y1="195" x2="500" y2="195" stroke="#2A2A34"/>
+        <!-- AWS - largest, orange -->
+        <polyline points="10,80 50,75 90,78 130,72 170,65 210,60 250,55 290,58 330,52 370,48 410,42 450,40" fill="none" stroke="#F58549" stroke-width="2"/>
+        <!-- Azure - blue -->
+        <polyline points="10,120 50,118 90,115 130,112 170,108 210,105 250,100 290,96 330,92 370,88 410,85 450,82" fill="none" stroke="#4A66D4" stroke-width="2"/>
+        <!-- GCP - green -->
+        <polyline points="10,160 50,158 90,155 130,152 170,150 210,146 250,142 290,140 330,137 370,134 410,130 450,128" fill="none" stroke="#7FB236" stroke-width="2"/>
+        <text x="10" y="190" fill="#8A8378" font-family="JetBrains Mono" font-size="10">12 wks ago</text>
+        <text x="450" y="190" fill="#8A8378" font-family="JetBrains Mono" font-size="10" text-anchor="end">now</text>
+      </svg>
+      <div style="display:flex; gap:16px; margin-top:8px; font-family:var(--mono); font-size:11px;">
+        <span style="color:var(--zop-orange); display:flex; align-items:center; gap:6px;"><span style="width:10px; height:2px; background:#F58549"></span> aws $98K</span>
+        <span style="color:#4A66D4; display:flex; align-items:center; gap:6px;"><span style="width:10px; height:2px; background:#4A66D4"></span> azure $58K</span>
+        <span style="color:var(--zop-green); display:flex; align-items:center; gap:6px;"><span style="width:10px; height:2px; background:#7FB236"></span> gcp $26K</span>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <span class="title"> spend by team · top 3</span>
+      <svg width="100%" height="200" viewBox="0 0 500 200" preserveAspectRatio="none">
+        <line x1="0" y1="50"  x2="500" y2="50"  stroke="#2A2A34" stroke-dasharray="2 4"/>
+        <line x1="0" y1="100" x2="500" y2="100" stroke="#2A2A34" stroke-dasharray="2 4"/>
+        <line x1="0" y1="150" x2="500" y2="150" stroke="#2A2A34" stroke-dasharray="2 4"/>
+        <line x1="0" y1="195" x2="500" y2="195" stroke="#2A2A34"/>
+        <polyline points="10,60 50,65 90,55 130,70 170,50 210,68 250,55 290,42 330,60 370,38 410,45 450,32" fill="none" stroke="#F0EBDB" stroke-width="2"/>
+        <polyline points="10,110 50,108 90,112 130,108 170,115 210,110 250,118 290,115 330,112 370,120 410,118 450,122" fill="none" stroke="var(--ink-3)" stroke-width="2"/>
+        <polyline points="10,170 50,168 90,165 130,162 170,160 210,162 250,158 290,155 330,152 370,150 410,148 450,145" fill="none" stroke="#55555E" stroke-width="2"/>
+      </svg>
+      <div style="display:flex; gap:14px; margin-top:8px; font-family:var(--mono); font-size:11px;">
+        <span style="color:var(--ink); display:flex; align-items:center; gap:6px;"><span style="width:10px; height:2px; background:#F0EBDB"></span> platform</span>
+        <span style="color:var(--ink-3); display:flex; align-items:center; gap:6px;"><span style="width:10px; height:2px; background:#A8A195"></span> data</span>
+        <span style="color:#55555E; display:flex; align-items:center; gap:6px;"><span style="width:10px; height:2px; background:#55555E"></span> ml</span>
+      </div>
+    </div>
+  </div>
+  <div class="spec-foot" style="background:var(--bg-1); margin-top:var(--sp-4); border:1px solid var(--line-2)">
+    <strong>Cloud-vendor lines</strong> use the pillar trio (orange / blue / green) because the vendors are the dominant dimension. <strong>Team lines</strong> use grayscale steps (ink / ink-3 / ink-5) when the team name is the dimension &mdash; avoids over-associating a team with a pillar color.
+  </div>
+</section>
+
+
+<!-- ======== 10 · STACKED AREA ======== -->
+<section class="sec">
+  <h2>&#167; 10 &middot; stacked area</h2>
+  <h3>Cost composition over time.</h3>
+  <p class="lead">Stacked area answers: <em>how is the spend distributed across categories, and how is that distribution shifting?</em> Use when the total matters AND the breakdown matters. Order areas by value descending at the latest point.</p>
+
+  <div class="chart-card" style="padding:var(--sp-7); background:var(--bg-1); border:1px solid var(--line-2)">
+    <span class="title"> spend composition · 12 months · by workload type</span>
+    <svg width="100%" height="200" viewBox="0 0 800 200" preserveAspectRatio="none" style="margin-top:8px">
+      <!-- stacked polygons · compute, db, storage, network -->
+      <!-- compute (largest, top) -->
+      <polygon points="0,200 60,200 120,200 180,200 240,200 300,200 360,200 420,200 480,200 540,200 600,200 660,200 720,200 720,120 660,118 600,116 540,115 480,113 420,110 360,108 300,106 240,105 180,104 120,102 60,101 0,100" fill="#F58549" opacity="0.85"/>
+      <!-- db -->
+      <polygon points="0,100 60,101 120,102 180,104 240,105 300,106 360,108 420,110 480,113 540,115 600,116 660,118 720,120 720,152 660,151 600,150 540,148 480,146 420,145 360,144 300,143 240,142 180,141 120,140 60,140 0,139" fill="#4A66D4" opacity="0.85"/>
+      <!-- storage -->
+      <polygon points="0,139 60,140 120,140 180,141 240,142 300,143 360,144 420,145 480,146 540,148 600,150 660,151 720,152 720,178 660,177 600,176 540,175 480,175 420,174 360,173 300,173 240,172 180,172 120,171 60,170 0,170" fill="#7FB236" opacity="0.85"/>
+      <!-- network -->
+      <polygon points="0,170 60,170 120,171 180,172 240,172 300,173 360,173 420,174 480,175 540,175 600,176 660,177 720,178 720,192 660,192 600,191 540,191 480,190 420,190 360,190 300,189 240,189 180,188 120,188 60,187 0,187" fill="#F0EBDB" opacity="0.65"/>
+      <!-- baseline -->
+      <line x1="0" y1="192" x2="720" y2="192" stroke="#2A2A34"/>
+      <!-- y-axis -->
+      <text x="725" y="104" fill="#8A8378" font-family="JetBrains Mono" font-size="10">$182K</text>
+      <text x="725" y="144" fill="#8A8378" font-family="JetBrains Mono" font-size="10">$90K</text>
+      <text x="725" y="182" fill="#8A8378" font-family="JetBrains Mono" font-size="10">$20K</text>
+      <!-- x-axis -->
+      <text x="0" y="200" fill="#8A8378" font-family="JetBrains Mono" font-size="10">may</text>
+      <text x="360" y="200" fill="#8A8378" font-family="JetBrains Mono" font-size="10" text-anchor="middle">nov</text>
+      <text x="720" y="200" fill="#8A8378" font-family="JetBrains Mono" font-size="10" text-anchor="end">apr</text>
+    </svg>
+    <div style="display:flex; gap:16px; margin-top:12px; font-family:var(--mono); font-size:11px; flex-wrap:wrap;">
+      <span style="display:flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; background:#F58549; opacity:.85"></span> compute · $82K</span>
+      <span style="display:flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; background:#4A66D4; opacity:.85"></span> database · $52K</span>
+      <span style="display:flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; background:#7FB236; opacity:.85"></span> storage · $32K</span>
+      <span style="display:flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; background:#F0EBDB; opacity:.65"></span> network · $16K</span>
+    </div>
+  </div>
+  <div class="spec-foot" style="background:var(--bg-1); margin-top:var(--sp-4); border:1px solid var(--line-2)">
+    <strong>Stacking order:</strong> largest at top, smallest at bottom. <strong>Opacity:</strong> 0.85 on pillar colors, 0.65 on cream (so it still reads on dark). Never overlap areas with different meanings &mdash; the reader should always be able to trace one band horizontally.
+  </div>
+</section>
+
+
+<!-- ======== 11 · HORIZONTAL BAR · top-N ======== -->
+<section class="sec">
+  <h2>&#167; 11 &middot; horizontal bar</h2>
+  <h3>Top-N resources by spend.</h3>
+  <p class="lead">The &ldquo;worst offenders&rdquo; view. Sort descending by value. Resource name on the left, money on the right, bar fills the track proportional to max. <strong>Red bar = non-remediated</strong>, <strong>orange = in-queue</strong>, <strong>green = just-remediated</strong>.</p>
+
+  <div class="chart-card" style="padding:var(--sp-6); background:var(--bg-1); border:1px solid var(--line-2); gap:0">
+    <span class="title" style="margin-bottom:12px"> top 10 resources &middot; monthly run-rate &middot; sorted desc</span>
+
+    <div style="display:grid; grid-template-columns:220px 1fr 80px; gap:14px; align-items:center; padding:10px 0; font-family:var(--mono); font-size:12px; border-top:1px solid var(--line);">
+      <span style="color:var(--ink); font-family:var(--font); font-weight:500; letter-spacing:-0.02em; font-size:13px;">analytics-rds &middot; db.m5.2xl</span>
+      <div style="height:8px; background:var(--bg-3); position:relative;"><div style="height:100%; width:95%; background:#F58549;"></div></div>
+      <span style="color:var(--ink); font-variant-numeric:tabular-nums; text-align:right;">$1,204</span>
+    </div>
+    <div style="display:grid; grid-template-columns:220px 1fr 80px; gap:14px; align-items:center; padding:10px 0; font-family:var(--mono); font-size:12px; border-top:1px solid var(--line);">
+      <span style="color:var(--ink); font-family:var(--font); font-weight:500; letter-spacing:-0.02em; font-size:13px;">web-prod &middot; i-0abc1234</span>
+      <div style="height:8px; background:var(--bg-3); position:relative;"><div style="height:100%; width:70%; background:#F58549;"></div></div>
+      <span style="color:var(--ink); font-variant-numeric:tabular-nums; text-align:right;">$842</span>
+    </div>
+    <div style="display:grid; grid-template-columns:220px 1fr 80px; gap:14px; align-items:center; padding:10px 0; font-family:var(--mono); font-size:12px; border-top:1px solid var(--line);">
+      <span style="color:var(--ink); font-family:var(--font); font-weight:500; letter-spacing:-0.02em; font-size:13px;">cache-redis-prod</span>
+      <div style="height:8px; background:var(--bg-3); position:relative;"><div style="height:100%; width:32%; background:#4A66D4;"></div></div>
+      <span style="color:var(--ink); font-variant-numeric:tabular-nums; text-align:right;">$390</span>
+    </div>
+    <div style="display:grid; grid-template-columns:220px 1fr 80px; gap:14px; align-items:center; padding:10px 0; font-family:var(--mono); font-size:12px; border-top:1px solid var(--line);">
+      <span style="color:var(--ink); font-family:var(--font); font-weight:500; letter-spacing:-0.02em; font-size:13px;">worker-pool-7 &middot; idle</span>
+      <div style="height:8px; background:var(--bg-3); position:relative;"><div style="height:100%; width:26%; background:#F58549;"></div></div>
+      <span style="color:var(--ink); font-variant-numeric:tabular-nums; text-align:right;">$318</span>
+    </div>
+    <div style="display:grid; grid-template-columns:220px 1fr 80px; gap:14px; align-items:center; padding:10px 0; font-family:var(--mono); font-size:12px; border-top:1px solid var(--line);">
+      <span style="color:var(--ink-3); font-family:var(--font); font-weight:500; letter-spacing:-0.02em; font-size:13px; text-decoration:line-through; text-decoration-color:rgba(127,178,54,0.5);">terminated-i-0xyz &middot; ec2</span>
+      <div style="height:8px; background:var(--bg-3); position:relative;"><div style="height:100%; width:20%; background:#7FB236;"></div></div>
+      <span style="color:var(--zop-green); font-variant-numeric:tabular-nums; text-align:right;">-$234</span>
+    </div>
+    <div style="display:grid; grid-template-columns:220px 1fr 80px; gap:14px; align-items:center; padding:10px 0; font-family:var(--mono); font-size:12px; border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+      <span style="color:var(--ink); font-family:var(--font); font-weight:500; letter-spacing:-0.02em; font-size:13px;">ml-batch-03 &middot; idle</span>
+      <div style="height:8px; background:var(--bg-3); position:relative;"><div style="height:100%; width:17%; background:#F58549;"></div></div>
+      <span style="color:var(--ink); font-variant-numeric:tabular-nums; text-align:right;">$204</span>
+    </div>
+  </div>
+  <div class="spec-foot" style="background:var(--bg-1); margin-top:var(--sp-4); border:1px solid var(--line-2)">
+    <strong>Bar colors are semantic:</strong> orange = needs attention (high spend or idle), blue = healthy running, green = recently terminated (display for 30 days with strike-through name + negative delta). <strong>Never a rainbow</strong> of bars just because the categories differ.
+  </div>
+</section>
+
+
+<!-- ======== 12 · TREEMAP · hierarchy ======== -->
+<section class="sec">
+  <h2>&#167; 12 &middot; treemap</h2>
+  <h3>Cost hierarchy at a glance.</h3>
+  <p class="lead">Treemap answers: <em>how much of the pie is each account, and inside each account, each service?</em> Every rectangle is a spend tier. Size = monthly $. Color = cloud vendor. Hover = full path.</p>
+
+  <div class="chart-card" style="padding:var(--sp-7); background:var(--bg-1); border:1px solid var(--line-2); gap:8px">
+    <span class="title"> cost hierarchy &middot; account &rarr; service &middot; april 2026</span>
+    <svg width="100%" height="300" viewBox="0 0 800 300">
+      <!-- AWS block (60%) - orange family -->
+      <g>
+        <rect x="0"   y="0" width="480" height="180" fill="#F58549" opacity="0.9" stroke="#060608" stroke-width="2"/>
+        <text x="12"  y="24" fill="#0A0A0A" font-family="Space Grotesk" font-weight="700" font-size="14">aws &middot; prod-us &middot; $98K</text>
+        <!-- inside AWS: ec2, rds, s3 -->
+        <rect x="0"   y="32"  width="280" height="148" fill="#F58549" opacity="0.6" stroke="#060608" stroke-width="2"/>
+        <text x="12"  y="54"  fill="#0A0A0A" font-family="Space Grotesk" font-weight="500" font-size="13">ec2 &middot; $58K</text>
+        <text x="12"  y="72"  fill="#0A0A0A" font-family="JetBrains Mono" font-size="10" letter-spacing="0.04em"> 847 instances</text>
+        <rect x="280" y="32"  width="120" height="98" fill="#F58549" opacity="0.45" stroke="#060608" stroke-width="2"/>
+        <text x="290" y="54"  fill="#0A0A0A" font-family="Space Grotesk" font-weight="500" font-size="13">rds &middot; $26K</text>
+        <rect x="400" y="32"  width="80"  height="78" fill="#F58549" opacity="0.35" stroke="#060608" stroke-width="2"/>
+        <text x="408" y="54"  fill="#0A0A0A" font-family="Space Grotesk" font-weight="500" font-size="12">s3 &middot; $14K</text>
+        <rect x="280" y="130" width="200" height="50" fill="#F58549" opacity="0.3" stroke="#060608" stroke-width="2"/>
+        <text x="290" y="150" fill="#0A0A0A" font-family="Space Grotesk" font-weight="500" font-size="12">ebs &middot; $8K</text>
+      </g>
+      <!-- Azure block (25%) - blue family -->
+      <g>
+        <rect x="480" y="0" width="320" height="180" fill="#4A66D4" opacity="0.9" stroke="#060608" stroke-width="2"/>
+        <text x="492" y="24" fill="#F0EBDB" font-family="Space Grotesk" font-weight="700" font-size="14">azure &middot; prod-eu &middot; $58K</text>
+        <rect x="480" y="32" width="200" height="148" fill="#4A66D4" opacity="0.65" stroke="#060608" stroke-width="2"/>
+        <text x="492" y="54" fill="#F0EBDB" font-family="Space Grotesk" font-weight="500" font-size="13">vm &middot; $38K</text>
+        <rect x="680" y="32" width="120" height="76" fill="#4A66D4" opacity="0.45" stroke="#060608" stroke-width="2"/>
+        <text x="690" y="54" fill="#F0EBDB" font-family="Space Grotesk" font-weight="500" font-size="12">sql &middot; $12K</text>
+        <rect x="680" y="108" width="120" height="72" fill="#4A66D4" opacity="0.3" stroke="#060608" stroke-width="2"/>
+        <text x="690" y="128" fill="#F0EBDB" font-family="Space Grotesk" font-weight="500" font-size="12">blob &middot; $8K</text>
+      </g>
+      <!-- GCP block (15%) - green family -->
+      <g>
+        <rect x="0"   y="180" width="800" height="120" fill="#7FB236" opacity="0.9" stroke="#060608" stroke-width="2"/>
+        <text x="12"  y="204" fill="#0A0A0A" font-family="Space Grotesk" font-weight="700" font-size="14">gcp &middot; prod-asia &middot; $26K</text>
+        <rect x="0"   y="212" width="440" height="88" fill="#7FB236" opacity="0.6" stroke="#060608" stroke-width="2"/>
+        <text x="12"  y="234" fill="#0A0A0A" font-family="Space Grotesk" font-weight="500" font-size="13">compute-engine &middot; $16K</text>
+        <rect x="440" y="212" width="220" height="88" fill="#7FB236" opacity="0.45" stroke="#060608" stroke-width="2"/>
+        <text x="452" y="234" fill="#0A0A0A" font-family="Space Grotesk" font-weight="500" font-size="12">cloud-sql &middot; $6K</text>
+        <rect x="660" y="212" width="140" height="88" fill="#7FB236" opacity="0.3" stroke="#060608" stroke-width="2"/>
+        <text x="672" y="234" fill="#0A0A0A" font-family="Space Grotesk" font-weight="500" font-size="12">storage &middot; $4K</text>
+      </g>
+    </svg>
+  </div>
+  <div class="spec-foot" style="background:var(--bg-1); margin-top:var(--sp-4); border:1px solid var(--line-2)">
+    <strong>Rectangles always border each other with 2px ink.</strong> Never rounded, never gapped. <strong>Color = the top-level dimension</strong> (cloud vendor). <strong>Opacity = depth</strong> (higher opacity = higher level in the tree). Text contrast: dark text on orange/green, cream text on blue.
+  </div>
+</section>
+
+
+<!-- ======== 13 · WATERFALL · savings breakdown ======== -->
+<section class="sec">
+  <h2>&#167; 13 &middot; waterfall</h2>
+  <h3>Where the money actually went.</h3>
+  <p class="lead">A waterfall chart shows the bridge from <em>spend last month</em> to <em>spend this month</em> &mdash; accumulating each change. Orange bars add (new resources, scale-ups), green bars subtract (remediations, rightsizing). Start and end totals are ink. Critical for Showback reports.</p>
+
+  <div class="chart-card" style="padding:var(--sp-7); background:var(--bg-1); border:1px solid var(--line-2); gap:8px">
+    <span class="title"> march &rarr; april spend bridge &middot; how we got from $182K to $152K</span>
+    <svg width="100%" height="260" viewBox="0 0 800 260">
+      <line x1="0" y1="220" x2="800" y2="220" stroke="#2A2A34"/>
+      <!-- baseline bar · march total -->
+      <rect x="20"  y="60"  width="80" height="160" fill="#F0EBDB"/>
+      <text x="60"  y="45"  fill="#F0EBDB" font-family="Space Grotesk" font-weight="700" font-size="15" text-anchor="middle">$182K</text>
+      <text x="60"  y="240" fill="#8A8378" font-family="JetBrains Mono" font-size="10" text-anchor="middle">mar 31</text>
+      <!-- + new resources · orange -->
+      <rect x="140" y="40" width="80" height="20" fill="#F58549"/>
+      <text x="180" y="32"  fill="#F58549" font-family="Space Grotesk" font-weight="600" font-size="12" text-anchor="middle">+$4K</text>
+      <text x="180" y="240" fill="#8A8378" font-family="JetBrains Mono" font-size="10" text-anchor="middle">new vms</text>
+      <line x1="100" y1="60" x2="140" y2="60" stroke="#F58549" stroke-dasharray="2 2"/>
+      <!-- + scale-ups · orange -->
+      <rect x="240" y="30" width="80" height="10" fill="#F58549"/>
+      <text x="280" y="22"  fill="#F58549" font-family="Space Grotesk" font-weight="600" font-size="12" text-anchor="middle">+$2K</text>
+      <text x="280" y="240" fill="#8A8378" font-family="JetBrains Mono" font-size="10" text-anchor="middle">scale-up</text>
+      <line x1="220" y1="40" x2="240" y2="40" stroke="#F58549" stroke-dasharray="2 2"/>
+      <!-- - rightsizing · green -->
+      <rect x="340" y="30" width="80" height="45" fill="#7FB236"/>
+      <text x="380" y="22"  fill="#7FB236" font-family="Space Grotesk" font-weight="600" font-size="12" text-anchor="middle">-$12K</text>
+      <text x="380" y="240" fill="#8A8378" font-family="JetBrains Mono" font-size="10" text-anchor="middle">rightsize</text>
+      <line x1="320" y1="30" x2="340" y2="30" stroke="#7FB236" stroke-dasharray="2 2"/>
+      <!-- - idle terminations · green -->
+      <rect x="440" y="75" width="80" height="55" fill="#7FB236"/>
+      <text x="480" y="68"  fill="#7FB236" font-family="Space Grotesk" font-weight="600" font-size="12" text-anchor="middle">-$14K</text>
+      <text x="480" y="240" fill="#8A8378" font-family="JetBrains Mono" font-size="10" text-anchor="middle">terminated</text>
+      <line x1="420" y1="75" x2="440" y2="75" stroke="#7FB236" stroke-dasharray="2 2"/>
+      <!-- - schedule · green -->
+      <rect x="540" y="130" width="80" height="30" fill="#7FB236"/>
+      <text x="580" y="122" fill="#7FB236" font-family="Space Grotesk" font-weight="600" font-size="12" text-anchor="middle">-$8K</text>
+      <text x="580" y="240" fill="#8A8378" font-family="JetBrains Mono" font-size="10" text-anchor="middle">non-prod sched</text>
+      <line x1="520" y1="130" x2="540" y2="130" stroke="#7FB236" stroke-dasharray="2 2"/>
+      <!-- - orphan cleanup · green -->
+      <rect x="640" y="160" width="80" height="12" fill="#7FB236"/>
+      <text x="680" y="152" fill="#7FB236" font-family="Space Grotesk" font-weight="600" font-size="12" text-anchor="middle">-$2K</text>
+      <text x="680" y="240" fill="#8A8378" font-family="JetBrains Mono" font-size="10" text-anchor="middle">orphan ebs</text>
+      <line x1="620" y1="160" x2="640" y2="160" stroke="#7FB236" stroke-dasharray="2 2"/>
+      <!-- final bar · april -->
+      <rect x="740" y="90" width="40" height="130" fill="#F0EBDB"/>
+      <text x="760" y="80"  fill="#F0EBDB" font-family="Space Grotesk" font-weight="700" font-size="15" text-anchor="middle">$152K</text>
+      <text x="760" y="240" fill="#8A8378" font-family="JetBrains Mono" font-size="10" text-anchor="middle">apr 30</text>
+      <line x1="720" y1="172" x2="740" y2="172" stroke="#F0EBDB" stroke-dasharray="2 2"/>
+    </svg>
+    <div style="display:flex; gap:16px; margin-top:12px; font-family:var(--mono); font-size:11px;">
+      <span style="display:flex; align-items:center; gap:6px; color:var(--ink);"><span style="width:10px; height:10px; background:#F0EBDB"></span> total</span>
+      <span style="display:flex; align-items:center; gap:6px; color:var(--zop-orange);"><span style="width:10px; height:10px; background:#F58549"></span> added</span>
+      <span style="display:flex; align-items:center; gap:6px; color:var(--zop-green);"><span style="width:10px; height:10px; background:#7FB236"></span> saved</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ======== 14 · ANOMALY SPIKE ======== -->
+<section class="sec">
+  <h2>&#167; 14 &middot; anomaly detection</h2>
+  <h3>Highlighting the spike.</h3>
+  <p class="lead">Any chart can show an anomaly. The band is the <em>expected range</em> (7-day p50 &plusmn; 1 std). The line is the actual. The <strong>red dot + leader + label</strong> appears only at the datum that breached. Never highlight "maybe" spikes &mdash; the callout is for definite anomalies only.</p>
+
+  <div class="chart-card" style="padding:var(--sp-7); background:var(--bg-1); border:1px solid var(--line-2)">
+    <span class="title"> eu-west-2 egress &middot; 14 days &middot; anomaly detected apr 22</span>
+    <svg width="100%" height="200" viewBox="0 0 700 200" preserveAspectRatio="none" style="margin-top:8px">
+      <!-- expected range band (faint) -->
+      <polygon points="0,110 50,108 100,112 150,110 200,108 250,112 300,110 350,108 400,110 450,112 500,108 550,110 600,108 650,112 700,110 700,80 650,82 600,78 550,80 500,78 450,82 400,80 350,78 300,80 250,82 200,78 150,80 100,82 50,78 0,80" fill="#2A2A34" opacity="0.7"/>
+      <!-- actual line -->
+      <polyline points="25,95 75,92 125,98 175,90 225,94 275,95 325,92 375,30 425,95 475,92 525,94 575,90 625,92 675,95" fill="none" stroke="#F0EBDB" stroke-width="2"/>
+      <!-- data points -->
+      <circle cx="25"  cy="95" r="2.5" fill="#F0EBDB"/>
+      <circle cx="75"  cy="92" r="2.5" fill="#F0EBDB"/>
+      <circle cx="125" cy="98" r="2.5" fill="#F0EBDB"/>
+      <circle cx="175" cy="90" r="2.5" fill="#F0EBDB"/>
+      <circle cx="225" cy="94" r="2.5" fill="#F0EBDB"/>
+      <circle cx="275" cy="95" r="2.5" fill="#F0EBDB"/>
+      <circle cx="325" cy="92" r="2.5" fill="#F0EBDB"/>
+      <circle cx="375" cy="30" r="4.5" fill="#F87171"/>
+      <circle cx="425" cy="95" r="2.5" fill="#F0EBDB"/>
+      <circle cx="475" cy="92" r="2.5" fill="#F0EBDB"/>
+      <circle cx="525" cy="94" r="2.5" fill="#F0EBDB"/>
+      <circle cx="575" cy="90" r="2.5" fill="#F0EBDB"/>
+      <circle cx="625" cy="92" r="2.5" fill="#F0EBDB"/>
+      <circle cx="675" cy="95" r="2.5" fill="#F0EBDB"/>
+      <!-- anomaly leader -->
+      <line x1="375" y1="30" x2="490" y2="30" stroke="#F87171" stroke-width="1"/>
+      <text x="498" y="33" fill="#F87171" font-family="JetBrains Mono" font-size="11" letter-spacing="0.04em"> anomaly &middot; +213% egress</text>
+      <text x="498" y="48" fill="#8A8378" font-family="JetBrains Mono" font-size="10" letter-spacing="0.04em"> caused by: backup-job #847</text>
+      <text x="498" y="62" fill="#8A8378" font-family="JetBrains Mono" font-size="10" letter-spacing="0.04em"> cost impact: $412 over 4hr</text>
+      <!-- axes -->
+      <text x="20" y="195" fill="#8A8378" font-family="JetBrains Mono" font-size="10">apr 08</text>
+      <text x="375" y="195" fill="#F87171" font-family="JetBrains Mono" font-size="10" text-anchor="middle" font-weight="700">apr 22</text>
+      <text x="675" y="195" fill="#8A8378" font-family="JetBrains Mono" font-size="10" text-anchor="end">apr 22</text>
+    </svg>
+  </div>
+</section>
+
+
+<!-- ======== 15 · EVENT TIMELINE ======== -->
+<section class="sec">
+  <h2>&#167; 15 &middot; event timeline</h2>
+  <h3>Remediation history.</h3>
+  <p class="lead">A timeline shows <em>what happened, when, by whom</em>. Every event is a horizontal row with mono timestamp, pillar-tinted icon, short subject line, and optional $ delta. Used in audit log, Showback reports, incident post-mortems.</p>
+
+  <div class="chart-card" style="padding:var(--sp-7); background:var(--bg-1); border:1px solid var(--line-2); gap:0">
+    <span class="title" style="margin-bottom:14px"> remediation timeline &middot; last 24 hours</span>
+
+    <div style="position:relative; padding-left:28px;">
+      <div style="position:absolute; top:0; bottom:0; left:6px; width:1px; background:var(--line-2);"></div>
+
+      <div style="position:relative; padding:12px 0; border-bottom:1px solid var(--line); display:grid; grid-template-columns:80px 1fr auto; gap:16px; align-items:baseline;">
+        <span style="position:absolute; left:-28px; top:17px; width:13px; height:13px; background:#7FB236;"></span>
+        <span style="font-family:var(--mono); font-size:11px; color:var(--ink-4); letter-spacing:.04em;">14:32 utc</span>
+        <span style="color:var(--ink); font-size:13px; letter-spacing:-0.02em;"><strong style="color:var(--ink)">Terminated</strong> worker-pool-7 &middot; idle 14d &middot; by CDCR auto-apply</span>
+        <span style="font-family:var(--mono); font-size:12px; color:var(--zop-green); font-variant-numeric:tabular-nums;">+$318/mo</span>
+      </div>
+      <div style="position:relative; padding:12px 0; border-bottom:1px solid var(--line); display:grid; grid-template-columns:80px 1fr auto; gap:16px; align-items:baseline;">
+        <span style="position:absolute; left:-28px; top:17px; width:13px; height:13px; background:#7FB236;"></span>
+        <span style="font-family:var(--mono); font-size:11px; color:var(--ink-4); letter-spacing:.04em;">13:15 utc</span>
+        <span style="color:var(--ink); font-size:13px; letter-spacing:-0.02em;"><strong style="color:var(--ink)">Right-sized</strong> analytics-rds: db.m5.2xl &rarr; db.t3.medium &middot; by ravindra</span>
+        <span style="font-family:var(--mono); font-size:12px; color:var(--zop-green); font-variant-numeric:tabular-nums;">+$1,480/mo</span>
+      </div>
+      <div style="position:relative; padding:12px 0; border-bottom:1px solid var(--line); display:grid; grid-template-columns:80px 1fr auto; gap:16px; align-items:baseline;">
+        <span style="position:absolute; left:-28px; top:17px; width:13px; height:13px; background:#4A66D4;"></span>
+        <span style="font-family:var(--mono); font-size:11px; color:var(--ink-4); letter-spacing:.04em;">11:42 utc</span>
+        <span style="color:var(--ink); font-size:13px; letter-spacing:-0.02em;"><strong style="color:var(--ink)">Scheduled</strong> dev-eu staging &middot; mon-fri 08-19 GMT &middot; by policy</span>
+        <span style="font-family:var(--mono); font-size:12px; color:var(--zop-green); font-variant-numeric:tabular-nums;">+$2,140/mo</span>
+      </div>
+      <div style="position:relative; padding:12px 0; border-bottom:1px solid var(--line); display:grid; grid-template-columns:80px 1fr auto; gap:16px; align-items:baseline;">
+        <span style="position:absolute; left:-28px; top:17px; width:13px; height:13px; background:#F58549;"></span>
+        <span style="font-family:var(--mono); font-size:11px; color:var(--ink-4); letter-spacing:.04em;">09:20 utc</span>
+        <span style="color:var(--ink); font-size:13px; letter-spacing:-0.02em;"><strong style="color:var(--ink)">Flagged</strong> 14 idle EC2 instances &middot; us-east-1 &middot; awaiting approval</span>
+        <span style="font-family:var(--mono); font-size:12px; color:var(--zop-orange); font-variant-numeric:tabular-nums;">+$2,810/mo</span>
+      </div>
+      <div style="position:relative; padding:12px 0; display:grid; grid-template-columns:80px 1fr auto; gap:16px; align-items:baseline;">
+        <span style="position:absolute; left:-28px; top:17px; width:13px; height:13px; background:#F0EBDB;"></span>
+        <span style="font-family:var(--mono); font-size:11px; color:var(--ink-4); letter-spacing:.04em;">00:00 utc</span>
+        <span style="color:var(--ink); font-size:13px; letter-spacing:-0.02em;"><strong style="color:var(--ink)">CDCR scan</strong> run #12,847 &middot; 847 resources &middot; 12 new findings &middot; 0 regressions</span>
+        <span style="font-family:var(--mono); font-size:12px; color:var(--ink-3); font-variant-numeric:tabular-nums;">&mdash;</span>
+      </div>
+    </div>
+  </div>
+  <div class="spec-foot" style="background:var(--bg-1); margin-top:var(--sp-4); border:1px solid var(--line-2)">
+    <strong>Dot color:</strong> green = remediation applied &middot; orange = finding flagged &middot; blue = schedule/policy change &middot; cream = system event (scan, maintenance). <strong>Timeline runs oldest at bottom, newest at top</strong> (reverse chronological &mdash; like a chat feed).
+  </div>
+</section>
+
+
+<!-- ======== 16 · VARIANCE / DIFF ======== -->
+<section class="sec">
+  <h2>&#167; 16 &middot; variance / diff</h2>
+  <h3>This month vs last.</h3>
+  <p class="lead">A single-row variance chart: left column is last period, right column is this period, center is delta. Use for executive summaries, weekly Showback digests. <strong>Only shows change &mdash; if delta is zero, hide the row</strong>.</p>
+
+  <div class="chart-card" style="padding:var(--sp-6); background:var(--bg-1); border:1px solid var(--line-2); gap:12px">
+    <span class="title"> month-over-month variance &middot; top categories</span>
+
+    <div style="display:grid; grid-template-columns:180px 1fr 100px 1fr 100px; gap:16px; align-items:center; padding:14px 0; border-top:1px solid var(--line); font-family:var(--mono); font-size:12px;">
+      <span style="color:var(--ink); font-family:var(--font); font-weight:500; font-size:13px; letter-spacing:-0.02em;">compute &middot; ec2/vm</span>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="flex:1; height:6px; background:var(--bg-3); position:relative;"><div style="height:100%; width:100%; background:#F0EBDB;"></div></div>
+        <span style="color:var(--ink); font-variant-numeric:tabular-nums;">$94K</span>
+      </div>
+      <span style="color:var(--zop-green); font-variant-numeric:tabular-nums; text-align:center;">&darr; -13%</span>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="flex:1; height:6px; background:var(--bg-3); position:relative;"><div style="height:100%; width:87%; background:#7FB236;"></div></div>
+        <span style="color:var(--ink); font-variant-numeric:tabular-nums;">$82K</span>
+      </div>
+      <span style="color:var(--zop-green); font-variant-numeric:tabular-nums; text-align:right;">-$12K</span>
+    </div>
+
+    <div style="display:grid; grid-template-columns:180px 1fr 100px 1fr 100px; gap:16px; align-items:center; padding:14px 0; border-top:1px solid var(--line); font-family:var(--mono); font-size:12px;">
+      <span style="color:var(--ink); font-family:var(--font); font-weight:500; font-size:13px; letter-spacing:-0.02em;">database &middot; rds/sql</span>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="flex:1; height:6px; background:var(--bg-3); position:relative;"><div style="height:100%; width:62%; background:#F0EBDB;"></div></div>
+        <span style="color:var(--ink); font-variant-numeric:tabular-nums;">$58K</span>
+      </div>
+      <span style="color:var(--zop-green); font-variant-numeric:tabular-nums; text-align:center;">&darr; -10%</span>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="flex:1; height:6px; background:var(--bg-3); position:relative;"><div style="height:100%; width:55%; background:#7FB236;"></div></div>
+        <span style="color:var(--ink); font-variant-numeric:tabular-nums;">$52K</span>
+      </div>
+      <span style="color:var(--zop-green); font-variant-numeric:tabular-nums; text-align:right;">-$6K</span>
+    </div>
+
+    <div style="display:grid; grid-template-columns:180px 1fr 100px 1fr 100px; gap:16px; align-items:center; padding:14px 0; border-top:1px solid var(--line); font-family:var(--mono); font-size:12px;">
+      <span style="color:var(--ink); font-family:var(--font); font-weight:500; font-size:13px; letter-spacing:-0.02em;">storage &middot; s3/blob</span>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="flex:1; height:6px; background:var(--bg-3); position:relative;"><div style="height:100%; width:32%; background:#F0EBDB;"></div></div>
+        <span style="color:var(--ink); font-variant-numeric:tabular-nums;">$30K</span>
+      </div>
+      <span style="color:var(--zop-orange); font-variant-numeric:tabular-nums; text-align:center;">&uarr; +7%</span>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="flex:1; height:6px; background:var(--bg-3); position:relative;"><div style="height:100%; width:34%; background:#F58549;"></div></div>
+        <span style="color:var(--ink); font-variant-numeric:tabular-nums;">$32K</span>
+      </div>
+      <span style="color:var(--zop-orange); font-variant-numeric:tabular-nums; text-align:right;">+$2K</span>
+    </div>
+
+    <div style="display:grid; grid-template-columns:180px 1fr 100px 1fr 100px; gap:16px; align-items:center; padding:14px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); font-family:var(--mono); font-size:12px;">
+      <span style="color:var(--ink); font-family:var(--font); font-weight:500; font-size:13px; letter-spacing:-0.02em;">network &middot; egress</span>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="flex:1; height:6px; background:var(--bg-3); position:relative;"><div style="height:100%; width:18%; background:#F0EBDB;"></div></div>
+        <span style="color:var(--ink); font-variant-numeric:tabular-nums;">$17K</span>
+      </div>
+      <span style="color:var(--zop-green); font-variant-numeric:tabular-nums; text-align:center;">&darr; -6%</span>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="flex:1; height:6px; background:var(--bg-3); position:relative;"><div style="height:100%; width:17%; background:#7FB236;"></div></div>
+        <span style="color:var(--ink); font-variant-numeric:tabular-nums;">$16K</span>
+      </div>
+      <span style="color:var(--zop-green); font-variant-numeric:tabular-nums; text-align:right;">-$1K</span>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; font-family:var(--mono); font-size:11px; color:var(--ink-4); letter-spacing:.04em; padding:6px 0;">
+      <span>march total &middot; $199K</span>
+      <span style="color:var(--zop-green); font-weight:600;">-$17K / -9%</span>
+      <span>april total &middot; $182K</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ======== 17 · KPI SCORECARD ======== -->
+<section class="sec">
+  <h2>&#167; 17 &middot; kpi scorecard</h2>
+  <h3>Multi-metric at a glance.</h3>
+  <p class="lead">A scorecard shows 6&ndash;12 metrics side-by-side, each with its <strong>value, delta, and direction</strong>. Used as an exec summary row at the top of a report. Uniform cards, no oversized metric.</p>
+
+  <div style="display:grid; grid-template-columns:repeat(6, 1fr); gap:0; border:1px solid var(--line-2); background:var(--bg-1);">
+    <div style="padding:var(--sp-5); border-right:1px solid var(--line-2); display:flex; flex-direction:column; gap:6px; min-height:120px;">
+      <span style="font-family:var(--mono); font-size:10px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase;">resources</span>
+      <span style="font-size:22px; font-weight:700; letter-spacing:-0.02em; color:var(--ink); font-variant-numeric:tabular-nums;">3,247</span>
+      <span style="font-family:var(--mono); font-size:11px; color:#4A66D4;">&uarr; +124</span>
+    </div>
+    <div style="padding:var(--sp-5); border-right:1px solid var(--line-2); display:flex; flex-direction:column; gap:6px; min-height:120px;">
+      <span style="font-family:var(--mono); font-size:10px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase;">spent</span>
+      <span style="font-size:22px; font-weight:700; letter-spacing:-0.02em; color:var(--ink); font-variant-numeric:tabular-nums;">$182K</span>
+      <span style="font-family:var(--mono); font-size:11px; color:var(--zop-green);">&darr; -9%</span>
+    </div>
+    <div style="padding:var(--sp-5); border-right:1px solid var(--line-2); display:flex; flex-direction:column; gap:6px; min-height:120px;">
+      <span style="font-family:var(--mono); font-size:10px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase;">wasted</span>
+      <span style="font-size:22px; font-weight:700; letter-spacing:-0.02em; color:var(--zop-orange); font-variant-numeric:tabular-nums;">$47K</span>
+      <span style="font-family:var(--mono); font-size:11px; color:var(--zop-green);">&darr; -18%</span>
+    </div>
+    <div style="padding:var(--sp-5); border-right:1px solid var(--line-2); display:flex; flex-direction:column; gap:6px; min-height:120px;">
+      <span style="font-family:var(--mono); font-size:10px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase;">reclaimed</span>
+      <span style="font-size:22px; font-weight:700; letter-spacing:-0.02em; color:var(--zop-green); font-variant-numeric:tabular-nums;">$38K</span>
+      <span style="font-family:var(--mono); font-size:11px; color:var(--zop-green);">&uarr; +24%</span>
+    </div>
+    <div style="padding:var(--sp-5); border-right:1px solid var(--line-2); display:flex; flex-direction:column; gap:6px; min-height:120px;">
+      <span style="font-family:var(--mono); font-size:10px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase;">remediations</span>
+      <span style="font-size:22px; font-weight:700; letter-spacing:-0.02em; color:var(--ink); font-variant-numeric:tabular-nums;">47</span>
+      <span style="font-family:var(--mono); font-size:11px; color:var(--zop-green);">&uarr; +12</span>
+    </div>
+    <div style="padding:var(--sp-5); display:flex; flex-direction:column; gap:6px; min-height:120px;">
+      <span style="font-family:var(--mono); font-size:10px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase;">uptime</span>
+      <span style="font-size:22px; font-weight:700; letter-spacing:-0.02em; color:var(--ink); font-variant-numeric:tabular-nums;">99.98%</span>
+      <span style="font-family:var(--mono); font-size:11px; color:var(--ok);">&bull; within sla</span>
+    </div>
+  </div>
+  <div class="spec-foot" style="background:var(--bg-1); margin-top:var(--sp-4); border:1px solid var(--line-2)">
+    <strong>Delta color-coding:</strong> positive-for-outcome = green &middot; negative-for-outcome = orange. A <em>rising</em> waste number is bad (orange). A <em>rising</em> reclaimed number is good (green). The direction arrow is informational; the color is the judgment.
+  </div>
+</section>
+
+
+<!-- ======== 18 · do/don't ======== -->
+<section class="sec">
+  <h2>&#167; 18 &middot; enforcement</h2>
+  <h3>Do &middot; Don&rsquo;t.</h3>
+  <div class="dd">
+    <div class="do">
+      <h5>DO</h5>
+      <ul>
+        <li>Map blue = monitored &middot; orange = at risk &middot; green = reclaimed, every time</li>
+        <li>Use tabular-nums on every figure, prices, percentages, counts</li>
+        <li>Sparklines at 1.5px stroke, 80&times;24 viewBox, no fills</li>
+        <li>Heatmaps with single-color alpha ramp, six stops</li>
+        <li>Gauges as 270&deg;-max arcs, 8px stroke, butt caps</li>
+        <li>Mono for tick labels, month names lowercase</li>
+        <li>Horizontal grid only, dashed, at most 5 lines</li>
+        <li>Annotation with thin 1px leader lines + mono labels</li>
+      </ul>
+    </div>
+    <div class="dont">
+      <h5>DON'T</h5>
+      <ul>
+        <li>No chart-color palette beyond the three pillars + ink</li>
+        <li>No two-color diverging maps · no rainbow scales</li>
+        <li>No filled area charts with gradients</li>
+        <li>No pie charts at all, use big-number or bar chart</li>
+        <li>No 3D effects · no drop shadows on data bars</li>
+        <li>No vertical grid lines · no ambient watermarks</li>
+        <li>No rounded line-caps on strokes</li>
+        <li>No chart junk · no legends longer than 3 items</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- footer -->
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="product-documentation.html">Product documentation</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developer-documentation.html">Documentation</a></li>
+        <li><a href="developer-documentation.html#endpoints">API reference</a></li>
+        <li><a href="developer-documentation.html#mcp-server">MCP server</a></li>
+        <li><a href="developer-documentation.html#sdks">SDK &amp; CLI</a></li>
+        <li><a href="developer-documentation.html#webhooks">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-bottom" style="padding-top:20px; border-top:1px solid var(--line);">
+      <div>© <span data-year>2026</span> ZopDev, Inc. · all rights reserved · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">privacy</a> · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">terms</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(){
+    document.querySelectorAll('[data-year]').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+    var ann = document.getElementById('ann-bar');
+    var btn = document.getElementById('ann-close');
+    if(!ann || !btn) return;
+    var key = 'zop-ann-2026-mcp';
+    try{ if(localStorage.getItem(key) === '1') ann.style.display = 'none'; }catch(e){}
+    btn.addEventListener('click', function(){
+      ann.style.display = 'none';
+      try{ localStorage.setItem(key, '1'); }catch(e){}
+    });
+  })();
+</script>
+<script src="chrome-darkfold.js" defer></script>
+<script src="chrome-mobilenav.js" defer></script>
+</body>
+</html>

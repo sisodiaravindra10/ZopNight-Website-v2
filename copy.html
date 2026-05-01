@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<title>Copy library · ZopDev</title>
+<meta name="description" content="Every sanctioned piece of UX copy on zop.dev and inside the product, buttons, empty states, toasts, errors, forms, emails. The brand's dictionary."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="chrome.css"/>
+<style>
+/* no-italic-site-wide */ em,i,cite,dfn,var,address,blockquote{font-style:normal}
+.page-head{ padding:var(--sec-pad) 0 var(--sp-10); max-width:var(--max); margin:0 auto; padding-left:var(--gutter); padding-right:var(--gutter); border-bottom:1px solid var(--line); }
+.crumb{ font-family:var(--mono); font-size:11px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase; margin-bottom:20px; }
+.crumb a{ color:var(--ink-3); } .crumb a:hover{ color:var(--ink); } .crumb .s{ color:var(--ink-5); margin:0 8px; }
+.page-head .meta{ font-family:var(--mono); font-size:11px; color:var(--zop-orange); letter-spacing:.14em; text-transform:uppercase; margin-bottom:16px; display:inline-flex; align-items:center; gap:8px; }
+.page-head .meta::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
+.page-head h1{ font-size:clamp(48px,6vw,88px); font-weight:700; letter-spacing:-.05em; line-height:.98; margin:0 0 24px; max-width:1100px; }
+.page-head h1 em{ font-style:normal; color:var(--zop-orange); }
+.page-head p.lede{ font-size:20px; color:var(--ink-3); max-width:760px; line-height:1.45; margin:0; }
+.page-head p.lede strong{ color:var(--ink); font-weight:500; }
+
+/* layout · TOC + content */
+.layout{ max-width:var(--max); margin:0 auto; padding:var(--sp-12) var(--gutter) 120px; display:grid; grid-template-columns:220px 1fr; gap:var(--sp-12); }
+.toc{ position:sticky; top:64px; align-self:start; font-family:var(--mono); font-size:11px; color:var(--ink-4); letter-spacing:.04em; }
+.toc h4{ font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-5); margin:0 0 12px; font-weight:500; }
+.toc ul{ list-style:none; padding:0; margin:0 0 24px; border-left:1px solid var(--line); }
+.toc li a{ display:block; padding:6px 16px; color:var(--ink-3); border-left:2px solid transparent; margin-left:-1px; }
+.toc li a:hover{ color:var(--ink); border-left-color:var(--zop-orange); }
+
+.sec{ padding:var(--sp-10) 0 var(--sp-14); border-bottom:1px solid var(--line); }
+.sec:last-child{ border-bottom:0; }
+.sec h2{ font-family:var(--mono); font-size:11px; color:var(--zop-orange); letter-spacing:.14em; text-transform:uppercase; margin:0 0 8px; display:inline-flex; align-items:center; gap:8px; }
+.sec h2::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
+.sec h3{ font-size:clamp(28px,3vw,36px); font-weight:700; letter-spacing:-.03em; line-height:1.05; margin:0 0 12px; }
+.sec > p.lead{ font-size:15px; color:var(--ink-3); max-width:680px; line-height:1.55; margin:0 0 var(--sp-8); }
+.sec > p.lead strong{ color:var(--ink); font-weight:500; }
+
+/* copy table */
+.ct{ width:100%; border-collapse:collapse; border:1px solid var(--line-2); font-family:var(--font); }
+.ct th, .ct td{ text-align:left; padding:14px 18px; border-bottom:1px solid var(--line); vertical-align:top; letter-spacing:-.02em; }
+.ct th{ background:#0A0A0A; color:var(--ink-4); font-weight:500; text-transform:uppercase; font-size:10px; letter-spacing:.14em; font-family:var(--mono); }
+.ct th.ctx{ width:30%; }
+.ct th.do{ width:35%; color:var(--ok); }
+.ct th.dont{ width:35%; color:var(--err); }
+.ct td{ font-size:13.5px; color:var(--ink-2); line-height:1.55; }
+.ct td.ctx{ color:var(--ink-3); font-family:var(--mono); font-size:12px; letter-spacing:.02em; line-height:1.55; }
+.ct td.ctx strong{ color:var(--ink); font-weight:500; font-family:var(--font); font-size:13px; letter-spacing:-.02em; display:block; margin-bottom:3px; }
+.ct td.do{ color:var(--ink); }
+.ct td.dont{ color:var(--ink-4); text-decoration:line-through; text-decoration-color:var(--line-b); }
+
+/* voice principles card */
+.voice{
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:0; border:1px solid var(--line-2);
+  margin-bottom:var(--sp-8);
+}
+.voice .v{
+  padding:var(--sp-6); border-right:1px solid var(--line-2);
+}
+.voice .v:last-child{ border-right:0; }
+.voice .v .t{ font-family:var(--mono); font-size:10px; color:var(--zop-orange); letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+.voice .v .h{ font-size:20px; font-weight:700; letter-spacing:-.02em; margin-bottom:8px; }
+.voice .v p{ font-size:12.5px; color:var(--ink-3); line-height:1.55; margin:0; }
+
+@media (max-width:960px){
+  .layout{ grid-template-columns:1fr; }
+  .toc{ position:static; }
+  .voice{ grid-template-columns:1fr 1fr; }
+  .voice .v{ border-right:0; border-bottom:1px solid var(--line-2); }
+  .ct{ font-size:12px; }
+  .ct th, .ct td{ padding:10px 12px; }
+}
+</style>
+<link rel="stylesheet" href="homepage-chrome.css"/>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>    <symbol id="mark-zopdev" viewBox="0 0 32 32">
+      <rect x="0" y="0" width="16" height="16" fill="var(--logo-blue, #2A4494)"/>
+      <rect x="16" y="0" width="16" height="16" fill="#F58549"/>
+      <rect x="16" y="16" width="16" height="16" fill="#7FB236"/>
+    </symbol>
+<symbol id="logo-zopdev" viewBox="0 0 715 276">
+    <path d="M7.452 229V201.784L63.504 137.308V134.716H9.072V115.6H85.86V142.816L29.808 207.292V209.884H86.184V229H7.452ZM136.786 231.268C128.794 231.268 121.612 229.648 115.24 226.408C108.868 223.168 103.846 218.47 100.174 212.314C96.5022 206.158 94.6662 198.76 94.6662 190.12V187.528C94.6662 178.888 96.5022 171.49 100.174 165.334C103.846 159.178 108.868 154.48 115.24 151.24C121.612 148 128.794 146.38 136.786 146.38C144.778 146.38 151.96 148 158.332 151.24C164.704 154.48 169.726 159.178 173.398 165.334C177.07 171.49 178.906 178.888 178.906 187.528V190.12C178.906 198.76 177.07 206.158 173.398 212.314C169.726 218.47 164.704 223.168 158.332 226.408C151.96 229.648 144.778 231.268 136.786 231.268ZM136.786 213.124C143.05 213.124 148.234 211.126 152.338 207.13C156.442 203.026 158.494 197.194 158.494 189.634V188.014C158.494 180.454 156.442 174.676 152.338 170.68C148.342 166.576 143.158 164.524 136.786 164.524C130.522 164.524 125.338 166.576 121.234 170.68C117.13 174.676 115.078 180.454 115.078 188.014V189.634C115.078 197.194 117.13 203.026 121.234 207.13C125.338 211.126 130.522 213.124 136.786 213.124ZM192.888 261.4V148.648H212.976V158.368H215.892C217.728 155.236 220.59 152.482 224.478 150.106C228.366 147.622 233.928 146.38 241.164 146.38C247.644 146.38 253.638 148 259.146 151.24C264.654 154.372 269.082 159.016 272.43 165.172C275.778 171.328 277.452 178.78 277.452 187.528V190.12C277.452 198.868 275.778 206.32 272.43 212.476C269.082 218.632 264.654 223.33 259.146 226.57C253.638 229.702 247.644 231.268 241.164 231.268C236.304 231.268 232.2 230.674 228.852 229.486C225.612 228.406 222.966 227.002 220.914 225.274C218.97 223.438 217.404 221.602 216.216 219.766H213.3V261.4H192.888ZM235.008 213.448C241.38 213.448 246.618 211.45 250.722 207.454C254.934 203.35 257.04 197.41 257.04 189.634V188.014C257.04 180.238 254.934 174.352 250.722 170.356C246.51 166.252 241.272 164.2 235.008 164.2C228.744 164.2 223.506 166.252 219.294 170.356C215.082 174.352 212.976 180.238 212.976 188.014V189.634C212.976 197.41 215.082 203.35 219.294 207.454C223.506 211.45 228.744 213.448 235.008 213.448ZM287.446 229V210.208H302.35V134.392H287.446V115.6H334.102C349.33 115.6 360.886 119.488 368.77 127.264C376.762 134.932 380.758 146.38 380.758 161.608V182.992C380.758 198.22 376.762 209.722 368.77 217.498C360.886 225.166 349.33 229 334.102 229H287.446ZM323.734 209.56H334.426C343.066 209.56 349.384 207.292 353.38 202.756C357.376 198.22 359.374 191.848 359.374 183.64V160.96C359.374 152.644 357.376 146.272 353.38 141.844C349.384 137.308 343.066 135.04 334.426 135.04H323.734V209.56ZM430.981 231.268C422.989 231.268 415.915 229.594 409.759 226.246C403.711 222.79 398.959 217.984 395.503 211.828C392.155 205.564 390.481 198.22 390.481 189.796V187.852C390.481 179.428 392.155 172.138 395.503 165.982C398.851 159.718 403.549 154.912 409.597 151.564C415.645 148.108 422.665 146.38 430.657 146.38C438.541 146.38 445.399 148.162 451.231 151.726C457.063 155.182 461.599 160.042 464.839 166.306C468.079 172.462 469.699 179.644 469.699 187.852V194.818H411.217C411.433 200.326 413.485 204.808 417.373 208.264C421.261 211.72 426.013 213.448 431.629 213.448C437.353 213.448 441.565 212.206 444.265 209.722C446.965 207.238 449.017 204.484 450.421 201.46L467.107 210.208C465.595 213.016 463.381 216.094 460.465 219.442C457.657 222.682 453.877 225.49 449.125 227.866C444.373 230.134 438.325 231.268 430.981 231.268ZM411.379 179.59H448.963C448.531 174.946 446.641 171.22 443.293 168.412C440.053 165.604 435.787 164.2 430.495 164.2C424.987 164.2 420.613 165.604 417.373 168.412C414.133 171.22 412.135 174.946 411.379 179.59ZM497.482 229L471.886 148.648H493.594L512.224 214.096H515.14L533.77 148.648H555.478L529.882 229H497.482Z" fill="currentColor"/>
+    <rect x="537" width="89" height="89" fill="var(--logo-blue, #2A4494)"/>
+    <rect x="626" width="89" height="89" fill="#F58549"/>
+    <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
+  </symbol></defs>
+</svg>
+
+<!-- announcement bar -->
+<div class="ann-bar" id="ann-bar">
+  <div class="ann-inner">
+    <a href="developers.html" class="ann-chip">
+      <span class="ann-dot"></span>
+      <strong>MCP Server</strong>, live in Claude &amp; Codex
+      <span class="ann-arrow">→</span>
+    </a>
+    <a href="changelog.html" class="ann-link">Changelog →</a>
+    <button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     LIVE STATUS STRIP. Cloud-ops signal strip
+     ============================================================ -->
+<div class="live-strip" aria-live="polite">
+  <!-- Anchored pill: live market-open indicator + uptime & UTC clock. Stays
+       put on the right while the ticker runs under it. -->
+  <div class="ls-anchor">
+    <span class="ls-live"><span class="ls-livedot"></span>LIVE</span>
+    <span class="ls-sep"></span>
+    <span class="ls-kpi"><em>UPT</em><b>99.98%</b></span>
+    <span class="ls-sep"></span>
+    <span class="ls-kpi"><em>UTC</em><b id="live-clock">--:--:--</b></span>
+  </div>
+
+  <!-- Marquee track: two identical rails side-by-side create a seamless loop.
+       Each item reads as a plain-English headline with a change indicator. -->
+  <div class="ls-track" role="presentation" aria-hidden="true">
+    <div class="ls-rail">
+      <span class="lt-row"><b id="live-saved">$48,210</b> saved this month <span class="lt-chg up">▲ $812 today</span></span>
+      <span class="lt-row"><b id="live-resources">10,401</b> cloud resources monitored <span class="lt-chg up">▲ 42 new</span></span>
+      <span class="lt-row"><b id="live-remediations">17</b> issues fixed today <span class="lt-chg up">▲ 3 in last hour</span></span>
+      <span class="lt-row"><b>847</b> idle instances reclaimed <span class="lt-chg up">▲ 31 this week</span></span>
+      <span class="lt-row"><b>99.98%</b> uptime across <b>47</b> regions</span>
+      <span class="lt-row"><b>3</b> anomalies open <span class="lt-chg dn">▼ 1 auto-resolved</span></span>
+      <span class="lt-row"><b>142</b> schedules running <span class="lt-chg up">▲ 12 this week</span></span>
+      <span class="lt-row"><b>$2.8M</b> monthly run-rate <span class="lt-chg dn">▼ 8% vs last month</span></span>
+      <span class="lt-row"><b>67%</b> average utilization <span class="lt-chg up">▲ 2 pts</span></span>
+      <span class="lt-row"><b>4m 12s</b> mean time to remediate <span class="lt-chg dn">▼ 22s faster</span></span>
+      <span class="lt-row"><b>0</b> incidents · <b>5-day</b> clean streak</span>
+      <span class="lt-row"><b>23%</b> savings rate <span class="lt-chg up">▲ 5 pts QoQ</span></span>
+    </div>
+    <div class="ls-rail" aria-hidden="true">
+      <span class="lt-row"><b>$48,210</b> saved this month <span class="lt-chg up">▲ $812 today</span></span>
+      <span class="lt-row"><b>10,401</b> cloud resources monitored <span class="lt-chg up">▲ 42 new</span></span>
+      <span class="lt-row"><b>17</b> issues fixed today <span class="lt-chg up">▲ 3 in last hour</span></span>
+      <span class="lt-row"><b>847</b> idle instances reclaimed <span class="lt-chg up">▲ 31 this week</span></span>
+      <span class="lt-row"><b>99.98%</b> uptime across <b>47</b> regions</span>
+      <span class="lt-row"><b>3</b> anomalies open <span class="lt-chg dn">▼ 1 auto-resolved</span></span>
+      <span class="lt-row"><b>142</b> schedules running <span class="lt-chg up">▲ 12 this week</span></span>
+      <span class="lt-row"><b>$2.8M</b> monthly run-rate <span class="lt-chg dn">▼ 8% vs last month</span></span>
+      <span class="lt-row"><b>67%</b> average utilization <span class="lt-chg up">▲ 2 pts</span></span>
+      <span class="lt-row"><b>4m 12s</b> mean time to remediate <span class="lt-chg dn">▼ 22s faster</span></span>
+      <span class="lt-row"><b>0</b> incidents · <b>5-day</b> clean streak</span>
+      <span class="lt-row"><b>23%</b> savings rate <span class="lt-chg up">▲ 5 pts QoQ</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo-lockup sm" aria-label="ZopDev">
+      <svg viewBox="0 0 715 276"><use href="#logo-zopdev"/></svg>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <div class="nav-item" data-menu="product">
+        <a>Product <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <div class="nav-item" data-menu="resources">
+        <a>Resources <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="pricing.html">Pricing</a>
+      <div class="nav-item" data-menu="company">
+        <a>Company <span class="nav-caret" aria-hidden="true"></span></a>
+      </div>
+      <a href="community.html">Community</a>
+    </div>
+
+    <!-- Shared dropdown overlay. Content crossfades, panel slides left/right -->
+    <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+      <div class="nav-panes" id="nav-panes">
+
+        <!-- ═══════ PRODUCT · 3 sub-products ═══════ -->
+        <div class="nav-pane" data-pane="product">
+          <!-- 3 equal cells. Inline grid-template-columns overrides the
+               default 1.3fr 1fr 1fr (which is built for a featured-hero
+               layout). All three products are equal here — no hero — so
+               no empty grid slots and no card stretches taller than its
+               siblings. -->
+          <div class="np-bento" style="grid-template-columns:1fr 1fr 1fr;">
+            <a class="np-cell" href="zopnight.html">
+              <span class="np-badge live">live</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopNight</h3>
+              <p class="np-cell-desc">Cloud cost optimization on autopilot. AWS, Azure, GCP.</p>
+            </a>
+            <a class="np-cell" href="zopday.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#F58549"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopDay</h3>
+              <p class="np-cell-desc">Deployment orchestration and release management.</p>
+            </a>
+            <a class="np-cell" href="zopcloud.html">
+              <span class="np-badge soon">soon</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#2A4494"/><rect x="12" y="8" width="8" height="6" fill="#FFFFFF"/><rect x="6" y="14" width="20" height="10" fill="#FFFFFF"/></svg>
+              </div>
+              <h3 class="np-cell-title">ZopCloud</h3>
+              <p class="np-cell-desc">Multi-cloud resource graph and topology view.</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Live in Claude &amp; Codex</strong> · run ZopNight from your MCP client</span>
+            <a href="developers.html">Try MCP →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ RESOURCES · 9 cells in a 3×3 grid ═══════ -->
+        <div class="nav-pane" data-pane="resources">
+          <div class="np-bento np-bento--grid">
+            <a class="np-cell" href="blog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Blog</h3>
+              <p class="np-cell-desc">Engineering + cost optimization notes</p>
+            </a>
+            <a class="np-cell" href="free-ebooks.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 4h7v13H3zM10 4h7v13h-7z" stroke="currentColor" stroke-width="1.5"/><path d="M10 4v13" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Ebooks</h3>
+              <p class="np-cell-desc">Free playbooks · FinOps, K8s, CDCR</p>
+            </a>
+            <a class="np-cell" href="customers.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 16c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Case studies</h3>
+              <p class="np-cell-desc">42-67% cuts, real teams</p>
+            </a>
+            <a class="np-cell" href="solutions.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Use cases by industry</h3>
+              <p class="np-cell-desc">SaaS · fintech · retail · health</p>
+            </a>
+            <a class="np-cell" href="product-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M8 7l4 3-4 3z" fill="currentColor"/></svg>
+              </div>
+              <h3 class="np-cell-title">Product documentation</h3>
+              <p class="np-cell-desc">Walkthroughs · video tours</p>
+            </a>
+            <a class="np-cell" href="kubernetes-guide.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2l7 4v8l-7 4-7-4V6z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
+              </div>
+              <h3 class="np-cell-title">Kubernetes guide</h3>
+              <p class="np-cell-desc">From cluster basics to right-sizing</p>
+            </a>
+            <a class="np-cell" href="changelog.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              </div>
+              <h3 class="np-cell-title">Changelog</h3>
+              <p class="np-cell-desc">What shipped this week</p>
+            </a>
+            <a class="np-cell" href="developer-documentation.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 6L3 10l4 4M13 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 class="np-cell-title">Developer documentation</h3>
+              <p class="np-cell-desc">REST API · SDKs · webhooks · MCP</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>Weekly digest</strong> · waste signals, wins, war stories</span>
+            <a href="blog.html">Subscribe →</a>
+          </div>
+        </div>
+
+        <!-- ═══════ COMPANY · 2 items ═══════ -->
+        <div class="nav-pane" data-pane="company">
+          <div class="np-bento" style="grid-template-columns:1fr 1fr;">
+            <a class="np-cell" href="about.html">
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#0A0A0A"/><rect x="6" y="6" width="8" height="20" fill="#F0EBDB"/><rect x="18" y="12" width="8" height="14" fill="#F58549"/></svg>
+              </div>
+              <h3 class="np-cell-title">About</h3>
+              <p class="np-cell-desc">Founded 2024. The autopilot for multi-cloud cost.</p>
+            </a>
+            <a class="np-cell" href="careers.html">
+              <span class="np-badge">hiring</span>
+              <div class="np-cell-icon">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="6" width="14" height="11" stroke="currentColor" stroke-width="1.5"/><path d="M7 6V4h6v2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <h3 class="np-cell-title">Careers</h3>
+              <p class="np-cell-desc">Open roles · engineering, design, GTM</p>
+            </a>
+          </div>
+          <div class="np-promo-row">
+            <span><strong>We're hiring</strong> · remote-first · 12 open roles</span>
+            <a href="careers.html">See roles →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="nav-cta">
+      <!-- Status pill · live dot · links to /status.html. Mirrors the
+           project's "always-on" identity (the live-ops strip above the
+           nav). Pulses green when all systems are operational. -->
+      <a class="nav-status" href="status.html" aria-label="System status">
+        <span class="nav-status-dot" aria-hidden="true"></span>
+        <span class="nav-status-text">Status</span>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" role="switch">
+        <span class="tt-opt tt-sun" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="8" cy="8" r="3" fill="currentColor" stroke="none"/>
+            <path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.9.9M11.7 11.7l.9.9M3.4 12.6l.9-.9M11.7 4.3l.9-.9"/>
+          </svg>
+        </span>
+        <span class="tt-opt tt-moon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M12.8 10.1a5.5 5.5 0 0 1-7-7 .5.5 0 0 0-.7-.6A6.5 6.5 0 1 0 13.4 10.8a.5.5 0 0 0-.6-.7z"/>
+          </svg>
+        </span>
+      </button>
+      <a class="chip-playground" href="playground.html"><span>Playground</span></a>
+      <a class="sign" href="signin.html">Sign In</a>
+      <a class="btn btn-accent" href="demo.html"><span>Book a Demo</span> <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="crumb"><a href="/">home</a><span class="s">/</span><a href="brand-guidelines.html">brand</a><span class="s">/</span>copy library</div>
+  <div class="meta">&#167; 15 &middot; ux microcopy</div>
+  <h1>The brand's <em>dictionary.</em></h1>
+  <p class="lede">Every button label, error message, empty-state line, toast notification, and email subject on ZopDev comes from this file. If the exact copy you need isn&rsquo;t here, match the <strong>voice principles</strong> below and add a row. <strong>The only wrong answer is inventing your own.</strong></p>
+</header>
+
+
+<div class="layout">
+
+<aside class="toc">
+  <h4>on this page</h4>
+  <ul>
+    <li><a href="#voice">00 &middot; Voice principles</a></li>
+    <li><a href="#buttons">01 &middot; Buttons &amp; CTAs</a></li>
+    <li><a href="#forms">02 &middot; Forms &amp; labels</a></li>
+    <li><a href="#empty">03 &middot; Empty states</a></li>
+    <li><a href="#loading">04 &middot; Loading &amp; progress</a></li>
+    <li><a href="#success">05 &middot; Success &amp; toasts</a></li>
+    <li><a href="#errors">06 &middot; Error messages</a></li>
+    <li><a href="#confirm">07 &middot; Confirmations</a></li>
+    <li><a href="#emails">08 &middot; Emails &amp; notifications</a></li>
+    <li><a href="#metrics">09 &middot; Metric labels</a></li>
+    <li><a href="#tooltips">10 &middot; Tooltips &amp; hints</a></li>
+    <li><a href="#words">11 &middot; Words we avoid</a></li>
+  </ul>
+</aside>
+
+<main>
+
+<!-- ====== voice principles ====== -->
+<section class="sec" id="voice">
+  <h2>&#167; 00 &middot; voice</h2>
+  <h3>Five principles.</h3>
+  <p class="lead">Before you write a line, check it against these five. If it fails even one, rewrite. Everything below in the dictionary obeys them.</p>
+
+  <div class="voice">
+    <div class="v">
+      <div class="t">01 &middot; outcome</div>
+      <div class="h">Outcome over feature.</div>
+      <p>Lead with the number the customer cares about. Not the technology that produced it. &ldquo;$38K reclaimed&rdquo; &mdash; not &ldquo;advanced rightsizing engine&rdquo;.</p>
+    </div>
+    <div class="v">
+      <div class="t">02 &middot; direct</div>
+      <div class="h">Direct. Declarative.</div>
+      <p>Short sentences. Active verbs. Concrete numbers. No hedging. No "might", "could", "possibly". We either ship it or we don't.</p>
+    </div>
+    <div class="v">
+      <div class="t">03 &middot; claim</div>
+      <div class="h">Name the category.</div>
+      <p>We don't enter categories &mdash; we name them. &ldquo;The Continuous CloudOps platform.&rdquo; &ldquo;The CDCR loop.&rdquo; &ldquo;The three-numbers dashboard.&rdquo;</p>
+    </div>
+    <div class="v">
+      <div class="t">04 &middot; numbers</div>
+      <div class="h">Numbers are punctuation.</div>
+      <p>Every claim is followed by a concrete figure. &ldquo;5 min to connect. 7 min to first fix. 42% median cut.&rdquo;</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ====== buttons ====== -->
+<section class="sec" id="buttons">
+  <h2>&#167; 01 &middot; buttons &amp; ctas</h2>
+  <h3>Button labels.</h3>
+  <p class="lead">Verb + object. Or verb alone. Never a sentence. Always title-case for primary, sentence-case for secondary.</p>
+  <table class="ct">
+    <thead><tr><th class="ctx">context</th><th class="do">DO</th><th class="dont">DON'T</th></tr></thead>
+    <tbody>
+      <tr><td class="ctx"><strong>Primary hero CTA</strong>new visitor entering the product</td><td class="do">Start free &middot; 5 min to connect</td><td class="dont">Get Started today!</td></tr>
+      <tr><td class="ctx"><strong>Secondary hero CTA</strong>exploration alternative</td><td class="do">See the Loop</td><td class="dont">Learn More about our solutions</td></tr>
+      <tr><td class="ctx"><strong>Book a Demo</strong>enterprise path</td><td class="do">Book a Demo</td><td class="dont">Schedule a personalized demo</td></tr>
+      <tr><td class="ctx"><strong>Sign in</strong>existing user</td><td class="do">Sign in</td><td class="dont">Log in to your account</td></tr>
+      <tr><td class="ctx"><strong>Apply remediation</strong>one resource</td><td class="do">Apply &middot; save $234/mo</td><td class="dont">Submit remediation request</td></tr>
+      <tr><td class="ctx"><strong>Apply batch</strong>many resources</td><td class="do">Apply all (47)</td><td class="dont">Execute selected items</td></tr>
+      <tr><td class="ctx"><strong>Rollback action</strong>undo a remediation</td><td class="do">Rollback &middot; restore snapshot</td><td class="dont">Undo</td></tr>
+      <tr><td class="ctx"><strong>Export report</strong>PDF download</td><td class="do">Download PDF</td><td class="dont">Generate export &amp; download</td></tr>
+      <tr><td class="ctx"><strong>Save settings</strong>form submit</td><td class="do">Save</td><td class="dont">Save my changes now</td></tr>
+      <tr><td class="ctx"><strong>Cancel / dismiss</strong>modal close</td><td class="do">Cancel</td><td class="dont">Nevermind</td></tr>
+      <tr><td class="ctx"><strong>Delete / destructive</strong>confirmation</td><td class="do">Delete &middot; this can't be undone</td><td class="dont">Delete (irreversible)</td></tr>
+      <tr><td class="ctx"><strong>Contact sales</strong>enterprise tier</td><td class="do">Talk to Sales</td><td class="dont">Contact our sales representative</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- ====== forms ====== -->
+<section class="sec" id="forms">
+  <h2>&#167; 02 &middot; forms &amp; labels</h2>
+  <h3>Form labels &amp; placeholders.</h3>
+  <p class="lead">Label above, placeholder inside (short example), helper below. Labels are nouns. Errors are one sentence, no jargon.</p>
+  <table class="ct">
+    <thead><tr><th class="ctx">context</th><th class="do">DO</th><th class="dont">DON'T</th></tr></thead>
+    <tbody>
+      <tr><td class="ctx"><strong>Email label</strong>signup</td><td class="do">Work email<br><em style="color:var(--ink-4); font-family:var(--mono); font-size:11px">placeholder: name@company.com</em></td><td class="dont">Please enter your email address here</td></tr>
+      <tr><td class="ctx"><strong>Password helper</strong>requirements</td><td class="do">12+ characters. No other rules.</td><td class="dont">Must contain upper, lower, number, special char, minimum 12</td></tr>
+      <tr><td class="ctx"><strong>Cloud account ID</strong>onboarding</td><td class="do">AWS account ID<br><em style="color:var(--ink-4); font-family:var(--mono); font-size:11px">placeholder: 123456789012</em></td><td class="dont">What is your AWS account identifier?</td></tr>
+      <tr><td class="ctx"><strong>Budget threshold</strong>alerts</td><td class="do">Alert me when monthly spend exceeds</td><td class="dont">Set alerting threshold for the maximum accepted expense per month</td></tr>
+      <tr><td class="ctx"><strong>Required field error</strong>validation</td><td class="do">Required.</td><td class="dont">This field is required. Please fill it in before continuing.</td></tr>
+      <tr><td class="ctx"><strong>Invalid email</strong>validation</td><td class="do">That doesn't look like an email.</td><td class="dont">Please enter a valid e-mail address in the correct format.</td></tr>
+      <tr><td class="ctx"><strong>Weak password</strong>validation</td><td class="do">Too short. 12+ characters.</td><td class="dont">Password strength insufficient. Please try a stronger one.</td></tr>
+      <tr><td class="ctx"><strong>Duplicate email</strong>signup error</td><td class="do">That email already has an account. <a href="#" style="color:var(--zop-orange)">Sign In</a>?</td><td class="dont">User with this email address is already registered in our system.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- ====== empty ====== -->
+<section class="sec" id="empty">
+  <h2>&#167; 03 &middot; empty states</h2>
+  <h3>Empty state copy.</h3>
+  <p class="lead">Headline (4-6 words) + one sentence of context + one action. Never a wall of text. Never apologetic.</p>
+  <table class="ct">
+    <thead><tr><th class="ctx">context</th><th class="do">DO</th><th class="dont">DON'T</th></tr></thead>
+    <tbody>
+      <tr><td class="ctx"><strong>No clouds connected</strong>first-time dashboard</td><td class="do"><strong>No clouds connected yet.</strong><br>Connect your first AWS, Azure, or GCP account &mdash; see every resource across them in under 5 minutes.<br><em style="color:var(--zop-orange); font-family:var(--mono); font-size:11px">CTA: Connect a cloud &rarr;</em></td><td class="dont">You haven't connected any cloud accounts yet. Click the button below to get started with connecting your first account!</td></tr>
+      <tr><td class="ctx"><strong>No findings</strong>first scan clean</td><td class="do"><strong>Nothing to fix right now.</strong><br>CDCR scanned 847 resources. All within budget, none idle, no over-provisioned. Next scan in 4 min.<br><em style="color:var(--zop-green); font-family:var(--mono); font-size:11px">(no CTA &mdash; no action needed)</em></td><td class="dont">There are no findings available for your cloud account. Please check back later.</td></tr>
+      <tr><td class="ctx"><strong>No results &middot; filtered</strong>search / filter</td><td class="do"><strong>No matches for that filter.</strong><br>Try widening the region, changing the state filter, or looking at a different cost window.<br><em style="color:var(--ink-3); font-family:var(--mono); font-size:11px">CTA: Clear filters</em></td><td class="dont">Sorry, we couldn't find any results matching your current filters. Please adjust your criteria.</td></tr>
+      <tr><td class="ctx"><strong>No team members</strong>admin area</td><td class="do"><strong>Just you on this team.</strong><br>Invite engineers or FinOps analysts &mdash; each gets their own view, audit log, Showback slice.<br><em style="color:var(--zop-orange); font-family:var(--mono); font-size:11px">CTA: Invite teammates &rarr;</em></td><td class="dont">Your team currently has no members added. You can invite colleagues using the button below.</td></tr>
+      <tr><td class="ctx"><strong>No remediations applied</strong>history tab, new account</td><td class="do"><strong>No remediations yet.</strong><br>When you apply one, it lands here with a timestamp, reason, and 7-day rollback window.<br><em style="color:var(--ink-3); font-family:var(--mono); font-size:11px">CTA: See pending findings &rarr;</em></td><td class="dont">No remediation history is available for display at this time.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- ====== loading ====== -->
+<section class="sec" id="loading">
+  <h2>&#167; 04 &middot; loading &amp; progress</h2>
+  <h3>Loading + progress copy.</h3>
+  <p class="lead">Never "Please wait". State what's loading. If it'll take more than 2 seconds, show a progress bar with count and ETA.</p>
+  <table class="ct">
+    <thead><tr><th class="ctx">context</th><th class="do">DO</th><th class="dont">DON'T</th></tr></thead>
+    <tbody>
+      <tr><td class="ctx"><strong>Skeleton row label</strong>above a loading table</td><td class="do">Scanning us-east-1 &middot; 142 of 847</td><td class="dont">Please wait while we load your data...</td></tr>
+      <tr><td class="ctx"><strong>Progress bar &middot; apply</strong>remediation batch</td><td class="do">Applying 47 remediations &middot; run #12,847<br><em style="color:var(--ink-3); font-family:var(--mono); font-size:11px">right-label: 62% &middot; eta 11s</em></td><td class="dont">Processing your request, please wait...</td></tr>
+      <tr><td class="ctx"><strong>Long-running export</strong>PDF generation</td><td class="do">Generating Q2 Showback &middot; 12 months of data &middot; ~45 sec</td><td class="dont">Your report is being prepared. Thank you for your patience.</td></tr>
+      <tr><td class="ctx"><strong>Initial cloud scan</strong>onboarding</td><td class="do">First scan: 3&ndash;5 min. You can close this &mdash; we'll email when it's done.</td><td class="dont">Scanning in progress. Please do not close this window.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- ====== success ====== -->
+<section class="sec" id="success">
+  <h2>&#167; 05 &middot; success &amp; toasts</h2>
+  <h3>Success confirmations &amp; toast notifications.</h3>
+  <p class="lead">State the action that completed, the outcome, and the rollback option (if any). Toasts auto-dismiss at 8 seconds.</p>
+  <table class="ct">
+    <thead><tr><th class="ctx">context</th><th class="do">DO</th><th class="dont">DON'T</th></tr></thead>
+    <tbody>
+      <tr><td class="ctx"><strong>Remediation applied</strong>bottom-right toast</td><td class="do"><strong>Applied. Saved $234/mo.</strong><br>Rollback available for 7 days.</td><td class="dont">Success! Your remediation has been applied successfully.</td></tr>
+      <tr><td class="ctx"><strong>Batch complete</strong>47 remediations</td><td class="do"><strong>47 remediations applied</strong>run #12,847 &middot; $23,450 reclaimed</td><td class="dont">Batch operation completed without errors.</td></tr>
+      <tr><td class="ctx"><strong>Settings saved</strong>form submit</td><td class="do">Saved.</td><td class="dont">Your settings have been saved successfully.</td></tr>
+      <tr><td class="ctx"><strong>Account connected</strong>onboarding</td><td class="do"><strong>AWS connected.</strong><br>First scan in 3&ndash;5 min. We'll email.</td><td class="dont">Your AWS account has been successfully linked.</td></tr>
+      <tr><td class="ctx"><strong>Invite sent</strong>team admin</td><td class="do">Invite sent to <em>tal@zop.dev</em>. They have 7 days.</td><td class="dont">The invitation was sent successfully.</td></tr>
+      <tr><td class="ctx"><strong>Copied to clipboard</strong>inline action</td><td class="do">Copied.</td><td class="dont">The content has been copied to your clipboard.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- ====== errors ====== -->
+<section class="sec" id="errors">
+  <h2>&#167; 06 &middot; error messages</h2>
+  <h3>Inline + toast error copy.</h3>
+  <p class="lead">Say what broke. Say what the user can do. No "Oops!". No "Something went wrong". Surface the error code at the end if there is one.</p>
+  <table class="ct">
+    <thead><tr><th class="ctx">context</th><th class="do">DO</th><th class="dont">DON'T</th></tr></thead>
+    <tbody>
+      <tr><td class="ctx"><strong>Network timeout</strong>API call failed</td><td class="do">Couldn't reach the server. Retry, or check status.</td><td class="dont">Oops! Something went wrong. Please try again.</td></tr>
+      <tr><td class="ctx"><strong>Remediation blocked</strong>policy violation</td><td class="do">Your policy requires an admin to approve this. Requested.</td><td class="dont">Action denied due to policy restrictions.</td></tr>
+      <tr><td class="ctx"><strong>IAM permission missing</strong>aws onboarding</td><td class="do"><strong>Missing permission:</strong> <code>ec2:DescribeInstances</code>. Update your role and rescan.</td><td class="dont">An error occurred during cloud account verification.</td></tr>
+      <tr><td class="ctx"><strong>Invalid API key</strong>CLI / integration</td><td class="do">That API key doesn't match any account. Generate a new one in Settings.</td><td class="dont">Authentication failed. Please check your credentials.</td></tr>
+      <tr><td class="ctx"><strong>Plan limit hit</strong>free tier cap</td><td class="do">You've hit the $50K monthly-spend cap on Starter. <a href="#" style="color:var(--zop-orange)">Upgrade</a> or remove accounts.</td><td class="dont">You have exceeded your plan's limit. Please upgrade.</td></tr>
+      <tr><td class="ctx"><strong>Rollback window expired</strong>&gt;7 days</td><td class="do">This remediation is past its 7-day rollback. Manually revert in your cloud console if needed.</td><td class="dont">Rollback is no longer available for this item.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- ====== confirm ====== -->
+<section class="sec" id="confirm">
+  <h2>&#167; 07 &middot; confirmations</h2>
+  <h3>Confirmation dialogs.</h3>
+  <p class="lead">Only use when something <em>destructive</em> is about to happen. State what, state how-long-reversible, state the action button.</p>
+  <table class="ct">
+    <thead><tr><th class="ctx">context</th><th class="do">DO</th><th class="dont">DON'T</th></tr></thead>
+    <tbody>
+      <tr><td class="ctx"><strong>Terminate resource</strong>destructive action</td><td class="do"><strong>Terminate <em>i-0abc1234</em> ?</strong><br>Snapshot created first. Rollback available for 7 days.<br>Savings: $234/mo.<br><em style="color:var(--zop-green); font-family:var(--mono); font-size:11px">primary: Terminate</em> &middot; <em style="color:var(--ink-3); font-family:var(--mono); font-size:11px">secondary: Cancel</em></td><td class="dont">Are you sure you want to terminate this instance? This action cannot be undone.</td></tr>
+      <tr><td class="ctx"><strong>Delete team</strong>admin</td><td class="do"><strong>Delete "<em>eu-platform</em>" team?</strong><br>Removes 14 members' access. Their remediation history stays in the audit log.<br>This can't be undone.<br><em style="color:var(--err); font-family:var(--mono); font-size:11px">primary: Delete team</em></td><td class="dont">Do you really want to delete this team? All team members will lose access.</td></tr>
+      <tr><td class="ctx"><strong>Remove cloud account</strong>settings</td><td class="do"><strong>Remove AWS <em>prod-us</em>?</strong><br>Stops monitoring in 1 minute. Findings become read-only. You can re-add it anytime.<br><em style="color:var(--zop-orange); font-family:var(--mono); font-size:11px">primary: Remove</em></td><td class="dont">Are you sure? This will disconnect your AWS account from our system.</td></tr>
+      <tr><td class="ctx"><strong>Cancel subscription</strong>billing</td><td class="do"><strong>Cancel Pro?</strong><br>Access continues until end of billing period (Apr 30). You're billed $499 for this month.<br>Your data stays. You can reactivate.<br><em style="color:var(--err); font-family:var(--mono); font-size:11px">primary: Cancel Pro</em></td><td class="dont">Are you sure you want to cancel your subscription? You will lose access to all premium features.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- ====== emails ====== -->
+<section class="sec" id="emails">
+  <h2>&#167; 08 &middot; emails &amp; notifications</h2>
+  <h3>Subject lines &amp; notification text.</h3>
+  <p class="lead">Subject is a sentence with a number. Preview is the action line. No emoji. No exclamation marks in subject.</p>
+  <table class="ct">
+    <thead><tr><th class="ctx">context</th><th class="do">DO</th><th class="dont">DON'T</th></tr></thead>
+    <tbody>
+      <tr><td class="ctx"><strong>Welcome email</strong>day 0</td><td class="do"><strong>subject:</strong> ZopDev is connected. Scanning now.<br><strong>preview:</strong> First findings in 3&ndash;5 min. We'll email them.</td><td class="dont">Welcome to ZopDev! Get Started with our platform today!</td></tr>
+      <tr><td class="ctx"><strong>First findings ready</strong>day 0</td><td class="do"><strong>subject:</strong> Your first 10 findings. Top: $2,810/mo recoverable.<br><strong>preview:</strong> 14 idle EC2 instances in us-east-1. One-click terminate.</td><td class="dont">Your ZopDev report is ready to view.</td></tr>
+      <tr><td class="ctx"><strong>Weekly Showback</strong>monday 09:00</td><td class="do"><strong>subject:</strong> This week: $12,840 reclaimed, 47 remediations.<br><strong>preview:</strong> Full Showback attached. 12-mo trend up 18%.</td><td class="dont">Your weekly ZopDev summary is here</td></tr>
+      <tr><td class="ctx"><strong>Budget breach</strong>alert</td><td class="do"><strong>subject:</strong> aws &middot; eu-west-2 passed $50K this month (+18% vs last).<br><strong>preview:</strong> Top driver: analytics-rds over-provisioned. Fix: right-size to db.t3.medium.</td><td class="dont">Alert: A budget threshold has been reached</td></tr>
+      <tr><td class="ctx"><strong>SOC 2 ready</strong>compliance</td><td class="do"><strong>subject:</strong> SOC 2 audit pack is ready. 47 controls passed automatically.<br><strong>preview:</strong> Download the PDF below. No manual prep was needed.</td><td class="dont">Your compliance report is now available</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- ====== metrics ====== -->
+<section class="sec" id="metrics">
+  <h2>&#167; 09 &middot; metric labels</h2>
+  <h3>Labels for the numbers we show.</h3>
+  <p class="lead">Short. Sentence case. No acronyms without context. Three-numbers order is locked: Spent &middot; Wasted &middot; Recoverable.</p>
+  <table class="ct">
+    <thead><tr><th class="ctx">context</th><th class="do">DO</th><th class="dont">DON'T</th></tr></thead>
+    <tbody>
+      <tr><td class="ctx"><strong>Three-numbers &middot; 01</strong>blue column</td><td class="do">Spent &middot; this month</td><td class="dont">Total Monthly Expenditure (TME)</td></tr>
+      <tr><td class="ctx"><strong>Three-numbers &middot; 02</strong>orange column</td><td class="do">Wasted &middot; right now</td><td class="dont">Cost Optimization Opportunity</td></tr>
+      <tr><td class="ctx"><strong>Three-numbers &middot; 03</strong>green column</td><td class="do">Recoverable &middot; one click</td><td class="dont">Available Savings Potential</td></tr>
+      <tr><td class="ctx"><strong>Proof tile</strong>big metric</td><td class="do">median week-1 cut</td><td class="dont">Average Initial Reduction</td></tr>
+      <tr><td class="ctx"><strong>Time to connect</strong>number</td><td class="do">5 min to connect</td><td class="dont">5 minutes average onboarding time</td></tr>
+      <tr><td class="ctx"><strong>Region row &middot; state</strong>table</td><td class="do">idle 14d</td><td class="dont">Inactive for 14 days (idle)</td></tr>
+      <tr><td class="ctx"><strong>Delta label</strong>percentage</td><td class="do">&uarr; 4.2% vs last mo</td><td class="dont">Increased by 4.2% compared to previous month</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- ====== tooltips ====== -->
+<section class="sec" id="tooltips">
+  <h2>&#167; 10 &middot; tooltips &amp; hints</h2>
+  <h3>Tooltips &amp; inline hints.</h3>
+  <p class="lead">Tooltip is a one-line definition, 12 words max. Inline hints go below inputs, 8-15 words.</p>
+  <table class="ct">
+    <thead><tr><th class="ctx">context</th><th class="do">DO</th><th class="dont">DON'T</th></tr></thead>
+    <tbody>
+      <tr><td class="ctx"><strong>CDCR tooltip</strong>acronym explain</td><td class="do">Continuous Discovery, Continuous Remediation. Our 4-min loop.</td><td class="dont">CDCR (Continuous Discovery and Continuous Remediation) is our proprietary looping system for cloud optimization</td></tr>
+      <tr><td class="ctx"><strong>Showback tooltip</strong>finance term</td><td class="do">Attribution without chargeback. Teams see their own spend.</td><td class="dont">Showback refers to the process of providing cost visibility to teams</td></tr>
+      <tr><td class="ctx"><strong>7-day rollback hint</strong>apply dialog</td><td class="do">Revert this for 7 days, no questions.</td><td class="dont">You have a 7-day window to undo this action if needed.</td></tr>
+      <tr><td class="ctx"><strong>Idle threshold hint</strong>policy editor</td><td class="do">CPU &lt; 3% for 14 days = idle. You can tune this.</td><td class="dont">An instance is considered idle if CPU utilization remains below 3% continuously</td></tr>
+      <tr><td class="ctx"><strong>Trust score tooltip</strong>finding quality</td><td class="do">$ impact &times; risk &times; effort. 10 = do this first.</td><td class="dont">A weighted score combining financial impact, risk assessment, and effort level</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- ====== words to avoid ====== -->
+<section class="sec" id="words">
+  <h2>&#167; 11 &middot; words we avoid</h2>
+  <h3>Words the brand never uses.</h3>
+  <p class="lead">If any of these appear in a draft, rewrite. No exceptions.</p>
+  <table class="ct">
+    <thead><tr><th class="ctx">banned word</th><th class="do">say instead</th><th class="dont">why banned</th></tr></thead>
+    <tbody>
+      <tr><td class="ctx"><strong>leverage</strong>verb</td><td class="do">use</td><td class="dont" style="text-decoration:none; color:var(--ink-3)">vague; consulting-speak</td></tr>
+      <tr><td class="ctx"><strong>solution(s)</strong>noun</td><td class="do">product &middot; surface &middot; answer</td><td class="dont" style="text-decoration:none; color:var(--ink-3)">generic; tells you nothing</td></tr>
+      <tr><td class="ctx"><strong>synergy</strong>noun</td><td class="do">(just rewrite the sentence)</td><td class="dont" style="text-decoration:none; color:var(--ink-3)">corporate filler</td></tr>
+      <tr><td class="ctx"><strong>empower</strong>verb</td><td class="do">let &middot; give &middot; help</td><td class="dont" style="text-decoration:none; color:var(--ink-3)">HR-brochure tone</td></tr>
+      <tr><td class="ctx"><strong>seamless</strong>adj</td><td class="do">fast &middot; one-click &middot; connected</td><td class="dont" style="text-decoration:none; color:var(--ink-3)">nothing is actually seamless</td></tr>
+      <tr><td class="ctx"><strong>robust / powerful</strong>adj</td><td class="do">show the capability directly</td><td class="dont" style="text-decoration:none; color:var(--ink-3)">filler adjectives, no content</td></tr>
+      <tr><td class="ctx"><strong>best-in-class</strong>adj</td><td class="do">say what class, then show why</td><td class="dont" style="text-decoration:none; color:var(--ink-3)">unprovable; sales-speak</td></tr>
+      <tr><td class="ctx"><strong>journey</strong>noun</td><td class="do">path &middot; flow &middot; route</td><td class="dont" style="text-decoration:none; color:var(--ink-3)">marketing clich&eacute;</td></tr>
+      <tr><td class="ctx"><strong>unlock value</strong>phrase</td><td class="do">save / reclaim $X</td><td class="dont" style="text-decoration:none; color:var(--ink-3)">value is not a lock</td></tr>
+      <tr><td class="ctx"><strong>at scale</strong>phrase</td><td class="do">name the number (across 847 resources)</td><td class="dont" style="text-decoration:none; color:var(--ink-3)">filler; means nothing specific</td></tr>
+      <tr><td class="ctx"><strong>please</strong>courtesy filler</td><td class="do">(drop it)</td><td class="dont" style="text-decoration:none; color:var(--ink-3)">slows the sentence</td></tr>
+      <tr><td class="ctx"><strong>Oops!</strong>error tone</td><td class="do">state what broke</td><td class="dont" style="text-decoration:none; color:var(--ink-3)">faux-cute; undermines trust</td></tr>
+    </tbody>
+  </table>
+</section>
+
+</main>
+</div>
+
+
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="product-documentation.html">Product documentation</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developer-documentation.html">Documentation</a></li>
+        <li><a href="developer-documentation.html#endpoints">API reference</a></li>
+        <li><a href="developer-documentation.html#mcp-server">MCP server</a></li>
+        <li><a href="developer-documentation.html#sdks">SDK &amp; CLI</a></li>
+        <li><a href="developer-documentation.html#webhooks">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-bottom" style="padding-top:20px; border-top:1px solid var(--line);">
+      <div>© <span data-year>2026</span> ZopDev, Inc. · all rights reserved · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">privacy</a> · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">terms</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(){
+    document.querySelectorAll('[data-year]').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+    var ann = document.getElementById('ann-bar');
+    var btn = document.getElementById('ann-close');
+    if(!ann || !btn) return;
+    var key = 'zop-ann-2026-mcp';
+    try{ if(localStorage.getItem(key) === '1') ann.style.display = 'none'; }catch(e){}
+    btn.addEventListener('click', function(){
+      ann.style.display = 'none';
+      try{ localStorage.setItem(key, '1'); }catch(e){}
+    });
+  })();
+</script>
+<script src="chrome-darkfold.js" defer></script>
+<script src="chrome-mobilenav.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cursor variants · crazy edition · ZopDev</title>
+<meta name="description" content="Twelve JavaScript-driven cursor experiments, trails, magnets, spotlights, reactive morphs, velocity stretches, brand stamps. Hover any card to activate that cursor inside it.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --zop-blue:#2A4494; --zop-orange:#F58549; --zop-green:#7FB236;
+  --paper:#FAF7EC; --ink:#0A0A0A;
+  --line:#D9D3BF; --g-100:#ECE7D7; --g-300:#C9C4B5;
+  --g-500:#707070; --g-600:#525252; --g-700:#2a2a2a;
+  --font:'Space Grotesk',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --max:1320px;
+  --ease-out:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box;border-radius:0;margin:0;padding:0}
+em,i{font-style:normal}
+body{font-family:var(--font);background:var(--paper);color:var(--ink);
+  letter-spacing:-0.02em;line-height:1.55;font-size:15px;
+  -webkit-font-smoothing:antialiased}
+
+.cv-head{padding:80px 32px 56px;border-bottom:1px solid var(--line);
+  max-width:var(--max);margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.cv-meta{font-family:var(--mono);font-size:11px;color:var(--zop-orange);
+  letter-spacing:.14em;text-transform:uppercase;display:inline-flex;gap:10px;align-items:center}
+.cv-meta::before{content:'';width:10px;height:10px;background:var(--zop-orange)}
+.cv-head h1{font-size:clamp(44px,5.5vw,76px);font-weight:700;line-height:1;letter-spacing:-0.045em;margin:0}
+.cv-head h1 em{color:var(--zop-orange)}
+.cv-head p{font-size:18px;color:var(--g-600);max-width:760px;line-height:1.55;margin:0}
+
+.cv-grid{max-width:var(--max);margin:0 auto;padding:48px 32px 96px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media(max-width:980px){.cv-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.cv-grid{grid-template-columns:1fr}}
+
+.cv-card{background:#FAF7EC;border:1px solid var(--line);
+  display:flex;flex-direction:column;
+  transition:transform .25s var(--ease-out),box-shadow .25s var(--ease-out)}
+.cv-card:hover{transform:translateY(-3px);box-shadow:0 6px 0 -3px var(--zop-orange)}
+
+.cv-stage{
+  position:relative;height:240px;background:var(--paper);
+  border-bottom:1px solid var(--line);overflow:hidden;
+  cursor:none;                           /* hide native cursor, JS handles */
+}
+.cv-stage::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle at center, var(--g-300) 0.5px, transparent 0.6px);
+  background-size:14px 14px;opacity:.55;pointer-events:none;
+}
+.cv-stage .label{
+  position:absolute;top:16px;left:16px;font-family:var(--mono);font-size:10px;
+  color:var(--g-500);letter-spacing:.1em;text-transform:uppercase;pointer-events:none}
+.cv-stage .targets{
+  position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;
+}
+.cv-stage .target{
+  position:absolute;font-family:var(--mono);font-size:11px;color:var(--ink);
+  border:1px solid var(--line);background:#FAF7EC;padding:8px 14px;letter-spacing:.06em;
+  pointer-events:auto;cursor:none}
+.cv-stage .target:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.cv-stage .target.t1{top:38%;left:18%}
+.cv-stage .target.t2{top:60%;left:62%}
+
+.cv-meta-row{padding:18px 20px 20px;display:flex;flex-direction:column;gap:4px}
+.cv-id{font-family:var(--mono);font-size:11px;color:var(--g-500);
+  letter-spacing:.06em;text-transform:uppercase}
+.cv-name{font-size:16px;font-weight:600;color:var(--ink);letter-spacing:-0.01em}
+.cv-desc{font-size:13px;color:var(--g-500);line-height:1.55;margin-top:4px}
+
+/* ─── CURSOR CHILDREN ─── all positioned absolute inside their card stage ─── */
+.cur, .cur *{pointer-events:none;position:absolute}
+
+/* X1 · DOT FOLLOWER · single small orange dot, no lag */
+.x1-dot{width:14px;height:14px;background:var(--zop-orange);
+  transform:translate3d(-50%,-50%,0);will-change:transform;left:0;top:0}
+
+/* X2 · TRAILING DOTS · 6 dots fading behind */
+.x2-dot{width:8px;height:8px;background:var(--zop-orange);
+  transform:translate3d(-50%,-50%,0);will-change:transform;left:0;top:0}
+.x2-dot:nth-child(1){opacity:1}
+.x2-dot:nth-child(2){opacity:.75;width:7px;height:7px}
+.x2-dot:nth-child(3){opacity:.55;width:6px;height:6px}
+.x2-dot:nth-child(4){opacity:.35;width:5px;height:5px}
+.x2-dot:nth-child(5){opacity:.20;width:4px;height:4px}
+.x2-dot:nth-child(6){opacity:.10;width:3px;height:3px}
+
+/* X3 · MAGNETIC · ring snaps onto interactive targets */
+.x3-ring{width:36px;height:36px;border:1.4px solid var(--ink);
+  transform:translate3d(-50%,-50%,0);will-change:transform,width,height;
+  transition:width 220ms var(--ease-out),height 220ms var(--ease-out),
+             border-color 180ms var(--ease-out)}
+.x3-ring.snap{width:80px;height:32px;border-color:var(--zop-orange)}
+
+/* X4 · CROSSHAIR BEACON · horizontal + vertical lines spanning the stage */
+.x4-h, .x4-v{background:var(--zop-orange);opacity:.55}
+.x4-h{height:1px;left:0;width:100%;top:0;transform:translateY(-1px)}
+.x4-v{width:1px;top:0;height:100%;left:0;transform:translateX(-1px)}
+.x4-dot{width:6px;height:6px;background:var(--ink);
+  transform:translate3d(-50%,-50%,0)}
+
+/* X5 · INVERSE SPOTLIGHT · everything ink except a paper window around cursor */
+.x5-mask{
+  position:absolute;inset:0;background:var(--ink);
+  -webkit-mask:radial-gradient(circle 80px at var(--x,50%) var(--y,50%), transparent 99%, #000 100%);
+          mask:radial-gradient(circle 80px at var(--x,50%) var(--y,50%), transparent 99%, #000 100%);
+  /* The outer ring colour shows ink-tint, the inside shows the paper bg */
+  pointer-events:none;
+}
+.x5-ring{width:160px;height:160px;border:1px solid var(--zop-orange);
+  transform:translate3d(-50%,-50%,0);opacity:.5}
+
+/* X6 · REACTIVE MORPH · changes shape over different element types */
+.x6-shape{width:14px;height:14px;background:var(--ink);
+  transform:translate3d(-50%,-50%,0) scale(1);
+  transition:width 180ms var(--ease-out),height 180ms var(--ease-out),
+             background 180ms var(--ease-out),transform 180ms var(--ease-out)}
+.x6-shape.over-target{width:64px;height:36px;background:var(--zop-orange);transform:translate3d(-50%,-50%,0) scale(1)}
+
+/* X7 · MARK STAMP · click leaves a brand-mark stamp behind */
+.x7-cursor{width:12px;height:12px;background:var(--zop-orange);
+  transform:translate3d(-50%,-50%,0)}
+.x7-stamp{width:24px;height:24px;display:grid;
+  grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;
+  transform:translate3d(-50%,-50%,0) scale(1);
+  animation:x7-stamp-grow 600ms var(--ease-out) forwards;
+  pointer-events:none}
+.x7-stamp i{display:block}
+.x7-stamp .a{background:var(--zop-blue)}
+.x7-stamp .b{background:var(--zop-orange)}
+.x7-stamp .c{background:transparent}
+.x7-stamp .d{background:var(--zop-green)}
+@keyframes x7-stamp-grow{
+  from{transform:translate3d(-50%,-50%,0) scale(.4);opacity:0}
+  35% {opacity:1}
+  to  {transform:translate3d(-50%,-50%,0) scale(1);opacity:0}
+}
+
+/* X8 · COORDINATE DISPLAY · cursor + live x,y readout */
+.x8-cur{width:8px;height:8px;background:var(--zop-orange);
+  transform:translate3d(-50%,-50%,0)}
+.x8-readout{font-family:var(--mono);font-size:10px;letter-spacing:.04em;
+  color:var(--ink);background:var(--paper);border:1px solid var(--ink);
+  padding:4px 8px;transform:translate3d(12px,12px,0);
+  white-space:nowrap}
+
+/* X9 · VELOCITY STRETCH · cursor stretches in direction of motion */
+.x9-cur{width:14px;height:14px;background:var(--zop-orange);
+  transform-origin:center;transform:translate3d(-50%,-50%,0) rotate(0deg) scaleX(1);
+  will-change:transform}
+
+/* X10 · TARGETING RETICLE · big crosshair circle that follows */
+.x10-ret{width:48px;height:48px;border:1.2px solid var(--ink);
+  transform:translate3d(-50%,-50%,0)}
+.x10-h{width:18px;height:1.2px;background:var(--ink);
+  transform:translate3d(-50%,-50%,0)}
+.x10-v{width:1.2px;height:18px;background:var(--ink);
+  transform:translate3d(-50%,-50%,0)}
+.x10-dot{width:3px;height:3px;background:var(--zop-orange);
+  transform:translate3d(-50%,-50%,0)}
+
+/* X11 · MARK CURSOR · the 4-quadrant brand mark IS the cursor */
+.x11-mark{width:20px;height:20px;display:grid;
+  grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;
+  transform:translate3d(-50%,-50%,0);will-change:transform}
+.x11-mark i{display:block}
+.x11-mark .a{background:var(--zop-blue)}
+.x11-mark .b{background:var(--zop-orange)}
+.x11-mark .c{background:transparent}
+.x11-mark .d{background:var(--zop-green)}
+
+/* X12 · TRAILING SQUARES · 3 brand-color squares trailing in formation */
+.x12-sq{width:8px;height:8px;
+  transform:translate3d(-50%,-50%,0);will-change:transform}
+.x12-sq.b{background:var(--zop-blue)}
+.x12-sq.o{background:var(--zop-orange)}
+.x12-sq.g{background:var(--zop-green)}
+</style>
+</head>
+<body>
+
+<header class="cv-head">
+  <div class="cv-meta">// cursor variants · crazy edition · 12 JS-driven</div>
+  <h1>Twelve cursors that <em>actually do something</em>.</h1>
+  <p>Native CSS keywords were table-stakes. These are JS-driven cursors that follow the mouse, snap to elements, leave trails, stretch with velocity, draw beacons, and stamp the brand mark on click. Move the mouse inside any card to activate that variant.</p>
+</header>
+
+<main class="cv-grid">
+
+  <!-- X1 · DOT FOLLOWER -->
+  <div class="cv-card"><div class="cv-stage" data-cur="x1">
+    <span class="label">// dot follower</span>
+    <div class="cur"><div class="x1-dot"></div></div>
+  </div><div class="cv-meta-row">
+    <div class="cv-id">X1 · DOT FOLLOWER</div>
+    <div class="cv-name">Single dot, no lag</div>
+    <div class="cv-desc">Native cursor hidden, replaced with a 14px brand-orange square that follows the mouse perfectly. The simplest custom cursor.</div></div></div>
+
+  <!-- X2 · TRAILING DOTS -->
+  <div class="cv-card"><div class="cv-stage" data-cur="x2">
+    <span class="label">// trailing dots</span>
+    <div class="cur" id="x2-cur">
+      <div class="x2-dot"></div><div class="x2-dot"></div><div class="x2-dot"></div>
+      <div class="x2-dot"></div><div class="x2-dot"></div><div class="x2-dot"></div>
+    </div>
+  </div><div class="cv-meta-row">
+    <div class="cv-id">X2 · TRAILING DOTS</div>
+    <div class="cv-name">Six-dot fading tail</div>
+    <div class="cv-desc">Each dot lerps to the position of the dot ahead of it · stationary cursor collapses to a single dot, fast cursor leaves a long fading trail. Reads as "cursor with momentum."</div></div></div>
+
+  <!-- X3 · MAGNETIC SNAP -->
+  <div class="cv-card"><div class="cv-stage" data-cur="x3">
+    <span class="label">// magnetic snap · hover the targets</span>
+    <button class="target t1">target A</button>
+    <button class="target t2">target B</button>
+    <div class="cur"><div class="x3-ring"></div></div>
+  </div><div class="cv-meta-row">
+    <div class="cv-id">X3 · MAGNETIC SNAP</div>
+    <div class="cv-name">Ring snaps onto interactive elements</div>
+    <div class="cv-desc">Default: 36×36 ink ring. Hover a `.target` and the ring resizes + repositions to wrap the target's bounding box. Brand-orange when snapped. Reads as "I know what's interactive."</div></div></div>
+
+  <!-- X4 · CROSSHAIR BEACON -->
+  <div class="cv-card"><div class="cv-stage" data-cur="x4">
+    <span class="label">// crosshair beacon</span>
+    <div class="cur">
+      <div class="x4-h"></div><div class="x4-v"></div><div class="x4-dot"></div>
+    </div>
+  </div><div class="cv-meta-row">
+    <div class="cv-id">X4 · CROSSHAIR BEACON</div>
+    <div class="cv-name">Full-stage horizontal + vertical guides</div>
+    <div class="cv-desc">Cursor is two thin orange lines that span the stage, intersecting at an ink dot. Same energy as a Figma comment-pin or a chart hover. Best for data / chart surfaces.</div></div></div>
+
+  <!-- X5 · INVERSE SPOTLIGHT -->
+  <div class="cv-card"><div class="cv-stage" data-cur="x5">
+    <span class="label">// inverse spotlight</span>
+    <div class="cur"><div class="x5-ring"></div><div class="x5-mask"></div></div>
+  </div><div class="cv-meta-row">
+    <div class="cv-id">X5 · INVERSE SPOTLIGHT</div>
+    <div class="cv-name">Everything dark except a window around the cursor</div>
+    <div class="cv-desc">CSS radial mask reveals only a circular area around the cursor; the rest is filled ink. Wraps with a brand-orange ring. Use sparingly, feels like a magnifying glass on a redacted document.</div></div></div>
+
+  <!-- X6 · REACTIVE MORPH -->
+  <div class="cv-card"><div class="cv-stage" data-cur="x6">
+    <span class="label">// reactive · hover targets to morph</span>
+    <button class="target t1">target A</button>
+    <button class="target t2">target B</button>
+    <div class="cur"><div class="x6-shape"></div></div>
+  </div><div class="cv-meta-row">
+    <div class="cv-id">X6 · REACTIVE MORPH</div>
+    <div class="cv-name">Cursor changes shape per element</div>
+    <div class="cv-desc">Default: 14×14 ink dot. Over a `.target`: 64×36 brand-orange pill. Smooth transition between states. Reads as "I'm context-aware."</div></div></div>
+
+  <!-- X7 · MARK STAMP -->
+  <div class="cv-card"><div class="cv-stage" data-cur="x7">
+    <span class="label">// click anywhere to stamp</span>
+    <div class="cur"><div class="x7-cursor"></div></div>
+  </div><div class="cv-meta-row">
+    <div class="cv-id">X7 · MARK STAMP</div>
+    <div class="cv-name">Click leaves a brand mark behind</div>
+    <div class="cv-desc">Click anywhere and the ZopDev 4-quadrant mark stamps where you clicked, then fades over 600ms. The cursor itself is the orange dot. Most playful · works as a portfolio / agency cursor.</div></div></div>
+
+  <!-- X8 · COORDINATE DISPLAY -->
+  <div class="cv-card"><div class="cv-stage" data-cur="x8">
+    <span class="label">// live coordinates</span>
+    <div class="cur"><div class="x8-cur"></div><div class="x8-readout">x=0, y=0</div></div>
+  </div><div class="cv-meta-row">
+    <div class="cv-id">X8 · COORDINATE DISPLAY</div>
+    <div class="cv-name">Cursor + live x,y readout</div>
+    <div class="cv-desc">Cursor dot + a small mono chip floating bottom-right with live `x=…, y=…`. Reads as a CAD / dev-tool cursor. Best on canvas / map / chart surfaces.</div></div></div>
+
+  <!-- X9 · VELOCITY STRETCH -->
+  <div class="cv-card"><div class="cv-stage" data-cur="x9">
+    <span class="label">// velocity stretch · move fast</span>
+    <div class="cur"><div class="x9-cur"></div></div>
+  </div><div class="cv-meta-row">
+    <div class="cv-id">X9 · VELOCITY STRETCH</div>
+    <div class="cv-name">Cursor stretches with motion</div>
+    <div class="cv-desc">A 14×14 orange square that scales horizontally based on cursor velocity (and rotates to match the motion vector). Stationary: small square. Sprinting: stretched bar. Pure physics read.</div></div></div>
+
+  <!-- X10 · TARGETING RETICLE -->
+  <div class="cv-card"><div class="cv-stage" data-cur="x10">
+    <span class="label">// targeting reticle</span>
+    <div class="cur">
+      <div class="x10-ret"></div>
+      <div class="x10-h"></div><div class="x10-v"></div>
+      <div class="x10-dot"></div>
+    </div>
+  </div><div class="cv-meta-row">
+    <div class="cv-id">X10 · TARGETING RETICLE</div>
+    <div class="cv-name">Big crosshair ring around the cursor</div>
+    <div class="cv-desc">48px ink ring with stub crosshair lines + an orange centre dot. Most explicit "operator targeting" feel · use on the live-scanner playground or threat-radar surfaces.</div></div></div>
+
+  <!-- X11 · MARK CURSOR -->
+  <div class="cv-card"><div class="cv-stage" data-cur="x11">
+    <span class="label">// brand mark · 4-quadrant cursor</span>
+    <div class="cur"><div class="x11-mark"><i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i></div></div>
+  </div><div class="cv-meta-row">
+    <div class="cv-id">X11 · BRAND MARK CURSOR</div>
+    <div class="cv-name">The 4-quadrant ZopDev mark IS the cursor</div>
+    <div class="cv-desc">20×20 brand-mark grid (blue / orange / · / green) follows the mouse. Strongest brand presence on hover-rich surfaces. Reserve for hero / signature pages, too much identity for app UI.</div></div></div>
+
+  <!-- X12 · TRAILING SQUARES -->
+  <div class="cv-card"><div class="cv-stage" data-cur="x12">
+    <span class="label">// trailing brand-color squares</span>
+    <div class="cur" id="x12-cur">
+      <div class="x12-sq o"></div>
+      <div class="x12-sq b"></div>
+      <div class="x12-sq g"></div>
+    </div>
+  </div><div class="cv-meta-row">
+    <div class="cv-id">X12 · TRAILING SQUARES</div>
+    <div class="cv-name">Three brand-color squares trail behind</div>
+    <div class="cv-desc">Orange leads, blue follows ~80ms behind, green follows ~160ms behind. Reads as the brand mark "smearing" through the cursor's path. Most kinetic / playful option.</div></div></div>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="product-documentation.html">Product documentation</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developer-documentation.html">Documentation</a></li>
+        <li><a href="developer-documentation.html#endpoints">API reference</a></li>
+        <li><a href="developer-documentation.html#mcp-server">MCP server</a></li>
+        <li><a href="developer-documentation.html#sdks">SDK &amp; CLI</a></li>
+        <li><a href="developer-documentation.html#webhooks">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-bottom" style="padding-top:20px; border-top:1px solid var(--line);">
+      <div>© <span data-year>2026</span> ZopDev, Inc. · all rights reserved · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">privacy</a> · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">terms</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+/* ============================================================
+   CURSOR ENGINE · per-stage activation
+   Each stage has its own listeners so cards don't fight each other.
+   The native cursor is hidden (cursor:none on .cv-stage) and we
+   position the .cur child via transform every frame.
+   ============================================================ */
+document.querySelectorAll('.cv-stage').forEach(stage => {
+  const kind = stage.dataset.cur;
+  const cur  = stage.querySelector('.cur');
+  if(!cur) return;
+
+  let mx = 0, my = 0;             /* live mouse */
+  let active = false;
+  const rect = () => stage.getBoundingClientRect();
+
+  stage.addEventListener('mousemove', (e) => {
+    const r = rect();
+    mx = e.clientX - r.left;
+    my = e.clientY - r.top;
+    active = true;
+  });
+  stage.addEventListener('mouseleave', () => active = false);
+
+  /* Per-variant frame logic */
+  const FRAMES = {
+    /* simple 1:1 follower */
+    x1(){
+      const dot = cur.querySelector('.x1-dot');
+      dot.style.transform = `translate3d(${mx}px,${my}px,0) translate(-50%,-50%)`;
+    },
+    /* trailing dots · each dot lerps toward the previous */
+    x2(){
+      const dots = cur.querySelectorAll('.x2-dot');
+      if(!cur._trail) cur._trail = Array.from(dots).map(()=>({x:mx,y:my}));
+      const t = cur._trail;
+      t[0].x += (mx - t[0].x) * 0.55;
+      t[0].y += (my - t[0].y) * 0.55;
+      for(let i=1;i<t.length;i++){
+        t[i].x += (t[i-1].x - t[i].x) * 0.45;
+        t[i].y += (t[i-1].y - t[i].y) * 0.45;
+      }
+      dots.forEach((d,i)=>{ d.style.transform = `translate3d(${t[i].x}px,${t[i].y}px,0) translate(-50%,-50%)`; });
+    },
+    /* magnetic ring · snap onto target rects */
+    x3(){
+      const ring = cur.querySelector('.x3-ring');
+      let snapTo = null;
+      stage.querySelectorAll('.target').forEach(t => {
+        const r = t.getBoundingClientRect();
+        const sr = rect();
+        const x = r.left - sr.left, y = r.top - sr.top;
+        if(mx >= x && mx <= x + r.width && my >= y && my <= y + r.height){
+          snapTo = { cx: x + r.width/2, cy: y + r.height/2, w: r.width + 12, h: r.height + 12 };
+        }
+      });
+      if(snapTo){
+        ring.classList.add('snap');
+        ring.style.width  = snapTo.w + 'px';
+        ring.style.height = snapTo.h + 'px';
+        ring.style.transform = `translate3d(${snapTo.cx}px,${snapTo.cy}px,0) translate(-50%,-50%)`;
+      } else {
+        ring.classList.remove('snap');
+        ring.style.width = ring.style.height = '';
+        ring.style.transform = `translate3d(${mx}px,${my}px,0) translate(-50%,-50%)`;
+      }
+    },
+    /* crosshair beacon · h + v lines spanning, dot at intersection */
+    x4(){
+      cur.querySelector('.x4-h').style.transform = `translateY(${my}px)`;
+      cur.querySelector('.x4-v').style.transform = `translateX(${mx}px)`;
+      cur.querySelector('.x4-dot').style.transform = `translate3d(${mx}px,${my}px,0) translate(-50%,-50%)`;
+    },
+    /* inverse spotlight · CSS variables drive the radial mask */
+    x5(){
+      const mask = cur.querySelector('.x5-mask');
+      mask.style.setProperty('--x', mx + 'px');
+      mask.style.setProperty('--y', my + 'px');
+      cur.querySelector('.x5-ring').style.transform = `translate3d(${mx}px,${my}px,0) translate(-50%,-50%)`;
+    },
+    /* reactive morph · check what we're hovering */
+    x6(){
+      const shape = cur.querySelector('.x6-shape');
+      const el = document.elementFromPoint(mx + rect().left, my + rect().top);
+      const onTarget = el && el.classList && el.classList.contains('target');
+      shape.classList.toggle('over-target', !!onTarget);
+      shape.style.transform = `translate3d(${mx}px,${my}px,0) translate(-50%,-50%)`;
+    },
+    /* mark stamp · click handler instead of frame */
+    x7(){
+      cur.querySelector('.x7-cursor').style.transform = `translate3d(${mx}px,${my}px,0) translate(-50%,-50%)`;
+    },
+    /* coordinate readout */
+    x8(){
+      cur.querySelector('.x8-cur').style.transform = `translate3d(${mx}px,${my}px,0) translate(-50%,-50%)`;
+      cur.querySelector('.x8-readout').textContent = `x=${mx|0}, y=${my|0}`;
+      cur.querySelector('.x8-readout').style.transform = `translate3d(${mx + 16}px,${my + 16}px,0)`;
+    },
+    /* velocity stretch · scale + rotate by motion vector */
+    x9(){
+      if(cur._lx === undefined){ cur._lx = mx; cur._ly = my; cur._scale = 1; cur._ang = 0; }
+      const dx = mx - cur._lx, dy = my - cur._ly;
+      const speed = Math.sqrt(dx*dx + dy*dy);
+      const targetScale = Math.min(1 + speed * 0.04, 4);
+      const targetAng = Math.atan2(dy, dx) * 180 / Math.PI;
+      cur._scale += (targetScale - cur._scale) * 0.4;
+      cur._ang = (Math.abs(speed) > 0.5) ? targetAng : cur._ang;   /* freeze angle when still */
+      cur._lx = mx; cur._ly = my;
+      cur.querySelector('.x9-cur').style.transform =
+        `translate3d(${mx}px,${my}px,0) translate(-50%,-50%) rotate(${cur._ang}deg) scaleX(${cur._scale.toFixed(2)})`;
+    },
+    /* targeting reticle · ring + crosshair stubs + dot */
+    x10(){
+      cur.querySelector('.x10-ret').style.transform = `translate3d(${mx}px,${my}px,0) translate(-50%,-50%)`;
+      cur.querySelector('.x10-h').style.transform   = `translate3d(${mx}px,${my}px,0) translate(-50%,-50%)`;
+      cur.querySelector('.x10-v').style.transform   = `translate3d(${mx}px,${my}px,0) translate(-50%,-50%)`;
+      cur.querySelector('.x10-dot').style.transform = `translate3d(${mx}px,${my}px,0) translate(-50%,-50%)`;
+    },
+    /* brand mark cursor */
+    x11(){
+      cur.querySelector('.x11-mark').style.transform = `translate3d(${mx}px,${my}px,0) translate(-50%,-50%)`;
+    },
+    /* trailing brand squares · 80ms / 160ms lag */
+    x12(){
+      if(!cur._hist) cur._hist = [];
+      cur._hist.unshift({ x: mx, y: my, t: performance.now() });
+      cur._hist = cur._hist.filter(p => performance.now() - p.t < 400);
+      const sqs = cur.querySelectorAll('.x12-sq');
+      const lookup = (lagMs) => {
+        const target = performance.now() - lagMs;
+        let best = cur._hist[cur._hist.length - 1] || { x: mx, y: my };
+        for(const p of cur._hist){ if(p.t <= target){ best = p; break; } }
+        return best;
+      };
+      sqs[0].style.transform = `translate3d(${mx}px,${my}px,0) translate(-50%,-50%)`;
+      const p1 = lookup(80);
+      sqs[1].style.transform = `translate3d(${p1.x}px,${p1.y}px,0) translate(-50%,-50%)`;
+      const p2 = lookup(160);
+      sqs[2].style.transform = `translate3d(${p2.x}px,${p2.y}px,0) translate(-50%,-50%)`;
+    }
+  };
+
+  function loop(){
+    if(active && FRAMES[kind]) FRAMES[kind]();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  /* X7 click-to-stamp · attach handler if this is the stamp variant */
+  if(kind === 'x7'){
+    stage.addEventListener('click', (e) => {
+      const r = rect();
+      const sx = e.clientX - r.left, sy = e.clientY - r.top;
+      const stamp = document.createElement('div');
+      stamp.className = 'x7-stamp';
+      stamp.innerHTML = '<i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i>';
+      stamp.style.left = sx + 'px'; stamp.style.top = sy + 'px';
+      stage.appendChild(stamp);
+      setTimeout(() => stamp.remove(), 700);
+    });
+  }
+});
+</script>
+
+</body>
+</html>

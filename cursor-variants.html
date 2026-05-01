@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cursor variants · ZopDev</title>
+<meta name="description" content="Eighteen brand-coherent cursor designs for the ZopDev system, sharp, restrained, operator-grade. Hover the demo zones to see each one.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --zop-blue:#2A4494;
+  --zop-orange:#F58549;
+  --zop-green:#7FB236;
+  --paper:#FAF7EC;
+  --ink:#0A0A0A;
+  --line:#D9D3BF;
+  --g-100:#ECE7D7;
+  --g-200:#E2DDCD;
+  --g-300:#C9C4B5;
+  --g-500:#707070;
+  --g-600:#525252;
+  --g-700:#2a2a2a;
+  --font:'Space Grotesk',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --max:1320px;
+  --ease-out:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box;border-radius:0;margin:0;padding:0}
+em,i,cite{font-style:normal}
+body{
+  font-family:var(--font);background:var(--paper);color:var(--ink);
+  letter-spacing:-0.02em;line-height:1.55;font-size:15px;
+  -webkit-font-smoothing:antialiased;
+}
+*:focus-visible{outline:2px solid var(--zop-orange);outline-offset:2px}
+
+/* ─── PAGE HEAD ─── */
+.cv-head{
+  padding:80px 32px 56px;border-bottom:1px solid var(--line);
+  max-width:var(--max);margin:0 auto;
+  display:flex;flex-direction:column;gap:18px;
+}
+.cv-meta{
+  font-family:var(--mono);font-size:11px;color:var(--zop-orange);
+  letter-spacing:.14em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.cv-meta::before{content:'';width:10px;height:10px;background:var(--zop-orange)}
+.cv-head h1{
+  font-size:clamp(44px,5.5vw,76px);font-weight:700;
+  line-height:1;letter-spacing:-0.045em;margin:0;max-width:1100px;
+}
+.cv-head h1 em{color:var(--zop-orange)}
+.cv-head p{
+  font-size:18px;color:var(--g-600);max-width:760px;line-height:1.55;margin:0;
+}
+
+.cv-grid{
+  max-width:var(--max);margin:0 auto;padding:48px 32px 96px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+}
+@media(max-width:980px){.cv-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.cv-grid{grid-template-columns:1fr}}
+
+.cv-card{
+  background:#FAF7EC;border:1px solid var(--line);
+  display:flex;flex-direction:column;
+  transition:transform .25s var(--ease-out),box-shadow .25s var(--ease-out);
+}
+.cv-card:hover{transform:translateY(-4px);box-shadow:0 8px 0 -4px var(--zop-orange)}
+.cv-stage{
+  height:200px;background:var(--paper);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  border-bottom:1px solid var(--line);
+  font-family:var(--mono);font-size:11px;color:var(--g-500);
+  letter-spacing:.08em;text-transform:uppercase;
+  transition:background .15s;
+}
+.cv-stage::before{
+  /* faint dot grid · gives the cursor something to register against */
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(circle at center, var(--g-300) 0.5px, transparent 0.6px);
+  background-size:16px 16px;
+  opacity:.5;pointer-events:none;
+}
+.cv-stage span{position:relative;z-index:1;background:var(--paper);padding:8px 12px;border:1px solid var(--line)}
+.cv-stage:hover{background:var(--g-100)}
+.cv-meta-row{
+  padding:18px 20px 20px;
+  display:flex;flex-direction:column;gap:4px;
+}
+.cv-id{
+  font-family:var(--mono);font-size:11px;color:var(--g-500);
+  letter-spacing:.06em;text-transform:uppercase;
+}
+.cv-name{font-size:16px;font-weight:600;color:var(--ink);letter-spacing:-0.01em}
+.cv-css{font-family:var(--mono);font-size:11px;color:var(--zop-orange);background:var(--g-100);padding:6px 10px;margin-top:8px;border:1px solid var(--g-200);overflow-x:auto;white-space:nowrap}
+.cv-desc{font-size:13px;color:var(--g-500);line-height:1.5;margin-top:2px}
+
+/* ===========================================================
+   THE 18 CURSOR DEFINITIONS
+   - Native CSS cursor keywords for variety
+   - Custom data-URI SVG cursors with brand glyphs
+   - Hotspot coordinates tuned for click accuracy
+   =========================================================== */
+
+/* C1 · Default arrow */
+.c1{cursor:default}
+
+/* C2 · Pointer · for clickable */
+.c2{cursor:pointer}
+
+/* C3 · Crosshair · "deploy here" */
+.c3{cursor:crosshair}
+
+/* C4 · Text I-beam */
+.c4{cursor:text}
+
+/* C5 · Move (4-arrow) */
+.c5{cursor:move}
+
+/* C6 · Grab (open hand) */
+.c6{cursor:grab}
+.c6:active{cursor:grabbing}
+
+/* C7 · Help (?) */
+.c7{cursor:help}
+
+/* C8 · Wait / loading */
+.c8{cursor:wait}
+
+/* C9 · Not-allowed */
+.c9{cursor:not-allowed}
+
+/* C10 · Zoom-in */
+.c10{cursor:zoom-in}
+
+/* C11 · ZopDev orange dot · 16×16, bright and brand-led */
+.c11{
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'><rect x='5' y='5' width='6' height='6' fill='%23F58549'/></svg>") 8 8, default;
+}
+
+/* C12 · Brand-mark · the 4-quadrant ZopDev mark, 20×20 */
+.c12{
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><rect x='2' y='2' width='8' height='8' fill='%232A4494'/><rect x='10' y='2' width='8' height='8' fill='%23F58549'/><rect x='10' y='10' width='8' height='8' fill='%237FB236'/></svg>") 10 10, pointer;
+}
+
+/* C13 · Scan reticle · ink ring with crosshair · "target a region" */
+.c13{
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><circle cx='14' cy='14' r='9' fill='none' stroke='%230A0A0A' stroke-width='1.4'/><line x1='14' y1='1' x2='14' y2='8' stroke='%230A0A0A' stroke-width='1.4'/><line x1='14' y1='20' x2='14' y2='27' stroke='%230A0A0A' stroke-width='1.4'/><line x1='1' y1='14' x2='8' y2='14' stroke='%230A0A0A' stroke-width='1.4'/><line x1='20' y1='14' x2='27' y2='14' stroke='%230A0A0A' stroke-width='1.4'/><circle cx='14' cy='14' r='1.6' fill='%23F58549'/></svg>") 14 14, crosshair;
+}
+
+/* C14 · Pen tip · sharp ink chevron · "edit / annotate" */
+.c14{
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path d='M2 2 L18 8 L10 10 L8 18 Z' fill='%230A0A0A' stroke='%23FAF7EC' stroke-width='0.8'/></svg>") 2 2, pointer;
+}
+
+/* C15 · Plus · add / spawn / new instance */
+.c15{
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><circle cx='11' cy='11' r='9' fill='%23FAF7EC' stroke='%230A0A0A' stroke-width='1.2'/><line x1='11' y1='6' x2='11' y2='16' stroke='%23F58549' stroke-width='1.6' stroke-linecap='square'/><line x1='6' y1='11' x2='16' y2='11' stroke='%23F58549' stroke-width='1.6' stroke-linecap='square'/></svg>") 11 11, pointer;
+}
+
+/* C16 · Square dot · minimal · 8×8 brand-orange anchor · the operator default */
+.c16{
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><rect x='3' y='3' width='4' height='4' fill='%23F58549'/></svg>") 5 5, default;
+}
+
+/* C17 · ZopNight cursor · blue circle with white moon */
+.c17{
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'><rect x='1' y='1' width='16' height='16' fill='%232A4494'/><circle cx='9' cy='9' r='4' fill='%23F0EBDB'/></svg>") 9 9, pointer;
+}
+
+/* C18 · ZopCloud cursor · green pixel cloud */
+.c18{
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'><rect x='1' y='1' width='5' height='5' fill='%237FB236'/><rect x='7' y='1' width='5' height='5' fill='%23F58549'/><rect x='13' y='7' width='4' height='5' fill='%232A4494'/><rect x='1' y='13' width='5' height='4' fill='%237FB236'/><rect x='7' y='7' width='5' height='5' fill='%230A0A0A'/></svg>") 9 9, pointer;
+}
+</style>
+</head>
+<body>
+
+<header class="cv-head">
+  <div class="cv-meta">// cursor variants · 18 examples</div>
+  <h1>Eighteen pointers. <em>One brand.</em></h1>
+  <p>Native CSS cursors plus custom SVG cursors built from the ZopDev mark, dot, scan reticle, and pen-tip primitives. Hover any demo zone to see the cursor change. The "css" line in each card is the rule you'd drop into your stylesheet.</p>
+</header>
+
+<main class="cv-grid">
+
+  <!-- ============= NATIVE CSS CURSORS ============= -->
+
+  <div class="cv-card"><div class="cv-stage c1"><span>hover · default</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C1 · DEFAULT</div><div class="cv-name">System arrow</div>
+      <div class="cv-css">cursor: default;</div>
+      <div class="cv-desc">The OS arrow. Use anywhere there's no specific affordance, body copy, page chrome, ambient surfaces.</div></div></div>
+
+  <div class="cv-card"><div class="cv-stage c2"><span>hover · pointer</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C2 · POINTER</div><div class="cv-name">Click hand</div>
+      <div class="cv-css">cursor: pointer;</div>
+      <div class="cv-desc">Clickable elements, links, buttons, cards. Anything that triggers a navigation or action on click.</div></div></div>
+
+  <div class="cv-card"><div class="cv-stage c3"><span>hover · crosshair</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C3 · CROSSHAIR</div><div class="cv-name">Target / deploy here</div>
+      <div class="cv-css">cursor: crosshair;</div>
+      <div class="cv-desc">Geometry that needs precise placement, drop-pin maps, region selectors, deploy markers.</div></div></div>
+
+  <div class="cv-card"><div class="cv-stage c4"><span>hover · text</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C4 · TEXT</div><div class="cv-name">I-beam</div>
+      <div class="cv-css">cursor: text;</div>
+      <div class="cv-desc">Selectable text, paragraphs, code blocks, input fields. The browser auto-applies this on `&lt;input&gt;` / `&lt;textarea&gt;`.</div></div></div>
+
+  <div class="cv-card"><div class="cv-stage c5"><span>hover · move</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C5 · MOVE</div><div class="cv-name">Four-arrow translate</div>
+      <div class="cv-css">cursor: move;</div>
+      <div class="cv-desc">Draggable along both axes, kanban cards, movable panels, dashboard widgets being repositioned.</div></div></div>
+
+  <div class="cv-card"><div class="cv-stage c6"><span>press · grab</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C6 · GRAB</div><div class="cv-name">Open hand → fist</div>
+      <div class="cv-css">cursor: grab; &amp; :active { cursor: grabbing }</div>
+      <div class="cv-desc">Pannable surfaces, maps, canvases, image viewers. The press state flips to `grabbing` automatically on the same element.</div></div></div>
+
+  <div class="cv-card"><div class="cv-stage c7"><span>hover · help</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C7 · HELP</div><div class="cv-name">Question mark</div>
+      <div class="cv-css">cursor: help;</div>
+      <div class="cv-desc">Tooltipped or info-on-hover elements. Pair with a small `(i)` glyph in the UI for redundancy.</div></div></div>
+
+  <div class="cv-card"><div class="cv-stage c8"><span>hover · wait</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C8 · WAIT</div><div class="cv-name">Spinner / hourglass</div>
+      <div class="cv-css">cursor: wait;</div>
+      <div class="cv-desc">Synchronous OS-blocking work. Avoid, prefer in-page skeletons or progress indicators. Reserve for &lt;2s waits.</div></div></div>
+
+  <div class="cv-card"><div class="cv-stage c9"><span>hover · not-allowed</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C9 · NOT-ALLOWED</div><div class="cv-name">No-entry</div>
+      <div class="cv-css">cursor: not-allowed;</div>
+      <div class="cv-desc">Disabled actions, submit buttons before form valid, locked rows, gated CTAs. Always pair with `aria-disabled="true"`.</div></div></div>
+
+  <div class="cv-card"><div class="cv-stage c10"><span>hover · zoom-in</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C10 · ZOOM-IN</div><div class="cv-name">Magnify</div>
+      <div class="cv-css">cursor: zoom-in;</div>
+      <div class="cv-desc">Click-to-magnify surfaces, chart drilldowns, image lightboxes, dashboard tiles that expand. Use `zoom-out` for the inverse.</div></div></div>
+
+  <!-- ============= CUSTOM BRAND CURSORS ============= -->
+
+  <div class="cv-card"><div class="cv-stage c11"><span>hover · orange dot</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C11 · BRAND DOT</div><div class="cv-name">ZopDev orange anchor</div>
+      <div class="cv-css">cursor: url(...orange-square...) 8 8, default;</div>
+      <div class="cv-desc">A 6×6 brand-orange square. Cleanest possible custom cursor, the smallest mark of brand presence on hover-rich surfaces.</div></div></div>
+
+  <div class="cv-card"><div class="cv-stage c12"><span>hover · brand mark</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C12 · BRAND MARK</div><div class="cv-name">4-quadrant lockup</div>
+      <div class="cv-css">cursor: url(...mark-zopdev...) 10 10, pointer;</div>
+      <div class="cv-desc">The full ZopDev mark (blue / orange / green) at 20px. Reserve for high-signature surfaces, hero, brand-led campaign pages.</div></div></div>
+
+  <div class="cv-card"><div class="cv-stage c13"><span>hover · scan reticle</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C13 · SCAN RETICLE</div><div class="cv-name">Targeting reticle</div>
+      <div class="cv-css">cursor: url(...reticle...) 14 14, crosshair;</div>
+      <div class="cv-desc">Ink ring with cross-hair lines + brand-orange centre dot. Operator-style, for region selectors, monitoring drilldowns, "scan this".</div></div></div>
+
+  <div class="cv-card"><div class="cv-stage c14"><span>hover · pen tip</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C14 · PEN TIP</div><div class="cv-name">Annotate / edit</div>
+      <div class="cv-css">cursor: url(...pen...) 2 2, pointer;</div>
+      <div class="cv-desc">Sharp ink chevron with a paper-coloured stroke for contrast. For annotation surfaces, comment threads, mark-up tools.</div></div></div>
+
+  <div class="cv-card"><div class="cv-stage c15"><span>hover · plus</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C15 · PLUS</div><div class="cv-name">Add / spawn</div>
+      <div class="cv-css">cursor: url(...plus...) 11 11, pointer;</div>
+      <div class="cv-desc">Paper disc with ink outline + orange `+`. Reserve for "click to add" zones, empty states, blank canvases, drop-targets.</div></div></div>
+
+  <div class="cv-card"><div class="cv-stage c16"><span>hover · minimal dot</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C16 · MINIMAL DOT</div><div class="cv-name">Operator default</div>
+      <div class="cv-css">cursor: url(...mini-dot...) 5 5, default;</div>
+      <div class="cv-desc">A tiny 4×4 orange square. Smaller and quieter than C11. Ambient surfaces where you want subtle brand presence without intrusion.</div></div></div>
+
+  <div class="cv-card"><div class="cv-stage c17"><span>hover · ZopNight</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C17 · ZOPNIGHT</div><div class="cv-name">Blue tile + moon</div>
+      <div class="cv-css">cursor: url(...zopnight-mark...) 9 9, pointer;</div>
+      <div class="cv-desc">The ZopNight sub-brand mark as a cursor. Use only on ZopNight-specific surfaces (cost optimisation, infra views).</div></div></div>
+
+  <div class="cv-card"><div class="cv-stage c18"><span>hover · ZopCloud</span></div>
+    <div class="cv-meta-row"><div class="cv-id">C18 · ZOPCLOUD</div><div class="cv-name">Pixel cloud</div>
+      <div class="cv-css">cursor: url(...zopcloud-mark...) 9 9, pointer;</div>
+      <div class="cv-desc">8-bit pixel-cloud mark in the brand quadrant colours. Use on ZopCloud-specific surfaces, multi-cloud platform pages.</div></div></div>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="product-documentation.html">Product documentation</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developer-documentation.html">Documentation</a></li>
+        <li><a href="developer-documentation.html#endpoints">API reference</a></li>
+        <li><a href="developer-documentation.html#mcp-server">MCP server</a></li>
+        <li><a href="developer-documentation.html#sdks">SDK &amp; CLI</a></li>
+        <li><a href="developer-documentation.html#webhooks">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-bottom" style="padding-top:20px; border-top:1px solid var(--line);">
+      <div>© <span data-year>2026</span> ZopDev, Inc. · all rights reserved · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">privacy</a> · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">terms</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
