@@ -7101,26 +7101,32 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
      5-column track gives a diagonal 3-2 / 2-3 split, so each row has a
      wide tile and a narrow tile, alternating corners. Bigger cards,
      bigger headings — section reads as the marquee feature block. */
+  /* Compact section padding · pulls the engines section into 1 viewport
+     by shrinking the breathing room above + below the bento grid. */
+  #features.section{ padding:40px 0; }
+  #features .sec-head{ margin-bottom:18px; }
   .engines-row.features-bento{
     grid-template-columns:repeat(5, minmax(0, 1fr));
-    gap:20px;
+    gap:12px;
   }
   .engines-row.features-bento .feature{
-    padding:32px 32px 0;
-    gap:12px;
-    min-height:460px;
+    padding:18px 20px 0;
+    gap:6px;
+    min-height:240px;
   }
-  /* Heading + description scaled up; min-heights removed so cards breathe
-     with their natural content height instead of being clipped to a row. */
-  .engines-row.features-bento .feature .num{ margin-bottom:14px; min-height:14px; }
+  /* Tightly compact bento card · 2×2 grid + heading fits comfortably
+     within a 720–900px viewport. */
+  .engines-row.features-bento .feature .num{ margin-bottom:6px; min-height:12px; }
   .engines-row.features-bento .feature h3{
-    font-size:32px; margin-bottom:10px; line-height:1.1; letter-spacing:-0.02em;
+    font-size:22px; margin-bottom:4px; line-height:1.1; letter-spacing:-0.02em;
   }
   .engines-row.features-bento .feature p{
-    font-size:15px; margin-bottom:14px; line-height:1.55; max-width:42ch;
+    font-size:13.5px; margin-bottom:8px; line-height:1.45; max-width:46ch;
   }
+  /* Visuals · capped tighter so they don't dominate the card. */
   .engines-row.features-bento .feat-visual{
-    min-height:220px !important; margin:auto -32px 0 -32px !important;
+    min-height:110px !important; max-height:130px !important;
+    margin:auto -20px 0 -20px !important;
   }
   /* Diagonal 2×2 asymmetric placements ─────────────────────────────────
      row 1 · Recommendations (wide, span 3) | Scheduling (narrow, span 2)
@@ -7129,10 +7135,10 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
   .engines-row.features-bento .feature[data-feature="scheduling"] { grid-column:4 / span 2; grid-row:1; }
   .engines-row.features-bento .feature[data-feature="autoscaler"] { grid-column:1 / span 2; grid-row:2; }
   .engines-row.features-bento .feature[data-feature="eventready"] { grid-column:3 / span 3; grid-row:2; }
-  /* Wide tiles get an extra-tall video frame to balance the asymmetry */
+  /* Wide tiles get a slightly taller video frame to balance the asymmetry */
   .engines-row.features-bento .feature[data-feature="recommend"] .feat-visual,
   .engines-row.features-bento .feature[data-feature="eventready"] .feat-visual{
-    min-height:280px !important;
+    min-height:140px !important; max-height:160px !important;
   }
   /* "NEW" chip inline next to the .num meta */
   .engines-row .feat-chip{
