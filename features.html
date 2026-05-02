@@ -22,9 +22,20 @@
 <title>Features · ZopDev</title>
 <meta name="description" content="The full ZopDev feature catalog. 27 capabilities across discovery, scheduling, remediation, attribution, governance, and integrations."/>
 
+<!-- Open Graph / Twitter · social previews -->
+<meta property="og:title" content="Features · ZopDev">
+<meta property="og:description" content="The full ZopDev feature catalog. 27 capabilities across discovery, scheduling, remediation, attribution, governance, and integrations.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://zop.dev/features">
+<meta property="og:image" content="https://zop.dev/favicon.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Features · ZopDev">
+<meta name="twitter:description" content="The full ZopDev feature catalog. 27 capabilities, end to end.">
+<meta name="twitter:image" content="https://zop.dev/favicon.svg">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="tokens.css"/>
 <link rel="stylesheet" href="homepage-chrome.css"/>
@@ -61,8 +72,8 @@
   margin:0 0 18px; max-width:920px;
 }
 .fp-head .lede{
-  font-size:18px; color:var(--g-700);
-  max-width:720px; line-height:1.5; margin:0 0 24px;
+  font-size:20px; color:var(--g-700);
+  max-width:760px; line-height:1.55; margin:0 0 24px;
 }
 html[data-theme="dark"] .fp-head .lede{ color:var(--g-300); }
 .fp-head .stats{
@@ -98,16 +109,16 @@ html[data-theme="dark"] .fp-filter a:hover{ color:var(--g-50); background:#1a1a1
 /* ─── TRACK SECTION ─── */
 .fp-track{
   max-width:1240px; margin:0 auto;
-  padding:96px 32px;
+  padding:72px 32px;
   border-bottom:1px solid var(--line);
   scroll-margin-top:120px;
 }
 .fp-track:last-child{ border-bottom:0; }
 .fp-track-head{
   display:grid; grid-template-columns:1fr 1.2fr;
-  gap:64px; align-items:end;
-  margin-bottom:64px;
-  padding-bottom:32px; border-bottom:1px dashed var(--line);
+  gap:48px; align-items:end;
+  margin-bottom:48px;
+  padding-bottom:28px; border-bottom:1px dashed var(--line);
 }
 .fp-track-head .meta{
   font-family:var(--mono); font-size:11px; letter-spacing:.14em;
@@ -122,8 +133,8 @@ html[data-theme="dark"] .fp-filter a:hover{ color:var(--g-50); background:#1a1a1
   margin:0;
 }
 .fp-track-head p{
-  font-size:16px; color:var(--g-700); line-height:1.6; margin:0;
-  max-width:560px;
+  font-size:17px; color:var(--g-700); line-height:1.6; margin:0;
+  max-width:620px;
 }
 html[data-theme="dark"] .fp-track-head p{ color:var(--g-300); }
 @media (max-width:980px){
@@ -133,8 +144,8 @@ html[data-theme="dark"] .fp-track-head p{ color:var(--g-300); }
 /* ─── FEATURE BLOCKS · alternating L/R deep-dive ─── */
 .fp-feature{
   display:grid; grid-template-columns:1fr 1fr;
-  gap:64px; align-items:start;
-  padding:48px 0;
+  gap:40px; align-items:start;
+  padding:40px 0;
   border-bottom:1px dashed var(--line);
 }
 .fp-feature:last-child{ border-bottom:0; padding-bottom:0; }
@@ -152,8 +163,8 @@ html[data-theme="dark"] .fp-track-head p{ color:var(--g-300); }
   margin:0 0 12px;
 }
 .fp-copy .fp-lede{
-  font-size:16px; color:var(--g-700); line-height:1.55;
-  margin:0 0 24px; max-width:520px;
+  font-size:18px; color:var(--g-700); line-height:1.55;
+  margin:0 0 24px;
 }
 html[data-theme="dark"] .fp-copy .fp-lede{ color:var(--g-300); }
 .fp-copy .fp-bullets{
@@ -163,7 +174,7 @@ html[data-theme="dark"] .fp-copy .fp-lede{ color:var(--g-300); }
 .fp-copy .fp-bullets li{
   display:grid; grid-template-columns:14px 1fr; gap:12px;
   align-items:start;
-  font-size:14px; color:var(--g-700); line-height:1.5;
+  font-size:16px; color:var(--g-700); line-height:1.55;
 }
 html[data-theme="dark"] .fp-copy .fp-bullets li{ color:var(--g-300); }
 .fp-copy .fp-bullets li::before{

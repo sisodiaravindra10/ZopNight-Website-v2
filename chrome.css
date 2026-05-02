@@ -821,3 +821,17 @@ html[data-theme="light"] .btn-accent span,
 .nav-cta .btn-accent span{
   color:#0A0A0A !important;
 }
+
+/* ============================================================================
+   CEO request · eyebrow labels removed site-wide. Hide rather than delete
+   so they can be restored quickly if needed. Targets the four canonical
+   eyebrow patterns (homepage section meta, features page-head + track-head,
+   walkthrough section meta). Inline UI labels inside widgets/cards are
+   intentionally NOT matched (.np-meta, .zd-meta, .gs-state-meta, etc.).
+   ============================================================================ */
+.sec-meta,
+.fp-head .meta,
+.fp-track-head .meta,
+.wt-sec-meta{
+  display: none !important;
+}
