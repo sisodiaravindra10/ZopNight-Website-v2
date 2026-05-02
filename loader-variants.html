@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loader variants · ZopDev</title>
+<meta name="description" content="Ten loader concepts for the ZopDev brand. Sharp corners, hard offset shadows, brand-coherent palette. Pick one to ship.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --zop-blue:#2A4494;
+  --zop-orange:#F58549;
+  --zop-green:#7FB236;
+  --paper:#FAF7EC;
+  --ink:#0A0A0A;
+  --line:#D9D3BF;
+  --g-100:#ECE7D7;
+  --g-200:#E2DDCD;
+  --g-300:#C9C4B5;
+  --g-500:#707070;
+  --g-600:#525252;
+  --g-700:#2a2a2a;
+  --font:'Space Grotesk',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --max:1320px;
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --ease-snap:cubic-bezier(.19,1,.22,1);
+}
+*,*::before,*::after{box-sizing:border-box;border-radius:0;margin:0;padding:0}
+em,i,cite{font-style:normal}
+body{
+  font-family:var(--font);background:var(--paper);color:var(--ink);
+  letter-spacing:-0.02em;line-height:1.55;font-size:15px;
+  -webkit-font-smoothing:antialiased;
+}
+*:focus-visible{outline:2px solid var(--zop-orange);outline-offset:2px}
+
+/* ─── PAGE CHROME ─── */
+.lv-head{
+  padding:80px 32px 56px;border-bottom:1px solid var(--line);
+  max-width:var(--max);margin:0 auto;
+  display:flex;flex-direction:column;gap:18px;
+}
+.lv-meta{
+  font-family:var(--mono);font-size:11px;color:var(--zop-orange);
+  letter-spacing:.14em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.lv-meta::before{content:'';width:10px;height:10px;background:var(--zop-orange)}
+.lv-head h1{
+  font-size:clamp(44px,5.5vw,76px);font-weight:700;
+  line-height:1;letter-spacing:-0.045em;margin:0;max-width:1100px;
+}
+.lv-head h1 em{color:var(--zop-orange)}
+.lv-head p{
+  font-size:18px;color:var(--g-600);max-width:760px;line-height:1.55;margin:0;
+}
+
+/* ─── GRID ─── */
+.lv-grid{
+  max-width:var(--max);margin:0 auto;padding:48px 32px 96px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+}
+@media(max-width:980px){.lv-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.lv-grid{grid-template-columns:1fr}}
+
+/* ─── CARD ─── */
+.lv-card{
+  background:#FAF7EC;border:1px solid var(--line);
+  display:flex;flex-direction:column;
+  transition:transform .25s var(--ease-out),box-shadow .25s var(--ease-out);
+}
+.lv-card:hover{transform:translateY(-4px);box-shadow:0 8px 0 -4px var(--zop-orange)}
+.lv-stage{
+  height:280px;background:var(--paper);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  border-bottom:1px solid var(--line);
+}
+.lv-meta-row{
+  padding:18px 20px 20px;
+  display:flex;flex-direction:column;gap:4px;
+}
+.lv-id{
+  font-family:var(--mono);font-size:11px;color:var(--g-500);
+  letter-spacing:.06em;text-transform:uppercase;
+}
+.lv-name{font-size:16px;font-weight:600;color:var(--ink);letter-spacing:-0.01em}
+.lv-desc{font-size:13px;color:var(--g-500);line-height:1.55;margin-top:2px}
+
+/* ===========================================================
+   L1 · TETRIS DROP, three squares fall and assemble the mark
+   =========================================================== */
+.l1{position:relative;width:64px;height:64px}
+.l1 i{position:absolute;width:32px;height:32px;display:block}
+.l1 .a{background:var(--zop-blue); top:0;  left:0;  animation:l1-drop 2.4s var(--ease-out) infinite}
+.l1 .b{background:var(--zop-orange);top:0;  left:32px;animation:l1-drop 2.4s var(--ease-out) infinite .3s}
+.l1 .c{background:var(--zop-green); top:32px;left:32px;animation:l1-drop 2.4s var(--ease-out) infinite .6s}
+@keyframes l1-drop{
+  0%,100%   {transform:translateY(-180px);opacity:0}
+  18%       {transform:translateY(0);opacity:1}
+  82%       {transform:translateY(0);opacity:1}
+}
+
+/* ===========================================================
+   L2 · WORDMARK SWEEP, ink wordmark, orange wipe L→R
+   =========================================================== */
+.l2{font-family:var(--font);font-size:36px;font-weight:700;letter-spacing:-0.04em;color:var(--ink);position:relative;line-height:1}
+.l2 .l2-fill{position:absolute;inset:0;color:var(--zop-orange);clip-path:inset(0 100% 0 0);animation:l2-wipe 2s linear infinite}
+.l2 .l2-dot{color:var(--zop-orange)}
+@keyframes l2-wipe{
+  0%   {clip-path:inset(0 100% 0 0)}
+  50%  {clip-path:inset(0 0 0 0)}
+  100% {clip-path:inset(0 0 0 100%)}
+}
+
+/* ===========================================================
+   L3 · IRIS, paper square scales down to reveal the mark
+   =========================================================== */
+.l3{position:relative;width:80px;height:80px}
+.l3 .l3-mark{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.l3 .l3-mark i{display:block}
+.l3 .l3-mark .a{background:var(--zop-blue)}
+.l3 .l3-mark .b{background:var(--zop-orange)}
+.l3 .l3-mark .c{background:var(--zop-green);grid-column:2;grid-row:2}
+.l3 .l3-iris{position:absolute;inset:0;background:var(--paper);transform-origin:center;animation:l3-iris 2s var(--ease-out) infinite}
+@keyframes l3-iris{
+  0%   {transform:scale(1)}
+  50%  {transform:scale(0)}
+  100% {transform:scale(1)}
+}
+
+/* ===========================================================
+   L4 · MARK ASSEMBLY, 3 squares slide in from 3 directions
+   =========================================================== */
+.l4{position:relative;width:64px;height:64px}
+.l4 i{position:absolute;width:32px;height:32px;display:block}
+.l4 .a{background:var(--zop-blue);  top:0;left:0;     animation:l4-from-left 2.2s var(--ease-snap) infinite}
+.l4 .b{background:var(--zop-orange);top:0;left:32px;  animation:l4-from-top 2.2s var(--ease-snap) infinite .15s}
+.l4 .c{background:var(--zop-green); top:32px;left:32px;animation:l4-from-bottom 2.2s var(--ease-snap) infinite .3s}
+@keyframes l4-from-left  {0%,5%{transform:translateX(-200%);opacity:0} 25%,75%{transform:translateX(0);opacity:1} 95%,100%{transform:translateX(-200%);opacity:0}}
+@keyframes l4-from-top   {0%,5%{transform:translateY(-200%);opacity:0} 25%,75%{transform:translateY(0);opacity:1} 95%,100%{transform:translateY(-200%);opacity:0}}
+@keyframes l4-from-bottom{0%,5%{transform:translateY(200%);opacity:0}  25%,75%{transform:translateY(0);opacity:1} 95%,100%{transform:translateY(200%);opacity:0}}
+
+/* ===========================================================
+   L5 · TYPEWRITER WORDMARK, letters appear with mono caret
+   =========================================================== */
+.l5{font-family:var(--font);font-size:32px;font-weight:700;letter-spacing:-0.04em;color:var(--ink);position:relative;display:inline-flex;align-items:baseline;line-height:1}
+.l5 .l5-text{display:inline-block;overflow:hidden;white-space:nowrap;animation:l5-type 3s steps(7,end) infinite}
+.l5 .l5-caret{display:inline-block;width:2px;height:.85em;background:var(--zop-orange);margin-left:4px;animation:l5-blink 1s steps(2,end) infinite}
+.l5 em{color:var(--zop-orange)}
+@keyframes l5-type {0%{width:0} 60%{width:7ch} 90%{width:7ch} 100%{width:0}}
+@keyframes l5-blink{0%,49%{opacity:1} 50%,100%{opacity:0}}
+
+/* ===========================================================
+   L6 · ORBIT THEN SETTLE, 3 squares orbit, then snap to mark
+   =========================================================== */
+.l6{position:relative;width:96px;height:96px}
+.l6 .l6-orbit{position:absolute;inset:0;animation:l6-rot 1.6s linear infinite}
+.l6 i{position:absolute;width:20px;height:20px;display:block}
+.l6 .a{background:var(--zop-blue);  top:0; left:50%; transform:translateX(-50%)}
+.l6 .b{background:var(--zop-orange);top:50%;right:0;  transform:translateY(-50%)}
+.l6 .c{background:var(--zop-green); bottom:0;left:50%;transform:translateX(-50%)}
+@keyframes l6-rot{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.l6 .l6-center{position:absolute;top:50%;left:50%;width:8px;height:8px;background:var(--ink);transform:translate(-50%,-50%)}
+
+/* ===========================================================
+   L7 · PULSE DOTS, three brand-color dots pulsing in sequence
+   =========================================================== */
+.l7{display:flex;gap:14px;align-items:center}
+.l7 i{display:block;width:14px;height:14px}
+.l7 .a{background:var(--zop-blue);   animation:l7-pulse 1.4s var(--ease-out) infinite      }
+.l7 .b{background:var(--zop-orange); animation:l7-pulse 1.4s var(--ease-out) infinite .15s }
+.l7 .c{background:var(--zop-green);  animation:l7-pulse 1.4s var(--ease-out) infinite .30s }
+@keyframes l7-pulse{
+  0%,100%{transform:scale(.55);opacity:.35}
+  40%    {transform:scale(1.35);opacity:1}
+  70%    {transform:scale(1);opacity:.85}
+}
+
+/* ===========================================================
+   L8 · STACK BUILD, bars rise from baseline to form mark grid
+   =========================================================== */
+.l8{position:relative;width:64px;height:64px}
+.l8 i{position:absolute;width:32px;display:block;bottom:0;animation-iteration-count:infinite;animation-duration:2s;animation-timing-function:var(--ease-out)}
+.l8 .a{background:var(--zop-blue);  height:64px;left:0; animation-name:l8-rise-tall;            animation-delay:.0s}
+.l8 .b{background:var(--zop-orange);height:32px;left:32px;animation-name:l8-rise-half;          animation-delay:.15s;top:0}
+.l8 .c{background:var(--zop-green); height:32px;left:32px;animation-name:l8-rise-half;          animation-delay:.30s;bottom:0;top:auto}
+@keyframes l8-rise-tall{0%{transform:scaleY(0);transform-origin:bottom}50%{transform:scaleY(1)}100%{transform:scaleY(0);transform-origin:bottom}}
+@keyframes l8-rise-half{0%{transform:scaleY(0);transform-origin:bottom}50%{transform:scaleY(1)}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ===========================================================
+   L9 · SCAN LINE, horizontal beam reveals the mark line by line
+   =========================================================== */
+.l9{position:relative;width:96px;height:96px}
+.l9 .l9-mark{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;clip-path:inset(0 0 100% 0);animation:l9-reveal 2.2s var(--ease-out) infinite}
+.l9 .l9-mark i{display:block}
+.l9 .l9-mark .a{background:var(--zop-blue)}
+.l9 .l9-mark .b{background:var(--zop-orange)}
+.l9 .l9-mark .c{background:var(--zop-green);grid-column:2;grid-row:2}
+.l9 .l9-beam{position:absolute;left:-8px;right:-8px;height:2px;background:var(--zop-orange);box-shadow:0 0 0 1px rgba(245,133,73,.4);animation:l9-beam 2.2s var(--ease-out) infinite}
+@keyframes l9-reveal{0%{clip-path:inset(0 0 100% 0)}50%{clip-path:inset(0 0 0 0)}100%{clip-path:inset(100% 0 0 0)}}
+@keyframes l9-beam  {0%{top:-2px}50%{top:100%}100%{top:100%}}
+
+/* ===========================================================
+   L10 · PROGRESS BAR · brand sweep with mono-tag percentage
+   =========================================================== */
+.l10{display:flex;flex-direction:column;align-items:center;gap:14px;width:240px}
+.l10 .l10-track{width:100%;height:3px;background:var(--g-200);position:relative;overflow:hidden}
+.l10 .l10-fill{position:absolute;top:0;left:0;bottom:0;width:0%;background:var(--zop-blue);animation:l10-fill 2.6s var(--ease-out) infinite}
+.l10 .l10-meta{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--g-500);text-transform:uppercase;display:flex;justify-content:space-between;width:100%}
+.l10 .l10-meta strong{color:var(--ink);font-weight:600}
+.l10 .l10-meta em{color:var(--zop-orange);font-weight:600}
+@keyframes l10-fill{
+  0%   {width:0%;  background:var(--zop-blue)}
+  50%  {width:65%; background:var(--zop-orange)}
+  100% {width:100%;background:var(--zop-green)}
+}
+</style>
+</head>
+<body>
+
+<header class="lv-head">
+  <div class="lv-meta">// loader variants · pick one to ship</div>
+  <h1>Ten loaders. <em>Pick one.</em></h1>
+  <p>Brand-coherent loader concepts in the ZopDev system, sharp corners, hard offsets, restrained palette, no gradients. Each loops continuously below so you can watch the cadence before choosing.</p>
+</header>
+
+<main class="lv-grid">
+
+  <!-- L1 -->
+  <div class="lv-card">
+    <div class="lv-stage">
+      <div class="l1">
+        <i class="a"></i><i class="b"></i><i class="c"></i>
+      </div>
+    </div>
+    <div class="lv-meta-row">
+      <div class="lv-id">L1 · TETRIS DROP</div>
+      <div class="lv-name">Pieces fall and assemble the mark</div>
+      <div class="lv-desc">Three brand-colour squares fall from above, staggered 300ms apart, settle into the 2×2 mark layout, then exit upward to loop.</div>
+    </div>
+  </div>
+
+  <!-- L2 -->
+  <div class="lv-card">
+    <div class="lv-stage">
+      <div class="l2">Zop<em>Dev</em><span class="l2-fill" aria-hidden="true">ZopDev</span></div>
+    </div>
+    <div class="lv-meta-row">
+      <div class="lv-id">L2 · WORDMARK SWEEP</div>
+      <div class="lv-name">Brand colour wipes through the wordmark</div>
+      <div class="lv-desc">Ink wordmark · orange overlay clipped left-to-right via clip-path · 2s cycle, no easing on the wipe so the line stays sharp.</div>
+    </div>
+  </div>
+
+  <!-- L3 -->
+  <div class="lv-card">
+    <div class="lv-stage">
+      <div class="l3">
+        <div class="l3-mark"><i class="a"></i><i class="b"></i><i></i><i class="c"></i></div>
+        <div class="l3-iris"></div>
+      </div>
+    </div>
+    <div class="lv-meta-row">
+      <div class="lv-id">L3 · IRIS COLLAPSE</div>
+      <div class="lv-name">Paper square scales down to reveal the mark</div>
+      <div class="lv-desc">Most architectural reading, the loader feels like a shutter opening on the mark. Sharp scale, no rotation.</div>
+    </div>
+  </div>
+
+  <!-- L4 -->
+  <div class="lv-card">
+    <div class="lv-stage">
+      <div class="l4">
+        <i class="a"></i><i class="b"></i><i class="c"></i>
+      </div>
+    </div>
+    <div class="lv-meta-row">
+      <div class="lv-id">L4 · DIRECTIONAL ASSEMBLY</div>
+      <div class="lv-name">Squares slide in from 3 directions</div>
+      <div class="lv-desc">Blue from the left, orange from the top, green from the bottom · they snap into the mark layout, hold, then exit the way they came.</div>
+    </div>
+  </div>
+
+  <!-- L5 -->
+  <div class="lv-card">
+    <div class="lv-stage">
+      <div class="l5"><span class="l5-text">Zop<em>Dev</em></span><span class="l5-caret"></span></div>
+    </div>
+    <div class="lv-meta-row">
+      <div class="lv-id">L5 · TERMINAL TYPE</div>
+      <div class="lv-name">Wordmark types in with mono caret</div>
+      <div class="lv-desc">Letter-by-letter reveal in 7 steps · blinking orange caret stays visible after the wordmark settles. Most operator/CLI feeling option.</div>
+    </div>
+  </div>
+
+  <!-- L6 -->
+  <div class="lv-card">
+    <div class="lv-stage">
+      <div class="l6">
+        <div class="l6-orbit">
+          <i class="a"></i>
+          <i class="b"></i>
+          <i class="c"></i>
+        </div>
+        <div class="l6-center"></div>
+      </div>
+    </div>
+    <div class="lv-meta-row">
+      <div class="lv-id">L6 · MARK ORBIT</div>
+      <div class="lv-name">Three squares orbit a centre dot</div>
+      <div class="lv-desc">Constant 1.6s rotation · ink centre dot anchors the orbit · the three brand colours stay equidistant. Most kinetic option.</div>
+    </div>
+  </div>
+
+  <!-- L7 -->
+  <div class="lv-card">
+    <div class="lv-stage">
+      <div class="l7"><i class="a"></i><i class="b"></i><i class="c"></i></div>
+    </div>
+    <div class="lv-meta-row">
+      <div class="lv-id">L7 · PULSE TRIO</div>
+      <div class="lv-name">Three brand dots pulse in sequence</div>
+      <div class="lv-desc">Smallest visual footprint · sequential pulse, 150ms offset between dots · the simplest, "always-watching" choice.</div>
+    </div>
+  </div>
+
+  <!-- L8 -->
+  <div class="lv-card">
+    <div class="lv-stage">
+      <div class="l8">
+        <i class="a"></i>
+        <i class="b"></i>
+        <i class="c"></i>
+      </div>
+    </div>
+    <div class="lv-meta-row">
+      <div class="lv-id">L8 · STACK BUILD</div>
+      <div class="lv-name">Bars rise to form the mark grid</div>
+      <div class="lv-desc">Blue tall bar fills first · orange + green half-bars stack right · transform-origin from bottom. Reads as "loading the structure."</div>
+    </div>
+  </div>
+
+  <!-- L9 -->
+  <div class="lv-card">
+    <div class="lv-stage">
+      <div class="l9">
+        <div class="l9-mark"><i class="a"></i><i class="b"></i><i></i><i class="c"></i></div>
+        <div class="l9-beam"></div>
+      </div>
+    </div>
+    <div class="lv-meta-row">
+      <div class="lv-id">L9 · SCAN LINE</div>
+      <div class="lv-name">Horizontal beam reveals the mark</div>
+      <div class="lv-desc">Orange beam sweeps top-to-bottom · clip-path follows behind it, painting the mark in. Clean technical/scanner energy.</div>
+    </div>
+  </div>
+
+  <!-- L10 -->
+  <div class="lv-card">
+    <div class="lv-stage">
+      <div class="l10">
+        <div class="l10-meta"><strong>// preparing</strong><em>0 → 100</em></div>
+        <div class="l10-track"><div class="l10-fill"></div></div>
+        <div class="l10-meta"><span>connecting · ingesting</span><span>elapsed 2.6s</span></div>
+      </div>
+    </div>
+    <div class="lv-meta-row">
+      <div class="lv-id">L10 · PROGRESS RAIL</div>
+      <div class="lv-name">Brand-coloured progress with mono labels</div>
+      <div class="lv-desc">Fill cycles blue → orange → green as the bar advances · mono "preparing" + percentage labels frame it. Closest to the existing loader's pattern, just sharper.</div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ============ DIAGONAL ARROW · UP-RIGHT CLIMB SET ============ -->
+<header class="lv-head" style="border-top:1px solid var(--line);padding-top:64px">
+  <div class="lv-meta">// diagonal arrow set · stairs / climb / sweep</div>
+  <h1>Three blocks. <em>Climbing up-right.</em></h1>
+  <p>Five concepts where the brand-mark squares read as a diagonal arrow ascending, the universal "going up" signal for a cost-cutting / capacity-rising / compute-scaling product.</p>
+</header>
+
+<style>
+/* ===========================================================
+   D-COMMON · the staircase / arrow geometry
+   3 blocks LOCKED in a stair formation (bottom-left → top-right)
+   The whole UNIT moves up-right diagonally · blocks never break apart
+   =========================================================== */
+.d-stage{
+  /* 120×120 stage gives the unit room to travel a full step */
+  width:120px; height:120px;
+  position:relative;
+  overflow:visible;
+}
+/* the locked stair, 3 blocks fixed in formation inside this wrapper */
+.d-unit{
+  position:absolute; left:0; top:48px;     /* anchored bottom-left of stage */
+  width:72px; height:72px;
+  /* This wrapper is what gets animated · the children stay put */
+}
+.d-unit i{position:absolute; width:24px; height:24px; display:block}
+.d-unit .a{background:var(--zop-blue);   left:0;   top:48px}     /* bottom-left */
+.d-unit .b{background:var(--zop-orange); left:24px;top:24px}     /* middle */
+.d-unit .c{background:var(--zop-green);  left:48px;top:0}        /* top-right */
+
+/* ===========================================================
+   D1 · CONTINUOUS GLIDE, stair slides smoothly up-right, loops
+   =========================================================== */
+.d1 .d-unit{animation:d1-glide 2.4s linear infinite}
+@keyframes d1-glide{
+  0%   {transform:translate(-24px,24px);  opacity:0}
+  15%  {transform:translate(-24px,24px);  opacity:0}
+  30%  {transform:translate(0,0);         opacity:1}
+  70%  {transform:translate(48px,-48px);  opacity:1}
+  85%  {transform:translate(72px,-72px);  opacity:0}
+  100% {transform:translate(72px,-72px);  opacity:0}
+}
+
+/* ===========================================================
+   D2 · RATCHETED STEPS, stair snaps to discrete positions
+   =========================================================== */
+.d2 .d-unit{animation:d2-ratchet 2.8s steps(4) infinite}
+@keyframes d2-ratchet{
+  0%   {transform:translate(0,0);         opacity:1}
+  25%  {transform:translate(24px,-24px);  opacity:1}
+  50%  {transform:translate(48px,-48px);  opacity:1}
+  75%  {transform:translate(72px,-72px);  opacity:0}
+  100% {transform:translate(0,0);         opacity:0}
+}
+
+/* ===========================================================
+   D3 · COMPRESS-AND-LAUNCH, stair compresses, then launches up-right
+   =========================================================== */
+.d3 .d-unit{animation:d3-launch 2.2s var(--ease-out) infinite;transform-origin:bottom left}
+@keyframes d3-launch{
+  0%,8%  {transform:translate(0,0)        scale(1);            opacity:1}
+  18%    {transform:translate(0,0)        scale(.86, 1.05);    opacity:1}  /* compress */
+  28%    {transform:translate(0,0)        scale(1.05, .92);    opacity:1}  /* anticipate */
+  60%    {transform:translate(48px,-48px) scale(1);            opacity:1}  /* launch */
+  85%    {transform:translate(72px,-72px) scale(1);            opacity:0}
+  100%   {transform:translate(0,0)        scale(1);            opacity:0}
+}
+
+/* ===========================================================
+   D4 · TRAILING GHOSTS, stair moves up, leaves 2 ghosts behind
+   =========================================================== */
+.d4 .d-unit{animation:d4-glide 2.6s var(--ease-out) infinite}
+.d4 .d-ghost{
+  position:absolute; left:0; top:48px; width:72px; height:72px;
+  pointer-events:none;
+}
+.d4 .d-ghost i{position:absolute; width:24px; height:24px; display:block}
+.d4 .d-ghost.g1 i{background:rgba(10,10,10,0.10)}
+.d4 .d-ghost.g2 i{background:rgba(10,10,10,0.05)}
+.d4 .d-ghost i.a{left:0;   top:48px}
+.d4 .d-ghost i.b{left:24px;top:24px}
+.d4 .d-ghost i.c{left:48px;top:0}
+.d4 .d-ghost.g1{animation:d4-glide 2.6s var(--ease-out) infinite -.18s}
+.d4 .d-ghost.g2{animation:d4-glide 2.6s var(--ease-out) infinite -.36s}
+@keyframes d4-glide{
+  0%   {transform:translate(-12px,12px);  opacity:0}
+  10%  {transform:translate(0,0);         opacity:1}
+  70%  {transform:translate(48px,-48px);  opacity:1}
+  90%  {transform:translate(72px,-72px);  opacity:0}
+  100% {transform:translate(72px,-72px);  opacity:0}
+}
+
+/* ===========================================================
+   D5 · TRACKED CLIMB, stair travels along a dotted diagonal track
+   =========================================================== */
+.d5{position:relative}
+.d5 .d-track{
+  position:absolute; left:6px; bottom:6px; width:140px; height:1px;
+  /* dotted diagonal track at -45deg · pure CSS, no gradient */
+  background-image:linear-gradient(90deg, var(--g-300) 50%, transparent 50%);
+  background-size:6px 1px;
+  transform-origin:left bottom;
+  transform:rotate(-45deg);
+  opacity:.7;
+}
+.d5 .d-unit{animation:d5-track 2.6s var(--ease-out) infinite}
+@keyframes d5-track{
+  0%,5%  {transform:translate(0,0);         opacity:1}
+  60%    {transform:translate(48px,-48px);  opacity:1}
+  78%    {transform:translate(72px,-72px);  opacity:0}
+  100%   {transform:translate(0,0);         opacity:0}
+}
+/* tip-marker that pulses at the next position when the unit arrives */
+.d5 .d-tip{
+  position:absolute; left:72px; top:0; width:8px; height:8px;
+  background:var(--zop-orange);
+  animation:d5-tip 2.6s var(--ease-out) infinite;
+  opacity:0;
+}
+@keyframes d5-tip{
+  0%,55% {opacity:0; transform:scale(.4)}
+  62%    {opacity:1; transform:scale(1.6)}
+  78%    {opacity:0; transform:scale(.4)}
+  100%   {opacity:0; transform:scale(.4)}
+}
+</style>
+
+<main class="lv-grid">
+
+  <!-- D1 -->
+  <div class="lv-card">
+    <div class="lv-stage">
+      <div class="d-stage d1">
+        <div class="d-unit"><i class="a"></i><i class="b"></i><i class="c"></i></div>
+      </div>
+    </div>
+    <div class="lv-meta-row">
+      <div class="lv-id">D1 · CONTINUOUS GLIDE</div>
+      <div class="lv-name">Locked stair slides up-right</div>
+      <div class="lv-desc">Three-block stair stays locked together as one rigid unit and glides up-right at constant speed · fades out at the top, restarts at the bottom · the simplest "going up" reading.</div>
+    </div>
+  </div>
+
+  <!-- D2 -->
+  <div class="lv-card">
+    <div class="lv-stage">
+      <div class="d-stage d2">
+        <div class="d-unit"><i class="a"></i><i class="b"></i><i class="c"></i></div>
+      </div>
+    </div>
+    <div class="lv-meta-row">
+      <div class="lv-id">D2 · RATCHETED STEPS</div>
+      <div class="lv-name">Snaps to discrete positions</div>
+      <div class="lv-desc">Stair unit snaps cleanly to four positions · CSS `steps(4)` timing function · each snap is sharp, no easing in between. Reads as "ratcheting up the staircase, one rung at a time."</div>
+    </div>
+  </div>
+
+  <!-- D3 -->
+  <div class="lv-card">
+    <div class="lv-stage">
+      <div class="d-stage d3">
+        <div class="d-unit"><i class="a"></i><i class="b"></i><i class="c"></i></div>
+      </div>
+    </div>
+    <div class="lv-meta-row">
+      <div class="lv-id">D3 · COMPRESS &amp; LAUNCH</div>
+      <div class="lv-name">Anticipate, then climb</div>
+      <div class="lv-desc">Stair briefly compresses (0.86 × 1.05), springs to anticipation (1.05 × 0.92), then launches up-right · the only variant with a coiled-spring physical reading. Sharp scales, no bounce easing.</div>
+    </div>
+  </div>
+
+  <!-- D4 -->
+  <div class="lv-card">
+    <div class="lv-stage">
+      <div class="d-stage d4">
+        <div class="d-ghost g2"><i class="a"></i><i class="b"></i><i class="c"></i></div>
+        <div class="d-ghost g1"><i class="a"></i><i class="b"></i><i class="c"></i></div>
+        <div class="d-unit"><i class="a"></i><i class="b"></i><i class="c"></i></div>
+      </div>
+    </div>
+    <div class="lv-meta-row">
+      <div class="lv-id">D4 · TRAILING GHOSTS</div>
+      <div class="lv-name">Stair leaves fading copies behind</div>
+      <div class="lv-desc">The locked stair travels up-right and leaves two ink-toned ghost copies behind it · ghosts run the same animation 180ms and 360ms behind the lead unit · richest motion read.</div>
+    </div>
+  </div>
+
+  <!-- D5 -->
+  <div class="lv-card">
+    <div class="lv-stage">
+      <div class="d-stage d5">
+        <div class="d-track" aria-hidden="true"></div>
+        <div class="d-unit"><i class="a"></i><i class="b"></i><i class="c"></i></div>
+        <div class="d-tip" aria-hidden="true"></div>
+      </div>
+    </div>
+    <div class="lv-meta-row">
+      <div class="lv-id">D5 · TRACKED CLIMB</div>
+      <div class="lv-name">Travels along a dotted track</div>
+      <div class="lv-desc">A dotted diagonal track sets the path · the locked stair travels along it · an orange tip-marker pulses at the destination as the unit arrives. Most explicit "going up" semantics.</div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid foot-grid--equal">
+      <div class="foot-col"><h3>product</h3><ul>
+        <li><a href="zopnight.html">ZopNight</a></li>
+        <li><a href="zopday.html">ZopDay</a></li>
+        <li><a href="zopcloud.html">ZopCloud</a></li>
+        <li><a href="integrations.html">Integrations</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="status.html">Status</a></li></ul></div>
+      <div class="foot-col"><h3>resources</h3><ul>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="free-ebooks.html">Ebooks</a></li>
+        <li><a href="customers.html">Case studies</a></li>
+        <li><a href="solutions.html">Use cases by industry</a></li>
+        <li><a href="product-documentation.html">Product documentation</a></li>
+        <li><a href="devops-hub.html">DevOps hub</a></li>
+        <li><a href="kubernetes-guide.html">Kubernetes guide</a></li>
+        <li><a href="ci-cd-best-practices.html">CI/CD best practices</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li></ul></div>
+      <div class="foot-col"><h3>developers</h3><ul>
+        <li><a href="developer-documentation.html">Documentation</a></li>
+        <li><a href="developer-documentation.html#endpoints">API reference</a></li>
+        <li><a href="developer-documentation.html#mcp-server">MCP server</a></li>
+        <li><a href="developer-documentation.html#sdks">SDK &amp; CLI</a></li>
+        <li><a href="developer-documentation.html#webhooks">Webhooks</a></li>
+        <li><a href="https://github.com/zopdev">GitHub</a></li></ul></div>
+      <div class="foot-col"><h3>company</h3><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="careers.html">Careers</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="brand-kit.html">Brand kit</a></li>
+        <li><a href="brand-kit.html">Press kit</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="trust.html">Trust center</a></li></ul></div>
+    </div>
+
+    <div class="foot-bottom" style="padding-top:20px; border-top:1px solid var(--line);">
+      <div>© <span data-year>2026</span> ZopDev, Inc. · all rights reserved · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">privacy</a> · <a href="trust.html" style="color:inherit; border-bottom:1px solid var(--line); padding-bottom:1px;">terms</a></div>
+      <div class="foot-social">
+        <a href="https://linkedin.com/company/zopdev">linkedin</a>
+        <a href="https://twitter.com/zopdev">twitter</a>
+        <a href="https://github.com/zopdev">github</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

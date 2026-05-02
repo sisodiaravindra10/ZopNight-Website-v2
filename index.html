@@ -5,6 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ZopDev. Multi-cloud optimization on autopilot</title>
 <meta name="description" content="ZopNight by ZopDev. Continuously discovers cloud sprawl and remediates it in one click. No code changes, no DevOps army required." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+
+<!-- Open Graph / Twitter · social previews -->
+<meta property="og:title" content="ZopDev — Multi-cloud optimization on autopilot">
+<meta property="og:description" content="ZopNight by ZopDev. Continuously discovers cloud sprawl and remediates it in one click. No code changes, no DevOps army required.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://zop.dev/">
+<meta property="og:image" content="https://zop.dev/favicon.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ZopDev — Multi-cloud optimization on autopilot">
+<meta name="twitter:description" content="ZopNight by ZopDev. Continuously discovers cloud sprawl and remediates it in one click.">
+<meta name="twitter:image" content="https://zop.dev/favicon.svg">
 
 <!-- ============================================================
      LOADER GATE · runs synchronously in <head> BEFORE any paint
@@ -32,7 +44,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 <!-- Shared chrome (base layer; inline <style> below intentionally overrides) -->
 <link rel="stylesheet" href="tokens.css">
@@ -84,10 +96,10 @@
 *,*::before,*::after{box-sizing:border-box; border-radius:0}
 html{scroll-behavior:smooth}
 body{
-  margin:0; font-family:var(--font); color:var(--ink);
-  background:var(--paper); letter-spacing:-0.02em;
+  margin:0; font-family:var(--font-body); color:var(--ink);
+  background:var(--paper); letter-spacing:-0.005em;
   -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-  font-size:15px; line-height:1.55;
+  font-size:17px; line-height:1.6;
   /* `overflow-x:clip` prevents horizontal overflow at all viewports
      WITHOUT establishing a scroll container.  This is critical because
      `overflow-x:hidden` would create a scroll container on <body>, which
@@ -7704,7 +7716,7 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
               <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Apply</div><div class="ftab-pt-desc">One-click remediation. Bill-validated savings, 7-day revert.</div></div></li>
             </ol>
             <div class="ftab-video">
-              <video src="recommendations.mp4" autoplay muted loop playsinline preload="metadata"></video>
+              <video src="recommendations.mp4" autoplay muted loop playsinline preload="metadata" poster="poster-placeholder.svg"></video>
             </div>
           </div>
         </div>
@@ -7718,7 +7730,7 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
               <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Activate</div><div class="ftab-pt-desc">Resources wake for the workday and sleep at night, automatically.</div></div></li>
             </ol>
             <div class="ftab-video">
-              <video src="scheduling.mp4" autoplay muted loop playsinline preload="metadata"></video>
+              <video src="scheduling.mp4" autoplay muted loop playsinline preload="metadata" poster="poster-placeholder.svg"></video>
             </div>
           </div>
         </div>
@@ -7732,7 +7744,7 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
               <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Go-live</div><div class="ftab-pt-desc">Every check passes. The event runs without late-night triage.</div></div></li>
             </ol>
             <div class="ftab-video">
-              <video src="event-readiness.mp4" autoplay muted loop playsinline preload="metadata"></video>
+              <video src="event-readiness.mp4" autoplay muted loop playsinline preload="metadata" poster="poster-placeholder.svg"></video>
             </div>
           </div>
         </div>
@@ -7746,7 +7758,7 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
               <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Live scale</div><div class="ftab-pt-desc">30&ndash;40% compute reduction on real production workloads.</div></div></li>
             </ol>
             <div class="ftab-video">
-              <video src="auto-scale.mp4" autoplay muted loop playsinline preload="metadata"></video>
+              <video src="auto-scale.mp4" autoplay muted loop playsinline preload="metadata" poster="poster-placeholder.svg"></video>
             </div>
           </div>
         </div>
@@ -9216,7 +9228,7 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
               <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Spin up</div><div class="ftab-pt-desc">Hardened K8s cluster live in minutes. RBAC, network policy, autoscaler all pre-wired.</div></div></li>
             </ol>
             <div class="ftab-video">
-              <video src="infrastructure.mp4" autoplay muted loop playsinline preload="metadata"></video>
+              <video src="infrastructure.mp4" autoplay muted loop playsinline preload="metadata" poster="poster-placeholder.svg"></video>
             </div>
           </div>
         </div>
@@ -9230,7 +9242,7 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
               <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Monitor</div><div class="ftab-pt-desc">Logs, metrics, traces wired in. Alerts to Slack on regression, auto-rollback on red.</div></div></li>
             </ol>
             <div class="ftab-video">
-              <video src="deploy.mp4" autoplay muted loop playsinline preload="metadata"></video>
+              <video src="deploy.mp4" autoplay muted loop playsinline preload="metadata" poster="poster-placeholder.svg"></video>
             </div>
           </div>
         </div>
