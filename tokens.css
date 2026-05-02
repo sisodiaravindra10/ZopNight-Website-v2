@@ -121,6 +121,9 @@ html[data-theme="light"]{
      font-variant-numeric: tabular-nums on every figure without exception.
      ======================================================================= */
   --font: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  /* Body font · paired with Space Grotesk display per CEO direction.
+     Inter loaded via Google Fonts in every page's <head>. */
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
   /* ------- weight ladder ------- */
@@ -280,12 +283,12 @@ html{ scroll-behavior: smooth; overflow-x: clip; }
 
 body{
   margin: 0;
-  font-family: var(--font);
+  font-family: var(--font-body);
   background: var(--bg-0);
   color: var(--ink);
-  font-size: var(--t-15);
-  line-height: var(--lh-body);
-  letter-spacing: var(--ls-body);
+  font-size: 17px;
+  line-height: 1.6;
+  letter-spacing: -0.005em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: "ss01" 0, "tnum" 1;

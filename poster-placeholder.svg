@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" role="img" aria-label="ZopDev video loading">
+  <defs>
+    <pattern id="zd-grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1920" height="1080" fill="#0A0A0A"/>
+  <rect width="1920" height="1080" fill="url(#zd-grid)"/>
+  <g transform="translate(960, 510)" text-anchor="middle">
+    <g transform="translate(-90, -36)">
+      <rect x="0" y="0" width="36" height="36" fill="#2A4494"/>
+      <rect x="36" y="0" width="36" height="36" fill="#F58549"/>
+      <rect x="36" y="36" width="36" height="36" fill="#7FB236"/>
+    </g>
+    <text x="0" y="80" fill="#D4CDB5" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="14" letter-spacing="3" font-weight="500">LOADING</text>
+  </g>
+</svg>
