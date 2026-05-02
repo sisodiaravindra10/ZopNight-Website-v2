@@ -7546,12 +7546,33 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
     grid-template-columns: 380px 1fr;
     min-height:480px;
   }
-  .ftab-pointers{
-    list-style:none; margin:0; padding:24px;
-    display:flex; flex-direction:column; gap:8px;
+  /* Left column · tagline + pointers, share the right border */
+  .ftab-left{
+    display:flex; flex-direction:column;
     border-right:1px solid var(--line);
   }
-  html[data-theme="dark"] .ftab-pointers{ border-right-color:#2a2a30; }
+  html[data-theme="dark"] .ftab-left{ border-right-color:#2a2a30; }
+  /* Highlighted one-line value statement above the pointers · brand
+     orange, bold, with a small dot prefix. Tells a scanner what the tab
+     does in 2 seconds before they read the 4 numbered steps. */
+  .ftab-tagline{
+    padding:18px 20px 12px;
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font); font-weight:700;
+    font-size:15px; letter-spacing:-0.01em; line-height:1.25;
+    color:var(--zop-orange);
+    border-bottom:1px solid rgba(245,133,73,.20);
+    margin:0 20px 12px;
+  }
+  html[data-theme="dark"] .ftab-tagline{ border-bottom-color:rgba(245,133,73,.30); }
+  .ftab-tagline::before{
+    content:''; width:8px; height:8px; background:var(--zop-orange); flex-shrink:0;
+  }
+  .ftab-pointers{
+    list-style:none; margin:0; padding:0 24px 24px;
+    display:flex; flex-direction:column; gap:8px;
+    border-right:0;
+  }
   .ftab-pt{
     display:grid; grid-template-columns:auto 1fr; gap:14px;
     padding:14px 16px;
@@ -7739,12 +7760,15 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
         <!-- TAB 1 · Recommendations -->
         <div class="ftab-panel is-active" data-ftab-panel="recommendations" role="tabpanel">
           <div class="ftab-grid">
-            <ol class="ftab-pointers" role="list">
-              <li class="ftab-pt"><span class="ftab-pt-num">01</span><div><div class="ftab-pt-head">Connect</div><div class="ftab-pt-desc">Read-only IAM across AWS, Azure, GCP. No agents, no sidecars.</div></div></li>
-              <li class="ftab-pt"><span class="ftab-pt-num">02</span><div><div class="ftab-pt-head">Scan</div><div class="ftab-pt-desc">317 rules grade your inventory across idle, rightsize, orphan, and compliance.</div></div></li>
-              <li class="ftab-pt"><span class="ftab-pt-num">03</span><div><div class="ftab-pt-head">Recommend</div><div class="ftab-pt-desc">Each finding ranked by dollar impact, validated against your actual bill.</div></div></li>
-              <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Apply</div><div class="ftab-pt-desc">One-click remediation. Bill-validated savings, 7-day revert.</div></div></li>
-            </ol>
+            <div class="ftab-left">
+              <div class="ftab-tagline">Right-size production</div>
+              <ol class="ftab-pointers" role="list">
+                <li class="ftab-pt"><span class="ftab-pt-num">01</span><div><div class="ftab-pt-head">Connect</div><div class="ftab-pt-desc">Read-only IAM across AWS, Azure, GCP. No agents, no sidecars.</div></div></li>
+                <li class="ftab-pt"><span class="ftab-pt-num">02</span><div><div class="ftab-pt-head">Scan</div><div class="ftab-pt-desc">317 rules grade your inventory across idle, rightsize, orphan, and compliance.</div></div></li>
+                <li class="ftab-pt"><span class="ftab-pt-num">03</span><div><div class="ftab-pt-head">Recommend</div><div class="ftab-pt-desc">Each finding ranked by dollar impact, validated against your actual bill.</div></div></li>
+                <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Apply</div><div class="ftab-pt-desc">One-click remediation. Bill-validated savings, 7-day revert.</div></div></li>
+              </ol>
+            </div>
             <div class="ftab-video">
               <video src="recommendations.mp4" autoplay muted loop playsinline preload="metadata" poster="poster-placeholder.svg"></video>
             </div>
@@ -7753,12 +7777,15 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
         <!-- TAB 2 · Scheduling -->
         <div class="ftab-panel" data-ftab-panel="scheduling" role="tabpanel">
           <div class="ftab-grid">
-            <ol class="ftab-pointers" role="list">
-              <li class="ftab-pt"><span class="ftab-pt-num">01</span><div><div class="ftab-pt-head">Pick a workload</div><div class="ftab-pt-desc">Non-prod env: dev, staging, qa. Production stays untouched by default.</div></div></li>
-              <li class="ftab-pt"><span class="ftab-pt-num">02</span><div><div class="ftab-pt-head">Define schedule</div><div class="ftab-pt-desc">Cron-based, in your team&rsquo;s timezone, evaluated every 15 minutes.</div></div></li>
-              <li class="ftab-pt"><span class="ftab-pt-num">03</span><div><div class="ftab-pt-head">Sequence dependencies</div><div class="ftab-pt-desc">AKS before its workload, DB before app, app before LB &mdash; auto-detected.</div></div></li>
-              <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Activate</div><div class="ftab-pt-desc">Resources wake for the workday and sleep at night, automatically.</div></div></li>
-            </ol>
+            <div class="ftab-left">
+              <div class="ftab-tagline">Sleep non-production</div>
+              <ol class="ftab-pointers" role="list">
+                <li class="ftab-pt"><span class="ftab-pt-num">01</span><div><div class="ftab-pt-head">Pick a workload</div><div class="ftab-pt-desc">Non-prod env: dev, staging, qa. Production stays untouched by default.</div></div></li>
+                <li class="ftab-pt"><span class="ftab-pt-num">02</span><div><div class="ftab-pt-head">Define schedule</div><div class="ftab-pt-desc">Cron-based, in your team&rsquo;s timezone, evaluated every 15 minutes.</div></div></li>
+                <li class="ftab-pt"><span class="ftab-pt-num">03</span><div><div class="ftab-pt-head">Sequence dependencies</div><div class="ftab-pt-desc">AKS before its workload, DB before app, app before LB &mdash; auto-detected.</div></div></li>
+                <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Activate</div><div class="ftab-pt-desc">Resources wake for the workday and sleep at night, automatically.</div></div></li>
+              </ol>
+            </div>
             <div class="ftab-video">
               <video src="scheduling.mp4" autoplay muted loop playsinline preload="metadata" poster="poster-placeholder.svg"></video>
             </div>
@@ -7767,12 +7794,15 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
         <!-- TAB 3 · Event Readiness -->
         <div class="ftab-panel" data-ftab-panel="eventready" role="tabpanel">
           <div class="ftab-grid">
-            <ol class="ftab-pointers" role="list">
-              <li class="ftab-pt"><span class="ftab-pt-num">01</span><div><div class="ftab-pt-head">Schedule the event</div><div class="ftab-pt-desc">Sale day, product launch, or marketing spike &mdash; up to 7 days out.</div></div></li>
-              <li class="ftab-pt"><span class="ftab-pt-num">02</span><div><div class="ftab-pt-head">Pre-flight checks</div><div class="ftab-pt-desc">Capacity, IAM, snapshots, dependencies &mdash; all green-lit before traffic.</div></div></li>
-              <li class="ftab-pt"><span class="ftab-pt-num">03</span><div><div class="ftab-pt-head">Review locks</div><div class="ftab-pt-desc">Stop-light report by category, with per-team owners for every yellow / red.</div></div></li>
-              <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Go-live</div><div class="ftab-pt-desc">Every check passes. The event runs without late-night triage.</div></div></li>
-            </ol>
+            <div class="ftab-left">
+              <div class="ftab-tagline">Scale unpredictable demand</div>
+              <ol class="ftab-pointers" role="list">
+                <li class="ftab-pt"><span class="ftab-pt-num">01</span><div><div class="ftab-pt-head">Schedule the event</div><div class="ftab-pt-desc">Sale day, product launch, or marketing spike &mdash; up to 7 days out.</div></div></li>
+                <li class="ftab-pt"><span class="ftab-pt-num">02</span><div><div class="ftab-pt-head">Pre-flight checks</div><div class="ftab-pt-desc">Capacity, IAM, snapshots, dependencies &mdash; all green-lit before traffic.</div></div></li>
+                <li class="ftab-pt"><span class="ftab-pt-num">03</span><div><div class="ftab-pt-head">Review locks</div><div class="ftab-pt-desc">Stop-light report by category, with per-team owners for every yellow / red.</div></div></li>
+                <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Go-live</div><div class="ftab-pt-desc">Every check passes. The event runs without late-night triage.</div></div></li>
+              </ol>
+            </div>
             <div class="ftab-video">
               <video src="event-readiness.mp4" autoplay muted loop playsinline preload="metadata" poster="poster-placeholder.svg"></video>
             </div>
@@ -7781,12 +7811,15 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
         <!-- TAB 4 · Auto-scale -->
         <div class="ftab-panel" data-ftab-panel="autoscale" role="tabpanel">
           <div class="ftab-grid">
-            <ol class="ftab-pointers" role="list">
-              <li class="ftab-pt"><span class="ftab-pt-num">01</span><div><div class="ftab-pt-head">Select workload</div><div class="ftab-pt-desc">Eligible production AKS node pools or Azure VM scale sets.</div></div></li>
-              <li class="ftab-pt"><span class="ftab-pt-num">02</span><div><div class="ftab-pt-head">Set bounds</div><div class="ftab-pt-desc">Floor and ceiling per workload. Replicas track demand within your guardrails.</div></div></li>
-              <li class="ftab-pt"><span class="ftab-pt-num">03</span><div><div class="ftab-pt-head">Safety rails</div><div class="ftab-pt-desc">HPA + PDB respected. Auto-rollback if SLO breaches post-scale.</div></div></li>
-              <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Live scale</div><div class="ftab-pt-desc">30&ndash;40% compute reduction on real production workloads.</div></div></li>
-            </ol>
+            <div class="ftab-left">
+              <div class="ftab-tagline">Pre-flight planned events</div>
+              <ol class="ftab-pointers" role="list">
+                <li class="ftab-pt"><span class="ftab-pt-num">01</span><div><div class="ftab-pt-head">Select workload</div><div class="ftab-pt-desc">Eligible production AKS node pools or Azure VM scale sets.</div></div></li>
+                <li class="ftab-pt"><span class="ftab-pt-num">02</span><div><div class="ftab-pt-head">Set bounds</div><div class="ftab-pt-desc">Floor and ceiling per workload. Replicas track demand within your guardrails.</div></div></li>
+                <li class="ftab-pt"><span class="ftab-pt-num">03</span><div><div class="ftab-pt-head">Safety rails</div><div class="ftab-pt-desc">HPA + PDB respected. Auto-rollback if SLO breaches post-scale.</div></div></li>
+                <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Live scale</div><div class="ftab-pt-desc">30&ndash;40% compute reduction on real production workloads.</div></div></li>
+              </ol>
+            </div>
             <div class="ftab-video">
               <video src="auto-scale.mp4" autoplay muted loop playsinline preload="metadata" poster="poster-placeholder.svg"></video>
             </div>
