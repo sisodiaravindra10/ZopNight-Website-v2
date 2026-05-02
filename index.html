@@ -550,7 +550,7 @@ html[data-theme="dark"] .hero .hero-cta .btn-secondary:hover{
   }
 }
 /* hero-meta strip removed, vendor lockup at the bottom of the hero carries brand presence */
-.hero h1{font-size:clamp(44px,5.8vw,80px); font-weight:700; line-height:0.98;
+.hero h1{font-size:clamp(36px,4.4vw,64px); font-weight:700; line-height:1.02;
   letter-spacing:-0.04em; margin-bottom:28px; max-width:1000px}
 .hero h1 em{font-style:normal; color:var(--zop-blue)}
 .hero .lead{font-size:19px; color:var(--g-600); max-width:620px; margin-bottom:32px; line-height:1.45}
@@ -624,7 +624,7 @@ html[data-theme="dark"] .hero-vendors .vendor{
 /* =================================================================
    STATS, minimal, grid-aligned
    ================================================================= */
-.stats{display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--line);
+.stats{display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--line);
   border-bottom:1px solid var(--line); background:var(--zop-white)}
 .stat{padding:32px 28px; border-right:1px solid var(--line); position:relative}
 .stat:last-child{border-right:0}
@@ -5088,7 +5088,8 @@ html[data-theme="dark"] .faq-list summary:hover{ background:rgba(255,255,255,.04
    ========================================================================= */
 .hero-mcp-pill{
   display:inline-flex; align-items:center; gap:10px;
-  font-family:var(--mono); font-size:11.5px; letter-spacing:0.04em;
+  font-family:var(--font-body, 'Inter', system-ui, sans-serif);
+  font-size:13px; font-weight:500; letter-spacing:0;
   color:var(--ink); text-decoration:none;
   padding:6px 12px;
   border:1px solid var(--line);
@@ -5157,8 +5158,33 @@ html[data-theme="dark"] .hero-mcp-pill .hmp-text{ color:var(--g-600); }
   font-style:normal; font-size:13px; color:var(--g-700); margin-top:20px}
 
 /* CDCR · simplified left list */
-.cdcr-steps{ list-style:none; padding:0; margin:28px 0 0; display:flex; flex-direction:column; gap:18px; }
+/* CEO request · CDCR steps redesigned for scannability. Each step now
+   reads as a card with a clear header (num + name) and a body line below,
+   instead of a 3-column inline layout that was hard to parse. */
+.cdcr-steps{
+  list-style:none; padding:0; margin:28px 0 0;
+  display:flex; flex-direction:column; gap:14px;
+}
 .cdcr-steps li{
+  display:block !important; padding:14px 16px !important;
+  border:1px solid var(--line); background:var(--paper);
+  position:relative;
+}
+.cdcr-steps li::before{
+  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+  background:var(--zop-orange);
+}
+.cdcr-steps li:nth-child(1)::before{ background:var(--zop-blue); }
+.cdcr-steps li:nth-child(2)::before{ background:var(--zop-orange); }
+.cdcr-steps li:nth-child(3)::before{ background:#6da137; }
+.cdcr-steps li:nth-child(4)::before{ background:var(--ink); }
+.cdcr-steps .s-num{ display:none !important; }
+.cdcr-steps .s-name{ display:block; margin-bottom:6px; font-size:16px !important; }
+.cdcr-steps .s-desc{ display:block; grid-column:auto !important; }
+html[data-theme="dark"] .cdcr-steps li{ background:#1a1a1e; border-color:#2a2a30; }
+
+/* Old flat-grid styles kept for backward compat / cascade order */
+.cdcr-steps li.flat-legacy{
   display:grid; grid-template-columns:auto auto 1fr; gap:0 14px;
   align-items:baseline;
   padding:14px 0 0; border-top:1px solid var(--line);
@@ -6021,6 +6047,7 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
 .hero-reveal.go .hr-r2{ animation-delay:1.05s; }
 .hero-reveal.go .hr-w3{ animation-delay:1.50s; }
 .hero-reveal.go .hr-r3{ animation-delay:1.80s; }
+.hero-reveal.go .hr-r4{ animation-delay:2.10s; }
 
 /* color coding */
 .hr-w1{ color:var(--zop-blue); }
@@ -6594,21 +6621,6 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
 </svg>
 
 <!-- ============================================================
-     ANNOUNCEMENT BAR. Site-wide, dismissible (zop-ann-2026-mcp).
-     ============================================================ -->
-<div class="ann-bar" id="ann-bar">
-  <div class="ann-inner">
-    <a href="developers.html" class="ann-chip">
-      <span class="ann-dot"></span>
-      <strong>MCP Server</strong>, live in Claude &amp; Codex
-      <span class="ann-arrow">→</span>
-    </a>
-    <a href="changelog.html" class="ann-link">Changelog →</a>
-    <button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button>
-  </div>
-</div>
-
-<!-- ============================================================
      SAVINGS CALCULATOR STRIP. Same chrome as the previous live strip,
      reduced to a single CTA that links to the calculator section.
      ============================================================ -->
@@ -6817,11 +6829,12 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
           <span class="hmp-arrow" aria-hidden="true">→</span>
         </a>
         <h1 class="hero-reveal">
-          <span class="hr-line"><span class="hr-word hr-w1">ZopDev</span><span class="hr-rest hr-r1"> is a</span></span>
+          <span class="hr-line"><span class="hr-rest hr-r1">The&nbsp;</span><span class="hr-word hr-w1">Only</span></span>
           <span class="hr-line"><span class="hr-word hr-w2">CloudOps</span><span class="hr-conn hr-r2">&amp;</span><span class="hr-word hr-w3">FinOps</span></span>
-          <span class="hr-line"><span class="hr-rest hr-r3 hr-rest-solo">platform.</span></span>
+          <span class="hr-line"><span class="hr-rest hr-r3 hr-rest-solo">platform</span></span>
+          <span class="hr-line"><span class="hr-rest hr-r4 hr-rest-solo">you will ever need.</span></span>
         </h1>
-        <p class="lead">ZopDay handles infrastructure and deployment by day. ZopNight handles cost and optimization by night. Together, they're the loop that keeps your cloud running.</p>
+        <p class="lead">ZopNight handles cost and optimization by night. ZopDay handles infrastructure and deployment by day. Together, they're the loop that keeps your cloud running.</p>
         <div class="hero-cta">
           <a class="btn btn-product btn-product-zd" href="zopday.html">
             <svg class="btn-mark" width="20" height="20" viewBox="0 0 32 32" aria-hidden="true"><rect x="0" y="0" width="32" height="32" fill="#F58549"/><circle cx="16" cy="16" r="8" fill="#FFFFFF"/></svg>
@@ -6906,24 +6919,19 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
   <div class="container">
     <div class="stats">
       <div class="stat">
-        <div class="k"> live coverage</div>
-        <div class="v">3 clouds &middot; 40+ services</div>
-        <div class="u">AWS, GCP, Azure across every region</div>
-      </div>
-      <div class="stat">
-        <div class="k"> this month</div>
-        <div class="v"><span data-target="12345" data-prefix="$" data-suffix="+">$12,345+</span></div>
-        <div class="u">Cloud savings delivered</div>
-      </div>
-      <div class="stat">
-        <div class="k"> monitored</div>
+        <div class="k"> resources under management</div>
         <div class="v"><span data-target="32000" data-suffix="+">32,000+</span></div>
-        <div class="u">Resources continuously scanned</div>
+        <div class="u">Continuously discovered across every cloud account</div>
       </div>
       <div class="stat">
-        <div class="k"> time to visibility</div>
-        <div class="v">10 min</div>
-        <div class="u">Connect your cloud, see every resource in one place</div>
+        <div class="k"> savings enabled</div>
+        <div class="v"><span data-target="12345" data-prefix="$" data-suffix="+">$12,345+</span></div>
+        <div class="u">Bill-validated cuts delivered this month</div>
+      </div>
+      <div class="stat">
+        <div class="k"> manual effort saved</div>
+        <div class="v"><span data-target="4200" data-suffix="+ hrs">4,200+ hrs</span></div>
+        <div class="u">Engineering time reclaimed via ZopDay automation</div>
       </div>
     </div>
   </div>
@@ -7116,7 +7124,8 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
   }
   /* Tightly compact bento card · 2×2 grid + heading fits comfortably
      within a 720–900px viewport. */
-  .engines-row.features-bento .feature .num{ margin-bottom:6px; min-height:12px; }
+  /* CEO request · eyebrow numbers ("01 · Recommendations") removed. */
+  .engines-row.features-bento .feature .num{ display:none; }
   .engines-row.features-bento .feature h3{
     font-size:22px; margin-bottom:4px; line-height:1.1; letter-spacing:-0.02em;
   }
@@ -7171,7 +7180,7 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
     <div class="sec-head">
       <div class="sec-meta">01 · zopnight · engines</div>
       <div>
-        <h2>ZopNight.<br/>Four engines.</h2>
+        <h2>ZopNight<br/>FinOps Platform.</h2>
         <p class="sub">Find waste. Schedule non-prod off. Right-size prod. Harden every launch. Agentless 2-min setup, 20–60% off the bill.</p>
       </div>
     </div>
@@ -7207,8 +7216,8 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
         <button class="feat-expand" aria-label="Expand Scheduling Engine details">
           <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter"><path d="M 4 8 L 4 4 L 8 4 M 16 12 L 16 16 L 12 16 M 4 4 L 9 9 M 16 16 L 11 11"/></svg>
         </button>
-        <h3>Scheduling</h3>
-        <p>Your dev environment runs 168 hours a week. Your team uses 50. Schedule the other 118.</p>
+        <h3>Smart Scheduling</h3>
+        <p>Your dev environment runs 168 hours a week. Your team uses 50. Schedule the other 118 with dependency-aware sequencing.</p>
         <div class="feat-visual" aria-hidden="true">
           <canvas id="bpv-scheduling"></canvas>
         </div>
@@ -7391,15 +7400,10 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
     margin-top:48px;
   }
   .cap-strip-head{ margin-bottom:18px; }
-  .cap-strip-eyebrow{
-    font-family:var(--mono); font-size:11px; font-weight:500;
-    letter-spacing:.12em; text-transform:uppercase; color:var(--g-500);
-    display:inline-flex; align-items:center; gap:10px;
-  }
-  .cap-strip-eyebrow::before{
-    content:''; width:8px; height:8px;
-    background:var(--zop-orange); display:inline-block;
-  }
+  /* CEO request · "More in ZopNight" eyebrow + per-card num eyebrows hidden. */
+  .cap-strip-eyebrow,
+  .cap-strip-head,
+  .cap-card .cap-num{ display:none !important; }
   /* 5-card asymmetric grid · Architecture spans 2 cols at top-left (hero),
      Reports top-right · then Tagging / Showback / Resources in a 1×3 row
      below. Same chrome and hover signature as the engine bento above
@@ -7487,15 +7491,17 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
      for 1512×982 capture (MacBook Pro 14" logical).
      ============================================================ -->
 <style>
-  /* Walkthrough tabs · single paper-warm card, orange-dot active indicator,
-     white pointer cards on cream for depth without line clutter. */
+  /* Walkthrough tabs · CEO request · removed the outer paper rectangle so
+     the tabs (which are themselves a pill-shaped container) don't sit
+     inside another framed rectangle. Section flows directly into the
+     tabs without the rectangle-in-rectangle look. */
   .ftab-wrap{
-    margin-top:32px;
-    background:var(--paper);
-    border:1px solid var(--line);
+    margin-top:24px;
+    background:transparent;
+    border:0;
     position:relative;
   }
-  html[data-theme="dark"] .ftab-wrap{ background:#16161a; border-color:#2a2a30; }
+  html[data-theme="dark"] .ftab-wrap{ background:transparent; border:0; }
   /* ftab-bar · pill-segmented control matching pricing.html .prod-switch.
      Container holds the tabs as discrete pills with a hard-offset shadow on
      the active tab and a 1px lift, instead of the old underline-style. */
@@ -7552,33 +7558,30 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
     grid-template-columns: 380px 1fr;
     min-height:480px;
   }
-  /* Left column · tagline + pointers, share the right border */
-  .ftab-left{
-    display:flex; flex-direction:column;
-    border-right:1px solid var(--line);
-  }
-  html[data-theme="dark"] .ftab-left{ border-right-color:#2a2a30; }
-  /* Highlighted one-line value statement above the pointers · brand
-     orange, bold, with a small dot prefix. Tells a scanner what the tab
-     does in 2 seconds before they read the 4 numbered steps. */
-  .ftab-tagline{
-    padding:18px 20px 12px;
-    display:inline-flex; align-items:center; gap:8px;
-    font-family:var(--font); font-weight:700;
-    font-size:15px; letter-spacing:-0.01em; line-height:1.25;
+  /* CEO request · tagline relocated to the top of each panel, full-width
+     above the grid, so it reads as a panel subheading explaining what the
+     active tab does — no longer competing with the pointer cards. */
+  .ftab-panel .ftab-tagline{
+    margin:0;
+    padding:14px 32px;
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--font); font-weight:600;
+    font-size:14px; letter-spacing:.02em; line-height:1.3;
     color:var(--zop-orange);
+    text-transform:uppercase;
+    background:transparent;
     border-bottom:1px solid rgba(245,133,73,.20);
-    margin:0 20px 12px;
   }
-  html[data-theme="dark"] .ftab-tagline{ border-bottom-color:rgba(245,133,73,.30); }
-  .ftab-tagline::before{
+  html[data-theme="dark"] .ftab-panel .ftab-tagline{ border-bottom-color:rgba(245,133,73,.30); }
+  .ftab-panel .ftab-tagline::before{
     content:''; width:8px; height:8px; background:var(--zop-orange); flex-shrink:0;
   }
   .ftab-pointers{
-    list-style:none; margin:0; padding:0 24px 24px;
+    list-style:none; margin:0; padding:24px;
     display:flex; flex-direction:column; gap:8px;
-    border-right:0;
+    border-right:1px solid var(--line);
   }
+  html[data-theme="dark"] .ftab-pointers{ border-right-color:#2a2a30; }
   .ftab-pt{
     display:grid; grid-template-columns:auto 1fr; gap:14px;
     padding:14px 16px;
@@ -7765,16 +7768,14 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
       <div class="ftab-panels">
         <!-- TAB 1 · Recommendations -->
         <div class="ftab-panel is-active" data-ftab-panel="recommendations" role="tabpanel">
+          <div class="ftab-tagline">Right-size production</div>
           <div class="ftab-grid">
-            <div class="ftab-left">
-              <div class="ftab-tagline">Right-size production</div>
-              <ol class="ftab-pointers" role="list">
-                <li class="ftab-pt"><span class="ftab-pt-num">01</span><div><div class="ftab-pt-head">Connect</div><div class="ftab-pt-desc">Read-only IAM across AWS, Azure, GCP. No agents, no sidecars.</div></div></li>
-                <li class="ftab-pt"><span class="ftab-pt-num">02</span><div><div class="ftab-pt-head">Scan</div><div class="ftab-pt-desc">317 rules grade your inventory across idle, rightsize, orphan, and compliance.</div></div></li>
-                <li class="ftab-pt"><span class="ftab-pt-num">03</span><div><div class="ftab-pt-head">Recommend</div><div class="ftab-pt-desc">Each finding ranked by dollar impact, validated against your actual bill.</div></div></li>
-                <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Apply</div><div class="ftab-pt-desc">One-click remediation. Bill-validated savings, 7-day revert.</div></div></li>
-              </ol>
-            </div>
+            <ol class="ftab-pointers" role="list">
+              <li class="ftab-pt"><span class="ftab-pt-num">01</span><div><div class="ftab-pt-head">Connect</div><div class="ftab-pt-desc">Read-only IAM across AWS, Azure, GCP. No agents, no sidecars.</div></div></li>
+              <li class="ftab-pt"><span class="ftab-pt-num">02</span><div><div class="ftab-pt-head">Scan</div><div class="ftab-pt-desc">317 rules grade your inventory across idle, rightsize, orphan, and compliance.</div></div></li>
+              <li class="ftab-pt"><span class="ftab-pt-num">03</span><div><div class="ftab-pt-head">Recommend</div><div class="ftab-pt-desc">Each finding ranked by dollar impact, validated against your actual bill.</div></div></li>
+              <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Apply</div><div class="ftab-pt-desc">One-click remediation. Bill-validated savings, 7-day revert.</div></div></li>
+            </ol>
             <div class="ftab-video">
               <video src="recommendations.mp4" autoplay muted loop playsinline preload="metadata" poster="poster-placeholder.svg"></video>
             </div>
@@ -7782,16 +7783,14 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
         </div>
         <!-- TAB 2 · Scheduling -->
         <div class="ftab-panel" data-ftab-panel="scheduling" role="tabpanel">
+          <div class="ftab-tagline">Sleep non-production</div>
           <div class="ftab-grid">
-            <div class="ftab-left">
-              <div class="ftab-tagline">Sleep non-production</div>
-              <ol class="ftab-pointers" role="list">
-                <li class="ftab-pt"><span class="ftab-pt-num">01</span><div><div class="ftab-pt-head">Pick a workload</div><div class="ftab-pt-desc">Non-prod env: dev, staging, qa. Production stays untouched by default.</div></div></li>
-                <li class="ftab-pt"><span class="ftab-pt-num">02</span><div><div class="ftab-pt-head">Define schedule</div><div class="ftab-pt-desc">Cron-based, in your team&rsquo;s timezone, evaluated every 15 minutes.</div></div></li>
-                <li class="ftab-pt"><span class="ftab-pt-num">03</span><div><div class="ftab-pt-head">Sequence dependencies</div><div class="ftab-pt-desc">AKS before its workload, DB before app, app before LB &mdash; auto-detected.</div></div></li>
-                <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Activate</div><div class="ftab-pt-desc">Resources wake for the workday and sleep at night, automatically.</div></div></li>
-              </ol>
-            </div>
+            <ol class="ftab-pointers" role="list">
+              <li class="ftab-pt"><span class="ftab-pt-num">01</span><div><div class="ftab-pt-head">Pick a workload</div><div class="ftab-pt-desc">Non-prod env: dev, staging, qa. Production stays untouched by default.</div></div></li>
+              <li class="ftab-pt"><span class="ftab-pt-num">02</span><div><div class="ftab-pt-head">Define schedule</div><div class="ftab-pt-desc">Cron-based, in your team&rsquo;s timezone, evaluated every 15 minutes.</div></div></li>
+              <li class="ftab-pt"><span class="ftab-pt-num">03</span><div><div class="ftab-pt-head">Sequence dependencies</div><div class="ftab-pt-desc">AKS before its workload, DB before app, app before LB &mdash; auto-detected.</div></div></li>
+              <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Activate</div><div class="ftab-pt-desc">Resources wake for the workday and sleep at night, automatically.</div></div></li>
+            </ol>
             <div class="ftab-video">
               <video src="scheduling.mp4" autoplay muted loop playsinline preload="metadata" poster="poster-placeholder.svg"></video>
             </div>
@@ -7799,16 +7798,14 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
         </div>
         <!-- TAB 3 · Event Readiness -->
         <div class="ftab-panel" data-ftab-panel="eventready" role="tabpanel">
+          <div class="ftab-tagline">Scale unpredictable demand</div>
           <div class="ftab-grid">
-            <div class="ftab-left">
-              <div class="ftab-tagline">Scale unpredictable demand</div>
-              <ol class="ftab-pointers" role="list">
-                <li class="ftab-pt"><span class="ftab-pt-num">01</span><div><div class="ftab-pt-head">Schedule the event</div><div class="ftab-pt-desc">Sale day, product launch, or marketing spike &mdash; up to 7 days out.</div></div></li>
-                <li class="ftab-pt"><span class="ftab-pt-num">02</span><div><div class="ftab-pt-head">Pre-flight checks</div><div class="ftab-pt-desc">Capacity, IAM, snapshots, dependencies &mdash; all green-lit before traffic.</div></div></li>
-                <li class="ftab-pt"><span class="ftab-pt-num">03</span><div><div class="ftab-pt-head">Review locks</div><div class="ftab-pt-desc">Stop-light report by category, with per-team owners for every yellow / red.</div></div></li>
-                <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Go-live</div><div class="ftab-pt-desc">Every check passes. The event runs without late-night triage.</div></div></li>
-              </ol>
-            </div>
+            <ol class="ftab-pointers" role="list">
+              <li class="ftab-pt"><span class="ftab-pt-num">01</span><div><div class="ftab-pt-head">Schedule the event</div><div class="ftab-pt-desc">Sale day, product launch, or marketing spike &mdash; up to 7 days out.</div></div></li>
+              <li class="ftab-pt"><span class="ftab-pt-num">02</span><div><div class="ftab-pt-head">Pre-flight checks</div><div class="ftab-pt-desc">Capacity, IAM, snapshots, dependencies &mdash; all green-lit before traffic.</div></div></li>
+              <li class="ftab-pt"><span class="ftab-pt-num">03</span><div><div class="ftab-pt-head">Review locks</div><div class="ftab-pt-desc">Stop-light report by category, with per-team owners for every yellow / red.</div></div></li>
+              <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Go-live</div><div class="ftab-pt-desc">Every check passes. The event runs without late-night triage.</div></div></li>
+            </ol>
             <div class="ftab-video">
               <video src="event-readiness.mp4" autoplay muted loop playsinline preload="metadata" poster="poster-placeholder.svg"></video>
             </div>
@@ -7816,16 +7813,14 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
         </div>
         <!-- TAB 4 · Auto-scale -->
         <div class="ftab-panel" data-ftab-panel="autoscale" role="tabpanel">
+          <div class="ftab-tagline">Pre-flight planned events</div>
           <div class="ftab-grid">
-            <div class="ftab-left">
-              <div class="ftab-tagline">Pre-flight planned events</div>
-              <ol class="ftab-pointers" role="list">
-                <li class="ftab-pt"><span class="ftab-pt-num">01</span><div><div class="ftab-pt-head">Select workload</div><div class="ftab-pt-desc">Eligible production AKS node pools or Azure VM scale sets.</div></div></li>
-                <li class="ftab-pt"><span class="ftab-pt-num">02</span><div><div class="ftab-pt-head">Set bounds</div><div class="ftab-pt-desc">Floor and ceiling per workload. Replicas track demand within your guardrails.</div></div></li>
-                <li class="ftab-pt"><span class="ftab-pt-num">03</span><div><div class="ftab-pt-head">Safety rails</div><div class="ftab-pt-desc">HPA + PDB respected. Auto-rollback if SLO breaches post-scale.</div></div></li>
-                <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Live scale</div><div class="ftab-pt-desc">30&ndash;40% compute reduction on real production workloads.</div></div></li>
-              </ol>
-            </div>
+            <ol class="ftab-pointers" role="list">
+              <li class="ftab-pt"><span class="ftab-pt-num">01</span><div><div class="ftab-pt-head">Select workload</div><div class="ftab-pt-desc">Eligible production AKS node pools or Azure VM scale sets.</div></div></li>
+              <li class="ftab-pt"><span class="ftab-pt-num">02</span><div><div class="ftab-pt-head">Set bounds</div><div class="ftab-pt-desc">Floor and ceiling per workload. Replicas track demand within your guardrails.</div></div></li>
+              <li class="ftab-pt"><span class="ftab-pt-num">03</span><div><div class="ftab-pt-head">Safety rails</div><div class="ftab-pt-desc">HPA + PDB respected. Auto-rollback if SLO breaches post-scale.</div></div></li>
+              <li class="ftab-pt"><span class="ftab-pt-num">04</span><div><div class="ftab-pt-head">Live scale</div><div class="ftab-pt-desc">30&ndash;40% compute reduction on real production workloads.</div></div></li>
+            </ol>
             <div class="ftab-video">
               <video src="auto-scale.mp4" autoplay muted loop playsinline preload="metadata" poster="poster-placeholder.svg"></video>
             </div>
@@ -8172,12 +8167,6 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
             </div>
           </div>
 
-        </div>
-      </div>
-    </div>
-        <div class="gs-deploy-card">
-          <div class="gs-deploy-title">Self-Hosted</div>
-          <div class="gs-deploy-tag">your VPC · data residency</div>
         </div>
       </div>
     </div>
@@ -8581,13 +8570,13 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
      ============================================================ -->
 <div class="end-arc-wrap">
   <div class="container">
-    <a class="end-arc end-arc-zn" href="/signin/zopnight">
+    <a class="end-arc end-arc-zn" href="zopnight.html">
       <div class="end-arc-text">
-        <span class="end-arc-eyebrow">· ready for zopnight</span>
-        <span class="end-arc-headline">Find waste. Schedule, scale, and harden, on autopilot.</span>
+        <span class="end-arc-headline">Cut your cloud bill 20–60% with ZopNight.</span>
+        <span class="end-arc-sub">Continuous discovery, scheduling, right-sizing, and event readiness on autopilot. Bill-validated savings in under 10 minutes — no agents, no code changes.</span>
       </div>
       <span class="end-arc-cta">
-        <span class="end-arc-cta-label">See ZopNight</span>
+        <span class="end-arc-cta-label">Explore ZopNight</span>
         <span class="end-arc-cta-arrow">→</span>
       </span>
     </a>
@@ -8983,15 +8972,9 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
     gap:12px;
     margin-bottom:10px;
   }
-  .zd-pcard-num{
-    font-family:var(--mono); font-size:11px; letter-spacing:.1em;
-    color:var(--g-500); font-weight:500;
-    display:flex; align-items:center; flex:1;
-  }
-  .zd-pcard-num strong{ color:var(--ink); font-weight:600; margin-right:6px; }
-  .zd-pcard-num::after{
-    content:''; flex:1; height:1px; background:var(--line); margin-left:16px;
-  }
+  /* CEO request · ZopDay platform card eyebrows hidden (mirrors the engine
+     bento eyebrow removal on the ZopNight side). */
+  .zd-pcard-num{ display:none; }
   /* Legacy .zd-pcard-read kept only as a fallback; new markup uses .feat-expand
      which inherits the engines bento expand-button chrome automatically. */
 
@@ -9599,12 +9582,6 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
             </div>
           </div>
 
-        </div>
-      </div>
-    </div>
-        <div class="gs-deploy-card">
-          <div class="gs-deploy-title">Your Cluster</div>
-          <div class="gs-deploy-tag">EKS · GKE · AKS · self-managed</div>
         </div>
       </div>
     </div>
@@ -10313,23 +10290,23 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
   }
   html[data-theme="dark"] .end-arc{ background:#16161a; border-color:#2a2a30; }
 
-  .end-arc-text{ display:flex; flex-direction:column; gap:6px; min-width:0; }
-  .end-arc-eyebrow{
-    font-family:'JetBrains Mono', monospace;
-    font-size:11px; letter-spacing:.14em; text-transform:uppercase;
-    color:var(--g-500); font-weight:500;
-    display:inline-flex; align-items:center; gap:8px;
-  }
-  .end-arc-zn .end-arc-eyebrow::before,
-  .end-arc-zd .end-arc-eyebrow::before{
-    content:''; width:8px; height:8px; flex-shrink:0; display:inline-block;
-  }
-  .end-arc-zn .end-arc-eyebrow::before{ background:var(--zop-blue); }
-  .end-arc-zd .end-arc-eyebrow::before{ background:var(--zop-orange); }
+  .end-arc-text{ display:flex; flex-direction:column; gap:8px; min-width:0; }
+  /* Eyebrow removed per CEO · let the headline carry the moment.
+     Headline is the dominant element, description is the supporting line. */
+  .end-arc-eyebrow{ display:none; }
   .end-arc-headline{
     font-family:var(--font);
-    font-size:22px; font-weight:600; letter-spacing:-.02em;
-    color:var(--ink); line-height:1.2;
+    font-size:32px; font-weight:700; letter-spacing:-.025em;
+    color:var(--ink); line-height:1.1;
+  }
+  .end-arc-sub{
+    font-family:var(--font-body);
+    font-size:15px; font-weight:400; line-height:1.5;
+    color:var(--g-600); max-width:62ch;
+  }
+  html[data-theme="dark"] .end-arc-sub{ color:var(--g-300); }
+  @media (max-width:780px){
+    .end-arc-headline{ font-size:24px; }
   }
 
   .end-arc-cta{
@@ -10359,7 +10336,42 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
   /* ════════════════════════════════════════════════════════════
      PICK WHERE YOU START · 2-card decision section
      ════════════════════════════════════════════════════════════ */
-  #pick-start{ padding-bottom:48px; }
+  /* CEO request · dual-product CTA section · dark slab background, the
+     long description sits below the heading (was an oversized .sub on
+     the right side of .sec-head). */
+  #pick-start{
+    padding:80px 0 64px;
+    background:#0A0A0A;
+    color:#F0EBDB;
+  }
+  #pick-start .ps-head{
+    max-width:780px; margin:0 auto 40px;
+    text-align:center;
+  }
+  #pick-start .ps-head h2{
+    font-family:var(--font);
+    font-size:clamp(36px, 4.4vw, 56px);
+    font-weight:700; letter-spacing:-.04em; line-height:1.05;
+    color:#F0EBDB;
+    margin:0 0 18px;
+  }
+  #pick-start .ps-head .ps-sub{
+    font-family:var(--font-body);
+    font-size:16px; line-height:1.55;
+    color:#B8B0A0;
+    margin:0;
+  }
+  #pick-start .ps-head .ps-sub strong{ color:#F0EBDB; font-weight:600; }
+  #pick-start .pick-card{
+    background:#16161a; border-color:#2a2a30;
+    color:#F0EBDB;
+  }
+  #pick-start .pick-card:hover{ border-color:#3a3a46; }
+  #pick-start .pick-card h3{ color:#F0EBDB; }
+  #pick-start .pick-card > p{ color:#B8B0A0; }
+  #pick-start .pick-card-list li{ color:#9C9588; }
+  #pick-start .pick-card-list li::before{ color:#9C9588; }
+  #pick-start .pick-card-cta{ color:#F0EBDB; }
   .pick-grid{
     display:grid; grid-template-columns:repeat(2, minmax(0, 1fr));
     gap:20px;
@@ -10492,13 +10504,13 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
      ============================================================ -->
 <div class="end-arc-wrap">
   <div class="container">
-    <a class="end-arc end-arc-zd" href="/signin/zopday">
+    <a class="end-arc end-arc-zd" href="zopday.html">
       <div class="end-arc-text">
-        <span class="end-arc-eyebrow">· ready for zopday</span>
-        <span class="end-arc-headline">From cloud account to live in minutes. With guardrails.</span>
+        <span class="end-arc-headline">Ship to production faster with ZopDay.</span>
+        <span class="end-arc-sub">Connect any cloud, define your workload, and deploy across regions — with guardrails. Hardened Kubernetes, dependency-aware rollouts, and one-click rollback baked in.</span>
       </div>
       <span class="end-arc-cta">
-        <span class="end-arc-cta-label">See ZopDay</span>
+        <span class="end-arc-cta-label">Explore ZopDay</span>
         <span class="end-arc-cta-arrow">→</span>
       </span>
     </a>
@@ -11172,7 +11184,7 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
         <ol class="cdcr-steps">
           <li><span class="s-num">01</span><span class="s-name">Connect</span><span class="s-desc">Read-only IAM role for AWS, GCP, Azure. Two-minute setup, no agents, no Terraform.</span></li>
           <li><span class="s-num">02</span><span class="s-name">Scan</span><span class="s-desc">Continuous discovery of every resource, every region, every account.</span></li>
-          <li><span class="s-num">03</span><span class="s-name">Policy &amp; Recommendations</span><span class="s-desc">317 rules grade each finding by impact, risk, and effort.</span></li>
+          <li><span class="s-num">03</span><span class="s-name">Smart Recommendation</span><span class="s-desc">317 rules grade each finding by impact, risk, and effort.</span></li>
           <li><span class="s-num">04</span><span class="s-name">Remediate</span><span class="s-desc">One-click fixes. Bill-validated, 7-day revert.</span></li>
         </ol>
       </div>
@@ -11190,23 +11202,23 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
           <polygon points="54,80 60,68 66,80" class="arrow a4"/>
         </svg>
         <div class="loop-node" data-step="discover">
-          <div class="hdr"><span class="dot"></span>01 · CONNECT</div>
+          <div class="hdr"><span class="dot"></span>CONNECT</div>
           <div class="name">IAM role</div>
-          <div class="meta">read-only · 3 clouds</div>
+          <div class="meta">read-only · every cloud</div>
         </div>
         <div class="loop-node" data-step="analyze">
-          <div class="hdr"><span class="dot"></span>02 · SCAN</div>
+          <div class="hdr"><span class="dot"></span>SCAN</div>
           <div class="name">Discovery</div>
           <div class="meta">847 resources</div>
         </div>
         <div class="loop-node" data-step="verify">
-          <div class="hdr"><span class="dot"></span>04 · REMEDIATE</div>
+          <div class="hdr"><span class="dot"></span>REMEDIATE</div>
           <div class="name">Executor</div>
           <div class="meta">12 actions queued</div>
         </div>
         <div class="loop-node" data-step="remediate">
-          <div class="hdr"><span class="dot"></span>03 · POLICY</div>
-          <div class="name">Rules engine</div>
+          <div class="hdr"><span class="dot"></span>RECOMMENDATION</div>
+          <div class="name">Smart Recommendation</div>
           <div class="meta">47 findings</div>
         </div>
         <div class="loop-hub">
@@ -11287,14 +11299,11 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
 <!-- ============================================================
      PICK WHERE YOU START · paired product login decision
      ============================================================ -->
-<section class="section" id="pick-start">
+<section class="section" id="pick-start" data-theme="dark">
   <div class="container">
-    <div class="sec-head">
-      <div class="sec-meta">· get started</div>
-      <div>
-        <h2>Stop watching the waste.<br/>Start cutting it.</h2>
-        <p class="sub"><strong>Find. Validate. Fix. Verify.</strong> Connect your first cloud account in under 5 minutes. See your first remediation in under 7. No credit card required. Read-only by default.</p>
-      </div>
+    <div class="ps-head">
+      <h2>Stop watching the waste.<br/>Start cutting it.</h2>
+      <p class="ps-sub"><strong>Find. Validate. Fix. Verify.</strong> Connect your first cloud account in under 5 minutes. See your first remediation in under 7. No credit card required. Read-only by default.</p>
     </div>
 
     <div class="pick-grid">
@@ -11351,10 +11360,9 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
     </a>
     <div class="final-grid">
       <div>
-        <div class="sec-meta" style="color:var(--zop-orange); margin-bottom:20px">end · ready when you are</div>
-        <h2>Stop watching the waste.<br/>Start cutting it.</h2>
+        <h2>Cut your cloud bill 20–60%<br/>with ZopNight.</h2>
         <p class="final-tag">See. Find. Fix. Automatic.</p>
-        <p>Connect your first cloud account in under 5 minutes. See your first remediation in under 7. No credit card required.</p>
+        <p>Bill-validated savings in under 7 minutes. No agents, no code changes, no credit card. Read-only by default.</p>
         <div class="final-cta">
           <a class="btn btn-primary" href="signin.html">Start free →</a>
           <a class="btn btn-secondary" href="demo.html">Book a demo</a>
