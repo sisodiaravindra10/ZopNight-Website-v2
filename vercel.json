@@ -26,6 +26,8 @@
     }
   ],
   "redirects": [
+    { "source": "/_dev/:path*",           "destination": "/404",                     "permanent": false },
+    { "source": "/_dev",                  "destination": "/404",                     "permanent": false },
     { "source": "/product/zopnight",      "destination": "/product/zopnight/atlas",  "permanent": false },
     { "source": "/product/zopnight.html", "destination": "/product/zopnight/atlas",  "permanent": false },
     { "source": "/product/zopday",        "destination": "/product",                 "permanent": false },

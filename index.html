@@ -600,9 +600,10 @@ html[data-theme="dark"] .hero-vendors .vendor{
   transition:transform var(--dur-med) var(--ease-out), border-color var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out), background var(--dur-med) var(--ease-out);
 }
 .family-card::after{
-  content:''; position:absolute; top:0; left:0; width:4px; height:0;
+  content:''; position:absolute; top:0; left:0; width:4px; height:100%;
   background:var(--zop-orange);
-  transition:height var(--dur-med) var(--ease-out);
+  transform:scaleY(0); transform-origin:top;
+  transition:transform var(--dur-med) var(--ease-out);
   z-index:2;
 }
 .family-card:last-child{border-right:0}
@@ -611,7 +612,7 @@ html[data-theme="dark"] .hero-vendors .vendor{
   background:var(--paper);
   box-shadow:0 8px 0 -4px var(--ink);
 }
-.family-card:hover::after{ height:100%; }
+.family-card:hover::after{ transform:scaleY(1); }
 .family-card.featured{background:var(--paper)}
 .family-card.featured::before{content:''; position:absolute; top:0; left:0; right:-1px; height:2px; background:var(--zop-blue)}
 .family-card .mk{margin-bottom:16px}
@@ -1628,13 +1629,14 @@ html[data-theme="dark"] .cb-big .cb-quote{ color:var(--g-600); }
 html[data-theme="dark"] .cb-big{ background:#141418; border-color:#2a2a30; }
 /* Orange left-corner stripe, same hover signature as .feature */
 .cb-big::after{
-  content:''; position:absolute; top:0; left:0; width:4px; height:0;
+  content:''; position:absolute; top:0; left:0; width:4px; height:100%;
   background:var(--zop-orange);
-  transition:height var(--dur-med) var(--ease-out);
+  transform:scaleY(0); transform-origin:top;
+  transition:transform var(--dur-med) var(--ease-out);
   pointer-events:none; z-index:2;
 }
 .cb-big:hover{ transform:translateY(-4px); box-shadow:0 8px 0 -4px var(--ink); }
-.cb-big:hover::after{ height:100%; }
+.cb-big:hover::after{ transform:scaleY(1); }
 .cb-big-top .cb-meta{
   font-family:var(--mono); font-size:10px; letter-spacing:.14em;
   text-transform:uppercase; color:var(--g-500); margin-bottom:8px;
@@ -1700,13 +1702,14 @@ html[data-theme="dark"] .cb-big-footer{ border-top-color:#2a2a30; }
 html[data-theme="dark"] .cb-small{ background:#1a1a1e; border-color:#2a2a30; }
 /* Orange left-corner stripe hover (matches .feature) */
 .cb-small::after{
-  content:''; position:absolute; top:0; left:0; width:4px; height:0;
+  content:''; position:absolute; top:0; left:0; width:4px; height:100%;
   background:var(--zop-orange);
-  transition:height var(--dur-med) var(--ease-out);
+  transform:scaleY(0); transform-origin:top;
+  transition:transform var(--dur-med) var(--ease-out);
   pointer-events:none; z-index:2;
 }
 .cb-small:hover{ transform:translateY(-4px); box-shadow:0 8px 0 -4px var(--ink); }
-.cb-small:hover::after{ height:100%; }
+.cb-small:hover::after{ transform:scaleY(1); }
 /* Expand-button-style affordance: "Read →" pill like .feat-expand */
 /* Read pill, always visible · solid paper bg so it reads on dark media */
 .cb-expand{
@@ -2108,8 +2111,8 @@ html[data-theme="dark"] .regions-v2{ background:#0F0F12; }
 #regions-map{ width:100%; height:100%; display:block; }
 .regions-stats{
   position:absolute; top:20px; left:20px; display:flex; gap:32px;
-  background:rgba(250,247,236,.92); padding:14px 20px;
-  border:1px solid var(--line); backdrop-filter:blur(6px);
+  background:var(--paper); padding:14px 20px;
+  border:1px solid var(--line);
   font-family:var(--font); z-index:3;
 }
 html[data-theme="dark"] .regions-stats{ background:rgba(20,20,24,.88); }
@@ -5419,9 +5422,10 @@ html[data-theme="dark"] .loop-node{
 }
 .family-card::after, .feature::after, .stat::after, .plan-card::after, .topo-node::after,
 .integ-group::after, .deploy-card::after, .calc-card::after, .testimonial::after{
-  content:''; position:absolute; top:0; left:0; width:4px; height:0;
+  content:''; position:absolute; top:0; left:0; width:4px; height:100%;
   background:var(--zop-orange);
-  transition:height var(--dur-med) var(--ease-out);
+  transform:scaleY(0); transform-origin:top;
+  transition:transform var(--dur-med) var(--ease-out);
   pointer-events:none; z-index:2;
 }
 /* card-lift signature: -4px lift + INK offset block + ORANGE left stripe grows top→bottom
@@ -5432,7 +5436,7 @@ html[data-theme="dark"] .loop-node{
   box-shadow:0 8px 0 -4px var(--ink);
 }
 .feature:hover::after, .stat:hover::after, .plan-card:hover::after, .topo-node:hover::after,
-.integ-group:hover::after, .deploy-card:hover::after, .calc-card:hover::after, .testimonial:hover::after{ height:100%; }
+.integ-group:hover::after, .deploy-card:hover::after, .calc-card:hover::after, .testimonial:hover::after{ transform:scaleY(1); }
 .trust-row .lg:hover{ background:var(--paper); color:var(--ink); transform:translateY(-2px); }
 
 /* section reveal on scroll */
@@ -6847,9 +6851,9 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
 
         <!-- vendor lockup strip · AWS · Azure · GCP · brand logos -->
         <div class="hero-vendors">
-          <img class="vendor" src="logo-aws.svg" alt="Amazon Web Services" height="32">
-          <img class="vendor" src="logo-azure.svg" alt="Microsoft Azure" height="32">
-          <img class="vendor" src="logo-gcp.svg" alt="Google Cloud" height="32">
+          <img class="vendor" src="logo-aws.svg" alt="Amazon Web Services" width="48" height="32" loading="lazy" decoding="async">
+          <img class="vendor" src="logo-azure.svg" alt="Microsoft Azure" width="120" height="32" loading="lazy" decoding="async">
+          <img class="vendor" src="logo-gcp.svg" alt="Google Cloud" width="60" height="32" loading="lazy" decoding="async">
           <span class="vendor-note">AWS · GCP · Azure · ISO 27001:2022 · SOC 2 Type II · IRDAI · DPDP · MeitY-empaneled</span>
         </div>
       </div>
@@ -7406,16 +7410,17 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
   /* Orange left-edge stripe · grows 0 → 100% on hover · matches engine cards */
   .cap-card::after{
     content:''; position:absolute; top:0; left:0;
-    width:4px; height:0;
+    width:4px; height:100%;
     background:var(--zop-orange);
-    transition:height var(--dur-med, 250ms) var(--ease-out, cubic-bezier(.22,1,.36,1));
+    transform:scaleY(0); transform-origin:top;
+    transition:transform var(--dur-med, 250ms) var(--ease-out, cubic-bezier(.22,1,.36,1));
     pointer-events:none; z-index:2;
   }
   .cap-card:hover{
     transform:translateY(-4px);
     box-shadow:0 8px 0 -4px var(--ink);
   }
-  .cap-card:hover::after{ height:100%; }
+  .cap-card:hover::after{ transform:scaleY(1); }
 
   /* Architecture (hero) gets a slightly bigger headline, more breathing room */
   .cap-card[data-cap="architecture"] h4{ font-size:22px; }
@@ -8931,12 +8936,13 @@ html[data-theme="dark"] .hr-conn{ color:#FAF7EC; }
   /* Orange left-edge stripe · grows 0 → 100% on hover, mirrors .feature ::after */
   .zd-pcard::after{
     content:''; position:absolute; left:0; top:0;
-    width:4px; height:0;
+    width:4px; height:100%;
     background:var(--zop-orange);
-    transition:height var(--dur-med, 250ms) var(--ease-out, cubic-bezier(.22,1,.36,1));
+    transform:scaleY(0); transform-origin:top;
+    transition:transform var(--dur-med, 250ms) var(--ease-out, cubic-bezier(.22,1,.36,1));
     pointer-events:none; z-index:2;
   }
-  .zd-pcard:hover::after{ height:100%; }
+  .zd-pcard:hover::after{ transform:scaleY(1); }
 
   /* Top-num row · matches .feature .num signature with the trailing 1px line */
   .zd-pcard-head{

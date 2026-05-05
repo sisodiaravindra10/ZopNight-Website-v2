@@ -52,62 +52,66 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
 .crumb a:hover{ color:var(--ink); }
 .crumb .sep{ color:var(--ink-5); margin:0 var(--sp-2); }
 
-/* HERO */
-.zd-hero{ background:var(--bg-1); border-bottom:1px solid var(--line); }
-.zd-hero-inner{
-  display:grid; grid-template-columns:1.4fr 1fr; gap:var(--sp-12);
-  align-items:center; padding-block:var(--sp-16) var(--sp-14);
+/* HERO · positioning mirrors the homepage hero exactly (DESIGN.md §10 dark) */
+.zd-hero{
+  --bg-0:#060608; --bg-1:#0E0E12; --bg-2:#15151A; --bg-3:#1C1C24; --bg-4:#252530;
+  --ink:#F0EBDB; --ink-2:#D4CDB5; --ink-3:#A8A195; --ink-4:#8A8378; --ink-5:#5A5A62;
+  --line:#2A2A34; --line-2:#3A3A46; --line-b:#55555E;
+  background:var(--bg-1) !important; color:var(--ink) !important;
+  border-bottom:1px solid var(--line) !important;
+  position:relative;
+  overflow:clip;
+  padding: 64px 0 88px;
 }
-@media (max-width:980px){ .zd-hero-inner{ grid-template-columns:1fr; } }
+.zd-hero-inner{
+  display:grid; grid-template-columns:1fr 1.1fr; gap:48px;
+  align-items:center;
+  position:relative; z-index:5;
+}
+@media (max-width:980px){ .zd-hero-inner{ grid-template-columns:1fr; gap:40px; } }
+/* 3D canvas · giant square that bleeds 40% past the right viewport edge */
+.zd-hero .product-3d-frame{
+  position:absolute;
+  top:50%; right:0;
+  transform: translate(40%, -50%);
+  width: clamp(720px, 78vw, 1280px);
+  aspect-ratio: 1;
+  z-index: 1;
+}
+.zd-hero .product-3d-frame canvas{
+  display:block; width:100%; height:100%; outline:none; cursor:grab;
+}
+.zd-hero .product-3d-frame canvas:active{ cursor:grabbing; }
+@media (max-width:980px){
+  .zd-hero{ display:flex; flex-direction:column; gap:40px; padding: 56px 0 72px; }
+  .zd-hero .container.zd-hero-inner{ order:1; }
+  .zd-hero .product-3d-frame{
+    order:2; position:static;
+    width:100%; aspect-ratio:1; transform:none; margin:0 auto;
+  }
+}
 .zd-tag{
   display:inline-flex; align-items:center; gap:8px;
   font-family:var(--mono); font-size:var(--t-11);
   letter-spacing:var(--ls-meta); text-transform:uppercase;
   color:var(--zop-orange); margin-bottom:var(--sp-5);
 }
-.zd-tag::before{ content:''; width:8px; height:8px; background:var(--zop-orange); }
+.zd-tag::before{
+  content:''; width:8px; height:8px; background:var(--zop-orange);
+  animation: zd-tag-pulse 2.6s var(--ease-in-out) infinite;
+}
+@keyframes zd-tag-pulse{ 0%, 100%{ opacity:1; } 50%{ opacity:.4; } }
 .zd-hero h1{
-  font-size:clamp(48px, 6.4vw, 88px);
-  line-height:var(--lh-display); letter-spacing:var(--ls-display);
-  margin:0 0 var(--sp-6); max-width:680px;
+  font-size:clamp(36px, 4.4vw, 64px);
+  font-weight:700; line-height:1.02; letter-spacing:-0.04em;
+  margin:0 0 28px; max-width:620px;
 }
 .zd-hero h1 em{ color:var(--zop-orange); font-style:normal; }
-.zd-hero .lead{ font-size:var(--t-20); color:var(--ink-3); max-width:560px; margin:0 0 var(--sp-8); line-height:1.5; }
+.zd-hero .lead{ font-size:19px; color:var(--ink-3); max-width:620px; margin:0 0 32px; line-height:1.45; }
 .zd-hero .lead strong{ color:var(--ink); font-weight:var(--fw-medium); }
+.zd-hero-cta{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
 
-/* Waitlist panel */
-.zd-waitlist{
-  background:var(--bg-2); border:1px solid var(--line);
-  padding:var(--sp-7);
-}
-.zd-waitlist .lab{
-  font-family:var(--mono); font-size:var(--t-10);
-  letter-spacing:var(--ls-meta); text-transform:uppercase;
-  color:var(--ink-4); margin-bottom:var(--sp-3);
-}
-.zd-waitlist .num{
-  font-family:var(--mono); font-size:var(--t-44); color:var(--zop-orange);
-  font-weight:var(--fw-bold); line-height:1; font-variant-numeric:tabular-nums;
-  margin-bottom:var(--sp-2);
-}
-.zd-waitlist h3{ font-size:var(--t-22); margin:0 0 var(--sp-4); letter-spacing:var(--ls-heading); }
-.zd-waitlist p{ color:var(--ink-3); font-size:var(--t-14); margin:0 0 var(--sp-5); line-height:var(--lh-body); }
-.zd-form{ display:flex; gap:var(--sp-2); }
-.zd-form input{
-  flex:1; padding:var(--sp-3) var(--sp-4);
-  background:var(--bg-1); border:1px solid var(--line); color:var(--ink);
-  font-family:var(--font); font-size:var(--t-14);
-}
-.zd-form input::placeholder{ color:var(--ink-5); }
-.zd-form input:focus{ outline:none; border-color:var(--zop-orange); }
-.zd-form button{
-  padding:var(--sp-3) var(--sp-5);
-  background:var(--zop-orange); color:#0A0A0A;
-  font-family:var(--mono); font-size:var(--t-11);
-  letter-spacing:var(--ls-meta); text-transform:uppercase; font-weight:var(--fw-semibold);
-  cursor:pointer; transition:transform .14s, box-shadow .14s;
-}
-.zd-form button:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover-ink); }
+/* (Waitlist panel and form rules removed — the canvas now sits unframed) */
 
 /* Section head */
 .zd-sec-head{
@@ -131,17 +135,36 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
 @media (max-width:768px){ .zd-sec-head{ flex-direction:column; align-items:flex-start; } }
 
 /* What's coming · 4 cards */
+/* Card grid · matches homepage Pattern A (per-card border + gap, with the
+   universal card-lift signature: 4px lift + ink hard-offset shadow + orange
+   left stripe drawing top→bottom). */
 .zd-coming{
   display:grid; grid-template-columns:repeat(3, 1fr);
-  gap:0; border:1px solid var(--line); background:var(--line);
+  gap:16px; border:none; background:transparent;
 }
 @media (max-width:900px){ .zd-coming{ grid-template-columns:1fr; } }
 .zd-card{
-  background:var(--bg-1); padding:var(--sp-8) var(--sp-7);
+  background:var(--bg-1); border:1px solid var(--line);
+  padding:var(--sp-8) var(--sp-7);
   display:flex; flex-direction:column; gap:var(--sp-4);
-  transition:background .14s var(--ease-out);
+  position:relative;
+  transition:transform var(--dur-med) var(--ease-out),
+             box-shadow var(--dur-med) var(--ease-out),
+             border-color var(--dur-med) var(--ease-out);
 }
-.zd-card:hover{ background:var(--bg-2); }
+.zd-card::after{
+  content:''; position:absolute; top:0; left:0; width:4px; height:100%;
+  background:var(--zop-orange);
+  transform:scaleY(0); transform-origin:top;
+  transition:transform var(--dur-med) var(--ease-out);
+  pointer-events:none; z-index:2;
+}
+.zd-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 8px 0 -4px var(--ink);
+  border-color:var(--line-b);
+}
+.zd-card:hover::after{ transform:scaleY(1); }
 .zd-card .badge{
   font-family:var(--mono); font-size:var(--t-10);
   letter-spacing:var(--ls-meta); text-transform:uppercase; font-weight:var(--fw-semibold);
@@ -168,15 +191,42 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
 .zd-why-item p{ margin:0; color:var(--ink-3); font-size:var(--t-14); line-height:var(--lh-body); }
 
 /* Final CTA */
-.zd-final{ background:var(--bg-1); border-top:1px solid var(--line); }
+/* Section roots inherit body bg (matches homepage aesthetic — sections share
+   one canvas color, only borders mark the boundary). */
+/* The single saturated brand band · ZopDay signs off in brand orange.
+   Dark text on orange (AAA contrast). */
+.zd-final{
+  background: var(--zop-orange);
+  border-top: 0;
+  color: #0A0A0A;
+}
 .zd-final .container{ text-align:center; padding:var(--sp-20) 0; }
 .zd-final h2{
   font-size:clamp(40px, 5.6vw, 80px);
   letter-spacing:var(--ls-display); line-height:var(--lh-display);
   margin:0 0 var(--sp-5); max-width:780px; margin-inline:auto;
+  color: #0A0A0A;
 }
-.zd-final h2 em{ color:var(--zop-orange); font-style:normal; }
-.zd-final p{ font-size:var(--t-17); color:var(--ink-3); max-width:560px; margin:0 auto var(--sp-8); }
+.zd-final h2 em{ color: #0A0A0A; opacity: .68; font-style:normal; }
+.zd-final p{ font-size:var(--t-17); color: rgba(10,10,10,.78); max-width:560px; margin:0 auto var(--sp-8); }
+.zd-final .btn-primary{
+  background: #0A0A0A !important; color: var(--zop-orange) !important;
+  border-color: #0A0A0A !important;
+}
+.zd-final .btn-primary:hover{
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 0 -4px rgba(0,0,0,.45) !important;
+}
+.zd-final .btn-secondary{
+  background: transparent !important; color: #0A0A0A !important;
+  border-color: rgba(10,10,10,.42) !important;
+}
+.zd-final .btn-secondary:hover{
+  border-color: #0A0A0A !important;
+  background: rgba(10,10,10,.07) !important;
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 0 -4px rgba(0,0,0,.45) !important;
+}
 .zd-final .zd-form{ max-width:480px; margin:0 auto; }
 
 @media (max-width:768px){ .page > section{ padding:var(--sec-pad-sm) 0; } }
@@ -187,7 +237,7 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
 }
 @media (max-width:768px){ .zd-templates{ grid-template-columns:1fr; } }
 .zd-tpl{
-  background:var(--bg-1); border:1px solid var(--line); border-radius:6px;
+  background:var(--bg-1); border:1px solid var(--line); border-radius:0;
   padding:var(--sp-6);
   display:flex; flex-direction:column; gap:var(--sp-3);
   transition:border-color var(--dur-fast) var(--ease-out);
@@ -205,7 +255,7 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
 .zd-tpl-badge{
   font-family:var(--mono); font-size:var(--t-11); letter-spacing:.08em; text-transform:uppercase;
   color:var(--ink-3);
-  border:1px dashed var(--line); padding:4px 10px; border-radius:3px;
+  border:1px dashed var(--line); padding:4px 10px; border-radius:0;
 }
 
 /* --- FAQ · zd-faq inherits faq-list base, adds spacing --- */
@@ -333,7 +383,7 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
 .zd-mcp-prompts .prompt{
   display:inline-block; font-family:var(--mono); font-size:var(--t-14);
   background:var(--bg-1); border:1px solid var(--line);
-  border-radius:3px; padding:var(--sp-3) var(--sp-4);
+  border-radius:0; padding:var(--sp-3) var(--sp-4);
   color:var(--ink); border-left:3px solid var(--zop-orange);
 }
 .zd-mcp-note{ font-size:var(--t-14); color:var(--ink-3); margin:0; line-height:var(--lh-body); }
@@ -434,7 +484,7 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
 
 /* --- Trust strip · 4-box panel design (matches zn-stats pattern) --- */
 .zd-stats{
-  background:var(--bg-0); border-bottom:1px solid var(--line);
+  border-bottom:1px solid var(--line);
   padding:var(--sp-12) 0;
 }
 .zd-stats .container{
@@ -457,7 +507,7 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
 
 /* --- Section 1 closing callout (parallels zn-callout-section) --- */
 .zd-callout-section{
-  background:var(--bg-0); border-bottom:1px solid var(--line);
+  border-bottom:1px solid var(--line);
 }
 .zd-callout-section .container{ padding:var(--sp-16) 0; text-align:center; }
 .zd-callout{ max-width:880px; margin:0 auto; }
@@ -488,7 +538,7 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
 <script src="chrome-mobilenav.js" defer></script>
 <script src="chrome-footer.js" defer></script>
 </head>
-<body data-product="zopday" class="is-tinted">
+<body data-product="zopday">
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -714,12 +764,11 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
 <!-- ZOPDAY PAGE -->
 <main class="page">
 
-  <div class="crumb"><a href="/">home</a> <span class="sep">/</span> <a href="zopnight.html">product</a> <span class="sep">/</span> zopday</div>
-
   <!-- HERO -->
   <section class="zd-hero">
-    <div class="product-hero-mark" aria-hidden="true">
-      <svg viewBox="0 0 32 32"><use href="#mark-zopday"/></svg>
+    <!-- 3D dotted bridge · canvas bleeds 40% off the right viewport edge -->
+    <div class="product-3d-frame" aria-label="Drag to rotate · click to deploy a packet">
+      <canvas class="zd-3d" tabindex="0" aria-hidden="true"></canvas>
     </div>
     <div class="container zd-hero-inner">
       <div>
@@ -733,19 +782,8 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
           </a>
           <a class="btn btn-secondary" href="signin.html">Deploy on your cloud <span aria-hidden="true">&rarr;</span></a>
         </div>
-        <p class="zd-hero-meta"><em>AWS &middot; GCP &middot; Azure &middot; BYOC &middot; ISO 27001 &middot; SOC 2 Type II &middot; Open-source roots</em></p>
+        <p class="zd-hero-meta">AWS · GCP · Azure · BYOC · ISO 27001 · SOC 2 Type II · open-source roots</p>
       </div>
-
-      <aside class="zd-waitlist" aria-label="Join the beta">
-        <div class="lab">trusted by mcafee · 12 aws accounts · 48 k8s clusters</div>
-        <div class="num">30</div>
-        <h3>minutes to a production-grade landing zone.</h3>
-        <p>Push code → production via Helm. No Dockerfile required, we auto-build from your repo. Security scans on every build. Audit trail on every deploy.</p>
-        <form class="zd-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='✓ opening playground';">
-          <input type="email" placeholder="you@team.com" required/>
-          <button type="submit"><svg class="btn-mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#mark-zopday"/></svg>Open the playground</button>
-        </form>
-      </aside>
     </div>
   </section>
 
@@ -1511,17 +1549,191 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
 })();
 </script>
 
-<!-- Product-page tint controller · see zopnight.html for the long form. -->
+<!-- Tint controller intentionally disabled · hero stays its own dark surface. -->
+
+<!-- 3D dotted bridge · same render pipeline as the homepage globe -->
+<script src="product-3d.js" defer></script>
 <script>
-(function(){
-  var hero = document.querySelector('.zn-hero, .zd-hero, .zc-hero');
-  if(!hero || !('IntersectionObserver' in window)) return;
-  var body = document.body;
-  var obs = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){ body.classList.toggle('is-tinted', e.isIntersecting); });
-  }, { threshold:0.05 });
-  obs.observe(hero);
-})();
+/* =============================================================================
+   ZopDay 3D · suspension bridge in dotted form. Two towers above + below
+   the deck, twin catenary main cables, vertical suspenders, deck slab.
+   Stratified sampling per region so dot density stays even.
+   Click triggers a "deploy" packet that travels across the bridge from
+   one tower to the other, leaving a trail.
+   ============================================================================= */
+var ZD_N = 3000;
+var ZD_PHI = Math.PI * (3 - Math.sqrt(5));
+
+function zdAlloc(parts, n){
+  var total = 0; for(var i=0; i<parts.length; i++) total += parts[i];
+  var out = [], assigned = 0;
+  for(var i=0; i<parts.length-1; i++){
+    var v = Math.round(n * parts[i] / total); out.push(v); assigned += v;
+  }
+  out.push(n - assigned);
+  return out;
+}
+
+function genBridgePoints(){
+  var pts = [];
+  var deckLen = 1.4, deckW = 0.18, deckThick = 0.04;
+  var towerH = 0.65, towerT = 0.05;
+  var cableTopY = towerH, cableLowY = 0.05;
+  var towerXs = [-0.32, 0.32];
+  var cableZs = [-deckW/3, deckW/3];
+
+  var budget = zdAlloc([
+    deckLen*deckW * 2,        /* deck top + bottom */
+    deckLen*deckThick * 2,    /* deck side rails */
+    towerH*towerT * 4 * 2,    /* two towers, 4 faces each, above-deck */
+    0.45*towerT * 4 * 2,      /* two towers, below-deck pillars */
+    0.55*0.55 * 2,            /* two main cables */
+    0.55,                     /* suspenders */
+    0.04                      /* tower caps (accent) */
+  ], ZD_N);
+
+  /* Deck top + bottom · stratified grid */
+  function emitDeckLayer(n, yval){
+    var grid = Math.ceil(Math.sqrt(n));
+    var idx = 0;
+    for(var ix=0; ix<grid && idx<n; ix++){
+      for(var iy=0; iy<grid && idx<n; iy++){
+        var u = (ix + 0.5)/grid;
+        var v = (iy + 0.5)/grid;
+        pts.push({x:(u-0.5)*deckLen, y:yval, z:(v-0.5)*deckW, hi:false});
+        idx++;
+      }
+    }
+  }
+  emitDeckLayer(Math.floor(budget[0]/2),  deckThick/2);
+  emitDeckLayer(budget[0] - Math.floor(budget[0]/2), -deckThick/2);
+
+  /* Side rails */
+  function emitSide(n, zval){
+    for(var i=0; i<n; i++){
+      pts.push({x:((i+0.5)/n - 0.5)*deckLen, y:0, z:zval, hi:false});
+    }
+  }
+  emitSide(Math.floor(budget[1]/2),  deckW/2);
+  emitSide(budget[1] - Math.floor(budget[1]/2), -deckW/2);
+
+  /* Towers · 4 faces, evenly sampled */
+  function emitTower(n, tx, yMin, yMax){
+    var perFace = Math.floor(n/4);
+    for(var f=0; f<4; f++){
+      var fN = (f === 3) ? (n - perFace*3) : perFace;
+      var grid = Math.ceil(Math.sqrt(fN));
+      var idx = 0;
+      for(var ix=0; ix<grid && idx<fN; ix++){
+        for(var iy=0; iy<grid && idx<fN; iy++){
+          var u = (ix+0.5)/grid, v = (iy+0.5)/grid;
+          var ty = yMin + v*(yMax - yMin);
+          var x, z;
+          if(f === 0){ x = tx + towerT/2;       z = (u-0.5)*deckW; }
+          else if(f === 1){ x = tx - towerT/2; z = (u-0.5)*deckW; }
+          else if(f === 2){ x = tx + (u-0.5)*towerT; z =  deckW/2; }
+          else            { x = tx + (u-0.5)*towerT; z = -deckW/2; }
+          pts.push({x:x, y:ty, z:z, hi:false});
+          idx++;
+        }
+      }
+    }
+  }
+  emitTower(Math.floor(budget[2]/2),  towerXs[0], 0, towerH);
+  emitTower(budget[2] - Math.floor(budget[2]/2), towerXs[1], 0, towerH);
+  emitTower(Math.floor(budget[3]/2),  towerXs[0], -0.45, 0);
+  emitTower(budget[3] - Math.floor(budget[3]/2), towerXs[1], -0.45, 0);
+
+  /* Main cables · catenary curves, evenly spaced points */
+  function emitCable(n, cz){
+    for(var i=0; i<n; i++){
+      var t = (i+0.5)/n * 2 - 1; /* -1 to 1 */
+      var cx = t * 0.55;
+      var u = cx / 0.32;
+      var cy;
+      if(Math.abs(u) <= 1){ cy = cableLowY + u*u*(cableTopY - cableLowY); }
+      else {
+        var beyond = (Math.abs(cx) - 0.32) / (0.55 - 0.32);
+        cy = cableTopY*(1 - beyond) - 0.30*beyond;
+      }
+      pts.push({x:cx, y:cy, z:cz, hi:false});
+    }
+  }
+  emitCable(Math.floor(budget[4]/2), cableZs[0]);
+  emitCable(budget[4] - Math.floor(budget[4]/2), cableZs[1]);
+
+  /* Suspenders · vertical lines from main cable down to deck */
+  var suspBudget = budget[5];
+  var nSusp = 14;
+  var perSuspender = Math.floor(suspBudget / (nSusp * 2));
+  for(var s=1; s<nSusp; s++){
+    var sx = -0.32 + (s/nSusp)*0.64;
+    var u = sx/0.32, sag = u*u;
+    var topY = cableLowY + sag*(cableTopY - cableLowY);
+    cableZs.forEach(function(cz){
+      for(var i=0; i<perSuspender; i++){
+        pts.push({x:sx, y: deckThick/2 + (i/perSuspender)*(topY - deckThick/2), z:cz, hi:false});
+      }
+    });
+  }
+
+  /* Tower caps · brand-color accent at the top of each tower */
+  var capN = Math.floor(budget[6] / 2);
+  towerXs.forEach(function(tx){
+    for(var i=0; i<capN; i++){
+      var phi = ZD_PHI * i;
+      pts.push({x:tx + Math.cos(phi)*0.04, y:towerH + 0.008, z:Math.sin(phi)*0.04, hi:true});
+    }
+  });
+
+  /* Pad/truncate to exactly ZD_N */
+  while(pts.length < ZD_N) pts.push({x:0,y:0,z:0,hi:false});
+  if(pts.length > ZD_N) pts.length = ZD_N;
+  return pts;
+}
+
+/* Spawn a deploy packet that crosses the bridge tower-to-tower.
+   Implemented as ~24 trailing particles emitted along the catenary cable. */
+function fireDeployPacket(c){
+  var towerXs = [-0.32, 0.32];
+  var cableTopY = 0.65, cableLowY = 0.05;
+  /* Pick a random cable side and direction */
+  var cz = (Math.random() < 0.5 ? -1 : 1) * (0.18/3);
+  var dir = Math.random() < 0.5 ? 1 : -1;
+  var steps = 26;
+  for(var i=0; i<steps; i++){
+    /* Position along cable from -0.32 (left tower) to +0.32 (right tower) */
+    var u = -1 + (i/steps) * 2; /* -1 to 1 */
+    if(dir < 0) u = -u;
+    var cx = u * 0.32;
+    var sag = (cx/0.32) * (cx/0.32);
+    var cy = cableLowY + sag * (cableTopY - cableLowY);
+    /* Emit with staggered delay via vy=0 + custom life cascade */
+    setTimeout(function(p){
+      c.addParticle({
+        x: p.cx, y: p.cy, z: p.cz,
+        vx: 0, vy: 0, vz: 0,
+        life: 36, max: 36
+      });
+    }.bind(null, {cx:cx, cy:cy, cz:cz}), i * 35);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  if(!window.ZopProduct3D) return;
+  ZopProduct3D(document.querySelector('.zd-3d'), genBridgePoints, {
+    accent: '#F58549',
+    radiusFactor: 0.58,
+    speed: 0.0026,
+    rotX: -0.14,
+    rotY: 0.6,
+    /* Click → fire a deploy packet across the bridge + ring pulse */
+    onActivate: function(controller, p){
+      controller.pulse(p.x, p.y);
+      fireDeployPacket(controller);
+    }
+  });
+});
 </script>
 
 </body>

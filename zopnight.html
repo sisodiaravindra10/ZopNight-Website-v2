@@ -118,58 +118,80 @@
    permitted repeating-linear-gradient body grid wash (in chrome.css).
    ===================================================================== */
 
-/* --- HERO --- */
-.zn-hero{ background:var(--bg-1); border-bottom:1px solid var(--line); }
-.zn-hero-inner{
-  display:grid; grid-template-columns:1.4fr 1fr; gap:var(--sp-12);
-  align-items:center; padding-block:var(--sp-16) var(--sp-14);
+/* --- HERO · positioning matches the homepage hero exactly ---
+   Always-dark dashboard surface per DESIGN.md §10. Padding, grid, gap and
+   typography all mirror `.hero` / `.hero h1` / `.hero .lead` from index.html
+   so the product hero feels like the homepage hero — only the visual differs. */
+.zn-hero{
+  --bg-0:#060608; --bg-1:#0E0E12; --bg-2:#15151A; --bg-3:#1C1C24; --bg-4:#252530;
+  --ink:#F0EBDB; --ink-2:#D4CDB5; --ink-3:#A8A195; --ink-4:#8A8378; --ink-5:#5A5A62;
+  --line:#2A2A34; --line-2:#3A3A46; --line-b:#55555E;
+  background:var(--bg-1) !important; color:var(--ink) !important;
+  border-bottom:1px solid var(--line) !important;
+  position:relative;
+  overflow:clip;
+  padding: 64px 0 88px;
 }
-@media (max-width:980px){ .zn-hero-inner{ grid-template-columns:1fr; gap:var(--sp-8); } }
+.zn-hero-inner{
+  display:grid; grid-template-columns:1fr 1.1fr; gap:48px;
+  align-items:center;
+  position:relative; z-index:5;
+}
+@media (max-width:980px){ .zn-hero-inner{ grid-template-columns:1fr; gap:40px; } }
 .zn-tag{
   display:inline-flex; align-items:center; gap:8px;
   font-family:var(--mono); font-size:var(--t-11);
   letter-spacing:var(--ls-meta); text-transform:uppercase;
   color:var(--zop-orange); margin-bottom:var(--sp-5);
 }
-.zn-tag::before{ content:''; width:8px; height:8px; background:var(--zop-orange); display:inline-block; }
+.zn-tag::before{
+  content:''; width:8px; height:8px; background:var(--zop-orange); display:inline-block;
+  animation: zn-tag-pulse 2.6s var(--ease-in-out) infinite;
+}
+@keyframes zn-tag-pulse{ 0%, 100%{ opacity:1; } 50%{ opacity:.4; } }
+/* h1 + lead + cta · sizes match `.hero h1` / `.hero .lead` on the homepage */
 .zn-hero h1{
-  font-size:clamp(48px, 6.4vw, 88px);
-  line-height:var(--lh-display); letter-spacing:var(--ls-display);
-  margin:0 0 var(--sp-6); max-width:680px;
+  font-size:clamp(36px, 4.4vw, 64px);
+  font-weight:700; line-height:1.02; letter-spacing:-0.04em;
+  margin:0 0 28px; max-width:620px;
 }
 .zn-hero h1 em{ color:var(--zop-orange); font-style:normal; }
 .zn-hero .lead{
-  font-size:var(--t-20); line-height:1.5; color:var(--ink-3);
-  max-width:560px; margin:0 0 var(--sp-8);
+  font-size:19px; line-height:1.45; color:var(--ink-3);
+  max-width:620px; margin:0 0 32px;
 }
 .zn-hero .lead strong{ color:var(--ink); font-weight:var(--fw-medium); }
-/* CTA row · uses the canonical .btn / .btn-accent / .btn-secondary
-   from chrome.css. No inline overrides so the hover treatment
-   stays consistent with the homepage and every other page
-   (translateY(-4px) + hard offset shadow). */
-.zn-cta{ display:flex; gap:var(--sp-4); flex-wrap:wrap; }
+.zn-cta{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
 
-/* hero side panel · the "before/after" cost callout */
-.zn-savings{
-  background:var(--bg-2); border:1px solid var(--line);
-  padding:var(--sp-7);
+/* 3D canvas · sized as a giant square that bleeds 40% past the right edge
+   of the viewport. `right: 0; translate(40%, -50%)` anchors the canvas
+   right edge at hero right, then pushes it right by 40% of its own width
+   so exactly 60% of the shape is visible inside the viewport. The hero's
+   `overflow: clip` handles all clipping. */
+.product-3d-frame{
+  position:absolute;
+  top:50%; right:0;
+  transform: translate(40%, -50%);
+  width: clamp(720px, 78vw, 1280px);
+  aspect-ratio: 1;
+  z-index: 1;
 }
-.zn-savings .lab{
-  font-family:var(--mono); font-size:var(--t-10);
-  letter-spacing:var(--ls-meta); text-transform:uppercase;
-  color:var(--ink-4); margin-bottom:var(--sp-3);
+.product-3d-frame canvas{
+  display:block; width:100%; height:100%;
+  outline:none; cursor:grab;
 }
-.zn-savings .row{
-  display:flex; justify-content:space-between; align-items:baseline;
-  padding:var(--sp-4) 0; border-top:1px solid var(--line);
-  font-family:var(--mono); font-size:var(--t-13);
+.product-3d-frame canvas:active{ cursor:grabbing; }
+@media (max-width:980px){
+  .zn-hero{ display:flex; flex-direction:column; gap:40px; padding: 56px 0 72px; }
+  .zn-hero .container.zn-hero-inner{ order:1; }
+  .zn-hero .product-3d-frame{
+    order:2;
+    position: static;
+    width: 100%; aspect-ratio: 1;
+    transform: none;
+    margin: 0 auto;
+  }
 }
-.zn-savings .row:first-of-type{ border-top:0; }
-.zn-savings .row .v{ color:var(--ink); font-size:var(--t-15); font-variant-numeric:tabular-nums; }
-.zn-savings .row.win .v{ color:var(--ok); }
-.zn-savings .row.delta{ background:var(--bg-3); padding:var(--sp-4) var(--sp-4); margin:var(--sp-4) calc(var(--sp-4) * -1) 0; border-top:0; }
-.zn-savings .row.delta .k{ color:var(--ink); font-weight:var(--fw-semibold); font-family:var(--font); letter-spacing:var(--ls-body); }
-.zn-savings .row.delta .v{ color:var(--zop-orange); font-size:var(--t-22); font-weight:var(--fw-bold); }
 
 /* --- STATS STRIP --- */
 .zn-stats{ background:var(--bg-0); border-bottom:1px solid var(--line); padding:var(--sp-12) 0; }
@@ -365,16 +387,44 @@
 @media (max-width:768px){ .zn-pricing-cta{ grid-template-columns:1fr; padding:var(--sp-8); } }
 
 /* --- FINAL CTA · the dark moment --- */
-.zn-final{ background:var(--bg-1); border-top:1px solid var(--line); }
+/* The single saturated brand band · ZopNight signs off in canonical brand blue.
+   Cream text + a paper-fill primary CTA for AAA contrast on the blue ground. */
+.zn-final{
+  background: var(--zop-blue);
+  border-top: 0;
+  color: var(--paper);
+}
 .zn-final .container{ text-align:center; padding:var(--sp-20) 0; }
+.zn-final h2,
+.zn-final h2 em{ color: var(--paper) !important; font-style: normal; }
+.zn-final h2 em{ opacity: .72; }
+.zn-final p{ color: rgba(250,247,236,.82) !important; }
+.zn-final .btn-primary{
+  background: var(--paper) !important; color: var(--zop-blue) !important;
+  border-color: var(--paper) !important;
+}
+.zn-final .btn-primary:hover{
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 0 -4px rgba(0,0,0,.55) !important;
+  background: var(--paper) !important;
+}
+.zn-final .btn-secondary{
+  background: transparent !important; color: var(--paper) !important;
+  border-color: rgba(250,247,236,.5) !important;
+}
+.zn-final .btn-secondary:hover{
+  border-color: var(--paper) !important;
+  background: rgba(250,247,236,.08) !important;
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 0 -4px rgba(0,0,0,.55) !important;
+}
 .zn-final h2{
   font-size:clamp(40px, 5.6vw, 80px);
   letter-spacing:var(--ls-display); line-height:var(--lh-display);
   margin:0 0 var(--sp-5); max-width:780px; margin-inline:auto;
 }
-.zn-final h2 em{ color:var(--zop-orange); font-style:normal; }
 .zn-final p{
-  font-size:var(--t-17); color:var(--ink-3); max-width:560px;
+  font-size:var(--t-17); max-width:560px;
   margin:0 auto var(--sp-8);
 }
 .zn-final .zn-cta{ justify-content:center; }
@@ -454,7 +504,7 @@
 /* --- Proof block · Azure Advisor 14% vs ZopNight 86% --- */
 .zn-proof{
   margin-top:var(--sp-12);
-  background:var(--bg-1); border:1px solid var(--line); border-radius:6px;
+  background:var(--bg-1); border:1px solid var(--line); border-radius:0;
   padding:var(--sp-10);
 }
 .zn-proof-head{ margin-bottom:var(--sp-8); max-width:720px; }
@@ -523,7 +573,7 @@
 .zn-event-tag strong{ color:var(--zop-orange); font-weight:700; }
 .zn-event-visual{
   margin-top:var(--sp-8);
-  background:var(--bg-1); border:1px solid var(--line); border-radius:6px;
+  background:var(--bg-1); border:1px solid var(--line); border-radius:0;
   padding:var(--sp-4);
   display:flex; flex-direction:column; gap:1px;
   font-family:var(--mono); font-size:var(--t-13);
@@ -537,7 +587,7 @@
 .zn-event-scope{ color:var(--ink); font-weight:500; }
 .zn-event-verdict{
   font-size:var(--t-11); letter-spacing:.08em; font-weight:600;
-  text-align:center; padding:3px 8px; border-radius:3px;
+  text-align:center; padding:3px 8px; border-radius:0;
 }
 .zn-event-action{ color:var(--ink-3); font-size:var(--t-12); }
 .zn-event-green{ border-left-color:#7FB236; }
@@ -564,7 +614,7 @@
 .zn-mcp-prompts .prompt{
   display:inline-block; font-family:var(--mono); font-size:var(--t-14);
   background:var(--bg-1); border:1px solid var(--line);
-  border-radius:3px; padding:var(--sp-3) var(--sp-4);
+  border-radius:0; padding:var(--sp-3) var(--sp-4);
   color:var(--ink); border-left:3px solid var(--zop-orange);
 }
 .zn-mcp-note{ font-size:var(--t-14); color:var(--ink-3); margin:0; }
@@ -693,7 +743,7 @@
 }
 @media (max-width:820px){ .zn-engines{ grid-template-columns:1fr; } }
 .zn-engine{
-  background:var(--bg-1); border:1px solid var(--line); border-radius:6px;
+  background:var(--bg-1); border:1px solid var(--line); border-radius:0;
   padding:var(--sp-6) var(--sp-7);
   display:flex; flex-direction:column; gap:var(--sp-3);
 }
@@ -717,7 +767,7 @@
 }
 @media (max-width:820px){ .zn-cdcr{ grid-template-columns:1fr; } }
 .zn-cdcr-card{
-  background:var(--bg-1); border:1px solid var(--line); border-radius:6px;
+  background:var(--bg-1); border:1px solid var(--line); border-radius:0;
   padding:var(--sp-6);
   display:flex; flex-direction:column; gap:var(--sp-4);
 }
@@ -809,7 +859,7 @@
 <script src="chrome-mobilenav.js" defer></script>
 <script src="chrome-footer.js" defer></script>
 </head>
-<body data-product="zopnight" class="is-tinted">
+<body data-product="zopnight">
 
 <!-- ========================================================================
      SVG defs, the canonical logo + marks. Identical on every page.
@@ -1057,14 +1107,13 @@
      ======================================================================== -->
 <main class="page">
 
-  <div class="crumb"><a href="/">home</a> <span class="sep">/</span> <a href="zopnight.html">product</a> <span class="sep">/</span> zopnight</div>
-
   <!-- ============================================================
        HERO · doc B · Hero
        ============================================================ -->
   <section class="zn-hero">
-    <div class="product-hero-mark" aria-hidden="true">
-      <svg viewBox="0 0 32 32"><use href="#mark-zopnight"/></svg>
+    <!-- 3D dotted lock ↔ piracy eye · canvas bleeds 40% off the right viewport edge -->
+    <div class="product-3d-frame" aria-label="Drag to rotate · click to see what's hidden">
+      <canvas class="zn-3d" tabindex="0" aria-hidden="true"></canvas>
     </div>
     <div class="container zn-hero-inner">
       <div>
@@ -1078,25 +1127,8 @@
           </a>
           <a class="btn btn-secondary" href="#section-2-engines">See how it works <span aria-hidden="true">&rarr;</span></a>
         </div>
-        <p class="zn-hero-meta"><em>AWS &middot; GCP &middot; Azure &middot; ISO 27001 &middot; SOC 2 Type II &middot; Read-only by default</em></p>
+        <p class="zn-hero-meta">AWS · GCP · Azure · ISO 27001 · SOC 2 Type II · read-only by default</p>
       </div>
-
-      <!-- Decorative savings panel · matches existing visual language -->
-      <aside class="zn-savings" aria-label="Sample savings">
-        <div class="lab">3 environments &middot; 4 weeks</div>
-        <div class="row">
-          <span class="k">Before ZopNight</span>
-          <span class="v">$17,750 / mo waste</span>
-        </div>
-        <div class="row win">
-          <span class="k">After ZopNight</span>
-          <span class="v">$14,820 recovered</span>
-        </div>
-        <div class="row delta">
-          <span class="k">Year-1 ROI</span>
-          <span class="v">2.8&times; &middot; payback &lt;5 mo</span>
-        </div>
-      </aside>
     </div>
   </section>
 
@@ -1822,20 +1854,197 @@
   })();
 </script>
 
-<!-- Product-page tint controller · `is-tinted` body class while the
-     hero is in view, removed once it scrolls out so the rest of the
-     page reverts to paper. CSS in homepage-chrome.css handles the
-     crossfade. -->
+<!-- Tint controller intentionally disabled · the hero stays its own dark
+     surface (DESIGN.md §10) instead of bleeding brand color across the body. -->
+
+<!-- 3D dotted lock ↔ piracy eye morph · same render pipeline as homepage globe -->
+<script src="product-3d.js" defer></script>
 <script>
-(function(){
-  var hero = document.querySelector('.zn-hero, .zd-hero, .zc-hero');
-  if(!hero || !('IntersectionObserver' in window)) return;
-  var body = document.body;
-  var obs = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){ body.classList.toggle('is-tinted', e.isIntersecting); });
-  }, { threshold:0.05 });
-  obs.observe(hero);
-})();
+/* =============================================================================
+   ZopNight 3D · the dots morph between a padlock (closed cloud)
+   and a piracy eye (the watching eye that finds the 60% you can't see).
+   Both shapes use Fibonacci-style structured distributions so the morph
+   reads as smooth flow — index N in one shape pairs with index N in the
+   other.
+
+   N is fixed at 3000 across both shapes so the lerp is index-stable.
+   ============================================================================= */
+var ZN_N = 3000;
+var ZN_PHI = Math.PI * (3 - Math.sqrt(5)); /* golden angle */
+
+/* Allocate `n` points to a region by surface-area fraction. */
+function znAlloc(areas, n){
+  var total = 0; for(var i=0; i<areas.length; i++) total += areas[i];
+  var out = []; var assigned = 0;
+  for(var i=0; i<areas.length-1; i++){
+    var v = Math.round(n * areas[i] / total);
+    out.push(v); assigned += v;
+  }
+  out.push(n - assigned);
+  return out;
+}
+
+/* === LOCK ===
+   Cuboid body · half-torus shackle · two short cylindrical legs · keyhole
+   on the front face. Stratified sampling per region so dots stay even. */
+function genLockPoints(){
+  var pts = [];
+  var bw = 0.62, bh = 0.92, bd = 0.30;
+  var bcy = -0.27;
+  var arcR = 0.26, legY1 = 0.19, legY2 = 0.30, tubeR = 0.055;
+
+  /* Per-region budget · 6 body faces + 2 legs + 1 arc + keyhole ring + stem */
+  var budget = znAlloc(
+    [bw*bh, bw*bh, bh*bd, bh*bd, bw*bd, bw*bd, /* body faces */
+     0.10,  0.10,                              /* legs (relative weight) */
+     0.85,                                     /* arc */
+     0.05,  0.04],                             /* keyhole */
+    ZN_N
+  );
+
+  /* Body faces · stratified-jittered grid so coverage is uniform */
+  function emitFace(n, sample){
+    var grid = Math.ceil(Math.sqrt(n));
+    var idx = 0;
+    for(var ix=0; ix<grid && idx<n; ix++){
+      for(var iy=0; iy<grid && idx<n; iy++){
+        var u = (ix + 0.5) / grid + (Math.random()-0.5)*0.5/grid;
+        var v = (iy + 0.5) / grid + (Math.random()-0.5)*0.5/grid;
+        pts.push(sample(u, v));
+        idx++;
+      }
+    }
+  }
+  emitFace(budget[0], function(u,v){ return {x:(u-0.5)*bw, y:(v-0.5)*bh+bcy, z: bd/2,    hi:false}; });
+  emitFace(budget[1], function(u,v){ return {x:(u-0.5)*bw, y:(v-0.5)*bh+bcy, z:-bd/2,    hi:false}; });
+  emitFace(budget[2], function(u,v){ return {x:-bw/2,      y:(v-0.5)*bh+bcy, z:(u-0.5)*bd, hi:false}; });
+  emitFace(budget[3], function(u,v){ return {x: bw/2,      y:(v-0.5)*bh+bcy, z:(u-0.5)*bd, hi:false}; });
+  emitFace(budget[4], function(u,v){ return {x:(u-0.5)*bw, y: bh/2+bcy,      z:(v-0.5)*bd, hi:false}; });
+  emitFace(budget[5], function(u,v){ return {x:(u-0.5)*bw, y:-bh/2+bcy,      z:(v-0.5)*bd, hi:false}; });
+
+  /* Two cylindrical legs */
+  function emitLeg(n, lx){
+    for(var i=0; i<n; i++){
+      var ty = legY1 + (i / Math.max(1,n-1)) * (legY2 - legY1);
+      var phi = ZN_PHI * i;
+      pts.push({x: lx + Math.cos(phi)*tubeR, y: ty, z: Math.sin(phi)*tubeR, hi:false});
+    }
+  }
+  emitLeg(budget[6], -arcR);
+  emitLeg(budget[7],  arcR);
+
+  /* Half-torus arc · θ from 0 (right) over the top to π (left) */
+  var arcN = budget[8];
+  for(var i=0; i<arcN; i++){
+    var theta = (i + 0.5) / arcN * Math.PI;
+    var phi = ZN_PHI * i;
+    var cT = Math.cos(theta), sT = Math.sin(theta);
+    var ax = arcR*cT, ay = legY2 + arcR*sT;
+    pts.push({
+      x: ax + Math.cos(phi)*tubeR*cT,
+      y: ay + Math.cos(phi)*tubeR*sT,
+      z: Math.sin(phi)*tubeR,
+      hi: false
+    });
+  }
+
+  /* Keyhole · circle ring + downward stem on the front face, accent-tinted */
+  var keyR = 0.055, keyCy = -0.05, ringN = budget[9];
+  for(var i=0; i<ringN; i++){
+    var t = (i + 0.5) / ringN * Math.PI*2;
+    pts.push({x:Math.cos(t)*keyR, y:keyCy+Math.sin(t)*keyR, z:bd/2+0.002, hi:true});
+  }
+  var stemN = budget[10];
+  for(var i=0; i<stemN; i++){
+    var ty = keyCy - keyR - (i/stemN)*0.07;
+    pts.push({x:0, y:ty, z:bd/2+0.002, hi:true});
+  }
+
+  /* Pad/truncate to exactly ZN_N */
+  while(pts.length < ZN_N) pts.push({x:0,y:0,z:0,hi:false});
+  if(pts.length > ZN_N) pts.length = ZN_N;
+  return pts;
+}
+
+/* === PIRACY EYE ===
+   Spherical eyeball (Fibonacci sphere) · iris ring on the front
+   · pupil disk · X/cross mark over the eye. */
+function genEyePoints(){
+  var pts = [];
+  var R = 0.55, irisR = 0.22, pupilR = 0.07, frontZ = R + 0.012;
+
+  var budget = znAlloc(
+    [1.00,  /* eyeball sphere */
+     0.18,  /* iris ring */
+     0.07,  /* pupil disk */
+     0.16], /* X mark */
+    ZN_N
+  );
+
+  /* Eyeball · Fibonacci sphere, same algorithm as homepage globe */
+  var Nb = budget[0];
+  for(var i=0; i<Nb; i++){
+    var yy = 1 - (i/(Nb-1))*2;
+    var rr = Math.sqrt(Math.max(0, 1 - yy*yy));
+    var th = ZN_PHI * i;
+    pts.push({x:Math.cos(th)*rr*R, y:yy*R, z:Math.sin(th)*rr*R, hi:false});
+  }
+
+  /* Iris · narrow ring on the front face (z ≈ frontZ) */
+  var Ni = budget[1];
+  for(var i=0; i<Ni; i++){
+    var t = (i + 0.5) / Ni * Math.PI*2;
+    /* Slight thickness via two concentric rings */
+    var rad = irisR + ((i % 2 === 0) ? 0.015 : -0.015);
+    pts.push({x:Math.cos(t)*rad, y:Math.sin(t)*rad, z:frontZ, hi:true});
+  }
+
+  /* Pupil · filled disk via Fibonacci 2D */
+  var Np = budget[2];
+  for(var i=0; i<Np; i++){
+    var t = ZN_PHI * i;
+    var rad = pupilR * Math.sqrt((i + 0.5) / Np);
+    pts.push({x:Math.cos(t)*rad, y:Math.sin(t)*rad, z:frontZ + 0.001, hi:true});
+  }
+
+  /* X mark · two crossing line segments through the eye, the pirate slash */
+  var Nx = budget[3];
+  var perArm = Math.floor(Nx / 4);
+  var armLen = R * 0.95;
+  function emitArm(n, dirX, dirY){
+    for(var i=0; i<n; i++){
+      var s = ((i + 0.5) / n - 0.5) * 2 * armLen; /* -armLen to +armLen */
+      pts.push({x: dirX * s, y: dirY * s, z: frontZ + 0.002, hi: false});
+    }
+  }
+  emitArm(perArm,  0.7071,  0.7071);
+  emitArm(perArm, -0.7071,  0.7071);
+  emitArm(perArm,  0.7071, -0.7071);
+  emitArm(Nx - perArm*3, -0.7071, -0.7071);
+
+  /* Pad/truncate to exactly ZN_N */
+  while(pts.length < ZN_N) pts.push({x:0,y:0,z:0,hi:false});
+  if(pts.length > ZN_N) pts.length = ZN_N;
+  return pts;
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  if(!window.ZopProduct3D) return;
+  var c = ZopProduct3D(document.querySelector('.zn-3d'), genLockPoints, {
+    pointsB: genEyePoints,
+    morphPeriod: 11000,
+    accent: '#4A66D4',          /* lifted blue · ZopNight identity */
+    radiusFactor: 0.58,
+    speed: 0.0028,
+    rotX: -0.10,
+    /* Click anywhere on the canvas → flash to the eye state ("see the
+       hidden waste") for ~1.4s while a ring pulse expands from the click. */
+    onActivate: function(controller, p){
+      controller.pulse(p.x, p.y);
+      controller.flashMorph(1, 1400);
+    }
+  });
+});
 </script>
 
 </body>

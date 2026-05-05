@@ -68,6 +68,7 @@ section.spec-sec > p.lead{ font-size:var(--t-15); color:var(--ink-3); max-width:
 /* ---- color swatch grid ---- */
 .swatches{ display:grid; grid-template-columns:repeat(5,1fr); gap:var(--sp-4); }
 .swatch{ border:1px solid var(--line-2); background:var(--bg-1); cursor:pointer; transition:transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out); }
+button.swatch{ appearance:none; -webkit-appearance:none; font:inherit; color:inherit; text-align:left; padding:0; width:100%; display:block; }
 .swatch:hover{ transform:translateY(-3px); box-shadow:var(--shadow-hover-orange); }
 .swatch .chip{ height:140px; }
 .swatch .meta{ padding:var(--sp-4); font-family:var(--mono); font-size:var(--t-11); color:var(--ink-3); }
@@ -145,18 +146,18 @@ section.spec-sec > p.lead{ font-size:var(--t-15); color:var(--ink-3); max-width:
 
 /* scenario */
 .scenario{ padding:var(--sp-5) var(--sp-6); background:var(--bg-2); border:1px solid var(--line-2); border-left:3px solid var(--zop-orange); display:flex; gap:var(--sp-5); align-items:flex-start; transition:transform var(--dur-med) var(--ease-out), border-color var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out), border-left-color var(--dur-med) var(--ease-out); position:relative; }
-.scenario::after{ content:''; position:absolute; top:0; left:0; width:4px; height:0; background:var(--zop-orange); transition:height var(--dur-med) var(--ease-out); }
+.scenario::after{ content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--zop-orange); transform:scaleY(0); transform-origin:top; transition:transform var(--dur-med) var(--ease-out); }
 .scenario:hover{ transform:translateY(-4px); border-color:var(--ink); box-shadow:var(--shadow-hover-orange); border-left-color:transparent; }
-.scenario:hover::after{ height:100%; }
+.scenario:hover::after{ transform:scaleY(1); }
 .scenario .n{ font-family:var(--mono); font-size:var(--t-11); color:var(--zop-orange); letter-spacing:var(--ls-meta); flex-shrink:0; padding-top:2px; }
 .scenario .q{ font-size:var(--t-15); color:var(--ink); line-height:1.5; font-weight:var(--fw-medium); letter-spacing:var(--ls-body); }
 .scenario .a{ font-family:var(--mono); font-size:var(--t-11); color:var(--ink-3); letter-spacing:var(--ls-meta-tight); margin-top:var(--sp-2); line-height:var(--lh-body); }
 
 /* case-study card */
 .case{ background:var(--bg-2); border:1px solid var(--line-2); padding:var(--sp-8); display:flex; flex-direction:column; gap:var(--sp-4); min-height:340px; transition:transform var(--dur-med) var(--ease-out), border-color var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out); position:relative; }
-.case::after{ content:''; position:absolute; top:0; left:0; width:4px; height:0; background:var(--zop-orange); transition:height var(--dur-med) var(--ease-out); }
+.case::after{ content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--zop-orange); transform:scaleY(0); transform-origin:top; transition:transform var(--dur-med) var(--ease-out); }
 .case:hover{ transform:translateY(-4px); border-color:var(--ink); box-shadow:var(--shadow-hover-orange); }
-.case:hover::after{ height:100%; }
+.case:hover::after{ transform:scaleY(1); }
 .case .ind{ font-family:var(--mono); font-size:var(--t-10); letter-spacing:var(--ls-meta); text-transform:uppercase; color:var(--ink-4); display:flex; align-items:center; gap:var(--sp-3); }
 .case .ind::before{ content:''; width:8px; height:8px; background:var(--zop-blue); }
 .case.b .ind::before{ background:var(--zop-blue); }
@@ -190,9 +191,9 @@ section.spec-sec > p.lead{ font-size:var(--t-15); color:var(--ink-3); max-width:
 
 /* trust card */
 .trust-card{ padding:var(--sp-7) var(--sp-6); background:var(--bg-2); border:1px solid var(--line-2); min-height:200px; display:flex; flex-direction:column; gap:var(--sp-3); transition:transform var(--dur-med) var(--ease-out), border-color var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out); position:relative; }
-.trust-card::after{ content:''; position:absolute; top:0; left:0; width:4px; height:0; background:var(--zop-orange); transition:height var(--dur-med) var(--ease-out); }
+.trust-card::after{ content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--zop-orange); transform:scaleY(0); transform-origin:top; transition:transform var(--dur-med) var(--ease-out); }
 .trust-card:hover{ transform:translateY(-4px); border-color:var(--ink); box-shadow:var(--shadow-hover-orange); }
-.trust-card:hover::after{ height:100%; }
+.trust-card:hover::after{ transform:scaleY(1); }
 .trust-card .ico{ width:44px; height:44px; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-weight:var(--fw-bold); font-size:var(--t-13); color:var(--bg-0); margin-bottom:var(--sp-2); }
 .trust-card.b .ico{ background:var(--zop-blue); color:var(--ink); }
 .trust-card.o .ico{ background:var(--zop-orange); }
@@ -218,9 +219,9 @@ section.spec-sec > p.lead{ font-size:var(--t-15); color:var(--ink-3); max-width:
 /* motion-principle grid */
 .motion-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--sp-4); }
 .motion-cell{ background:var(--bg-2); border:1px solid var(--line-2); padding:var(--sp-5); display:flex; flex-direction:column; gap:var(--sp-3); min-height:160px; cursor:pointer; transition:all var(--dur-med) var(--ease-out); position:relative; }
-.motion-cell::after{ content:''; position:absolute; top:0; left:0; width:4px; height:0; background:var(--zop-orange); transition:height var(--dur-med) var(--ease-out); }
+.motion-cell::after{ content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--zop-orange); transform:scaleY(0); transform-origin:top; transition:transform var(--dur-med) var(--ease-out); }
 .motion-cell:hover{ transform:translateY(-4px); border-color:var(--ink); box-shadow:var(--shadow-hover-orange); }
-.motion-cell:hover::after{ height:100%; }
+.motion-cell:hover::after{ transform:scaleY(1); }
 .motion-cell .t{ font-family:var(--mono); font-size:var(--t-10); color:var(--ink-4); letter-spacing:var(--ls-meta); text-transform:uppercase; }
 .motion-cell h4{ font-size:var(--t-17); font-weight:var(--fw-bold); letter-spacing:var(--ls-body); }
 .motion-cell p{ font-size:var(--t-12); color:var(--ink-3); line-height:var(--lh-body); margin:0; font-family:var(--mono); }
@@ -578,11 +579,11 @@ footer .inner{ max-width:var(--max); margin:0 auto; padding:0 var(--gutter); dis
     <div class="spec-head"><strong>Brand palette</strong><span class="tag">locked · do not extend</span></div>
     <div class="spec-body">
       <div class="swatches">
-        <div class="swatch" onclick="copyHex(this, '#2A4494')"><div class="chip" style="background:#2A4494"></div><div class="meta"><span class="name">Zop Blue</span><span class="hex">#2A4494</span><span class="role">Secure · "spent" · trust</span></div></div>
-        <div class="swatch" onclick="copyHex(this, '#F58549')"><div class="chip" style="background:#F58549"></div><div class="meta"><span class="name">Zop Orange</span><span class="hex">#F58549</span><span class="role">Speed · accent · "wasted"</span></div></div>
-        <div class="swatch" onclick="copyHex(this, '#7FB236')"><div class="chip" style="background:#7FB236"></div><div class="meta"><span class="name">Zop Green</span><span class="hex">#7FB236</span><span class="role">Savings · "recoverable"</span></div></div>
-        <div class="swatch" onclick="copyHex(this, '#0A0A0A')"><div class="chip" style="background:#0A0A0A; border-right:1px solid var(--line)"></div><div class="meta"><span class="name">Zop Black</span><span class="hex">#0A0A0A</span><span class="role">Ink · anchor · print</span></div></div>
-        <div class="swatch" onclick="copyHex(this, '#F0EBDB')"><div class="chip" style="background:#F0EBDB"></div><div class="meta"><span class="name">Zop Cream</span><span class="hex">#F0EBDB</span><span class="role">Paper · display on dark</span></div></div>
+        <button type="button" class="swatch" onclick="copyHex(this, '#2A4494')"><div class="chip" style="background:#2A4494"></div><div class="meta"><span class="name">Zop Blue</span><span class="hex">#2A4494</span><span class="role">Secure · "spent" · trust</span></div></button>
+        <button type="button" class="swatch" onclick="copyHex(this, '#F58549')"><div class="chip" style="background:#F58549"></div><div class="meta"><span class="name">Zop Orange</span><span class="hex">#F58549</span><span class="role">Speed · accent · "wasted"</span></div></button>
+        <button type="button" class="swatch" onclick="copyHex(this, '#7FB236')"><div class="chip" style="background:#7FB236"></div><div class="meta"><span class="name">Zop Green</span><span class="hex">#7FB236</span><span class="role">Savings · "recoverable"</span></div></button>
+        <button type="button" class="swatch" onclick="copyHex(this, '#0A0A0A')"><div class="chip" style="background:#0A0A0A; border-right:1px solid var(--line)"></div><div class="meta"><span class="name">Zop Black</span><span class="hex">#0A0A0A</span><span class="role">Ink · anchor · print</span></div></button>
+        <button type="button" class="swatch" onclick="copyHex(this, '#F0EBDB')"><div class="chip" style="background:#F0EBDB"></div><div class="meta"><span class="name">Zop Cream</span><span class="hex">#F0EBDB</span><span class="role">Paper · display on dark</span></div></button>
       </div>
     </div>
     <pre class="spec-code"><span class="c">/* tokens.css, brand palette */</span>
@@ -597,14 +598,14 @@ footer .inner{ max-width:var(--max); margin:0 auto; padding:0 var(--gutter); dis
     <div class="spec-head"><strong>Dark canvas · elevation ladder</strong><span class="tag">--bg-0 → --bg-4</span></div>
     <div class="spec-body">
       <div class="swatches small">
-        <div class="swatch" onclick="copyHex(this, '#060608')"><div class="chip" style="background:#060608"></div><div class="meta"><span class="hex">#060608</span><span class="role">bg-0</span></div></div>
-        <div class="swatch" onclick="copyHex(this, '#0E0E12')"><div class="chip" style="background:#0E0E12"></div><div class="meta"><span class="hex">#0E0E12</span><span class="role">bg-1</span></div></div>
-        <div class="swatch" onclick="copyHex(this, '#15151A')"><div class="chip" style="background:#15151A"></div><div class="meta"><span class="hex">#15151A</span><span class="role">bg-2</span></div></div>
-        <div class="swatch" onclick="copyHex(this, '#1C1C24')"><div class="chip" style="background:#1C1C24"></div><div class="meta"><span class="hex">#1C1C24</span><span class="role">bg-3</span></div></div>
-        <div class="swatch" onclick="copyHex(this, '#252530')"><div class="chip" style="background:#252530"></div><div class="meta"><span class="hex">#252530</span><span class="role">bg-4</span></div></div>
-        <div class="swatch" onclick="copyHex(this, '#2A2A34')"><div class="chip" style="background:#2A2A34"></div><div class="meta"><span class="hex">#2A2A34</span><span class="role">line</span></div></div>
-        <div class="swatch" onclick="copyHex(this, '#3A3A46')"><div class="chip" style="background:#3A3A46"></div><div class="meta"><span class="hex">#3A3A46</span><span class="role">line-2</span></div></div>
-        <div class="swatch" onclick="copyHex(this, '#55555E')"><div class="chip" style="background:#55555E"></div><div class="meta"><span class="hex">#55555E</span><span class="role">line-b</span></div></div>
+        <button type="button" class="swatch" onclick="copyHex(this, '#060608')"><div class="chip" style="background:#060608"></div><div class="meta"><span class="hex">#060608</span><span class="role">bg-0</span></div></button>
+        <button type="button" class="swatch" onclick="copyHex(this, '#0E0E12')"><div class="chip" style="background:#0E0E12"></div><div class="meta"><span class="hex">#0E0E12</span><span class="role">bg-1</span></div></button>
+        <button type="button" class="swatch" onclick="copyHex(this, '#15151A')"><div class="chip" style="background:#15151A"></div><div class="meta"><span class="hex">#15151A</span><span class="role">bg-2</span></div></button>
+        <button type="button" class="swatch" onclick="copyHex(this, '#1C1C24')"><div class="chip" style="background:#1C1C24"></div><div class="meta"><span class="hex">#1C1C24</span><span class="role">bg-3</span></div></button>
+        <button type="button" class="swatch" onclick="copyHex(this, '#252530')"><div class="chip" style="background:#252530"></div><div class="meta"><span class="hex">#252530</span><span class="role">bg-4</span></div></button>
+        <button type="button" class="swatch" onclick="copyHex(this, '#2A2A34')"><div class="chip" style="background:#2A2A34"></div><div class="meta"><span class="hex">#2A2A34</span><span class="role">line</span></div></button>
+        <button type="button" class="swatch" onclick="copyHex(this, '#3A3A46')"><div class="chip" style="background:#3A3A46"></div><div class="meta"><span class="hex">#3A3A46</span><span class="role">line-2</span></div></button>
+        <button type="button" class="swatch" onclick="copyHex(this, '#55555E')"><div class="chip" style="background:#55555E"></div><div class="meta"><span class="hex">#55555E</span><span class="role">line-b</span></div></button>
       </div>
     </div>
     <div class="spec-foot"><strong>Rule:</strong> adjacent surfaces step by exactly one rung. Never mix <code style="background:#0A0A0A; padding:1px 4px">bg-0</code> next to <code style="background:#0A0A0A; padding:1px 4px">bg-3</code>, elevation must feel continuous.</div>
@@ -614,11 +615,11 @@ footer .inner{ max-width:var(--max); margin:0 auto; padding:0 var(--gutter); dis
     <div class="spec-head"><strong>Text tints</strong><span class="tag">--ink → --ink-5</span></div>
     <div class="spec-body">
       <div class="swatches small">
-        <div class="swatch" onclick="copyHex(this, '#F0EBDB')"><div class="chip" style="background:#F0EBDB"></div><div class="meta"><span class="hex">#F0EBDB</span><span class="role">ink · primary</span></div></div>
-        <div class="swatch" onclick="copyHex(this, '#D4CDB5')"><div class="chip" style="background:#D4CDB5"></div><div class="meta"><span class="hex">#D4CDB5</span><span class="role">ink-2</span></div></div>
-        <div class="swatch" onclick="copyHex(this, '#A8A195')"><div class="chip" style="background:#A8A195"></div><div class="meta"><span class="hex">#A8A195</span><span class="role">ink-3 · body</span></div></div>
-        <div class="swatch" onclick="copyHex(this, '#8A8378')"><div class="chip" style="background:#8A8378"></div><div class="meta"><span class="hex">#8A8378</span><span class="role">ink-4 · meta</span></div></div>
-        <div class="swatch" onclick="copyHex(this, '#5A5A62')"><div class="chip" style="background:#5A5A62"></div><div class="meta"><span class="hex">#5A5A62</span><span class="role">ink-5 · rare</span></div></div>
+        <button type="button" class="swatch" onclick="copyHex(this, '#F0EBDB')"><div class="chip" style="background:#F0EBDB"></div><div class="meta"><span class="hex">#F0EBDB</span><span class="role">ink · primary</span></div></button>
+        <button type="button" class="swatch" onclick="copyHex(this, '#D4CDB5')"><div class="chip" style="background:#D4CDB5"></div><div class="meta"><span class="hex">#D4CDB5</span><span class="role">ink-2</span></div></button>
+        <button type="button" class="swatch" onclick="copyHex(this, '#A8A195')"><div class="chip" style="background:#A8A195"></div><div class="meta"><span class="hex">#A8A195</span><span class="role">ink-3 · body</span></div></button>
+        <button type="button" class="swatch" onclick="copyHex(this, '#8A8378')"><div class="chip" style="background:#8A8378"></div><div class="meta"><span class="hex">#8A8378</span><span class="role">ink-4 · meta</span></div></button>
+        <button type="button" class="swatch" onclick="copyHex(this, '#5A5A62')"><div class="chip" style="background:#5A5A62"></div><div class="meta"><span class="hex">#5A5A62</span><span class="role">ink-5 · rare</span></div></button>
       </div>
     </div>
   </div>
@@ -627,9 +628,9 @@ footer .inner{ max-width:var(--max); margin:0 auto; padding:0 var(--gutter); dis
     <div class="spec-head"><strong>Status</strong><span class="tag">system, not brand</span></div>
     <div class="spec-body">
       <div class="swatches small">
-        <div class="swatch" onclick="copyHex(this, '#34d399')"><div class="chip" style="background:#34d399"></div><div class="meta"><span class="hex">#34d399</span><span class="role">ok · live · applied</span></div></div>
-        <div class="swatch" onclick="copyHex(this, '#FBBF24')"><div class="chip" style="background:#FBBF24"></div><div class="meta"><span class="hex">#FBBF24</span><span class="role">warn · pending</span></div></div>
-        <div class="swatch" onclick="copyHex(this, '#F87171')"><div class="chip" style="background:#F87171"></div><div class="meta"><span class="hex">#F87171</span><span class="role">err · boundary</span></div></div>
+        <button type="button" class="swatch" onclick="copyHex(this, '#34d399')"><div class="chip" style="background:#34d399"></div><div class="meta"><span class="hex">#34d399</span><span class="role">ok · live · applied</span></div></button>
+        <button type="button" class="swatch" onclick="copyHex(this, '#FBBF24')"><div class="chip" style="background:#FBBF24"></div><div class="meta"><span class="hex">#FBBF24</span><span class="role">warn · pending</span></div></button>
+        <button type="button" class="swatch" onclick="copyHex(this, '#F87171')"><div class="chip" style="background:#F87171"></div><div class="meta"><span class="hex">#F87171</span><span class="role">err · boundary</span></div></button>
       </div>
     </div>
     <div class="spec-foot"><strong>Rule:</strong> status colors are <em>system semantics</em>, never use them in marketing copy or hero visuals. Brand pillars (orange, blue, green) carry emotional meaning; status is purely functional.</div>
