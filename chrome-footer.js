@@ -266,3 +266,75 @@
   window.addEventListener('resize', resize);
   requestAnimationFrame(frame);
 })();
+
+/* ============================================================================
+   Graduation band · "Pick where you are" — three product cards above the
+   globe footer. Reads <body data-product> to highlight the active product
+   ("you're here"). Self-initializing IIFE; safe on every page. Renders into
+   the .foot-globe block so the band sits visually above the world map.
+   ============================================================================ */
+(function(){
+  var globe = document.querySelector('.foot-globe');
+  if(!globe || document.querySelector('.foot-grad')) return;
+
+  var here = (document.body.getAttribute('data-product') || '').toLowerCase();
+  var hereKey = here === 'zopcloud' ? 'cloud'
+              : here === 'zopday'   ? 'day'
+              : here === 'zopnight' ? 'night'
+              : '';
+
+  var products = [
+    { key:'cloud', href:'zopcloud.html', name:'ZopCloud',
+      eyebrow:'Indie devs · MVP teams',
+      tag:'We host. You push.' },
+    { key:'day',   href:'zopday.html',   name:'ZopDay',
+      eyebrow:'Platform engineers · scale-ups',
+      tag:'Your cloud. Our orchestration.' },
+    { key:'night', href:'zopnight.html', name:'ZopNight',
+      eyebrow:'FinOps leads · CFOs · enterprises',
+      tag:'Continuous governance + cost optimization.' }
+  ];
+
+  var section = document.createElement('section');
+  section.className = 'foot-grad';
+  section.setAttribute('aria-label', 'Pick where you are');
+
+  var head = document.createElement('div');
+  head.className = 'foot-grad-head';
+  head.innerHTML =
+    '<div class="foot-grad-eyebrow">pick where you are</div>' +
+    '<h3 class="foot-grad-title">Three products. One platform.</h3>';
+  section.appendChild(head);
+
+  var row = document.createElement('div');
+  row.className = 'foot-grad-row';
+  for(var i=0; i<products.length; i++){
+    var p = products[i];
+    var card = document.createElement('a');
+    card.className = 'foot-grad-card foot-grad-' + p.key + (p.key === hereKey ? ' is-here' : '');
+    card.href = p.href;
+    card.setAttribute('data-product', p.key);
+    card.innerHTML =
+      '<div class="grad-eyebrow">' +
+        (p.key === hereKey ? '<span class="grad-here-dot" aria-hidden="true"></span>you are here · ' : '') +
+        p.eyebrow +
+      '</div>' +
+      '<div class="grad-title">' + p.name + '</div>' +
+      '<div class="grad-tag">' + p.tag + '</div>' +
+      '<span class="grad-arrow" aria-hidden="true">&rarr;</span>';
+    row.appendChild(card);
+  }
+  section.appendChild(row);
+
+  var sub = document.createElement('p');
+  sub.className = 'foot-grad-sub';
+  sub.innerHTML = 'No re-platform when you grow. No surprise bill when you scale. No drift when it’s running.';
+  section.appendChild(sub);
+
+  var meta = document.createElement('p');
+  meta.className = 'foot-grad-meta';
+  meta.innerHTML = 'Looking at the platform? &rarr; <a href="index.html">zop.dev</a>';
+  section.appendChild(meta);
+
+  globe.parentNode.insertBefore(section, globe);
+})();

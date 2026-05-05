@@ -835,3 +835,24 @@ html[data-theme="light"] .btn-accent span,
 .wt-sec-meta{
   display: none !important;
 }
+
+/* ============================================================================
+   CEO request · Space Grotesk reads poorly at small sizes. Headings keep it
+   (h1–h6 plus explicit display selectors), but small UI labels should use
+   Inter for legibility. This rule overrides cases where an inline class
+   assigned `font-family: var(--font)` to small text.
+   ============================================================================ */
+.np-cell-desc, .np-promo-row,
+.pick-card-list, .pick-card > p,
+.feat-expand, .ftab-pt-desc, .ftab-pt-head,
+.gs-pt-desc, .gs-pt-head,
+.pui-meta, .pui-detail-tags, .pui-form-label,
+.zd-pcard p, .zd-pcard-mini-meta,
+.foot-col li, .foot-bottom-3,
+.fp-bullets li, .fp-tag,
+.feat-tagline,
+.btn, .btn-primary, .btn-secondary, .btn-product,
+.nav-cta a.sign, .nav-status, .chip-playground,
+.live-strip-cta, .ann-bar{
+  font-family: var(--font-body, 'Inter', system-ui, sans-serif);
+}

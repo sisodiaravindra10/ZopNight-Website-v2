@@ -14,41 +14,41 @@
 <style>
 /* no-italic-site-wide */ em,i,cite,dfn,var,address,blockquote{font-style:normal}
 .page-head{ padding:var(--sec-pad) 0 var(--sp-10); max-width:var(--max); margin:0 auto; padding-left:var(--gutter); padding-right:var(--gutter); border-bottom:1px solid var(--line); }
-.crumb{ font-family:var(--mono); font-size:11px; color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase; margin-bottom:20px; }
+.crumb{ font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); letter-spacing:.14em; text-transform:uppercase; margin-bottom:20px; }
 .crumb a{ color:var(--ink-3); } .crumb a:hover{ color:var(--ink); } .crumb .s{ color:var(--ink-5); margin:0 8px; }
-.page-head .meta{ font-family:var(--mono); font-size:11px; color:var(--zop-orange); letter-spacing:.14em; text-transform:uppercase; margin-bottom:16px; display:inline-flex; align-items:center; gap:8px; }
+.page-head .meta{ font-family:var(--mono); font-size:var(--t-11); color:var(--zop-orange); letter-spacing:.14em; text-transform:uppercase; margin-bottom:16px; display:inline-flex; align-items:center; gap:8px; }
 .page-head .meta::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
 .page-head h1{ font-size:clamp(48px,6vw,88px); font-weight:700; letter-spacing:-.05em; line-height:.98; margin:0 0 24px; max-width:1100px; }
 .page-head h1 em{ font-style:normal; color:var(--zop-orange); }
-.page-head p.lede{ font-size:20px; color:var(--ink-3); max-width:760px; line-height:1.45; margin:0; }
+.page-head p.lede{ font-size:var(--t-20); color:var(--ink-3); max-width:760px; line-height:1.45; margin:0; }
 .page-head p.lede strong{ color:var(--ink); font-weight:500; }
 
 /* layout · TOC + content */
 .layout{ max-width:var(--max); margin:0 auto; padding:var(--sp-12) var(--gutter) 120px; display:grid; grid-template-columns:220px 1fr; gap:var(--sp-12); }
-.toc{ position:sticky; top:64px; align-self:start; font-family:var(--mono); font-size:11px; color:var(--ink-4); letter-spacing:.04em; }
-.toc h4{ font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-5); margin:0 0 12px; font-weight:500; }
+.toc{ position:sticky; top:64px; align-self:start; font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4); letter-spacing:.04em; }
+.toc h4{ font-size:var(--t-10); letter-spacing:.14em; text-transform:uppercase; color:var(--ink-5); margin:0 0 12px; font-weight:500; }
 .toc ul{ list-style:none; padding:0; margin:0 0 24px; border-left:1px solid var(--line); }
 .toc li a{ display:block; padding:6px 16px; color:var(--ink-3); border-left:2px solid transparent; margin-left:-1px; }
 .toc li a:hover{ color:var(--ink); border-left-color:var(--zop-orange); }
 
 .sec{ padding:var(--sp-10) 0 var(--sp-14); border-bottom:1px solid var(--line); }
 .sec:last-child{ border-bottom:0; }
-.sec h2{ font-family:var(--mono); font-size:11px; color:var(--zop-orange); letter-spacing:.14em; text-transform:uppercase; margin:0 0 8px; display:inline-flex; align-items:center; gap:8px; }
+.sec h2{ font-family:var(--mono); font-size:var(--t-11); color:var(--zop-orange); letter-spacing:.14em; text-transform:uppercase; margin:0 0 8px; display:inline-flex; align-items:center; gap:8px; }
 .sec h2::before{ content:''; width:10px; height:10px; background:var(--zop-orange); }
 .sec h3{ font-size:clamp(28px,3vw,36px); font-weight:700; letter-spacing:-.03em; line-height:1.05; margin:0 0 12px; }
-.sec > p.lead{ font-size:15px; color:var(--ink-3); max-width:680px; line-height:1.55; margin:0 0 var(--sp-8); }
+.sec > p.lead{ font-size:var(--t-15); color:var(--ink-3); max-width:680px; line-height:1.55; margin:0 0 var(--sp-8); }
 .sec > p.lead strong{ color:var(--ink); font-weight:500; }
 
 /* copy table */
 .ct{ width:100%; border-collapse:collapse; border:1px solid var(--line-2); font-family:var(--font); }
 .ct th, .ct td{ text-align:left; padding:14px 18px; border-bottom:1px solid var(--line); vertical-align:top; letter-spacing:-.02em; }
-.ct th{ background:#0A0A0A; color:var(--ink-4); font-weight:500; text-transform:uppercase; font-size:10px; letter-spacing:.14em; font-family:var(--mono); }
+.ct th{ background:#0A0A0A; color:var(--ink-4); font-weight:500; text-transform:uppercase; font-size:var(--t-10); letter-spacing:.14em; font-family:var(--mono); }
 .ct th.ctx{ width:30%; }
 .ct th.do{ width:35%; color:var(--ok); }
 .ct th.dont{ width:35%; color:var(--err); }
 .ct td{ font-size:13.5px; color:var(--ink-2); line-height:1.55; }
-.ct td.ctx{ color:var(--ink-3); font-family:var(--mono); font-size:12px; letter-spacing:.02em; line-height:1.55; }
-.ct td.ctx strong{ color:var(--ink); font-weight:500; font-family:var(--font); font-size:13px; letter-spacing:-.02em; display:block; margin-bottom:3px; }
+.ct td.ctx{ color:var(--ink-3); font-family:var(--mono); font-size:var(--t-12); letter-spacing:.02em; line-height:1.55; }
+.ct td.ctx strong{ color:var(--ink); font-weight:500; font-family:var(--font); font-size:var(--t-13); letter-spacing:-.02em; display:block; margin-bottom:3px; }
 .ct td.do{ color:var(--ink); }
 .ct td.dont{ color:var(--ink-4); text-decoration:line-through; text-decoration-color:var(--line-b); }
 
@@ -62,8 +62,8 @@
   padding:var(--sp-6); border-right:1px solid var(--line-2);
 }
 .voice .v:last-child{ border-right:0; }
-.voice .v .t{ font-family:var(--mono); font-size:10px; color:var(--zop-orange); letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
-.voice .v .h{ font-size:20px; font-weight:700; letter-spacing:-.02em; margin-bottom:8px; }
+.voice .v .t{ font-family:var(--mono); font-size:var(--t-10); color:var(--zop-orange); letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+.voice .v .h{ font-size:var(--t-20); font-weight:700; letter-spacing:-.02em; margin-bottom:8px; }
 .voice .v p{ font-size:12.5px; color:var(--ink-3); line-height:1.55; margin:0; }
 
 @media (max-width:960px){
@@ -71,7 +71,7 @@
   .toc{ position:static; }
   .voice{ grid-template-columns:1fr 1fr; }
   .voice .v{ border-right:0; border-bottom:1px solid var(--line-2); }
-  .ct{ font-size:12px; }
+  .ct{ font-size:var(--t-12); }
   .ct th, .ct td{ padding:10px 12px; }
 }
 </style>
@@ -92,19 +92,6 @@
     <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
   </symbol></defs>
 </svg>
-
-<!-- announcement bar -->
-<div class="ann-bar" id="ann-bar">
-  <div class="ann-inner">
-    <a href="developers.html" class="ann-chip">
-      <span class="ann-dot"></span>
-      <strong>MCP Server</strong>, live in Claude &amp; Codex
-      <span class="ann-arrow">→</span>
-    </a>
-    <a href="changelog.html" class="ann-link">Changelog →</a>
-    <button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button>
-  </div>
-</div>
 
 <!-- ============================================================
      LIVE STATUS STRIP. Cloud-ops signal strip
@@ -434,9 +421,9 @@
   <table class="ct">
     <thead><tr><th class="ctx">context</th><th class="do">DO</th><th class="dont">DON'T</th></tr></thead>
     <tbody>
-      <tr><td class="ctx"><strong>Email label</strong>signup</td><td class="do">Work email<br><em style="color:var(--ink-4); font-family:var(--mono); font-size:11px">placeholder: name@company.com</em></td><td class="dont">Please enter your email address here</td></tr>
+      <tr><td class="ctx"><strong>Email label</strong>signup</td><td class="do">Work email<br><em style="color:var(--ink-4); font-family:var(--mono); font-size:var(--t-11)">placeholder: name@company.com</em></td><td class="dont">Please enter your email address here</td></tr>
       <tr><td class="ctx"><strong>Password helper</strong>requirements</td><td class="do">12+ characters. No other rules.</td><td class="dont">Must contain upper, lower, number, special char, minimum 12</td></tr>
-      <tr><td class="ctx"><strong>Cloud account ID</strong>onboarding</td><td class="do">AWS account ID<br><em style="color:var(--ink-4); font-family:var(--mono); font-size:11px">placeholder: 123456789012</em></td><td class="dont">What is your AWS account identifier?</td></tr>
+      <tr><td class="ctx"><strong>Cloud account ID</strong>onboarding</td><td class="do">AWS account ID<br><em style="color:var(--ink-4); font-family:var(--mono); font-size:var(--t-11)">placeholder: 123456789012</em></td><td class="dont">What is your AWS account identifier?</td></tr>
       <tr><td class="ctx"><strong>Budget threshold</strong>alerts</td><td class="do">Alert me when monthly spend exceeds</td><td class="dont">Set alerting threshold for the maximum accepted expense per month</td></tr>
       <tr><td class="ctx"><strong>Required field error</strong>validation</td><td class="do">Required.</td><td class="dont">This field is required. Please fill it in before continuing.</td></tr>
       <tr><td class="ctx"><strong>Invalid email</strong>validation</td><td class="do">That doesn't look like an email.</td><td class="dont">Please enter a valid e-mail address in the correct format.</td></tr>
@@ -455,11 +442,11 @@
   <table class="ct">
     <thead><tr><th class="ctx">context</th><th class="do">DO</th><th class="dont">DON'T</th></tr></thead>
     <tbody>
-      <tr><td class="ctx"><strong>No clouds connected</strong>first-time dashboard</td><td class="do"><strong>No clouds connected yet.</strong><br>Connect your first AWS, Azure, or GCP account &mdash; see every resource across them in under 5 minutes.<br><em style="color:var(--zop-orange); font-family:var(--mono); font-size:11px">CTA: Connect a cloud &rarr;</em></td><td class="dont">You haven't connected any cloud accounts yet. Click the button below to get started with connecting your first account!</td></tr>
-      <tr><td class="ctx"><strong>No findings</strong>first scan clean</td><td class="do"><strong>Nothing to fix right now.</strong><br>CDCR scanned 847 resources. All within budget, none idle, no over-provisioned. Next scan in 4 min.<br><em style="color:var(--zop-green); font-family:var(--mono); font-size:11px">(no CTA &mdash; no action needed)</em></td><td class="dont">There are no findings available for your cloud account. Please check back later.</td></tr>
-      <tr><td class="ctx"><strong>No results &middot; filtered</strong>search / filter</td><td class="do"><strong>No matches for that filter.</strong><br>Try widening the region, changing the state filter, or looking at a different cost window.<br><em style="color:var(--ink-3); font-family:var(--mono); font-size:11px">CTA: Clear filters</em></td><td class="dont">Sorry, we couldn't find any results matching your current filters. Please adjust your criteria.</td></tr>
-      <tr><td class="ctx"><strong>No team members</strong>admin area</td><td class="do"><strong>Just you on this team.</strong><br>Invite engineers or FinOps analysts &mdash; each gets their own view, audit log, Showback slice.<br><em style="color:var(--zop-orange); font-family:var(--mono); font-size:11px">CTA: Invite teammates &rarr;</em></td><td class="dont">Your team currently has no members added. You can invite colleagues using the button below.</td></tr>
-      <tr><td class="ctx"><strong>No remediations applied</strong>history tab, new account</td><td class="do"><strong>No remediations yet.</strong><br>When you apply one, it lands here with a timestamp, reason, and 7-day rollback window.<br><em style="color:var(--ink-3); font-family:var(--mono); font-size:11px">CTA: See pending findings &rarr;</em></td><td class="dont">No remediation history is available for display at this time.</td></tr>
+      <tr><td class="ctx"><strong>No clouds connected</strong>first-time dashboard</td><td class="do"><strong>No clouds connected yet.</strong><br>Connect your first AWS, Azure, or GCP account &mdash; see every resource across them in under 5 minutes.<br><em style="color:var(--zop-orange); font-family:var(--mono); font-size:var(--t-11)">CTA: Connect a cloud &rarr;</em></td><td class="dont">You haven't connected any cloud accounts yet. Click the button below to get started with connecting your first account!</td></tr>
+      <tr><td class="ctx"><strong>No findings</strong>first scan clean</td><td class="do"><strong>Nothing to fix right now.</strong><br>CDCR scanned 847 resources. All within budget, none idle, no over-provisioned. Next scan in 4 min.<br><em style="color:var(--zop-green); font-family:var(--mono); font-size:var(--t-11)">(no CTA &mdash; no action needed)</em></td><td class="dont">There are no findings available for your cloud account. Please check back later.</td></tr>
+      <tr><td class="ctx"><strong>No results &middot; filtered</strong>search / filter</td><td class="do"><strong>No matches for that filter.</strong><br>Try widening the region, changing the state filter, or looking at a different cost window.<br><em style="color:var(--ink-3); font-family:var(--mono); font-size:var(--t-11)">CTA: Clear filters</em></td><td class="dont">Sorry, we couldn't find any results matching your current filters. Please adjust your criteria.</td></tr>
+      <tr><td class="ctx"><strong>No team members</strong>admin area</td><td class="do"><strong>Just you on this team.</strong><br>Invite engineers or FinOps analysts &mdash; each gets their own view, audit log, Showback slice.<br><em style="color:var(--zop-orange); font-family:var(--mono); font-size:var(--t-11)">CTA: Invite teammates &rarr;</em></td><td class="dont">Your team currently has no members added. You can invite colleagues using the button below.</td></tr>
+      <tr><td class="ctx"><strong>No remediations applied</strong>history tab, new account</td><td class="do"><strong>No remediations yet.</strong><br>When you apply one, it lands here with a timestamp, reason, and 7-day rollback window.<br><em style="color:var(--ink-3); font-family:var(--mono); font-size:var(--t-11)">CTA: See pending findings &rarr;</em></td><td class="dont">No remediation history is available for display at this time.</td></tr>
     </tbody>
   </table>
 </section>
@@ -474,7 +461,7 @@
     <thead><tr><th class="ctx">context</th><th class="do">DO</th><th class="dont">DON'T</th></tr></thead>
     <tbody>
       <tr><td class="ctx"><strong>Skeleton row label</strong>above a loading table</td><td class="do">Scanning us-east-1 &middot; 142 of 847</td><td class="dont">Please wait while we load your data...</td></tr>
-      <tr><td class="ctx"><strong>Progress bar &middot; apply</strong>remediation batch</td><td class="do">Applying 47 remediations &middot; run #12,847<br><em style="color:var(--ink-3); font-family:var(--mono); font-size:11px">right-label: 62% &middot; eta 11s</em></td><td class="dont">Processing your request, please wait...</td></tr>
+      <tr><td class="ctx"><strong>Progress bar &middot; apply</strong>remediation batch</td><td class="do">Applying 47 remediations &middot; run #12,847<br><em style="color:var(--ink-3); font-family:var(--mono); font-size:var(--t-11)">right-label: 62% &middot; eta 11s</em></td><td class="dont">Processing your request, please wait...</td></tr>
       <tr><td class="ctx"><strong>Long-running export</strong>PDF generation</td><td class="do">Generating Q2 Showback &middot; 12 months of data &middot; ~45 sec</td><td class="dont">Your report is being prepared. Thank you for your patience.</td></tr>
       <tr><td class="ctx"><strong>Initial cloud scan</strong>onboarding</td><td class="do">First scan: 3&ndash;5 min. You can close this &mdash; we'll email when it's done.</td><td class="dont">Scanning in progress. Please do not close this window.</td></tr>
     </tbody>
@@ -528,10 +515,10 @@
   <table class="ct">
     <thead><tr><th class="ctx">context</th><th class="do">DO</th><th class="dont">DON'T</th></tr></thead>
     <tbody>
-      <tr><td class="ctx"><strong>Terminate resource</strong>destructive action</td><td class="do"><strong>Terminate <em>i-0abc1234</em> ?</strong><br>Snapshot created first. Rollback available for 7 days.<br>Savings: $234/mo.<br><em style="color:var(--zop-green); font-family:var(--mono); font-size:11px">primary: Terminate</em> &middot; <em style="color:var(--ink-3); font-family:var(--mono); font-size:11px">secondary: Cancel</em></td><td class="dont">Are you sure you want to terminate this instance? This action cannot be undone.</td></tr>
-      <tr><td class="ctx"><strong>Delete team</strong>admin</td><td class="do"><strong>Delete "<em>eu-platform</em>" team?</strong><br>Removes 14 members' access. Their remediation history stays in the audit log.<br>This can't be undone.<br><em style="color:var(--err); font-family:var(--mono); font-size:11px">primary: Delete team</em></td><td class="dont">Do you really want to delete this team? All team members will lose access.</td></tr>
-      <tr><td class="ctx"><strong>Remove cloud account</strong>settings</td><td class="do"><strong>Remove AWS <em>prod-us</em>?</strong><br>Stops monitoring in 1 minute. Findings become read-only. You can re-add it anytime.<br><em style="color:var(--zop-orange); font-family:var(--mono); font-size:11px">primary: Remove</em></td><td class="dont">Are you sure? This will disconnect your AWS account from our system.</td></tr>
-      <tr><td class="ctx"><strong>Cancel subscription</strong>billing</td><td class="do"><strong>Cancel Pro?</strong><br>Access continues until end of billing period (Apr 30). You're billed $499 for this month.<br>Your data stays. You can reactivate.<br><em style="color:var(--err); font-family:var(--mono); font-size:11px">primary: Cancel Pro</em></td><td class="dont">Are you sure you want to cancel your subscription? You will lose access to all premium features.</td></tr>
+      <tr><td class="ctx"><strong>Terminate resource</strong>destructive action</td><td class="do"><strong>Terminate <em>i-0abc1234</em> ?</strong><br>Snapshot created first. Rollback available for 7 days.<br>Savings: $234/mo.<br><em style="color:var(--zop-green); font-family:var(--mono); font-size:var(--t-11)">primary: Terminate</em> &middot; <em style="color:var(--ink-3); font-family:var(--mono); font-size:var(--t-11)">secondary: Cancel</em></td><td class="dont">Are you sure you want to terminate this instance? This action cannot be undone.</td></tr>
+      <tr><td class="ctx"><strong>Delete team</strong>admin</td><td class="do"><strong>Delete "<em>eu-platform</em>" team?</strong><br>Removes 14 members' access. Their remediation history stays in the audit log.<br>This can't be undone.<br><em style="color:var(--err); font-family:var(--mono); font-size:var(--t-11)">primary: Delete team</em></td><td class="dont">Do you really want to delete this team? All team members will lose access.</td></tr>
+      <tr><td class="ctx"><strong>Remove cloud account</strong>settings</td><td class="do"><strong>Remove AWS <em>prod-us</em>?</strong><br>Stops monitoring in 1 minute. Findings become read-only. You can re-add it anytime.<br><em style="color:var(--zop-orange); font-family:var(--mono); font-size:var(--t-11)">primary: Remove</em></td><td class="dont">Are you sure? This will disconnect your AWS account from our system.</td></tr>
+      <tr><td class="ctx"><strong>Cancel subscription</strong>billing</td><td class="do"><strong>Cancel Pro?</strong><br>Access continues until end of billing period (Apr 30). You're billed $499 for this month.<br>Your data stays. You can reactivate.<br><em style="color:var(--err); font-family:var(--mono); font-size:var(--t-11)">primary: Cancel Pro</em></td><td class="dont">Are you sure you want to cancel your subscription? You will lose access to all premium features.</td></tr>
     </tbody>
   </table>
 </section>

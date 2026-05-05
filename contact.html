@@ -114,7 +114,7 @@
 .thumb-ph::after{
   content:attr(data-mark);
   position:absolute; right:14px; bottom:10px;
-  font-family:var(--mono); font-size:11px; color:var(--ink-4);
+  font-family:var(--mono); font-size:var(--t-11); color:var(--ink-4);
   letter-spacing:var(--ls-meta); text-transform:uppercase;
 }
 
@@ -267,7 +267,7 @@
 .post-code .code-lang{
   position:absolute; top:0; right:0;
   padding:4px 10px;
-  font-family:var(--mono); font-size:10px; letter-spacing:var(--ls-meta);
+  font-family:var(--mono); font-size:var(--t-10); letter-spacing:var(--ls-meta);
   text-transform:uppercase; color:var(--ink-4);
   background:var(--bg-4, var(--bg-2)); border-left:1px solid var(--line); border-bottom:1px solid var(--line);
 }
@@ -305,7 +305,7 @@
   padding:var(--sp-5) var(--sp-6); align-items:start;
 }
 .callout-tag{
-  font-family:var(--mono); font-size:10px; letter-spacing:var(--ls-meta);
+  font-family:var(--mono); font-size:var(--t-10); letter-spacing:var(--ls-meta);
   text-transform:uppercase; padding:4px 8px; color:var(--paper); background:var(--ink);
   font-weight:var(--fw-semibold); align-self:start;
 }
@@ -381,19 +381,7 @@
       <rect x="626" y="89" width="89" height="89" fill="#7FB236"/>
     </symbol>
   </defs>
-</svg><div class="ann-bar" id="ann-bar">
-  <div class="ann-inner">
-    <a href="developers.html" class="ann-chip">
-      <span class="ann-dot"></span>
-      <strong>MCP Server</strong> &mdash; live in Claude &amp; Codex
-      <span class="ann-arrow">→</span>
-    </a>
-    <a href="changelog.html" class="ann-link">Changelog →</a>
-    <button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button>
-  </div>
-</div>
-
-<!-- ============================================================
+</svg><!-- ============================================================
      LIVE STATUS STRIP. Cloud-ops signal strip
      ============================================================ -->
 <!-- ============================================================
@@ -602,7 +590,7 @@
   border-bottom:1px solid var(--line);
 }
 .contact-head .meta{
-  font-family:var(--mono); font-size:11px; letter-spacing:.16em;
+  font-family:var(--mono); font-size:var(--t-11); letter-spacing:.16em;
   color:var(--zop-orange); text-transform:uppercase; font-weight:600;
   display:inline-flex; align-items:center; gap:8px; margin:0 0 18px;
 }
@@ -614,7 +602,7 @@
 }
 .contact-head h1 em{ font-style:normal; color:var(--zop-orange); }
 .contact-head p.lede{
-  font-size:18px; color:var(--g-700); line-height:1.5; max-width:60ch;
+  font-size:var(--t-18); color:var(--g-700); line-height:1.5; max-width:60ch;
   margin:0 0 36px;
 }
 /* Stat strip */
@@ -623,7 +611,7 @@
   gap:32px; padding-top:28px; border-top:1px solid var(--line);
 }
 .contact-stat .k{
-  font-family:var(--mono); font-size:10px; letter-spacing:.14em;
+  font-family:var(--mono); font-size:var(--t-10); letter-spacing:.14em;
   color:var(--g-500); text-transform:uppercase; font-weight:600;
   margin-bottom:8px;
 }
@@ -633,7 +621,7 @@
   font-variant-numeric:tabular-nums; margin-bottom:6px;
 }
 .contact-stat .u{
-  font-size:13px; color:var(--g-700); line-height:1.45;
+  font-size:var(--t-13); color:var(--g-700); line-height:1.45;
 }
 @media(max-width:760px){
   .contact-stats{ grid-template-columns:repeat(2, minmax(0,1fr)); gap:24px; }
@@ -654,7 +642,7 @@
   letter-spacing:-0.025em; line-height:1.1; margin:0; max-width:520px;
 }
 .contact-channels-wrap > .head p{
-  font-size:14px; color:var(--g-700); line-height:1.55; max-width:300px; margin:0;
+  font-size:var(--t-14); color:var(--g-700); line-height:1.55; max-width:300px; margin:0;
 }
 .contact-channels{
   display:grid; gap:0;
@@ -672,22 +660,22 @@
 .channel-card .badge{
   display:inline-flex; align-items:center; justify-content:center;
   width:36px; height:36px; font-family:var(--mono); font-weight:700;
-  font-size:13px; flex-shrink:0;
+  font-size:var(--t-13); flex-shrink:0;
 }
 .channel-card[data-tone="orange"] .badge{ background:var(--zop-orange); color:var(--ink); }
 .channel-card[data-tone="blue"]   .badge{ background:var(--zop-blue);   color:var(--paper); }
 .channel-card[data-tone="green"]  .badge{ background:var(--zop-green);  color:var(--ink); }
 .channel-card[data-tone="ink"]    .badge{ background:var(--ink);        color:var(--paper); }
 .channel-card h3{
-  font-size:18px; font-weight:600; letter-spacing:-0.02em;
+  font-size:var(--t-18); font-weight:600; letter-spacing:-0.02em;
   line-height:1.2; margin:0; color:var(--ink);
 }
 .channel-card p{
-  font-size:13px; color:var(--g-700); line-height:1.55; margin:0;
+  font-size:var(--t-13); color:var(--g-700); line-height:1.55; margin:0;
   flex:1;
 }
 .channel-card .pill{
-  font-family:var(--mono); font-size:11px; letter-spacing:.04em;
+  font-family:var(--mono); font-size:var(--t-11); letter-spacing:.04em;
   color:var(--ink); padding:6px 10px; border:1px solid var(--ink);
   display:inline-flex; align-items:center; gap:6px; align-self:flex-start;
   transition:background var(--dur-fast) var(--ease-out),
@@ -718,18 +706,18 @@
   letter-spacing:-0.025em; line-height:1.1; margin:0 0 14px;
 }
 .contact-form-grid p.intro{
-  font-size:15px; color:var(--g-700); line-height:1.55; margin:0 0 28px;
+  font-size:var(--t-15); color:var(--g-700); line-height:1.55; margin:0 0 28px;
   max-width:48ch;
 }
 .contact-form{ display:flex; flex-direction:column; gap:18px; }
 .cf-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
 .cf-field{ display:flex; flex-direction:column; gap:8px; }
 .cf-field label{
-  font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+  font-family:var(--mono); font-size:var(--t-11); letter-spacing:.14em;
   color:var(--g-600); font-weight:600; text-transform:uppercase;
 }
 .cf-field input, .cf-field select, .cf-field textarea{
-  font-family:var(--font); font-size:15px; padding:12px 14px;
+  font-family:var(--font); font-size:var(--t-15); padding:12px 14px;
   border:1px solid var(--line); background:var(--paper); color:var(--ink);
   letter-spacing:-0.01em; outline:none;
   transition:border-color var(--dur-fast) var(--ease-out),
@@ -740,7 +728,7 @@
   border-color:var(--ink); box-shadow:0 0 0 3px rgba(245,133,73,.18);
 }
 .cf-submit{
-  font-family:var(--font); font-size:14px; font-weight:700;
+  font-family:var(--font); font-size:var(--t-14); font-weight:700;
   padding:14px 22px; background:var(--ink); color:var(--paper);
   border:1px solid var(--ink); cursor:pointer; align-self:flex-start;
   display:inline-flex; align-items:center; gap:8px;
@@ -760,11 +748,11 @@
   padding:24px; border:1px solid var(--line); background:var(--g-50);
 }
 .contact-aside h3{
-  font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+  font-family:var(--mono); font-size:var(--t-11); letter-spacing:.14em;
   text-transform:uppercase; color:var(--g-600); font-weight:600;
   margin:0 0 4px;
 }
-.contact-aside .ans{ font-size:14px; color:var(--ink); line-height:1.55; margin:0; }
+.contact-aside .ans{ font-size:var(--t-14); color:var(--ink); line-height:1.55; margin:0; }
 .contact-aside .ans strong{ font-weight:600; color:var(--ink); }
 .contact-aside .ans a{ color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
 .contact-aside .ans a:hover{ color:var(--zop-orange); }
@@ -788,7 +776,7 @@
   letter-spacing:-0.025em; line-height:1.1; margin:0;
 }
 .contact-offices > .head p{
-  font-size:14px; color:var(--g-700); line-height:1.55; max-width:300px; margin:0;
+  font-size:var(--t-14); color:var(--g-700); line-height:1.55; max-width:300px; margin:0;
 }
 .offices-grid{
   display:grid; gap:0;
@@ -801,19 +789,19 @@
 }
 .office:last-child{ border-right:0; }
 .office .city{
-  font-family:var(--mono); font-size:11px; letter-spacing:.16em;
+  font-family:var(--mono); font-size:var(--t-11); letter-spacing:.16em;
   text-transform:uppercase; font-weight:700; color:var(--zop-orange);
 }
 .office h3{
-  font-size:20px; font-weight:600; letter-spacing:-0.02em;
+  font-size:var(--t-20); font-weight:600; letter-spacing:-0.02em;
   line-height:1.2; margin:0; color:var(--ink);
 }
 .office address{
-  font-style:normal; font-size:13px; color:var(--g-700); line-height:1.6;
+  font-style:normal; font-size:var(--t-13); color:var(--g-700); line-height:1.6;
 }
 .office .hours{
   margin-top:auto; padding-top:14px; border-top:1px dashed var(--line);
-  font-family:var(--mono); font-size:11px; letter-spacing:.04em;
+  font-family:var(--mono); font-size:var(--t-11); letter-spacing:.04em;
   color:var(--g-600); display:flex; align-items:center; gap:8px;
 }
 .office .hours::before{
