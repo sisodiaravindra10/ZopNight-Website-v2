@@ -259,7 +259,9 @@
     mobTheme.addEventListener('click', function(){
       var html = document.documentElement;
       var cur = html.getAttribute('data-theme');
-      html.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+      var next = cur === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      try{ localStorage.setItem('zop-theme', next); }catch(e){}
     });
   }
 
@@ -447,20 +449,29 @@
    the button itself carries a data flag so repeat loads don't double-bind.
    ============================================================================ */
 (function(){
+  var html = document.documentElement;
+
+  /* Restore saved theme preference · runs as early as the deferred chrome
+     script can. For zero-flash, paste this same `try{...}catch{}` block
+     inline at the top of <head> on each page. localStorage is the source
+     of truth; otherwise default to dark. */
+  try{
+    var saved = localStorage.getItem('zop-theme');
+    if(saved === 'dark' || saved === 'light'){
+      html.setAttribute('data-theme', saved);
+    }
+  }catch(e){}
+  if(!html.getAttribute('data-theme')) html.setAttribute('data-theme', 'dark');
+
   var btn = document.getElementById('theme-toggle');
   if(!btn) return;
   if(btn.dataset.themeWired === '1') return;
   btn.dataset.themeWired = '1';
 
-  var html = document.documentElement;
-  /* If a page forgot to declare a theme, default to dark so the design
-     reads correctly on first paint. Every subpage already gets dark
-     default via <html data-theme="dark"> from the earlier sweep, but
-     this is a safety net. */
-  if(!html.getAttribute('data-theme')) html.setAttribute('data-theme', 'dark');
-
   btn.addEventListener('click', function(){
     var cur = html.getAttribute('data-theme');
-    html.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+    var next = cur === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    try{ localStorage.setItem('zop-theme', next); }catch(e){}
   });
 })();

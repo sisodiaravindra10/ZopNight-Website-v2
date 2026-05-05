@@ -44,9 +44,9 @@
   transition:transform var(--dur-med) var(--ease-out), border-color var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out);
   text-decoration:none; color:inherit;
 }
-.dl-card::after{ content:''; position:absolute; top:0; left:0; width:4px; height:0; background:var(--zop-orange); transition:height var(--dur-med) var(--ease-out); }
+.dl-card::after{ content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--zop-orange); transform:scaleY(0); transform-origin:top; transition:transform var(--dur-med) var(--ease-out); }
 .dl-card:hover{ transform:translateY(-4px); border-color:var(--ink); box-shadow:0 8px 0 -4px var(--zop-orange); }
-.dl-card:hover::after{ height:100%; }
+.dl-card:hover::after{ transform:scaleY(1); }
 .dl-card .preview{
   height:120px;
   background:var(--bg-2); border:1px solid var(--line-2);
@@ -354,6 +354,8 @@
   </div>
 </nav>
 
+<main>
+
 <header class="page-head">
   <div class="crumb"><a href="/">home</a><span class="s">/</span><a href="brand-guidelines.html">brand</a><span class="s">/</span>assets</div>
   <div class="meta">&#167; 19 &middot; asset downloads</div>
@@ -523,35 +525,35 @@
 
   <div class="dl">
     <a class="dl-card" href="og/og-default.svg" download>
-      <div class="preview"><img src="og/og-default.svg" alt="Default OG" style="max-width:100%"/></div>
+      <div class="preview"><img src="og/og-default.svg" alt="Default OG" width="1200" height="630" decoding="async" style="max-width:100%"/></div>
       <div class="meta"><span>og-default</span><span>1200&times;630</span></div>
       <h4>Default / homepage</h4>
       <p>Three-numbers + lockup fallback.</p>
       <span class="link">Download &rarr;</span>
     </a>
     <a class="dl-card" href="og/og-product.svg" download>
-      <div class="preview"><img src="og/og-product.svg" alt="Product OG" style="max-width:100%"/></div>
+      <div class="preview"><img src="og/og-product.svg" alt="Product OG" width="1200" height="630" decoding="async" style="max-width:100%"/></div>
       <div class="meta"><span>og-product</span><span>1200&times;630</span></div>
       <h4>Product pages</h4>
       <p>Four-surface chip layout.</p>
       <span class="link">Download &rarr;</span>
     </a>
     <a class="dl-card" href="og/og-customer.svg" download>
-      <div class="preview"><img src="og/og-customer.svg" alt="Customer OG" style="max-width:100%"/></div>
+      <div class="preview"><img src="og/og-customer.svg" alt="Customer OG" width="1200" height="630" decoding="async" style="max-width:100%"/></div>
       <div class="meta"><span>og-customer</span><span>1200&times;630</span></div>
       <h4>Customer stories</h4>
       <p>Huge metric + short quote.</p>
       <span class="link">Download &rarr;</span>
     </a>
     <a class="dl-card" href="og/og-pricing.svg" download>
-      <div class="preview"><img src="og/og-pricing.svg" alt="Pricing OG" style="max-width:100%"/></div>
+      <div class="preview"><img src="og/og-pricing.svg" alt="Pricing OG" width="1200" height="630" decoding="async" style="max-width:100%"/></div>
       <div class="meta"><span>og-pricing</span><span>1200&times;630</span></div>
       <h4>Pricing page</h4>
       <p>Three-tier card layout.</p>
       <span class="link">Download &rarr;</span>
     </a>
     <a class="dl-card" href="og/og-post.svg" download>
-      <div class="preview"><img src="og/og-post.svg" alt="Blog OG" style="max-width:100%"/></div>
+      <div class="preview"><img src="og/og-post.svg" alt="Blog OG" width="1200" height="630" decoding="async" style="max-width:100%"/></div>
       <div class="meta"><span>og-post</span><span>1200&times;630</span></div>
       <h4>Blog posts · docs</h4>
       <p>Editorial slot with byline.</p>
@@ -777,6 +779,8 @@
     });
   })();
 </script>
+</main>
+
 <script src="chrome-darkfold.js" defer></script>
 <script src="chrome-mobilenav.js" defer></script>
 </body>
