@@ -188,13 +188,22 @@ Never replace the orange square with a circle, dot, or icon. Single consistent a
 
 ### 7.3 Cards
 
-#### Feature card (`.feature`)
-- 1px line border
-- Card-lift hover: `translateY(-4px)` + `box-shadow: 0 8px 0 -4px var(--ink)` + orange 4px stripe grows top→bottom on left edge
+There are **two sanctioned card patterns** — pick by layout context:
+
+#### A. Feature card · standalone with card-lift (`.feature`, `.cert-card`, `.case-card`, `.outcome-tile`, `.role-card`, etc.)
+- 1px `--line` border
+- Sit in a grid with non-zero `gap` (cards are visually separated)
+- Card-lift hover: `transform: translateY(-4px)` + `box-shadow: 0 8px 0 -4px var(--zop-orange)` + `border-color: var(--line-b)` + (on `.feature` only) orange 4px stripe grows top→bottom on left edge
+- Hover signature is centralised in `chrome.css` — page-level CSS should NOT redefine the hover. Just declare the static state, and add the class to the shared rule list when adding a new card class.
 - Content: meta number + h3 + p + visual
 
+#### B. Grid-cell card · connected with background-change (`.number-tile`, `.value-card`, `.zd-card`, `.cs-rel-card`, `.eb-rel-card`, `.channel-card`)
+- **No** per-cell border. The parent grid renders the dividers via `gap:0; border:1px solid var(--line); background:var(--line)` — each cell gets `background:var(--bg-1)` and the gap reveals the parent's line colour.
+- Hover: `background:var(--bg-2)` (subtle lift to a slightly warmer tile). Optionally a small `transform: translateY(-2px)` if the cell is a primary action; never the full `-4px` lift (that breaks grid cohesion).
+- Use this pattern for connected stat tiles, related-content rows, value grids, and any layout where cells share edges.
+
 #### Bento card (`.feat-expand` button + `.feat-drawer-tpl` template)
-- Same as feature card
+- Same visual as Feature card (Pattern A)
 - Whole card is clickable, opens drawer with deeper content
 
 ### 7.4 Marquee (`.trust-marquee`)

@@ -65,12 +65,9 @@
   background:var(--bg-2); border:1px solid var(--line);
   padding:var(--sp-7);
   display:flex; flex-direction:column; gap:var(--sp-4);
-  transition:transform var(--dur-med) var(--ease-out), border-color var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out);
 }
-.entry-card:hover{
-  transform:translateY(-4px); border-color:var(--line-b);
-  box-shadow:4px 4px 0 0 var(--zop-orange);
-}
+/* Hover handled by chrome.css shared card-lift signature
+   (transform translateY(-4px) + var(--shadow-hover-orange) + border-color) */
 .entry-card-icon{
   width:40px; height:40px;
 }
@@ -213,18 +210,6 @@
     </symbol>
   </defs>
 </svg>
-
-<div class="ann-bar" id="ann-bar">
-  <div class="ann-inner">
-    <a href="developers.html" class="ann-chip">
-      <span class="ann-dot"></span>
-      <strong>MCP Server</strong>, live in Claude &amp; Codex
-      <span class="ann-arrow">→</span>
-    </a>
-    <a href="changelog.html" class="ann-link">Changelog →</a>
-    <button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button>
-  </div>
-</div>
 
 <!-- ============================================================
      LIVE STATUS STRIP. Cloud-ops signal strip

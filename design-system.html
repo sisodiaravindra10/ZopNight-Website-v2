@@ -61,7 +61,7 @@
 }
 .ds-pagehead .meta{
   display:inline-flex; align-items:center; gap:8px;
-  font-family:var(--mono); font-size:11px; font-weight:600;
+  font-family:var(--mono); font-size:var(--t-11); font-weight:600;
   text-transform:uppercase; letter-spacing:.14em;
   color:var(--zop-orange);
   margin-bottom:18px;
@@ -75,13 +75,13 @@
   margin:0 0 14px;
 }
 .ds-pagehead .lede{
-  font-size:18px; color:var(--g-700);
+  font-size:var(--t-18); color:var(--g-700);
   max-width:720px; line-height:1.5; margin:0 0 22px;
 }
 html[data-theme="dark"] .ds-pagehead .lede{ color:var(--g-300); }
 .ds-pagehead .vbar{
   display:flex; flex-wrap:wrap; gap:8px 14px;
-  font-family:var(--mono); font-size:11px;
+  font-family:var(--mono); font-size:var(--t-11);
   color:var(--g-600); letter-spacing:.04em;
 }
 .ds-pagehead .vbar strong{ color:var(--ink); font-weight:600; }
@@ -92,11 +92,11 @@ html[data-theme="dark"] .ds-pagehead .vbar strong{ color:var(--g-50); }
 /* ─── TOC ─── */
 .ds-toc{
   position:sticky; top:96px;
-  font-family:var(--mono); font-size:12px; line-height:2;
+  font-family:var(--mono); font-size:var(--t-12); line-height:2;
   border-left:1px solid var(--line); padding-left:18px;
 }
 .ds-toc-h{
-  font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+  font-size:var(--t-10); letter-spacing:.14em; text-transform:uppercase;
   color:var(--g-600); font-weight:700; margin-bottom:10px;
   display:block;
 }
@@ -133,7 +133,7 @@ html[data-theme="dark"] .ds-toc a:hover{ color:var(--g-50); }
 
 .ds-h2{
   font-family:var(--font);
-  font-size:14px; font-weight:600;
+  font-size:var(--t-14); font-weight:600;
   text-transform:uppercase; letter-spacing:.12em;
   color:var(--g-600);
   margin:0 0 6px;
@@ -150,20 +150,20 @@ html[data-theme="dark"] .ds-h2{ color:var(--g-300); }
   margin:0 0 12px;
 }
 .ds-section-lede{
-  font-size:15px; color:var(--g-700); line-height:1.55;
+  font-size:var(--t-15); color:var(--g-700); line-height:1.55;
   max-width:680px; margin:0 0 32px;
 }
 html[data-theme="dark"] .ds-section-lede{ color:var(--g-300); }
 
 .ds-h3{
-  font-size:18px; font-weight:600; letter-spacing:-.01em;
+  font-size:var(--t-18); font-weight:600; letter-spacing:-.01em;
   margin:32px 0 12px;
   color:var(--ink);
 }
 html[data-theme="dark"] .ds-h3{ color:var(--g-50); }
 
 .ds-h4{
-  font-family:var(--mono); font-size:11px; font-weight:600;
+  font-family:var(--mono); font-size:var(--t-11); font-weight:600;
   text-transform:uppercase; letter-spacing:.1em;
   color:var(--g-600); margin:28px 0 8px;
 }
@@ -186,14 +186,14 @@ html[data-theme="dark"] .ds-demo.ds-demo-dark{ background:#0a0a0f; }
   border-top:1px solid var(--line);
   background:#0F0F12; color:#F0EBDB;
   padding:18px 22px;
-  font-family:var(--mono); font-size:12px; line-height:1.6;
+  font-family:var(--mono); font-size:var(--t-12); line-height:1.6;
   overflow-x:auto;
   white-space:pre;
   position:relative;
 }
 .ds-code::before{
   content:'HTML'; position:absolute; top:8px; right:14px;
-  font-size:9px; letter-spacing:.18em; font-weight:600;
+  font-size:var(--t-10); letter-spacing:.18em; font-weight:600;
   color:rgba(240,235,219,.4);
 }
 .ds-code.ds-code-css::before{ content:'CSS'; }
@@ -218,7 +218,7 @@ html[data-theme="dark"] .ds-demo.ds-demo-dark{ background:#0a0a0f; }
   height:80px; border-bottom:1px solid var(--line);
 }
 .ds-swatch-meta{
-  padding:10px 12px; font-family:var(--mono); font-size:11px;
+  padding:10px 12px; font-family:var(--mono); font-size:var(--t-11);
   display:flex; flex-direction:column; gap:2px;
   background:var(--paper);
 }
@@ -228,7 +228,7 @@ html[data-theme="dark"] .ds-swatch-meta .tk{ color:var(--g-50); }
 .ds-swatch-meta .hx{ color:var(--g-600); letter-spacing:.04em; }
 html[data-theme="dark"] .ds-swatch-meta .hx{ color:var(--g-400); }
 .ds-swatch-meta .ratio{
-  font-size:10px; color:var(--g-600); letter-spacing:.06em;
+  font-size:var(--t-10); color:var(--g-600); letter-spacing:.06em;
 }
 .ds-swatch-meta .ratio.fail{ color:var(--zop-orange); font-weight:600; }
 html[data-theme="dark"] .ds-swatch-meta .ratio{ color:var(--g-400); }
@@ -241,7 +241,7 @@ html[data-theme="dark"] .ds-swatch-meta .ratio{ color:var(--g-400); }
 }
 .ds-type-row:last-child{ border-bottom:0; }
 .ds-type-meta{
-  font-family:var(--mono); font-size:10px;
+  font-family:var(--mono); font-size:var(--t-10);
   text-transform:uppercase; letter-spacing:.1em;
   color:var(--g-600);
   display:flex; flex-direction:column; gap:3px;
@@ -256,10 +256,10 @@ html[data-theme="dark"] .ds-type-meta strong{ color:var(--g-50); }
 html[data-theme="dark"] .ds-type-sample{ color:var(--g-50); }
 .ds-type-sample.s-hero    { font-size:clamp(48px,6.4vw,86px); font-weight:700; letter-spacing:-.045em; line-height:.96; }
 .ds-type-sample.s-h2      { font-size:clamp(28px,3.2vw,44px); font-weight:700; letter-spacing:-.03em; line-height:1.05; }
-.ds-type-sample.s-h3      { font-size:22px; font-weight:600; letter-spacing:-.015em; line-height:1.2; }
-.ds-type-sample.s-body    { font-size:15px; font-weight:400; letter-spacing:-.01em; line-height:1.55; }
-.ds-type-sample.s-caption { font-size:13px; color:var(--g-700); line-height:1.55; }
-.ds-type-sample.s-mono    { font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--g-600); }
+.ds-type-sample.s-h3      { font-size:var(--t-22); font-weight:600; letter-spacing:-.015em; line-height:1.2; }
+.ds-type-sample.s-body    { font-size:var(--t-15); font-weight:400; letter-spacing:-.01em; line-height:1.55; }
+.ds-type-sample.s-caption { font-size:var(--t-13); color:var(--g-700); line-height:1.55; }
+.ds-type-sample.s-mono    { font-family:var(--mono); font-size:var(--t-11); text-transform:uppercase; letter-spacing:.1em; color:var(--g-600); }
 html[data-theme="dark"] .ds-type-sample.s-caption{ color:var(--g-300); }
 html[data-theme="dark"] .ds-type-sample.s-mono   { color:var(--g-400); }
 
@@ -269,7 +269,7 @@ html[data-theme="dark"] .ds-type-sample.s-mono   { color:var(--g-400); }
   gap:18px; align-items:center; padding:8px 0;
 }
 .ds-spacing-row .lbl{
-  font-family:var(--mono); font-size:11px; color:var(--g-700);
+  font-family:var(--mono); font-size:var(--t-11); color:var(--g-700);
 }
 html[data-theme="dark"] .ds-spacing-row .lbl{ color:var(--g-300); }
 .ds-spacing-bar{ height:14px; background:var(--ink); }
@@ -289,15 +289,15 @@ html[data-theme="dark"] .ds-spacing-bar{ background:var(--g-50); }
   box-shadow:0 8px 0 -4px var(--ink);
 }
 .ds-card-demo .num{
-  font-family:var(--mono); font-size:10px; letter-spacing:.14em;
+  font-family:var(--mono); font-size:var(--t-10); letter-spacing:.14em;
   text-transform:uppercase; color:var(--g-600); font-weight:600;
 }
 .ds-card-demo h4{
-  font-size:18px; font-weight:600; letter-spacing:-.015em;
+  font-size:var(--t-18); font-weight:600; letter-spacing:-.015em;
   margin:0; line-height:1.25;
 }
 .ds-card-demo p{
-  font-size:14px; color:var(--g-700); line-height:1.55; margin:0;
+  font-size:var(--t-14); color:var(--g-700); line-height:1.55; margin:0;
 }
 html[data-theme="dark"] .ds-card-demo{ background:#15151a; }
 html[data-theme="dark"] .ds-card-demo p{ color:var(--g-300); }
@@ -307,7 +307,7 @@ html[data-theme="dark"] .ds-card-demo p{ color:var(--g-300); }
   display:inline-flex; align-items:center; gap:6px;
   padding:4px 10px;
   border:1px solid var(--line);
-  font-family:var(--mono); font-size:10px; font-weight:600;
+  font-family:var(--mono); font-size:var(--t-10); font-weight:600;
   letter-spacing:.1em; text-transform:uppercase;
   color:var(--ink);
 }
@@ -325,7 +325,7 @@ html[data-theme="dark"] .ds-chip{ color:var(--g-50); }
   padding:11px 14px;
   background:transparent; color:var(--ink);
   border:1px solid var(--line);
-  font-family:var(--font); font-size:14px;
+  font-family:var(--font); font-size:var(--t-14);
   outline:none;
   transition:border-color var(--dur-fast) var(--ease-out);
 }
@@ -333,7 +333,7 @@ html[data-theme="dark"] .ds-chip{ color:var(--g-50); }
 html[data-theme="dark"] .ds-input{ color:var(--g-50); border-color:#3a3a42; }
 
 .ds-label{
-  display:block; font-family:var(--mono); font-size:10px;
+  display:block; font-family:var(--mono); font-size:var(--t-10);
   letter-spacing:.12em; text-transform:uppercase;
   color:var(--g-600); font-weight:600; margin-bottom:6px;
 }
@@ -342,7 +342,7 @@ html[data-theme="dark"] .ds-label{ color:var(--g-400); }
 /* Section meta example block */
 .ds-sec-meta-demo{
   display:inline-flex; align-items:center; gap:8px;
-  font-family:var(--mono); font-size:11px; font-weight:600;
+  font-family:var(--mono); font-size:var(--t-11); font-weight:600;
   text-transform:uppercase; letter-spacing:.14em;
   color:var(--zop-orange);
 }
@@ -362,12 +362,12 @@ html[data-theme="dark"] .ds-label{ color:var(--g-400); }
 }
 html[data-theme="dark"] .ds-easing-card{ background:#15151a; }
 .ds-easing-card .name{
-  font-family:var(--mono); font-size:11px; font-weight:600;
+  font-family:var(--mono); font-size:var(--t-11); font-weight:600;
   letter-spacing:.06em; color:var(--ink);
 }
 html[data-theme="dark"] .ds-easing-card .name{ color:var(--g-50); }
 .ds-easing-card .val{
-  font-family:var(--mono); font-size:10px; color:var(--g-600);
+  font-family:var(--mono); font-size:var(--t-10); color:var(--g-600);
   letter-spacing:.02em;
 }
 html[data-theme="dark"] .ds-easing-card .val{ color:var(--g-400); }
@@ -396,12 +396,12 @@ html[data-theme="dark"] .ds-easing-card .val{ color:var(--g-400); }
   padding:16px; display:flex; flex-direction:column; gap:6px;
 }
 .ds-banned .lbl{
-  font-family:var(--mono); font-size:10px; letter-spacing:.12em;
+  font-family:var(--mono); font-size:var(--t-10); letter-spacing:.12em;
   text-transform:uppercase; font-weight:700; color:var(--zop-orange);
 }
 .ds-banned .lbl::before{ content:'× '; }
 .ds-banned p{
-  font-size:13px; color:var(--g-700); line-height:1.5; margin:0;
+  font-size:var(--t-13); color:var(--g-700); line-height:1.5; margin:0;
 }
 html[data-theme="dark"] .ds-banned p{ color:var(--g-300); }
 
@@ -418,7 +418,7 @@ html[data-theme="dark"] .ds-banned p{ color:var(--g-300); }
 html[data-theme="dark"] .ds-mark-cell{ background:#15151a; }
 .ds-mark-cell svg{ width:48px; height:48px; }
 .ds-mark-cell .label{
-  font-family:var(--mono); font-size:11px; font-weight:600;
+  font-family:var(--mono); font-size:var(--t-11); font-weight:600;
   letter-spacing:.08em; color:var(--ink);
 }
 html[data-theme="dark"] .ds-mark-cell .label{ color:var(--g-50); }
@@ -851,7 +851,7 @@ html[data-theme="dark"] .ds-mark-cell .label{ color:var(--g-50); }
           <a class="btn btn-primary" href="#">Get Started <span class="arrow">→</span></a>
           <a class="btn btn-secondary" href="#">View Pricing</a>
           <a class="btn" href="#" style="background:var(--zop-orange); color:#0a0a0c; border-color:var(--zop-orange)">Talk to Us <span class="arrow">→</span></a>
-          <a href="#" style="font-family:var(--font); font-size:14px; font-weight:600; color:var(--ink); text-decoration:underline; text-underline-offset:4px">View changelog →</a>
+          <a href="#" style="font-family:var(--font); font-size:var(--t-14); font-weight:600; color:var(--ink); text-decoration:underline; text-underline-offset:4px">View changelog →</a>
         </div>
 <pre class="ds-code"><span class="com">&lt;!-- Primary · ink fill --&gt;</span>
 <span class="tag">&lt;a</span> <span class="attr">class</span>=<span class="str">"btn btn-primary"</span> <span class="attr">href</span>=<span class="str">"#"</span><span class="tag">&gt;</span>Get Started <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"arrow"</span><span class="tag">&gt;</span>→<span class="tag">&lt;/span&gt;&lt;/a&gt;</span>
@@ -1055,12 +1055,12 @@ html[data-theme="dark"] .ds-mark-cell .label{ color:var(--g-50); }
       <p class="ds-section-lede">Six breakpoints. Container max-width 1200px, gutters 32px desktop / 24px tablet / 20px phone.</p>
       <div class="ds-pair">
         <div class="ds-demo ds-demo-block">
-          <table style="width:100%; font-family:var(--mono); font-size:12px; border-collapse:collapse;">
+          <table style="width:100%; font-family:var(--mono); font-size:var(--t-12); border-collapse:collapse;">
             <thead>
               <tr style="border-bottom:1px solid var(--line); text-align:left;">
-                <th style="padding:8px 12px; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">token</th>
-                <th style="padding:8px 12px; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">value</th>
-                <th style="padding:8px 12px; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">use</th>
+                <th style="padding:8px 12px; font-size:var(--t-10); letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">token</th>
+                <th style="padding:8px 12px; font-size:var(--t-10); letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">value</th>
+                <th style="padding:8px 12px; font-size:var(--t-10); letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">use</th>
               </tr>
             </thead>
             <tbody>
@@ -1086,20 +1086,20 @@ html[data-theme="dark"] .ds-mark-cell .label{ color:var(--g-50); }
           <table style="width:100%; border-collapse:collapse;">
             <thead>
               <tr style="border-bottom:1px solid var(--line);">
-                <th style="text-align:left; padding:12px 16px; font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">resource <span style="color:var(--ink); margin-left:4px;">↓</span></th>
-                <th style="text-align:left; padding:12px 16px; font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">region</th>
-                <th style="text-align:right; padding:12px 16px; font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">monthly <span style="color:var(--g-500); margin-left:4px;">↕</span></th>
-                <th style="text-align:right; padding:12px 16px; font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">action</th>
+                <th style="text-align:left; padding:12px 16px; font-family:var(--mono); font-size:var(--t-10); letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">resource <span style="color:var(--ink); margin-left:4px;">↓</span></th>
+                <th style="text-align:left; padding:12px 16px; font-family:var(--mono); font-size:var(--t-10); letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">region</th>
+                <th style="text-align:right; padding:12px 16px; font-family:var(--mono); font-size:var(--t-10); letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">monthly <span style="color:var(--g-500); margin-left:4px;">↕</span></th>
+                <th style="text-align:right; padding:12px 16px; font-family:var(--mono); font-size:var(--t-10); letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); font-weight:600;">action</th>
               </tr>
             </thead>
             <tbody>
-              <tr style="border-bottom:1px dashed var(--line);"><td style="padding:14px 16px;">Idle m6i.large</td><td style="padding:14px 16px; color:var(--g-700);">us-east-1</td><td style="padding:14px 16px; text-align:right; font-family:'JetBrains Mono', monospace; font-variant-numeric:tabular-nums; font-weight:700;">$184</td><td style="padding:14px 16px; text-align:right;"><button style="font-family:var(--mono); font-size:10px; padding:5px 10px; background:var(--ink); color:var(--paper); border:1px solid var(--ink); letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">terminate</button></td></tr>
-              <tr style="border-bottom:1px dashed var(--line);"><td style="padding:14px 16px;">db.r6g.4xl over-provisioned</td><td style="padding:14px 16px; color:var(--g-700);">us-west-2</td><td style="padding:14px 16px; text-align:right; font-family:'JetBrains Mono', monospace; font-variant-numeric:tabular-nums; font-weight:700;">$612</td><td style="padding:14px 16px; text-align:right;"><button style="font-family:var(--mono); font-size:10px; padding:5px 10px; background:var(--ink); color:var(--paper); border:1px solid var(--ink); letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">resize</button></td></tr>
-              <tr><td style="padding:14px 16px;">Orphan EBS volume</td><td style="padding:14px 16px; color:var(--g-700);">eu-west-1</td><td style="padding:14px 16px; text-align:right; font-family:'JetBrains Mono', monospace; font-variant-numeric:tabular-nums; font-weight:700;">$48</td><td style="padding:14px 16px; text-align:right;"><button style="font-family:var(--mono); font-size:10px; padding:5px 10px; background:var(--ink); color:var(--paper); border:1px solid var(--ink); letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">delete</button></td></tr>
+              <tr style="border-bottom:1px dashed var(--line);"><td style="padding:14px 16px;">Idle m6i.large</td><td style="padding:14px 16px; color:var(--g-700);">us-east-1</td><td style="padding:14px 16px; text-align:right; font-family:'JetBrains Mono', monospace; font-variant-numeric:tabular-nums; font-weight:700;">$184</td><td style="padding:14px 16px; text-align:right;"><button style="font-family:var(--mono); font-size:var(--t-10); padding:5px 10px; background:var(--ink); color:var(--paper); border:1px solid var(--ink); letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">terminate</button></td></tr>
+              <tr style="border-bottom:1px dashed var(--line);"><td style="padding:14px 16px;">db.r6g.4xl over-provisioned</td><td style="padding:14px 16px; color:var(--g-700);">us-west-2</td><td style="padding:14px 16px; text-align:right; font-family:'JetBrains Mono', monospace; font-variant-numeric:tabular-nums; font-weight:700;">$612</td><td style="padding:14px 16px; text-align:right;"><button style="font-family:var(--mono); font-size:var(--t-10); padding:5px 10px; background:var(--ink); color:var(--paper); border:1px solid var(--ink); letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">resize</button></td></tr>
+              <tr><td style="padding:14px 16px;">Orphan EBS volume</td><td style="padding:14px 16px; color:var(--g-700);">eu-west-1</td><td style="padding:14px 16px; text-align:right; font-family:'JetBrains Mono', monospace; font-variant-numeric:tabular-nums; font-weight:700;">$48</td><td style="padding:14px 16px; text-align:right;"><button style="font-family:var(--mono); font-size:var(--t-10); padding:5px 10px; background:var(--ink); color:var(--paper); border:1px solid var(--ink); letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">delete</button></td></tr>
             </tbody>
             <tfoot>
               <tr style="border-top:1px solid var(--line);">
-                <td colspan="4" style="padding:14px 16px; font-family:var(--mono); font-size:11px; color:var(--g-600); display:flex; justify-content:space-between; align-items:center;">
+                <td colspan="4" style="padding:14px 16px; font-family:var(--mono); font-size:var(--t-11); color:var(--g-600); display:flex; justify-content:space-between; align-items:center;">
                   <span>1–3 of 23 findings</span>
                   <span style="color:var(--g-700);">‹‹ ‹ <strong style="color:var(--ink); margin:0 6px;">1</strong> 2 › ››</span>
                 </td>
@@ -1118,24 +1118,24 @@ html[data-theme="dark"] .ds-mark-cell .label{ color:var(--g-50); }
       <div class="ds-pair">
         <div class="ds-demo ds-demo-block" style="display:flex; flex-direction:column; gap:12px;">
           <div style="display:grid; grid-template-columns:auto 1fr auto; gap:14px; padding:14px 18px; border:1px solid var(--zop-blue); border-left-width:4px; background:rgba(42,68,148,.06); align-items:start;">
-            <span style="color:var(--zop-blue); font-size:18px; line-height:1; margin-top:2px;">ⓘ</span>
-            <div><div style="font-weight:600; color:var(--ink); margin-bottom:2px;">Connect AWS to start scanning.</div><div style="font-size:13px; color:var(--g-700);">Read-only IAM role · 4-minute scan cadence · no credit card.</div></div>
-            <button style="background:transparent; border:0; color:var(--g-500); cursor:pointer; font-size:18px; line-height:1;">×</button>
+            <span style="color:var(--zop-blue); font-size:var(--t-18); line-height:1; margin-top:2px;">ⓘ</span>
+            <div><div style="font-weight:600; color:var(--ink); margin-bottom:2px;">Connect AWS to start scanning.</div><div style="font-size:var(--t-13); color:var(--g-700);">Read-only IAM role · 4-minute scan cadence · no credit card.</div></div>
+            <button style="background:transparent; border:0; color:var(--g-500); cursor:pointer; font-size:var(--t-18); line-height:1;">×</button>
           </div>
           <div style="display:grid; grid-template-columns:auto 1fr auto; gap:14px; padding:14px 18px; border:1px solid var(--zop-green); border-left-width:4px; background:rgba(127,178,54,.08); align-items:start;">
-            <span style="color:var(--zop-green); font-size:18px; line-height:1; margin-top:2px;">✓</span>
-            <div><div style="font-weight:600; color:var(--ink); margin-bottom:2px;">Connection healthy.</div><div style="font-size:13px; color:var(--g-700);">847 resources scanned · last sync 2 min ago.</div></div>
-            <button style="background:transparent; border:0; color:var(--g-500); cursor:pointer; font-size:18px; line-height:1;">×</button>
+            <span style="color:var(--zop-green); font-size:var(--t-18); line-height:1; margin-top:2px;">✓</span>
+            <div><div style="font-weight:600; color:var(--ink); margin-bottom:2px;">Connection healthy.</div><div style="font-size:var(--t-13); color:var(--g-700);">847 resources scanned · last sync 2 min ago.</div></div>
+            <button style="background:transparent; border:0; color:var(--g-500); cursor:pointer; font-size:var(--t-18); line-height:1;">×</button>
           </div>
           <div style="display:grid; grid-template-columns:auto 1fr auto; gap:14px; padding:14px 18px; border:1px solid var(--zop-orange); border-left-width:4px; background:rgba(245,133,73,.07); align-items:start;">
-            <span style="color:var(--zop-orange); font-size:18px; line-height:1; margin-top:2px;">!</span>
-            <div><div style="font-weight:600; color:var(--ink); margin-bottom:2px;">Tag coverage below 80%.</div><div style="font-size:13px; color:var(--g-700);">12 untagged resources won't appear in showback. <a href="#" style="color:var(--ink); text-decoration:underline;">Review →</a></div></div>
-            <button style="background:transparent; border:0; color:var(--g-500); cursor:pointer; font-size:18px; line-height:1;">×</button>
+            <span style="color:var(--zop-orange); font-size:var(--t-18); line-height:1; margin-top:2px;">!</span>
+            <div><div style="font-weight:600; color:var(--ink); margin-bottom:2px;">Tag coverage below 80%.</div><div style="font-size:var(--t-13); color:var(--g-700);">12 untagged resources won't appear in showback. <a href="#" style="color:var(--ink); text-decoration:underline;">Review →</a></div></div>
+            <button style="background:transparent; border:0; color:var(--g-500); cursor:pointer; font-size:var(--t-18); line-height:1;">×</button>
           </div>
           <div style="display:grid; grid-template-columns:auto 1fr auto; gap:14px; padding:14px 18px; border:1px solid var(--zop-orange); border-left-width:4px; background:rgba(245,133,73,.12); align-items:start;">
-            <span style="color:var(--zop-orange); font-size:18px; line-height:1; margin-top:2px;">⚠</span>
-            <div><div style="font-weight:600; color:var(--ink); margin-bottom:2px;">Couldn't reach AWS us-east-1.</div><div style="font-size:13px; color:var(--g-700);">Last successful scan: 47 min ago. <a href="#" style="color:var(--ink); text-decoration:underline;">Retry</a> · <a href="#" style="color:var(--ink); text-decoration:underline;">contact support</a>.</div></div>
-            <button style="background:transparent; border:0; color:var(--g-500); cursor:pointer; font-size:18px; line-height:1;">×</button>
+            <span style="color:var(--zop-orange); font-size:var(--t-18); line-height:1; margin-top:2px;">⚠</span>
+            <div><div style="font-weight:600; color:var(--ink); margin-bottom:2px;">Couldn't reach AWS us-east-1.</div><div style="font-size:var(--t-13); color:var(--g-700);">Last successful scan: 47 min ago. <a href="#" style="color:var(--ink); text-decoration:underline;">Retry</a> · <a href="#" style="color:var(--ink); text-decoration:underline;">contact support</a>.</div></div>
+            <button style="background:transparent; border:0; color:var(--g-500); cursor:pointer; font-size:var(--t-18); line-height:1;">×</button>
           </div>
         </div>
       </div>
@@ -1149,15 +1149,15 @@ html[data-theme="dark"] .ds-mark-cell .label{ color:var(--g-50); }
       <div class="ds-pair">
         <div class="ds-demo ds-demo-block">
           <div style="border-bottom:1px solid var(--line); display:flex; gap:0;">
-            <button style="padding:14px 22px; background:transparent; border:0; border-bottom:2px solid var(--ink); font-family:var(--mono); font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); cursor:pointer; margin-bottom:-1px;">findings</button>
-            <button style="padding:14px 22px; background:transparent; border:0; font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); cursor:pointer;">resources</button>
-            <button style="padding:14px 22px; background:transparent; border:0; font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); cursor:pointer;">audit log</button>
-            <button style="padding:14px 22px; background:transparent; border:0; font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); cursor:pointer;">policies</button>
+            <button style="padding:14px 22px; background:transparent; border:0; border-bottom:2px solid var(--ink); font-family:var(--mono); font-size:var(--t-11); font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); cursor:pointer; margin-bottom:-1px;">findings</button>
+            <button style="padding:14px 22px; background:transparent; border:0; font-family:var(--mono); font-size:var(--t-11); font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); cursor:pointer;">resources</button>
+            <button style="padding:14px 22px; background:transparent; border:0; font-family:var(--mono); font-size:var(--t-11); font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); cursor:pointer;">audit log</button>
+            <button style="padding:14px 22px; background:transparent; border:0; font-family:var(--mono); font-size:var(--t-11); font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); cursor:pointer;">policies</button>
           </div>
           <div style="margin-top:24px; display:inline-flex; border:1px solid var(--line);">
-            <button style="padding:9px 18px; background:var(--ink); color:var(--paper); border:0; font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">daily</button>
-            <button style="padding:9px 18px; background:transparent; color:var(--g-700); border:0; border-left:1px solid var(--line); font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">weekly</button>
-            <button style="padding:9px 18px; background:transparent; color:var(--g-700); border:0; border-left:1px solid var(--line); font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">monthly</button>
+            <button style="padding:9px 18px; background:var(--ink); color:var(--paper); border:0; font-family:var(--mono); font-size:var(--t-11); font-weight:600; letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">daily</button>
+            <button style="padding:9px 18px; background:transparent; color:var(--g-700); border:0; border-left:1px solid var(--line); font-family:var(--mono); font-size:var(--t-11); font-weight:600; letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">weekly</button>
+            <button style="padding:9px 18px; background:transparent; color:var(--g-700); border:0; border-left:1px solid var(--line); font-family:var(--mono); font-size:var(--t-11); font-weight:600; letter-spacing:.1em; text-transform:uppercase; cursor:pointer;">monthly</button>
           </div>
         </div>
       </div>
@@ -1171,15 +1171,15 @@ html[data-theme="dark"] .ds-mark-cell .label{ color:var(--g-50); }
       <div class="ds-pair">
         <div class="ds-demo ds-demo-block" style="display:flex; gap:24px; align-items:flex-start;">
           <div style="border:1px solid var(--line); padding:4px 0; min-width:240px; background:var(--paper);">
-            <div style="padding:8px 14px; font-family:var(--mono); font-size:14px; color:var(--ink); display:flex; align-items:center; gap:10px;"><span style="width:8px; height:8px; background:var(--zop-orange);"></span>Atlas</div>
-            <div style="padding:8px 14px; font-family:var(--mono); font-size:14px; color:var(--g-700);">Showback</div>
-            <div style="padding:8px 14px; font-family:var(--mono); font-size:14px; color:var(--g-700);">Schedule</div>
-            <div style="padding:8px 14px; font-family:var(--mono); font-size:14px; color:var(--g-700);">Recommendations</div>
+            <div style="padding:8px 14px; font-family:var(--mono); font-size:var(--t-14); color:var(--ink); display:flex; align-items:center; gap:10px;"><span style="width:8px; height:8px; background:var(--zop-orange);"></span>Atlas</div>
+            <div style="padding:8px 14px; font-family:var(--mono); font-size:var(--t-14); color:var(--g-700);">Showback</div>
+            <div style="padding:8px 14px; font-family:var(--mono); font-size:var(--t-14); color:var(--g-700);">Schedule</div>
+            <div style="padding:8px 14px; font-family:var(--mono); font-size:var(--t-14); color:var(--g-700);">Recommendations</div>
             <div style="height:1px; background:var(--line); margin:6px 0;"></div>
-            <div style="padding:8px 14px; font-family:var(--mono); font-size:14px; color:var(--g-700);">Audit log</div>
-            <div style="padding:8px 14px; font-family:var(--mono); font-size:14px; color:var(--g-700);">Settings</div>
+            <div style="padding:8px 14px; font-family:var(--mono); font-size:var(--t-14); color:var(--g-700);">Audit log</div>
+            <div style="padding:8px 14px; font-family:var(--mono); font-size:var(--t-14); color:var(--g-700);">Settings</div>
           </div>
-          <div style="font-family:var(--mono); font-size:11px; color:var(--g-600); padding-top:12px; max-width:300px; line-height:1.6;">36px tall items · 8px square accent for the active row · 1px solid <code>--line</code> separator between groups.</div>
+          <div style="font-family:var(--mono); font-size:var(--t-11); color:var(--g-600); padding-top:12px; max-width:300px; line-height:1.6;">36px tall items · 8px square accent for the active row · 1px solid <code>--line</code> separator between groups.</div>
         </div>
       </div>
     </section>
@@ -1193,12 +1193,12 @@ html[data-theme="dark"] .ds-mark-cell .label{ color:var(--g-50); }
         <div class="ds-demo ds-demo-block" style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
           <div style="border:1px solid var(--line); padding:48px 32px; text-align:center; background:var(--paper);">
             <div style="width:14px; height:14px; background:var(--zop-orange); margin:0 auto 24px;"></div>
-            <div style="font-size:18px; font-weight:600; color:var(--ink); margin-bottom:8px;">No findings yet.</div>
-            <div style="font-size:13px; color:var(--g-700); line-height:1.55; margin-bottom:24px;">Connect an account to start scanning your cloud.</div>
-            <a class="btn btn-primary" href="#" style="font-size:13px;">Connect AWS <span class="arrow">→</span></a>
+            <div style="font-size:var(--t-18); font-weight:600; color:var(--ink); margin-bottom:8px;">No findings yet.</div>
+            <div style="font-size:var(--t-13); color:var(--g-700); line-height:1.55; margin-bottom:24px;">Connect an account to start scanning your cloud.</div>
+            <a class="btn btn-primary" href="#" style="font-size:var(--t-13);">Connect AWS <span class="arrow">→</span></a>
           </div>
           <div style="border:1px solid var(--line); padding:48px 32px; background:var(--paper);">
-            <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); margin-bottom:18px;">scanning · 64%</div>
+            <div style="font-family:var(--mono); font-size:var(--t-10); letter-spacing:.12em; text-transform:uppercase; color:var(--g-600); margin-bottom:18px;">scanning · 64%</div>
             <div style="display:flex; flex-direction:column; gap:10px;">
               <div style="height:14px; background:var(--g-100); border:1px solid var(--line);"></div>
               <div style="height:14px; background:var(--g-100); border:1px solid var(--line); width:80%;"></div>
@@ -1219,19 +1219,19 @@ html[data-theme="dark"] .ds-mark-cell .label{ color:var(--g-50); }
       <div class="ds-pair">
         <div class="ds-demo ds-demo-block" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0; border:1px solid var(--line);">
           <div style="padding:32px 28px; border-right:1px solid var(--line);">
-            <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;"><svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><use href="#mark-zopnight"/></svg><strong style="font-size:18px; letter-spacing:-.015em;">ZopNight</strong></div>
-            <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--zop-blue); margin-bottom:8px;">--zop-blue · #2A4494</div>
-            <p style="font-size:13px; color:var(--g-700); line-height:1.55; margin:0;">Cloud cost, infrastructure, CDCR. The Discovery + Remediation engine.</p>
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;"><svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><use href="#mark-zopnight"/></svg><strong style="font-size:var(--t-18); letter-spacing:-.015em;">ZopNight</strong></div>
+            <div style="font-family:var(--mono); font-size:var(--t-10); letter-spacing:.12em; text-transform:uppercase; color:var(--zop-blue); margin-bottom:8px;">--zop-blue · #2A4494</div>
+            <p style="font-size:var(--t-13); color:var(--g-700); line-height:1.55; margin:0;">Cloud cost, infrastructure, CDCR. The Discovery + Remediation engine.</p>
           </div>
           <div style="padding:32px 28px; border-right:1px solid var(--line);">
-            <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;"><svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><use href="#mark-zopday"/></svg><strong style="font-size:18px; letter-spacing:-.015em;">ZopDay</strong></div>
-            <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--zop-orange); margin-bottom:8px;">--zop-orange · #F58549</div>
-            <p style="font-size:13px; color:var(--g-700); line-height:1.55; margin:0;">Activation, signature accent, high-energy moments. CTAs and findings markers.</p>
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;"><svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><use href="#mark-zopday"/></svg><strong style="font-size:var(--t-18); letter-spacing:-.015em;">ZopDay</strong></div>
+            <div style="font-family:var(--mono); font-size:var(--t-10); letter-spacing:.12em; text-transform:uppercase; color:var(--zop-orange); margin-bottom:8px;">--zop-orange · #F58549</div>
+            <p style="font-size:var(--t-13); color:var(--g-700); line-height:1.55; margin:0;">Activation, signature accent, high-energy moments. CTAs and findings markers.</p>
           </div>
           <div style="padding:32px 28px;">
-            <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;"><svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><use href="#mark-zopcloud"/></svg><strong style="font-size:18px; letter-spacing:-.015em;">ZopCloud</strong></div>
-            <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--zop-green); margin-bottom:8px;">--zop-green · #7FB236</div>
-            <p style="font-size:13px; color:var(--g-700); line-height:1.55; margin:0;">Multi-cloud platform, financial outcomes, success states. Used on dark surfaces only when text is white.</p>
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;"><svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><use href="#mark-zopcloud"/></svg><strong style="font-size:var(--t-18); letter-spacing:-.015em;">ZopCloud</strong></div>
+            <div style="font-family:var(--mono); font-size:var(--t-10); letter-spacing:.12em; text-transform:uppercase; color:var(--zop-green); margin-bottom:8px;">--zop-green · #7FB236</div>
+            <p style="font-size:var(--t-13); color:var(--g-700); line-height:1.55; margin:0;">Multi-cloud platform, financial outcomes, success states. Used on dark surfaces only when text is white.</p>
           </div>
         </div>
       </div>
@@ -1242,7 +1242,7 @@ html[data-theme="dark"] .ds-mark-cell .label{ color:var(--g-50); }
       <p class="ds-h2">13 · a11y</p>
       <h2 class="ds-section-title">Accessibility checklist.</h2>
       <p class="ds-section-lede">WCAG 2.1 AA minimum. Every interactive element has a focus state. Heading hierarchy never skips levels.</p>
-      <ul style="font-family:var(--mono); font-size:13px; line-height:2; color:var(--g-700); list-style:none; padding:0; margin:0; max-width:720px">
+      <ul style="font-family:var(--mono); font-size:var(--t-13); line-height:2; color:var(--g-700); list-style:none; padding:0; margin:0; max-width:720px">
         <li>· 4.5:1 contrast for body text · 3:1 for 18px+ or 14px-bold large text</li>
         <li>· Focus-visible state · 2px orange outline + 2px offset</li>
         <li>· No <code>h2 → h4</code> level skips</li>
