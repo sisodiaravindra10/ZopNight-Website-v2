@@ -27,27 +27,27 @@ a:focus-visible,button:focus-visible{outline-offset:3px}
 
 .minav{padding:18px 0;border-bottom:1px solid var(--line);background:var(--paper);position:sticky;top:0;z-index:50}
 .minav .container{display:flex;align-items:center;justify-content:space-between;gap:18px}
-.minav .wm{font-size:22px;font-weight:700;letter-spacing:-0.025em;color:var(--ink)}
+.minav .wm{font-size:var(--t-22);font-weight:700;letter-spacing:-0.025em;color:var(--ink)}
 .minav .wm span{color:var(--zop-orange)}
-.minav .right{font-family:var(--mono);font-size:11px;color:var(--g-500);letter-spacing:.14em;text-transform:uppercase}
+.minav .right{font-family:var(--mono);font-size:var(--t-11);color:var(--g-500);letter-spacing:.14em;text-transform:uppercase}
 .minav .right a{color:var(--g-600);border-bottom:1px solid transparent;transition:border-color var(--dur-fast),color var(--dur-fast)}
 .minav .right a:hover{color:var(--zop-orange);border-color:var(--zop-orange)}
 
 .page-head{padding:64px 0 56px;border-bottom:1px solid var(--line)}
 .page-head .container{display:flex;flex-direction:column;gap:18px}
-.page-head .meta{font-family:var(--mono);font-size:11px;color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
+.page-head .meta{font-family:var(--mono);font-size:var(--t-11);color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
 .page-head .meta::before{content:'';width:10px;height:10px;background:var(--zop-orange);flex-shrink:0}
 .page-head h1{font-size:clamp(40px,5.5vw,72px);font-weight:700;line-height:1;letter-spacing:-0.045em;margin:0;max-width:1100px}
 .page-head h1 em{font-style:normal;color:var(--zop-orange)}
-.page-head .lede{font-size:18px;color:var(--g-600);max-width:760px;line-height:1.55;margin:0}
+.page-head .lede{font-size:var(--t-18);color:var(--g-600);max-width:760px;line-height:1.55;margin:0}
 
 .status-strip{background:var(--ink);color:var(--zop-cream);border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
 .status-strip .container{display:grid;grid-template-columns:repeat(5,1fr);gap:0}
 @media(max-width:880px){.status-strip .container{grid-template-columns:repeat(2,1fr)}}
 .ss-cell{padding:28px 24px;border-right:1px solid #2a2a2a}
 .ss-cell:last-child{border-right:0}
-.ss-key{font-family:var(--mono);font-size:11px;color:#8a8378;letter-spacing:.14em;text-transform:uppercase;margin:0 0 8px}
-.ss-val{font-size:32px;line-height:1;font-weight:700;letter-spacing:-0.025em;color:var(--zop-cream);font-variant-numeric:tabular-nums}
+.ss-key{font-family:var(--mono);font-size:var(--t-11);color:#8a8378;letter-spacing:.14em;text-transform:uppercase;margin:0 0 8px}
+.ss-val{font-size:var(--t-32);line-height:1;font-weight:700;letter-spacing:-0.025em;color:var(--zop-cream);font-variant-numeric:tabular-nums}
 .ss-val em{font-style:normal;color:var(--zop-orange)}
 
 .jumps{padding:32px 0;border-bottom:1px solid var(--line);background:var(--g-50)}
@@ -55,19 +55,19 @@ a:focus-visible,button:focus-visible{outline-offset:3px}
 .jump{flex:1;min-width:160px;padding:14px 18px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px;transition:background var(--dur-fast)}
 .jump:last-child{border-right:0}
 .jump:hover{background:var(--g-100)}
-.jump-num{font-family:var(--mono);font-size:11px;color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase}
-.jump-title{font-size:14px;font-weight:600;color:var(--ink)}
-.jump-count{font-family:var(--mono);font-size:10px;color:var(--g-500);letter-spacing:.04em}
+.jump-num{font-family:var(--mono);font-size:var(--t-11);color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase}
+.jump-title{font-size:var(--t-14);font-weight:600;color:var(--ink)}
+.jump-count{font-family:var(--mono);font-size:var(--t-10);color:var(--g-500);letter-spacing:.04em}
 
 section.cat{padding:56px 0;border-bottom:1px solid var(--line)}
 section.cat:last-of-type{border-bottom:0}
 .cat-head{display:flex;flex-direction:column;gap:14px;margin:0 0 32px;padding-bottom:18px;border-bottom:1px solid var(--line)}
-.cat-meta{font-family:var(--mono);font-size:11px;color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
+.cat-meta{font-family:var(--mono);font-size:var(--t-11);color:var(--zop-orange);letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
 .cat-meta::before{content:'';width:10px;height:10px;background:var(--zop-orange);flex-shrink:0}
 .cat-row{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
 .cat h2{font-size:clamp(28px,3.4vw,44px);letter-spacing:-0.04em;font-weight:700;margin:0;line-height:1}
 .cat h2 em{font-style:normal;color:var(--zop-orange)}
-.cat .cat-sub{font-size:15px;color:var(--g-600);max-width:520px;line-height:1.55;margin:0}
+.cat .cat-sub{font-size:var(--t-15);color:var(--g-600);max-width:520px;line-height:1.55;margin:0}
 
 .files{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);background:var(--paper)}
 @media(max-width:980px){.files{grid-template-columns:1fr 1fr}}
@@ -78,19 +78,19 @@ section.cat:last-of-type{border-bottom:0}
 .file:hover .file-name{color:var(--zop-orange)}
 @media(max-width:980px){.file{border-right:0}.file:nth-child(2n-1){border-right:1px solid var(--line)}.file:nth-child(2n){border-right:0}}
 @media(max-width:600px){.file{border-right:0}.file:nth-child(2n-1){border-right:0}}
-.file-path{font-family:var(--mono);font-size:10px;color:var(--g-500);letter-spacing:.04em}
-.file-name{font-size:14px;font-weight:600;color:var(--ink);line-height:1.4}
-.file-desc{font-size:12px;color:var(--g-500);line-height:1.4;margin-top:2px}
+.file-path{font-family:var(--mono);font-size:var(--t-10);color:var(--g-500);letter-spacing:.04em}
+.file-name{font-size:var(--t-14);font-weight:600;color:var(--ink);line-height:1.4}
+.file-desc{font-size:var(--t-12);color:var(--g-500);line-height:1.4;margin-top:2px}
 
 .routes{margin-top:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);background:var(--paper)}
 @media(max-width:780px){.routes{grid-template-columns:1fr 1fr}}
-.route{padding:10px 14px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--g-700);letter-spacing:.02em;display:flex;align-items:center;gap:8px;transition:background var(--dur-fast),color var(--dur-fast)}
+.route{padding:10px 14px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:var(--t-12);color:var(--g-700);letter-spacing:.02em;display:flex;align-items:center;gap:8px;transition:background var(--dur-fast),color var(--dur-fast)}
 .route:nth-child(4n){border-right:0}
 .route:hover{background:var(--g-100);color:var(--zop-orange)}
 .route::before{content:'/';color:var(--zop-orange);font-weight:700}
 @media(max-width:780px){.route{border-right:0}.route:nth-child(2n-1){border-right:1px solid var(--line)}.route:nth-child(4n){border-right:0}}
 
-.tree{font-family:var(--mono);font-size:13px;line-height:1.7;background:var(--zop-black);color:var(--zop-cream);padding:24px 28px;margin-top:32px;border:1px solid var(--ink);overflow-x:auto}
+.tree{font-family:var(--mono);font-size:var(--t-13);line-height:1.7;background:var(--zop-black);color:var(--zop-cream);padding:24px 28px;margin-top:32px;border:1px solid var(--ink);overflow-x:auto}
 .tree b{color:var(--zop-orange);font-weight:600}
 .tree .c{color:#7c7c7c}
 .tree a{color:inherit;border-bottom:1px solid transparent;transition:color var(--dur-fast),border-color var(--dur-fast)}
@@ -100,9 +100,9 @@ section.cat:last-of-type{border-bottom:0}
 .cta .container{max-width:880px;text-align:center}
 .cta h2{font-size:clamp(32px,4vw,52px);letter-spacing:-0.04em;font-weight:700;margin:0 0 18px;line-height:1.05}
 .cta h2 em{font-style:normal;color:var(--zop-orange)}
-.cta p{font-size:16px;color:#a8a195;max-width:560px;margin:0 auto 28px;line-height:1.55}
+.cta p{font-size:var(--t-16);color:#a8a195;max-width:560px;margin:0 auto 28px;line-height:1.55}
 .cta .btn-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-.cta .btn{display:inline-block;padding:14px 22px;font-family:var(--font);font-size:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;transition:transform var(--dur-fast),box-shadow var(--dur-fast)}
+.cta .btn{display:inline-block;padding:14px 22px;font-family:var(--font);font-size:var(--t-14);font-weight:600;letter-spacing:.04em;text-transform:uppercase;transition:transform var(--dur-fast),box-shadow var(--dur-fast)}
 .cta .btn-primary{background:var(--zop-orange);color:var(--ink);border:1px solid var(--zop-orange)}
 .cta .btn-primary:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 0 var(--zop-cream)}
 .cta .btn-ghost{background:transparent;color:var(--zop-cream);border:1px solid #2a2a34}
@@ -275,7 +275,7 @@ section.cat:last-of-type{border-bottom:0}
       <a class="file" href="what-is-devops.html"><div class="file-path">/what-is-devops.html</div><div class="file-name">What is DevOps</div><div class="file-desc">Pillar topic page</div></a>
     </div>
 
-    <h3 style="margin:32px 0 14px;font-size:14px;font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Blog posts</h3>
+    <h3 style="margin:32px 0 14px;font-size:var(--t-14);font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Blog posts</h3>
     <div class="routes">
       <a class="route" href="blog/aws-cost-anomaly-detection">aws-cost-anomaly-detection</a>
       <a class="route" href="blog/azure-reserved-instances-vs-savings-plans">azure-ri-vs-savings</a>
@@ -293,7 +293,7 @@ section.cat:last-of-type{border-bottom:0}
       <a class="route" href="blog/zero-trust-security-cloud">zero-trust-cloud</a>
     </div>
 
-    <h3 style="margin:32px 0 14px;font-size:14px;font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Ebooks</h3>
+    <h3 style="margin:32px 0 14px;font-size:var(--t-14);font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Ebooks</h3>
     <div class="routes">
       <a class="route" href="ebooks/cloud-native-patterns">cloud-native-patterns</a>
       <a class="route" href="ebooks/devops-guide">devops-guide</a>
@@ -328,7 +328,7 @@ section.cat:last-of-type{border-bottom:0}
       <a class="file" href="assets.html"><div class="file-path">/assets.html</div><div class="file-name">Press assets</div><div class="file-desc">Logo pack + screenshots</div></a>
       <a class="file" href="sub-brands.html"><div class="file-path">/sub-brands.html</div><div class="file-name">Sub-brands</div><div class="file-desc">ZopCloud, ZopNight, ZopSmart, etc.</div></a>
     </div>
-    <h3 style="margin:32px 0 14px;font-size:14px;font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Shared assets</h3>
+    <h3 style="margin:32px 0 14px;font-size:var(--t-14);font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Shared assets</h3>
     <div class="routes">
       <a class="route" href="tokens.css">tokens.css</a>
       <a class="route" href="homepage-chrome.css">homepage-chrome.css</a>
@@ -417,7 +417,7 @@ section.cat:last-of-type{border-bottom:0}
       </div>
     </div>
 
-    <h3 style="margin:0 0 14px;font-size:14px;font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Auth + company</h3>
+    <h3 style="margin:0 0 14px;font-size:var(--t-14);font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Auth + company</h3>
     <div class="files">
       <a class="file" href="signin.html"><div class="file-path">/signin.html</div><div class="file-name">Sign in</div><div class="file-desc">Login form</div></a>
       <a class="file" href="careers.html"><div class="file-path">/careers.html</div><div class="file-name">Careers</div><div class="file-desc">Open roles + culture</div></a>
@@ -425,7 +425,7 @@ section.cat:last-of-type{border-bottom:0}
       <a class="file" href="company/press.html"><div class="file-path">/company/press.html</div><div class="file-name">Press</div><div class="file-desc">Media kit + inquiries</div></a>
     </div>
 
-    <h3 style="margin:32px 0 14px;font-size:14px;font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Error / status</h3>
+    <h3 style="margin:32px 0 14px;font-size:var(--t-14);font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Error / status</h3>
     <div class="files">
       <a class="file" href="403.html"><div class="file-path">/403.html</div><div class="file-name">403 forbidden</div><div class="file-desc">Access denied</div></a>
       <a class="file" href="404.html"><div class="file-path">/404.html</div><div class="file-name">404 not found</div><div class="file-desc">Branded miss page</div></a>
@@ -434,7 +434,7 @@ section.cat:last-of-type{border-bottom:0}
       <a class="file" href="offline.html"><div class="file-path">/offline.html</div><div class="file-name">Offline</div><div class="file-desc">PWA offline state</div></a>
     </div>
 
-    <h3 style="margin:32px 0 14px;font-size:14px;font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Design explorations <span style="font-weight:400;color:var(--g-500)">– variants kept for reference, not shipped</span></h3>
+    <h3 style="margin:32px 0 14px;font-size:var(--t-14);font-weight:600;color:var(--g-700);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em">Design explorations <span style="font-weight:400;color:var(--g-500)">– variants kept for reference, not shipped</span></h3>
     <div class="files">
       <a class="file" href="footer-variants.html"><div class="file-path">/footer-variants.html</div><div class="file-name">Footer · 10 variants</div><div class="file-desc">F1–F10 layout explorations</div></a>
       <a class="file" href="footer-wordmark-variants.html"><div class="file-path">/footer-wordmark-variants.html</div><div class="file-name">Footer · wordmark + marquee</div><div class="file-desc">M1–M6 wordmark/marquee</div></a>

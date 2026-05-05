@@ -6,7 +6,24 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
 
 <title>ZopDay · Ship faster, sleep through your deploys · ZopDev</title>
-<meta name="description" content="ZopDay is the deployment orchestration layer for ZopDev. Pipeline runner, dependency-aware deploys, multi-cloud release management. Currently in beta — join the waitlist."/>
+<meta name="description" content="ZopDay is the deployment orchestration layer for ZopDev. Pipeline runner, dependency-aware deploys, multi-cloud release management. Currently in beta, join the waitlist."/>
+
+<!-- ============================================================
+     LOADER GATE · sessionStorage flag shared with index.html.
+     First visit to any ZopDev site in a tab marks the flag so the
+     full brand-intro loader on the umbrella runs once per session.
+     Subsequent navigations (including landing on this product page
+     first) leave the flag set, so the homepage loader skips next.
+     ============================================================ -->
+<script>
+(function(){
+  try {
+    if(sessionStorage.getItem('zd-loader-shown-v1') !== '1'){
+      sessionStorage.setItem('zd-loader-shown-v1', '1');
+    }
+  } catch(e){ /* sessionStorage unavailable, no-op */ }
+})();
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -115,10 +132,10 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
 
 /* What's coming · 4 cards */
 .zd-coming{
-  display:grid; grid-template-columns:repeat(2, 1fr);
+  display:grid; grid-template-columns:repeat(3, 1fr);
   gap:0; border:1px solid var(--line); background:var(--line);
 }
-@media (max-width:768px){ .zd-coming{ grid-template-columns:1fr; } }
+@media (max-width:900px){ .zd-coming{ grid-template-columns:1fr; } }
 .zd-card{
   background:var(--bg-1); padding:var(--sp-8) var(--sp-7);
   display:flex; flex-direction:column; gap:var(--sp-4);
@@ -163,6 +180,310 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
 .zd-final .zd-form{ max-width:480px; margin:0 auto; }
 
 @media (max-width:768px){ .page > section{ padding:var(--sec-pad-sm) 0; } }
+
+/* --- Templates · pre-built blueprints (Coming soon) --- */
+.zd-templates{
+  display:grid; grid-template-columns:repeat(2, 1fr); gap:var(--sp-5);
+}
+@media (max-width:768px){ .zd-templates{ grid-template-columns:1fr; } }
+.zd-tpl{
+  background:var(--bg-1); border:1px solid var(--line); border-radius:6px;
+  padding:var(--sp-6);
+  display:flex; flex-direction:column; gap:var(--sp-3);
+  transition:border-color var(--dur-fast) var(--ease-out);
+}
+.zd-tpl:hover{ border-color:var(--zop-orange); }
+.zd-tpl-stack{
+  font-family:var(--mono); font-size:var(--t-13); font-weight:600;
+  color:var(--zop-orange); letter-spacing:.02em;
+}
+.zd-tpl p{ margin:0; color:var(--ink-3); font-size:var(--t-14); line-height:var(--lh-body); }
+.zd-tpl-cta{
+  display:flex; align-items:center; gap:var(--sp-4);
+  margin-top:var(--sp-6); justify-content:center; flex-wrap:wrap;
+}
+.zd-tpl-badge{
+  font-family:var(--mono); font-size:var(--t-11); letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink-3);
+  border:1px dashed var(--line); padding:4px 10px; border-radius:3px;
+}
+
+/* --- FAQ · zd-faq inherits faq-list base, adds spacing --- */
+.zd-faq{ margin-top:var(--sp-6); }
+.zd-faq details{
+  border-top:1px solid var(--line);
+  padding:var(--sp-5) 0;
+}
+.zd-faq details:last-child{ border-bottom:1px solid var(--line); }
+.zd-faq summary{
+  list-style:none; cursor:pointer;
+  display:flex; justify-content:space-between; align-items:flex-start; gap:var(--sp-4);
+  font-size:var(--t-17); font-weight:500; color:var(--ink);
+  line-height:1.35;
+}
+.zd-faq summary::-webkit-details-marker{ display:none; }
+.zd-faq .faq-chevron{
+  font-family:var(--mono); color:var(--zop-orange); font-size:var(--t-18);
+  flex-shrink:0; transition:transform var(--dur-fast) var(--ease-out);
+}
+.zd-faq details[open] .faq-chevron{ transform:rotate(45deg); }
+.zd-faq .faq-body{
+  padding-top:var(--sp-4); color:var(--ink-3);
+  font-size:var(--t-15); line-height:var(--lh-body); max-width:780px;
+}
+.zd-faq .faq-body p{ margin:0 0 var(--sp-3); }
+.zd-faq .faq-body p:last-child{ margin-bottom:0; }
+.zd-faq .faq-body em{ color:var(--ink); font-style:normal; }
+
+/* --- Section 1 · Problem table --- */
+.zd-problem-wrap{ margin-top:var(--sp-8); }
+.zd-problem{
+  width:100%; border-collapse:collapse;
+  font-family:var(--font); font-size:var(--t-15);
+  background:var(--bg-1);
+}
+.zd-problem th, .zd-problem td{
+  padding:var(--sp-4) var(--sp-5);
+  border-bottom:1px solid var(--line);
+  text-align:left; vertical-align:top;
+}
+.zd-problem thead th{
+  font-family:var(--mono); font-size:var(--t-11);
+  letter-spacing:.06em; text-transform:uppercase;
+  color:var(--ink-3); border-bottom:1px solid var(--ink);
+}
+.zd-problem tbody td:first-child{ font-weight:500; color:var(--ink); width:50%; }
+.zd-problem tbody td:last-child{ color:var(--ink-3); }
+.zd-problem-tag{
+  margin:var(--sp-5) 0 0; font-size:var(--t-15);
+  color:var(--ink-3); text-align:center;
+}
+
+/* --- Section 3 · How it works in 4 minutes --- */
+.zd-howto-wrap{ margin-top:var(--sp-8); overflow-x:auto; }
+.zd-howto{
+  width:100%; border-collapse:collapse;
+  font-family:var(--font); font-size:var(--t-14);
+  background:var(--bg-1);
+}
+.zd-howto th, .zd-howto td{
+  padding:var(--sp-4) var(--sp-5);
+  border-bottom:1px solid var(--line);
+  text-align:left; vertical-align:top;
+}
+.zd-howto thead th{
+  font-family:var(--mono); font-size:var(--t-11);
+  letter-spacing:.06em; text-transform:uppercase;
+  color:var(--ink-3); border-bottom:1px solid var(--ink);
+}
+.zd-howto thead th:last-child{ text-align:right; }
+.zd-howto tbody td:first-child{ font-weight:500; color:var(--ink); width:24%; }
+.zd-howto tbody td:nth-child(2){ color:var(--ink-3); }
+.zd-howto tbody td:last-child{ font-family:var(--mono); color:var(--zop-orange); text-align:right; width:80px; }
+.zd-howto-cta{
+  display:flex; align-items:center; gap:var(--sp-4);
+  margin-top:var(--sp-6); flex-wrap:wrap;
+}
+.zd-howto-note{
+  font-family:var(--mono); font-size:var(--t-11); color:var(--ink-3);
+  letter-spacing:.02em;
+}
+
+/* --- Section 5 · vs PaaS / Internal / Raw --- */
+.zd-compare-wrap{ margin-top:var(--sp-8); overflow-x:auto; }
+.zd-compare{
+  width:100%; border-collapse:collapse;
+  font-family:var(--mono); font-size:var(--t-13);
+  background:var(--bg-1);
+}
+.zd-compare th, .zd-compare td{
+  padding:var(--sp-3) var(--sp-4);
+  border-bottom:1px solid var(--line);
+  text-align:center; vertical-align:middle;
+}
+.zd-compare thead th{
+  font-weight:600; color:var(--ink-3); text-transform:uppercase;
+  letter-spacing:.06em; font-size:var(--t-11); line-height:1.3;
+  border-bottom:1px solid var(--ink);
+}
+.zd-compare thead th small{ display:block; font-size:var(--t-10); color:var(--ink-5); margin-top:2px; font-weight:400; text-transform:none; }
+.zd-compare tbody th{ text-align:left; font-weight:500; color:var(--ink); }
+.zd-compare td{ color:var(--ink-3); }
+.zd-compare .zd-us{ background:rgba(245,133,73,.08); color:var(--ink); }
+.zd-compare thead .zd-us{ color:var(--zop-orange); border-bottom-color:var(--zop-orange); }
+.zd-compare tbody td.zd-us strong{ color:var(--zop-orange); }
+.zd-compare-tag{
+  margin:var(--sp-5) 0 0; font-size:var(--t-15);
+  color:var(--ink-3); text-align:center;
+}
+@media (max-width:720px){
+  .zd-compare{ font-size:var(--t-11); }
+  .zd-compare th, .zd-compare td{ padding:var(--sp-2) var(--sp-3); }
+}
+
+/* --- Section 6 · MCP --- */
+.zd-mcp{
+  display:flex; flex-direction:column; gap:var(--sp-5);
+  align-items:flex-start; margin-top:var(--sp-8); max-width:680px;
+}
+.zd-mcp-prompts{
+  list-style:none; padding:0; margin:0;
+  display:flex; flex-direction:column; gap:var(--sp-3); width:100%;
+}
+.zd-mcp-prompts .prompt{
+  display:inline-block; font-family:var(--mono); font-size:var(--t-14);
+  background:var(--bg-1); border:1px solid var(--line);
+  border-radius:3px; padding:var(--sp-3) var(--sp-4);
+  color:var(--ink); border-left:3px solid var(--zop-orange);
+}
+.zd-mcp-note{ font-size:var(--t-14); color:var(--ink-3); margin:0; line-height:var(--lh-body); }
+
+/* --- Section 7 · Open source DNA --- */
+.zd-gofr{
+  margin-top:var(--sp-6);
+  display:flex; flex-direction:column; gap:var(--sp-4);
+  max-width:720px;
+}
+.zd-gofr p{ font-size:var(--t-15); color:var(--ink-3); line-height:var(--lh-body); margin:0; }
+.zd-gofr p a{ color:var(--zop-orange); text-decoration:underline; }
+.zd-gofr-pull{ font-size:var(--t-17) !important; color:var(--ink) !important; font-style:normal; }
+.zd-gofr-cta{ display:flex; gap:var(--sp-3); flex-wrap:wrap; margin-top:var(--sp-3); }
+
+/* --- Section 8 · Pricing tier table --- */
+.zd-pricing-wrap{ margin-top:var(--sp-8); overflow-x:auto; }
+.zd-pricing{
+  width:100%; border-collapse:collapse;
+  font-family:var(--font); font-size:var(--t-14);
+  background:var(--bg-0);
+}
+.zd-pricing th, .zd-pricing td{
+  padding:24px 16px !important;
+  border-bottom:1px solid var(--line);
+  text-align:center; vertical-align:middle !important;
+  line-height:1.5;
+}
+.zd-pricing thead th{
+  font-weight:600; color:var(--ink); text-transform:uppercase;
+  letter-spacing:.06em; font-size:var(--t-12);
+  border-bottom:1px solid var(--ink); padding-top:var(--sp-5); padding-bottom:var(--sp-3);
+}
+.zd-pricing thead .zd-us{ color:var(--zop-orange); border-bottom-color:var(--zop-orange); }
+.zd-pricing-tagline td{
+  font-family:var(--mono); font-size:var(--t-11); color:var(--ink-3);
+  border-bottom:1px solid var(--line); padding-top:0; padding-bottom:var(--sp-4);
+}
+.zd-pricing tbody th{ text-align:left; font-weight:500; color:var(--ink); }
+.zd-pricing tbody td{ color:var(--ink-3); }
+.zd-pricing .zd-us{ background:rgba(245,133,73,.06); }
+.zd-pricing-hi td{ background:rgba(245,133,73,.04); }
+.zd-pricing-hi td.zd-us{ background:rgba(245,133,73,.10); }
+.zd-pricing-price th, .zd-pricing-price td{
+  padding-top:var(--sp-5); padding-bottom:var(--sp-5);
+  font-size:var(--t-17); color:var(--ink);
+}
+.zd-pricing-price td.zd-us strong{ color:var(--zop-orange); }
+.zd-pricing-cta-row td{ padding-top:var(--sp-4); padding-bottom:var(--sp-5); border-bottom:none; }
+.zd-pricing-foot{
+  font-size:var(--t-15); color:var(--ink); margin:var(--sp-6) 0 0; text-align:center;
+}
+.zd-pricing-foot strong{ color:var(--zop-orange); font-weight:700; }
+@media (max-width:720px){
+  .zd-pricing{ font-size:var(--t-11); }
+  .zd-pricing th, .zd-pricing td{ padding:var(--sp-2) var(--sp-3); }
+}
+
+/* --- Section 9 · Trust posture bullets --- */
+.zd-trust-list{
+  list-style:none; padding:0; margin:var(--sp-8) 0 0;
+  display:grid; grid-template-columns:repeat(2, 1fr); gap:var(--sp-4) var(--sp-8);
+}
+@media (max-width:720px){ .zd-trust-list{ grid-template-columns:1fr; } }
+.zd-trust-list li{
+  font-size:var(--t-15); color:var(--ink-2); line-height:var(--lh-body);
+  padding-left:var(--sp-5); position:relative;
+}
+.zd-trust-list li::before{
+  content:""; position:absolute; left:0; top:.65em;
+  width:8px; height:8px; background:var(--zop-orange); border-radius:50%;
+}
+.zd-trust-list strong{ color:var(--ink); font-weight:600; }
+
+/* --- Section 10 · Stakeholder grid --- */
+.zd-stake-wrap{ margin-top:var(--sp-8); overflow-x:auto; }
+.zd-stake{
+  width:100%; border-collapse:collapse;
+  font-family:var(--font); font-size:var(--t-14);
+  background:var(--bg-1);
+}
+.zd-stake th, .zd-stake td{
+  padding:var(--sp-4) var(--sp-5);
+  border-bottom:1px solid var(--line);
+  text-align:left; vertical-align:top;
+}
+.zd-stake thead th{
+  font-family:var(--mono); font-size:var(--t-11);
+  letter-spacing:.06em; text-transform:uppercase;
+  color:var(--ink-3); border-bottom:1px solid var(--ink);
+}
+.zd-stake tbody th{ width:22%; color:var(--ink); }
+.zd-stake tbody th strong{ color:var(--zop-orange); font-weight:700; }
+.zd-stake tbody td{ color:var(--ink-3); width:39%; }
+@media (max-width:720px){
+  .zd-stake th, .zd-stake td{ padding:var(--sp-3); font-size:var(--t-13); }
+}
+
+/* --- Trust strip · 4-box panel design (matches zn-stats pattern) --- */
+.zd-stats{
+  background:var(--bg-0); border-bottom:1px solid var(--line);
+  padding:var(--sp-12) 0;
+}
+.zd-stats .container{
+  display:grid; grid-template-columns:repeat(4, 1fr); gap:var(--sp-8);
+}
+@media (max-width:768px){
+  .zd-stats .container{ grid-template-columns:repeat(2, 1fr); }
+}
+.zd-stat .v{
+  font-size:clamp(36px, 4vw, 56px);
+  letter-spacing:var(--ls-display); line-height:1; color:var(--ink);
+  margin:6px 0 10px; font-weight:600;
+}
+.zd-stat .v em{ color:var(--zop-orange); font-style:normal; }
+.zd-stat .k{
+  font-family:var(--mono); font-size:var(--t-11); letter-spacing:.08em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+.zd-stat .l{ font-size:var(--t-13); color:var(--ink-3); line-height:var(--lh-body); }
+
+/* --- Section 1 closing callout (parallels zn-callout-section) --- */
+.zd-callout-section{
+  background:var(--bg-0); border-bottom:1px solid var(--line);
+}
+.zd-callout-section .container{ padding:var(--sp-16) 0; text-align:center; }
+.zd-callout{ max-width:880px; margin:0 auto; }
+.zd-callout-eyebrow{
+  font-family:var(--mono); font-size:var(--t-11); letter-spacing:.12em;
+  text-transform:uppercase; color:var(--zop-orange); margin-bottom:var(--sp-4);
+}
+.zd-callout-headline{
+  font-size:clamp(32px, 4.4vw, 56px);
+  letter-spacing:var(--ls-heading); line-height:var(--lh-heading);
+  margin:0 0 var(--sp-6); color:var(--ink);
+  max-width:880px; margin-inline:auto;
+}
+.zd-callout-headline em{ color:var(--zop-orange); font-style:normal; }
+.zd-callout-sub{
+  font-size:var(--t-17); color:var(--ink-3); line-height:var(--lh-body);
+  max-width:640px; margin:0 auto;
+}
+
+/* --- Section 2 closing tag --- */
+.zd-stages-tag{
+  margin:var(--sp-6) 0 0; text-align:center;
+  font-size:var(--t-17); color:var(--ink-2);
+  font-style:normal;
+}
+.zd-stages-tag strong{ color:var(--zop-orange); font-weight:700; font-style:normal; }
 </style>
 <script src="chrome-mobilenav.js" defer></script>
 <script src="chrome-footer.js" defer></script>
@@ -192,19 +513,6 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
     </symbol>
   </defs>
 </svg>
-
-<!-- Announcement bar -->
-<div class="ann-bar" id="ann-bar">
-  <div class="ann-inner">
-    <a href="developers.html" class="ann-chip">
-      <span class="ann-dot"></span>
-      <strong>MCP Server</strong>, live in Claude &amp; Codex
-      <span class="ann-arrow">→</span>
-    </a>
-    <a href="changelog.html" class="ann-link">Changelog →</a>
-    <button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button>
-  </div>
-</div>
 
 <!-- Live-ops strip -->
 <!-- ============================================================
@@ -415,21 +723,107 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
     </div>
     <div class="container zd-hero-inner">
       <div>
-        <div class="zd-tag">ZopDay · beta · invite-only</div>
-        <h1>Ship faster. <em>Sleep through your deploys.</em></h1>
-        <p class="lead">ZopDay is the deployment layer ZopDev customers asked us to build. <strong>Pipeline runner. Dependency-aware releases. Multi-cloud out of the box.</strong> Currently in private beta &mdash; we're letting in 5 teams a week.</p>
+        <div class="zd-tag">ZopDay · platform engineering · BYOC</div>
+        <h1>The platform engineering layer <em>your cloud doesn't ship with.</em></h1>
+        <p class="lead">Landing zone, deploy pipeline, drift remediation, audit, built once, runs on AWS, GCP, and Azure. Your team gets push-to-deploy speed without <strong>the 6-month internal-platform project.</strong></p>
+        <div class="zd-hero-cta">
+          <a class="btn btn-primary" href="demo.html">
+            <svg class="btn-mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#mark-zopday"/></svg>
+            Open the playground <span aria-hidden="true">&rarr;</span>
+          </a>
+          <a class="btn btn-secondary" href="signin.html">Deploy on your cloud <span aria-hidden="true">&rarr;</span></a>
+        </div>
+        <p class="zd-hero-meta"><em>AWS &middot; GCP &middot; Azure &middot; BYOC &middot; ISO 27001 &middot; SOC 2 Type II &middot; Open-source roots</em></p>
       </div>
 
       <aside class="zd-waitlist" aria-label="Join the beta">
-        <div class="lab">private beta · join the waitlist</div>
-        <div class="num">847</div>
-        <h3>teams ahead of you, on average.</h3>
-        <p>We move fast. Most teams who sign up Monday are running their first ZopDay deploy by Friday.</p>
-        <form class="zd-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='✓ on the list';">
+        <div class="lab">trusted by mcafee · 12 aws accounts · 48 k8s clusters</div>
+        <div class="num">30</div>
+        <h3>minutes to a production-grade landing zone.</h3>
+        <p>Push code → production via Helm. No Dockerfile required, we auto-build from your repo. Security scans on every build. Audit trail on every deploy.</p>
+        <form class="zd-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='✓ opening playground';">
           <input type="email" placeholder="you@team.com" required/>
-          <button type="submit"><svg class="btn-mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#mark-zopday"/></svg>Join</button>
+          <button type="submit"><svg class="btn-mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#mark-zopday"/></svg>Open the playground</button>
         </form>
       </aside>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       TRUST STRIP · doc C · Trust strip (4-box panel design)
+       ============================================================ -->
+  <section class="zd-stats zd-stats-trust">
+    <div class="container">
+      <div class="zd-stat">
+        <span class="k">customer</span>
+        <div class="v">McAfee</div>
+        <div class="l">running platform engineering on ZopDay in production</div>
+      </div>
+      <div class="zd-stat">
+        <span class="k">AWS accounts</span>
+        <div class="v">12</div>
+        <div class="l">multi-cloud landing zones, BYOC</div>
+      </div>
+      <div class="zd-stat">
+        <span class="k">K8s clusters</span>
+        <div class="v">48</div>
+        <div class="l">across regions, all CDCR-monitored</div>
+      </div>
+      <div class="zd-stat">
+        <span class="k">throughput</span>
+        <div class="v">1,000<em>+</em></div>
+        <div class="l">req/sec sustained on production</div>
+      </div>
+    </div>
+    <div class="container">
+      <p class="zd-trust-italic"><em>AWS &middot; GCP &middot; Azure &middot; BYOC &middot; GoFr open-source &middot; Apache 2.0</em></p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 1 · THE PROBLEM
+       Your cloud is fast. Building on it isn't.
+       ============================================================ -->
+  <section>
+    <div class="container">
+      <div class="zd-sec-head">
+        <div>
+          <div class="meta">section 1 · the problem</div>
+          <h2>Your cloud is fast. <em>Building on it isn't.</em></h2>
+        </div>
+        <p class="sub">Every team eventually hits the same wall: the cloud gives you primitives, VPCs, IAM, K8s, secret managers, but not a platform. So someone on your team builds one. Helm charts. Terraform modules. CI templates. A wiki nobody updates. A landing zone that takes six weeks. A drift problem that returns every quarter.</p>
+      </div>
+
+      <div class="zd-problem-wrap">
+        <table class="zd-problem">
+          <thead>
+            <tr><th scope="col">What teams build internally</th><th scope="col">What it really costs</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Landing zone + IaC modules</td><td>6&ndash;8 weeks per environment</td></tr>
+            <tr><td>Helm + ingress + cert-manager glue</td><td>1&ndash;2 platform engineers, full-time</td></tr>
+            <tr><td>Drift detection + remediation</td><td>Catching it post-incident, not before</td></tr>
+            <tr><td>Audit trail across deploys</td><td>&ldquo;We&rsquo;ll do it before the audit&rdquo;</td></tr>
+            <tr><td>Onboarding a new cloud</td><td>Re-do the whole thing</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 1 · CLOSING CALLOUT
+       That work is real. It's also not your product.
+       ============================================================ -->
+  <section class="zd-callout-section">
+    <div class="container">
+      <div class="zd-callout">
+        <div class="zd-callout-eyebrow">the main thing</div>
+        <h2 class="zd-callout-headline">
+          That work is real. <em>It's also not your product.</em>
+        </h2>
+        <p class="zd-callout-sub">Helm, Terraform, ingress, secrets, drift remediation, audit forwarding, every team rebuilds it. ZopDay ships the platform so your team can stop maintaining their own and ship product instead.</p>
+      </div>
     </div>
   </section>
 
@@ -438,38 +832,119 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
     <div class="container">
       <div class="zd-sec-head">
         <div>
-          <div class="meta">what ships in beta</div>
-          <h2>The deployment layer <em>without the YAML cliff.</em></h2>
+          <div class="meta">section 2 · three stages</div>
+          <h2>One platform. Three stages. <em>Security baked in at every step.</em></h2>
         </div>
-        <p class="sub">Most "deployment platforms" are config-file factories. ZopDay is a state machine you can read in a single screen.</p>
+        <p class="sub">Day 0 to landing zone. Every day to deploys. Every minute to CDCR.</p>
       </div>
 
       <div class="zd-coming">
 
         <article class="zd-card">
-          <span class="badge">live in beta</span>
-          <h3>Pipeline runner</h3>
-          <p>Triggers on push, tag, or schedule. Runs against AWS, GCP, Azure, or your own kubeconfig. No agent install &mdash; pulls from your registry over a signed token.</p>
+          <span class="badge">Day 0</span>
+          <h3>01 · Landing Zone</h3>
+          <p>Production-grade compute, datastores, networks. 30 minutes, every cloud. GKE · EKS · AKS via wizard. MySQL · Postgres · Redis with HA, backups, deletion protection. RBAC and secrets from minute zero. IRDAI controls applied by default.</p>
         </article>
 
         <article class="zd-card">
-          <span class="badge">live in beta</span>
-          <h3>Dependency-aware deploys</h3>
-          <p>Database migrations gate API rollout. API rollout gates frontend. Failed migration? The whole flight is held. No more "front-end deployed, back-end didn't" Slack threads.</p>
+          <span class="badge">Every day</span>
+          <h3>02 · Deployment</h3>
+          <p>Push code → production via Helm. No Dockerfile required, we auto-build from your repo. Security scans on every build. DORA-grade visibility. One-click rollback. Sensitive env vars masked, stored in your cloud's native secret manager, never ours.</p>
         </article>
 
         <article class="zd-card">
-          <span class="badge soon">Q2 2026</span>
-          <h3>Release management</h3>
-          <p>Canary, blue-green, progressive rollout out of the box. Health checks plug into the same metrics ZopNight uses for right-sizing &mdash; one source of truth for "is this thing OK?"</p>
+          <span class="badge">Every minute</span>
+          <h3>03 · CDCR</h3>
+          <p>Continuous Detection. Continuous Remediation. Drift on VPCs, IAM, K8s, secrets, caught in real time. Auto-fix where safe. PR-style guided remediation for the rest. Self-healing on K8s. Production writes opt-in, scoped, fully logged.</p>
         </article>
 
-        <article class="zd-card">
-          <span class="badge soon">Q3 2026</span>
-          <h3>Auto-rollback</h3>
-          <p>SLO breach → automatic rollback to the last known-good. The threshold is yours; the response is instant. Pages your on-call <em>after</em> the fix has shipped.</p>
+      </div>
+
+      <p class="zd-stages-tag"><em>CI/CD made code continuous. <strong>CDCR makes your cloud continuous.</strong></em></p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 2.5 · TEMPLATES · pre-built blueprints (Coming soon)
+       (resolution to docx comments 11 / 12)
+       ============================================================ -->
+  <section>
+    <div class="container">
+      <div class="zd-sec-head">
+        <div>
+          <div class="meta">section · templates</div>
+          <h2>Pre-built templates. <em>Production patterns out of the box.</em></h2>
+        </div>
+        <p class="sub">Skip the blank canvas. Start from a curated stack, edit a few env vars, and deploy. Every template ships as Helm + the same landing-zone primitives, so you keep all the platform discipline.</p>
+      </div>
+
+      <div class="zd-templates">
+
+        <article class="zd-tpl">
+          <div class="zd-tpl-stack">Node + Postgres + Redis</div>
+          <h3>API service</h3>
+          <p>REST/gRPC service with Postgres, Redis cache, structured logging, OpenAPI docs, health checks, autoscaling baseline.</p>
+          <span class="zd-tpl-badge">coming soon</span>
         </article>
 
+        <article class="zd-tpl">
+          <div class="zd-tpl-stack">Next.js + Postgres + S3</div>
+          <h3>Full-stack web app</h3>
+          <p>SSR frontend, managed Postgres, object storage, auth scaffold, CDN, preview environments per branch.</p>
+          <span class="zd-tpl-badge">coming soon</span>
+        </article>
+
+        <article class="zd-tpl">
+          <div class="zd-tpl-stack">Go + Kafka + Redis</div>
+          <h3>Event-driven worker</h3>
+          <p>Background worker pool, Kafka consumer, retry queues, dead-letter routing, Prometheus metrics, graceful shutdown.</p>
+          <span class="zd-tpl-badge">coming soon</span>
+        </article>
+
+        <article class="zd-tpl">
+          <div class="zd-tpl-stack">Python + Postgres + Celery</div>
+          <h3>Data pipeline</h3>
+          <p>Scheduled and event-driven jobs, task queue, S3-backed artifact store, lineage logging, IRDAI-ready audit trail.</p>
+          <span class="zd-tpl-badge">coming soon</span>
+        </article>
+
+      </div>
+
+      <p class="zd-stages-tag" style="margin-top:24px"><em>Templates are <strong>blueprints, not lock-in</strong>. Bring your own Terraform, override any layer, eject any time. Same platform underneath.</em></p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 3 · HOW IT ACTUALLY WORKS IN 4 MINUTES
+       From git push to live URL, without leaving the editor.
+       ============================================================ -->
+  <section>
+    <div class="container">
+      <div class="zd-sec-head">
+        <div>
+          <div class="meta">section 3 · how it actually works</div>
+          <h2>From git push to live URL, <em>without leaving the editor.</em></h2>
+        </div>
+      </div>
+
+      <div class="zd-howto-wrap">
+        <table class="zd-howto">
+          <thead>
+            <tr><th scope="col">Step</th><th scope="col">What happens</th><th scope="col">Time</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>1.</strong> Connect your cloud</td><td>OAuth-style connect for AWS, GCP, or Azure. Read-only first; write scoped, opt-in.</td><td>30s</td></tr>
+            <tr><td><strong>2.</strong> Point at a repo</td><td>GitHub App or paste a URL. Branch picker. Auto-deploy on push toggle.</td><td>30s</td></tr>
+            <tr><td><strong>3.</strong> We scan + analyze</td><td>We detect your stack, Node, Python, Go, Java. No Dockerfile needed. You can override.</td><td>60s</td></tr>
+            <tr><td><strong>4.</strong> Configure</td><td>Env vars, port, root path. Sensitive values masked. Secrets land in your cloud&rsquo;s vault.</td><td>60s</td></tr>
+            <tr><td><strong>5.</strong> Deploy</td><td>Helm rollout with live status. Ingress, DNS, cert-manager handled.</td><td>90s</td></tr>
+            <tr><td><strong>6.</strong> Live URL</td><td>Service live. Topology updated. Audit log written. Slack/Teams ping.</td><td>&mdash;</td></tr>
+          </tbody>
+        </table>
+        <div class="zd-howto-cta">
+          <a class="btn btn-primary" href="demo.html">Open the playground</a>
+          <span class="zd-howto-note">(mock data, no card, real flow)</span>
+        </div>
       </div>
     </div>
   </section>
@@ -479,8 +954,8 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
     <div class="container">
       <div class="zd-sec-head">
         <div>
-          <div class="meta">why we're building it</div>
-          <h2>Because the <em>"deploy with confidence"</em> tools don't.</h2>
+          <div class="meta">section 4 · proof</div>
+          <h2>McAfee runs platform engineering <em>on ZopDay.</em></h2>
         </div>
       </div>
 
@@ -489,34 +964,362 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
         <div class="zd-why-item">
           <span class="num">01</span>
           <div>
-            <h3>Two systems, one source of truth.</h3>
-            <p>ZopNight already knows your inventory, dependencies, and metrics. ZopDay deploys onto that map. No "import your services" tax &mdash; we already have them.</p>
+            <h3>12 AWS accounts · 48 K8s clusters.</h3>
+            <p>30-node max. 1,000+ req/sec in production. Running in production today.</p>
           </div>
         </div>
 
         <div class="zd-why-item">
           <span class="num">02</span>
           <div>
-            <h3>Multi-cloud from line one.</h3>
-            <p>If your stack spans AWS + GCP, your deploy tool shouldn't make you pick one. ZopDay treats each provider as a target, not a religion.</p>
+            <h3>60% faster deployments.</h3>
+            <p>Pipeline-driven, standardized. Manual and error-prone before ZopDay.</p>
           </div>
         </div>
 
         <div class="zd-why-item">
           <span class="num">03</span>
           <div>
-            <h3>The pipeline reads like English.</h3>
-            <p>Your release plan is a single declarative file, ~30 lines, no Helm charts to maintain. Reviewers can understand it. Your CFO can understand it.</p>
+            <h3>40% less audit prep.</h3>
+            <p>Compliance centralized across regions. Hard to enforce before ZopDay.</p>
           </div>
         </div>
 
         <div class="zd-why-item">
           <span class="num">04</span>
           <div>
-            <h3>Cost-aware deploys.</h3>
-            <p>Deploying a heavier instance? ZopDay flags it before the apply runs. Deploying overnight? It uses the spot pool ZopNight already cleaned up. Day and Night talk to each other.</p>
+            <h3>30% faster MTTR.</h3>
+            <p>Full-stack observability. "Zop has been instrumental in simplifying our multi-cloud operations, a must-have for any organization managing complex cloud environments.", Mahesh Tyagarajan, VP Platform Engineering, McAfee</p>
           </div>
         </div>
+
+      </div>
+
+      <div class="zd-proof-cta">
+        <a class="btn btn-secondary" href="customers.html">Read the case study <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 5 · WHERE ZOPDAY FITS · vs PaaS / Internal / Raw
+       Hosted PaaS rents you their stack. Internal platforms cost a team.
+       ============================================================ -->
+  <section>
+    <div class="container">
+      <div class="zd-sec-head">
+        <div>
+          <div class="meta">section 5 · where zopday fits</div>
+          <h2>Hosted PaaS rents you their stack. <em>Internal platforms cost you a team.</em></h2>
+        </div>
+      </div>
+
+      <div class="zd-compare-wrap">
+        <table class="zd-compare">
+          <thead>
+            <tr>
+              <th scope="col">&nbsp;</th>
+              <th scope="col">Hosted PaaS<br/><small>Render, Railway, Heroku, ZopCloud</small></th>
+              <th scope="col">Internal Platform<br/><small>Backstage, Spinnaker, DIY</small></th>
+              <th scope="col">Raw K8s + Terraform</th>
+              <th scope="col" class="zd-us">ZopDay</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">BYOC (your cloud, your bill)</th><td>—</td><td>✓</td><td>✓</td><td class="zd-us"><strong>✓</strong></td></tr>
+            <tr><th scope="row">Push-to-deploy UX</th><td>✓</td><td>depends</td><td>—</td><td class="zd-us"><strong>✓</strong></td></tr>
+            <tr><th scope="row">30-min landing zone</th><td>n/a</td><td>weeks</td><td>weeks</td><td class="zd-us"><strong>✓</strong></td></tr>
+            <tr><th scope="row">Drift detection + auto-fix (CDCR)</th><td>—</td><td>DIY</td><td>—</td><td class="zd-us"><strong>✓</strong></td></tr>
+            <tr><th scope="row">Multi-cloud (AWS · GCP · Azure)</th><td>partial</td><td>DIY</td><td>DIY</td><td class="zd-us"><strong>✓</strong></td></tr>
+            <tr><th scope="row">DORA + audit baked in</th><td>partial</td><td>DIY</td><td>DIY</td><td class="zd-us"><strong>✓</strong></td></tr>
+            <tr><th scope="row">India residency · IRDAI · DPDP</th><td>—</td><td>DIY</td><td>DIY</td><td class="zd-us"><strong>✓</strong></td></tr>
+            <tr><th scope="row">Engineer-time to maintain</th><td>—</td><td>high</td><td>very high</td><td class="zd-us"><strong>low</strong></td></tr>
+          </tbody>
+        </table>
+        <p class="zd-compare-tag"><em>ZopDay gives you the platform, on the cloud you already have.</em></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 6 · MCP · Deploy from your editor.
+       ============================================================ -->
+  <section>
+    <div class="container">
+      <div class="zd-sec-head">
+        <div>
+          <div class="meta">section 6 · mcp / ai-native</div>
+          <h2>Deploy from your editor. <em>Without leaving Claude.</em></h2>
+        </div>
+        <p class="sub">ZopDay ships an MCP server with <strong>read + scoped-write tools</strong> for services, environments, deployments, env vars, and topology.</p>
+      </div>
+
+      <div class="zd-mcp">
+        <ul class="zd-mcp-prompts">
+          <li><span class="prompt">&ldquo;Deploy this branch to staging.&rdquo;</span></li>
+          <li><span class="prompt">&ldquo;What broke in the last release?&rdquo;</span></li>
+          <li><span class="prompt">&ldquo;Roll back the API service to the previous revision.&rdquo;</span></li>
+          <li><span class="prompt">&ldquo;Show me the topology for this project.&rdquo;</span></li>
+        </ul>
+        <p class="zd-mcp-note">Connect Claude Desktop, Cursor, Codex, or Claude Code. PAT-authenticated. Write actions are scoped per-role and logged immutably.</p>
+        <a class="btn btn-secondary" href="developers.html">Setup guide <span aria-hidden="true">&rarr;</span></a>
+      </div>
+      <!-- VISUAL REQUIRED: editor mock with Claude proposing a deploy diff, then executing it -->
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 7 · OPEN SOURCE DNA · Built on GoFr
+       ============================================================ -->
+  <section>
+    <div class="container">
+      <div class="zd-sec-head">
+        <div>
+          <div class="meta">section 7 · open source dna</div>
+          <h2>Built on GoFr. <em>Open source by default.</em></h2>
+        </div>
+      </div>
+
+      <div class="zd-gofr">
+        <p>ZopDay is built on <a href="https://gofr.dev" target="_blank" rel="noopener">GoFr</a>, the open-source Go framework, Apache 2.0 licensed, created by our CTO. The same framework McAfee, FairPrice, and Fortune 500 retail teams run in production.</p>
+        <p class="zd-gofr-pull">Your services build cleanly on it. So do ours.</p>
+        <div class="zd-gofr-cta">
+          <a class="btn btn-secondary gofr-star-link" href="https://github.com/zopdev/gofr" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" style="vertical-align:-2px"><path fill="currentColor" d="M8 .25l2.39 4.84 5.36.78-3.88 3.78.91 5.34L8 12.5l-4.78 2.51.91-5.34L.25 5.87l5.36-.78L8 .25z"/></svg>
+            Star GoFr on GitHub
+            <span class="gofr-star-count" data-gofr-stars aria-live="polite">&middot; <span class="gofr-stars-num">&hellip;</span></span>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+          <a class="btn btn-secondary" href="developer-documentation.html">Read the architecture <span aria-hidden="true">&rarr;</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+  /* Live GoFr GitHub star count · cached 1 hour in localStorage to avoid
+     rate limiting. Falls back silently if the API is unreachable. */
+  (function(){
+    var nodes = document.querySelectorAll('[data-gofr-stars] .gofr-stars-num');
+    if(!nodes.length) return;
+    var key='gofr-stars-v1', ts='gofr-stars-ts-v1', maxAge=3600*1000;
+    function render(n){
+      var f = n >= 1000 ? (n/1000).toFixed(1).replace(/\.0$/,'') + 'k' : String(n);
+      nodes.forEach(function(el){ el.textContent = f; });
+    }
+    try {
+      var cached = localStorage.getItem(key);
+      var when = parseInt(localStorage.getItem(ts)||'0', 10);
+      if(cached && Date.now()-when < maxAge){ render(parseInt(cached,10)); return; }
+    } catch(e){}
+    fetch('https://api.github.com/repos/gofr-dev/gofr', {headers:{'Accept':'application/vnd.github+json'}})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if(!d || typeof d.stargazers_count !== 'number') return;
+        render(d.stargazers_count);
+        try {
+          localStorage.setItem(key, String(d.stargazers_count));
+          localStorage.setItem(ts, String(Date.now()));
+        } catch(e){}
+      })
+      .catch(function(){ /* silent fallback */ });
+  })();
+  </script>
+
+  <!-- ============================================================
+       SECTION 8 · PRICING · Aligned pricing. Free where it matters.
+       ============================================================ -->
+  <section>
+    <div class="container">
+      <div class="zd-sec-head">
+        <div>
+          <div class="meta">section 8 · pricing</div>
+          <h2>Aligned pricing. <em>Free where it matters.</em></h2>
+        </div>
+      </div>
+
+      <div class="zd-pricing-wrap">
+        <table class="zd-pricing">
+          <thead>
+            <tr>
+              <th scope="col">&nbsp;</th>
+              <th scope="col">Free</th>
+              <th scope="col">Team</th>
+              <th scope="col">Growth</th>
+              <th scope="col" class="zd-us">Enterprise</th>
+            </tr>
+            <tr class="zd-pricing-tagline">
+              <td>&nbsp;</td>
+              <td>Connect + 1 service</td>
+              <td>Up to 10 services &middot; 1 cloud</td>
+              <td>Up to 50 services &middot; all 3 clouds</td>
+              <td class="zd-us">Unlimited + SLA</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Playground access</th><td>✓</td><td>✓</td><td>✓</td><td class="zd-us">✓</td></tr>
+            <tr><th scope="row">BYOC (AWS / GCP / Azure)</th><td>1 cloud</td><td>1 cloud</td><td>all 3</td><td class="zd-us">all 3</td></tr>
+            <tr><th scope="row">Push-to-deploy + auto-detect</th><td>✓</td><td>✓</td><td>✓</td><td class="zd-us">✓</td></tr>
+            <tr><th scope="row">Helm rollouts + rollback</th><td>✓</td><td>✓</td><td>✓</td><td class="zd-us">✓</td></tr>
+            <tr><th scope="row">Auto-DNS + cert-manager</th><td>✓</td><td>✓</td><td>✓</td><td class="zd-us">✓</td></tr>
+            <tr><th scope="row">Templates (pre-built blueprints)</th><td>—</td><td>✓ <span class="zd-tpl-badge" style="font-size:var(--t-10);padding:2px 6px;vertical-align:middle">soon</span></td><td>✓ <span class="zd-tpl-badge" style="font-size:var(--t-10);padding:2px 6px;vertical-align:middle">soon</span></td><td class="zd-us">✓ <span class="zd-tpl-badge" style="font-size:var(--t-10);padding:2px 6px;vertical-align:middle">soon</span></td></tr>
+            <tr><th scope="row">DORA metrics</th><td>—</td><td>✓</td><td>✓</td><td class="zd-us">✓</td></tr>
+            <tr><th scope="row">Security scans + audit log</th><td>—</td><td>✓</td><td>✓</td><td class="zd-us">✓</td></tr>
+            <tr class="zd-pricing-hi"><th scope="row">CDCR, drift + auto-fix</th><td>—</td><td>—</td><td><strong>✓</strong></td><td class="zd-us"><strong>✓</strong></td></tr>
+            <tr><th scope="row">MCP server (read + scoped-write)</th><td>✓</td><td>✓</td><td>✓</td><td class="zd-us">✓</td></tr>
+            <tr><th scope="row">SAML SSO, RBAC</th><td>—</td><td>—</td><td>✓</td><td class="zd-us">✓</td></tr>
+            <tr><th scope="row">India residency / VPC deploy</th><td>—</td><td>—</td><td>—</td><td class="zd-us">✓</td></tr>
+            <tr><th scope="row">Support</th><td>community</td><td>business hours</td><td>priority</td><td class="zd-us">dedicated + SLA</td></tr>
+            <tr class="zd-pricing-price">
+              <th scope="row">Price</th>
+              <td><strong>$0</strong></td>
+              <td><strong>$299/mo</strong><sup>*</sup></td>
+              <td><strong>$999/mo</strong><sup>*</sup></td>
+              <td class="zd-us"><strong>Custom</strong></td>
+            </tr>
+            <tr class="zd-pricing-cta-row">
+              <td>&nbsp;</td>
+              <td><a class="btn btn-secondary" href="signin.html">Connect a cloud &rarr;</a></td>
+              <td><a class="btn btn-secondary" href="signin.html">Start trial &rarr;</a></td>
+              <td><a class="btn btn-secondary" href="signin.html">Start trial &rarr;</a></td>
+              <td class="zd-us"><a class="btn btn-primary" href="demo.html">Talk to us &rarr;</a></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="zd-pricing-foot"><strong>No vendor lock-in.</strong> Your services run on your cloud. If you leave ZopDay, the workloads stay where they are.</p>
+        <p class="zd-pricing-foot" style="font-size:var(--t-11); color:var(--ink-4); margin-top:8px"><sup>*</sup>Placeholder pricing, confirm or replace.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 9 · TRUST POSTURE
+       Your cloud. Your keys. Your audit trail.
+       ============================================================ -->
+  <section>
+    <div class="container">
+      <div class="zd-sec-head">
+        <div>
+          <div class="meta">section 9 · trust posture</div>
+          <h2>Your cloud. Your keys. <em>Your audit trail.</em></h2>
+        </div>
+      </div>
+
+      <ul class="zd-trust-list">
+        <li><strong>BYOC.</strong> Workloads run on your AWS/GCP/Azure account. We never host them.</li>
+        <li><strong>Secrets in your vault.</strong> Sensitive env vars sit in your cloud&rsquo;s native secret manager, never ours.</li>
+        <li><strong>No data path</strong> for your application traffic. ZopDay is a control plane, not a proxy.</li>
+        <li><strong>ISO 27001:2022 &middot; SOC 2 Type II</strong> &middot; annually re-audited</li>
+        <li><strong>IRDAI ICS 2023 controls applied by default</strong> &middot; DPDP Act 2023 DPA available</li>
+        <li><strong>GCP India (Mumbai)</strong> &middot; MeitY-empaneled across AWS, Azure, GCP, OCI &middot; sovereign providers buildable</li>
+        <li><strong>Open source roots</strong>, built on GoFr, Apache 2.0</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 10 · STAKEHOLDER GRID · Built for every seat in the room
+       ============================================================ -->
+  <section>
+    <div class="container">
+      <div class="zd-sec-head">
+        <div>
+          <div class="meta">section 10 · stakeholder grid</div>
+          <h2>Built for every seat <em>in the room.</em></h2>
+        </div>
+      </div>
+
+      <div class="zd-stake-wrap">
+        <table class="zd-stake">
+          <thead>
+            <tr><th scope="col">&nbsp;</th><th scope="col">What you get</th><th scope="col">What it stops</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row"><strong>Platform engineer</strong></th><td>A platform you didn&rsquo;t have to build. Helm rollouts, drift detection, audit trail, all in.</td><td>Hand-rolling another module on a Sunday night.</td></tr>
+            <tr><th scope="row"><strong>Founding engineer</strong></th><td>Push-to-deploy speed without losing your cloud.</td><td>The &ldquo;we&rsquo;ll add a CI later&rdquo; tech debt.</td></tr>
+            <tr><th scope="row"><strong>VP Engineering</strong></th><td>Predictable shipping cadence. Real DORA metrics, not vibes.</td><td>The 6-month internal-platform project that&rsquo;s been &ldquo;almost done&rdquo; since Q1.</td></tr>
+            <tr><th scope="row"><strong>CTO</strong></th><td>One platform across three clouds. No vendor lock-in. CDCR keeping production at peak.</td><td>The migration meeting in 18 months when your hosted PaaS bill 4&times;s.</td></tr>
+            <tr><th scope="row"><strong>InfoSec / Audit</strong></th><td>IRDAI-mapped, SOC 2 audited, secrets in your vault, full audit log. Every CDCR action traceable.</td><td>&ldquo;Yet another vendor in our data path.&rdquo;</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FAQ · address Terraform + common objections (comment #10/#13)
+       FAQs help GEO and pre-empt the obvious comparisons
+       ============================================================ -->
+  <section>
+    <div class="container">
+      <div class="zd-sec-head">
+        <div>
+          <div class="meta">faq</div>
+          <h2>Things teams ask <em>before they sign.</em></h2>
+        </div>
+      </div>
+
+      <div class="faq-list zd-faq">
+
+        <details>
+          <summary>How does ZopDay compare to our existing Terraform setup? <span class="faq-chevron">+</span></summary>
+          <div class="faq-body">
+            <p>Terraform models infrastructure. ZopDay models the <em>platform</em> on top of it: the landing zone, the deploy pipeline, the drift remediation, the audit trail, the one-click rollback. You can keep your Terraform and run ZopDay alongside it; or you can use ZopDay templates as the starting modules.</p>
+            <p>Either way, ZopDay never hides what's on your cloud. Every resource it creates is inspectable in your AWS, GCP, or Azure console: same names, same tags, same APIs. If you ever leave, the workloads stay where they are.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Do ZopDay templates replace Terraform? <span class="faq-chevron">+</span></summary>
+          <div class="faq-body">
+            <p>No. Templates are <strong>opinionated platform blueprints</strong>: a stack (e.g. Node + Postgres + Redis) wired with the deploy pipeline, secrets layout, observability, and audit trail you need on day one. They sit on top of Terraform-style infrastructure, not in place of it.</p>
+            <p>For greenfield projects you can let a template stand up the underlying landing zone via ZopDay, and it'll emit the equivalent Terraform so you keep an IaC source of truth. For existing estates, point ZopDay at the cloud account; it reads what's there and lets you graft templates onto live infrastructure without rewrites.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Can I bring my own Terraform modules? <span class="faq-chevron">+</span></summary>
+          <div class="faq-body">
+            <p>Yes. Point ZopDay at a Terraform module in a Git repo or registry; ZopDay calls it the same way your CI would, captures the plan output for review, applies with scoped credentials, and forwards the audit log to your SIEM. State stays in your backend (S3, GCS, Azure Blob, Terraform Cloud), not ours.</p>
+            <p>This is how teams with existing IaC investments adopt ZopDay incrementally: keep your modules, gain the platform layer (deploy pipeline, drift detection, RBAC, DORA metrics) without re-authoring infra code.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>How does drift remediation interact with our existing IaC? <span class="faq-chevron">+</span></summary>
+          <div class="faq-body">
+            <p>ZopDay watches your cloud accounts directly (not your Terraform state) so drift is detected against <em>real</em> resources, not your last apply. When something drifts (an IAM policy widened in the console, a security group manually edited, an untagged resource provisioned by a script) ZopDay opens a PR-style remediation against the IaC source, with the diff, the actor, and the timestamp.</p>
+            <p>You decide whether to auto-fix safe categories (tags, idle cleanup, certs) or hold all writes for human approval. Production writes are always opt-in, scoped per resource type, and fully logged.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Do we need to give up our existing CI? <span class="faq-chevron">+</span></summary>
+          <div class="faq-body">
+            <p>No. ZopDay plugs into GitHub Actions, GitLab CI, CircleCI, or Buildkite. You keep your build steps; ZopDay handles the rollout, secrets injection, ingress, cert-manager, and audit log. If you don't have a CI yet, the GitHub App ships a working pipeline on day one.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>What happens to our workloads if we leave ZopDay? <span class="faq-chevron">+</span></summary>
+          <div class="faq-body">
+            <p>They keep running. ZopDay is a control plane, your workloads live in your AWS, GCP, or Azure account, deployed via Helm into your Kubernetes clusters, with secrets in your cloud's native vault. If you turn ZopDay off, nothing in the data path changes. You lose the ZopDay UI, the drift remediation, and the audit forwarding, but the application keeps serving traffic.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Can we bring our own Helm charts? <span class="faq-chevron">+</span></summary>
+          <div class="faq-body">
+            <p>Yes. Point ZopDay at a chart in a repo, an OCI registry, or your existing chart museum. ZopDay applies your values overlays, your ingress class, and your secret refs without rewriting the chart.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>What's the security model? <span class="faq-chevron">+</span></summary>
+          <div class="faq-body">
+            <p>BYOC. Your workloads run on your cloud account; ZopDay never hosts them. Secrets sit in your cloud's native secret manager, never ours. Application traffic never traverses ZopDay, we are a control plane, not a proxy. Production write actions are opt-in, scoped per role, and fully logged. ISO 27001:2022, SOC 2 Type II, IRDAI mapped, DPDP DPA available.</p>
+          </div>
+        </details>
 
       </div>
     </div>
@@ -525,12 +1328,16 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
   <!-- FINAL CTA -->
   <section class="zd-final">
     <div class="container">
-      <h2>Want to deploy with us <em>this week?</em></h2>
-      <p>Beta access is rolling. Drop your email and we'll route you to the closest open slot.</p>
-      <form class="zd-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='✓ on the list';">
-        <input type="email" placeholder="you@team.com" required/>
-        <button type="submit">Request beta access</button>
-      </form>
+      <h2>See it on your cloud <em>in 4 minutes.</em></h2>
+      <p>Connect a repo. Get a URL. Free for one service. No card.</p>
+      <div class="zd-final-cta">
+        <a class="btn btn-primary" href="demo.html">
+          <svg class="btn-mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#mark-zopday"/></svg>
+          Open the playground <span aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="btn btn-secondary" href="signin.html">Deploy on your cloud <span aria-hidden="true">&rarr;</span></a>
+        <a class="btn btn-secondary" href="demo.html">Book a 20-min walk-through <span aria-hidden="true">&rarr;</span></a>
+      </div>
     </div>
   </section>
 
@@ -565,6 +1372,54 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
 </section>
 
 <!-- BRIDGE MARQUEE · cream slab between dark CTA and dark footer -->
+<!-- ============================================================
+     FOOTER GRADUATION BAND · Day 1 / Day 100 / Day 365
+     Shared across all four sites. "You are here" indicator
+     points to ZopDay (Day 100) on this page.
+     ============================================================ -->
+<section class="section tight" id="graduation-band" aria-label="ZopDev product graduation" data-here="day-100">
+  <div class="container">
+    <div class="docsec-table-wrap">
+      <table class="docsec-table">
+        <thead>
+          <tr>
+            <th>Day 1</th>
+            <th>Day 100 <span class="gb-here" aria-label="you are here">&#9664; you are here</span></th>
+            <th>Day 365</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row"><strong>ZopCloud</strong></th>
+            <th scope="row"><strong>ZopDay</strong></th>
+            <th scope="row"><strong>ZopNight</strong></th>
+          </tr>
+          <tr>
+            <td>We host. You push.</td>
+            <td>Your cloud. Our orchestration.</td>
+            <td>Continuous governance + cost optimization.</td>
+          </tr>
+          <tr>
+            <td><a href="zopcloud.html">&rarr; zopcloud.com</a></td>
+            <td><a href="zopday.html">&rarr; zopday.dev</a></td>
+            <td><a href="zopnight.html">&rarr; zopnight.com</a></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="docsec-tag" style="text-align:center; margin-top:20px; font-style:normal">No re-platform when you grow. No surprise bill when you scale. No drift when it&rsquo;s running. Looking at the platform? <a href="index.html">&rarr; zop.dev</a></p>
+    </div>
+  </div>
+</section>
+<style>
+  #graduation-band .gb-here{
+    display:inline-block; margin-left:8px;
+    font-family:var(--mono); font-size:var(--t-10); letter-spacing:.08em;
+    color:var(--zop-orange); text-transform:uppercase;
+    border:1px solid var(--zop-orange); padding:2px 6px; border-radius:0;
+    vertical-align:middle;
+  }
+</style>
+
 <section class="bridge-marquee" aria-label="ZopDev brand statement">
   <div class="bridge-track">
     <span>Multi-cloud automation</span><span class="acc">·</span>

@@ -17,7 +17,7 @@
   gate, comes from tokens.css + chrome.css. Do not redefine locally.
   ========================================================================
 -->
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -25,23 +25,6 @@
 
 <title>ZopNight · Stop paying for cloud no one is using · ZopDev</title>
 <meta name="description" content="ZopNight schedules cloud resources to power down when nobody is using them and right-sizes what is left. 70% off non-prod spend, 5-minute setup, AWS / GCP / Azure / Kubernetes."/>
-
-<!-- ============================================================
-     LOADER GATE · sessionStorage flag shared with index.html.
-     First visit to any ZopDev site in a tab marks the flag so the
-     full brand-intro loader on the umbrella runs once per session.
-     Subsequent navigations (including landing on this product page
-     first) leave the flag set, so the homepage loader skips next.
-     ============================================================ -->
-<script>
-(function(){
-  try {
-    if(sessionStorage.getItem('zd-loader-shown-v1') !== '1'){
-      sessionStorage.setItem('zd-loader-shown-v1', '1');
-    }
-  } catch(e){ /* sessionStorage unavailable, no-op */ }
-})();
-</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -384,7 +367,7 @@
 .zn-callout-section .container{ padding:var(--sp-16) 0; text-align:center; }
 .zn-callout{ max-width:880px; margin:0 auto; }
 .zn-callout-eyebrow{
-  font-family:var(--mono); font-size:var(--t-11); letter-spacing:.12em;
+  font-family:var(--mono); font-size:11px; letter-spacing:.12em;
   text-transform:uppercase; color:var(--zop-orange); margin-bottom:var(--sp-4);
 }
 .zn-callout-headline{
@@ -403,7 +386,7 @@
 .zn-compare-wrap{ margin-top:var(--sp-10); overflow-x:auto; }
 .zn-compare{
   width:100%; border-collapse:collapse;
-  font-family:var(--mono); font-size:var(--t-13);
+  font-family:var(--mono); font-size:13px;
   background:var(--bg-0);
 }
 .zn-compare th, .zn-compare td{
@@ -413,7 +396,7 @@
 }
 .zn-compare thead th{
   font-weight:600; color:var(--ink-3); text-transform:uppercase;
-  letter-spacing:.06em; font-size:var(--t-11); padding-top:var(--sp-4); padding-bottom:var(--sp-4);
+  letter-spacing:.06em; font-size:11px; padding-top:var(--sp-4); padding-bottom:var(--sp-4);
   border-bottom:1px solid var(--ink);
 }
 .zn-compare tbody th{ text-align:left; font-weight:500; color:var(--ink); }
@@ -422,7 +405,7 @@
 .zn-compare thead .zn-us{ color:var(--zop-orange); border-bottom-color:var(--zop-orange); }
 .zn-compare tbody td.zn-us strong{ color:var(--zop-orange); }
 .zn-compare-note{
-  font-family:var(--mono); font-size:var(--t-11); color:var(--ink-3);
+  font-family:var(--mono); font-size:11px; color:var(--ink-3);
   margin-top:var(--sp-4); letter-spacing:.02em;
 }
 
@@ -442,13 +425,13 @@
 .zn-compare-strap strong{ font-weight:700; color:var(--zop-orange); font-style:normal; }
 .zn-compare-foot{
   margin:var(--sp-4) 0 0;
-  font-family:var(--mono); font-size:var(--t-11);
+  font-family:var(--mono); font-size:11px;
   color:var(--ink-3); letter-spacing:.04em;
   line-height:1.5;
 }
 .zn-compare-foot sup{ color:var(--zop-orange); }
 @media (max-width:720px){
-  .zn-compare-strap{ padding:var(--sp-5); font-size:var(--t-16); }
+  .zn-compare-strap{ padding:var(--sp-5); font-size:16px; }
 }
 
 /* --- Proof block · Azure Advisor 14% vs ZopNight 86% --- */
@@ -459,7 +442,7 @@
 }
 .zn-proof-head{ margin-bottom:var(--sp-8); max-width:720px; }
 .zn-proof-eyebrow{
-  font-family:var(--mono); font-size:var(--t-11); letter-spacing:.12em;
+  font-family:var(--mono); font-size:11px; letter-spacing:.12em;
   text-transform:uppercase; color:var(--zop-orange); margin-bottom:var(--sp-3);
 }
 .zn-proof-head h3{
@@ -470,7 +453,7 @@
 .zn-proof-head p{ color:var(--ink-3); font-size:var(--t-15); line-height:var(--lh-body); margin:0; }
 .zn-proof-table{
   width:100%; border-collapse:collapse;
-  font-family:var(--mono); font-size:var(--t-14); margin-bottom:var(--sp-6);
+  font-family:var(--mono); font-size:14px; margin-bottom:var(--sp-6);
 }
 .zn-proof-table th, .zn-proof-table td{
   padding:var(--sp-3) var(--sp-4);
@@ -478,7 +461,7 @@
   text-align:right;
 }
 .zn-proof-table thead th{
-  text-transform:uppercase; font-size:var(--t-11); letter-spacing:.06em;
+  text-transform:uppercase; font-size:11px; letter-spacing:.06em;
   color:var(--ink-3); border-bottom:1px solid var(--ink);
 }
 .zn-proof-table tbody th{ text-align:left; font-weight:500; color:var(--ink); }
@@ -492,7 +475,7 @@
 .zn-proof-line strong{ color:var(--zop-orange); font-weight:700; }
 @media (max-width:720px){
   .zn-proof{ padding:var(--sp-6); }
-  .zn-compare{ font-size:var(--t-11); }
+  .zn-compare{ font-size:11px; }
   .zn-compare th, .zn-compare td{ padding:var(--sp-2) var(--sp-3); }
 }
 
@@ -526,7 +509,7 @@
   background:var(--bg-1); border:1px solid var(--line); border-radius:6px;
   padding:var(--sp-4);
   display:flex; flex-direction:column; gap:1px;
-  font-family:var(--mono); font-size:var(--t-13);
+  font-family:var(--mono); font-size:13px;
 }
 .zn-event-row{
   display:grid; grid-template-columns:minmax(0,1fr) 140px minmax(0,1.4fr);
@@ -536,10 +519,10 @@
 }
 .zn-event-scope{ color:var(--ink); font-weight:500; }
 .zn-event-verdict{
-  font-size:var(--t-11); letter-spacing:.08em; font-weight:600;
+  font-size:11px; letter-spacing:.08em; font-weight:600;
   text-align:center; padding:3px 8px; border-radius:3px;
 }
-.zn-event-action{ color:var(--ink-3); font-size:var(--t-12); }
+.zn-event-action{ color:var(--ink-3); font-size:12px; }
 .zn-event-green{ border-left-color:#7FB236; }
 .zn-event-green .zn-event-verdict{ background:rgba(127,178,54,.15); color:#7FB236; }
 .zn-event-amber{ border-left-color:#E0A030; }
@@ -562,7 +545,7 @@
   display:flex; flex-direction:column; gap:var(--sp-3); width:100%;
 }
 .zn-mcp-prompts .prompt{
-  display:inline-block; font-family:var(--mono); font-size:var(--t-14);
+  display:inline-block; font-family:var(--mono); font-size:14px;
   background:var(--bg-1); border:1px solid var(--line);
   border-radius:3px; padding:var(--sp-3) var(--sp-4);
   color:var(--ink); border-left:3px solid var(--zop-orange);
@@ -591,19 +574,19 @@
 }
 .zn-pricing thead th{
   font-weight:600; color:var(--ink); text-transform:uppercase;
-  letter-spacing:.06em; font-size:var(--t-12);
+  letter-spacing:.06em; font-size:12px;
   border-bottom:1px solid var(--ink);
   padding-top:var(--sp-3); padding-bottom:var(--sp-2);
   background:var(--bg-1);
 }
 .zn-pricing thead tr:first-child th:first-child{
-  font-family:var(--mono); font-size:var(--t-11); letter-spacing:.08em;
+  font-family:var(--mono); font-size:11px; letter-spacing:.08em;
   color:var(--ink-3); font-weight:500;
   border-bottom-color:var(--ink);
 }
 .zn-pricing thead .zn-us{ color:var(--zop-orange); border-bottom-color:var(--zop-orange); }
 .zn-pricing-tagline td{
-  font-family:var(--mono); font-size:var(--t-11); color:var(--ink-3);
+  font-family:var(--mono); font-size:11px; color:var(--ink-3);
   border-bottom:1px solid var(--line);
   padding-top:var(--sp-2); padding-bottom:var(--sp-3);
   background:var(--bg-1);
@@ -626,11 +609,11 @@
 }
 .zn-pricing-foot strong{ color:var(--zop-orange); font-weight:700; }
 .zn-pricing-note{
-  font-family:var(--mono); font-size:var(--t-11); color:var(--ink-3);
+  font-family:var(--mono); font-size:11px; color:var(--ink-3);
   margin:var(--sp-2) 0 0; letter-spacing:.02em;
 }
 @media (max-width:720px){
-  .zn-pricing{ font-size:var(--t-11); }
+  .zn-pricing{ font-size:11px; }
   .zn-pricing th, .zn-pricing td{ padding:var(--sp-2) var(--sp-3); }
 }
 
@@ -653,7 +636,7 @@
 /* --- Hero meta italic line --- */
 .zn-hero-meta{
   margin:var(--sp-5) 0 0;
-  font-family:var(--mono); font-size:var(--t-12);
+  font-family:var(--mono); font-size:12px;
   color:var(--ink-3); letter-spacing:.02em;
 }
 
@@ -665,7 +648,7 @@
 .zn-trust-strip .container{ padding:var(--sp-5) 0; }
 .zn-trust-strip p{
   margin:0; text-align:center;
-  font-family:var(--mono); font-size:var(--t-13);
+  font-family:var(--mono); font-size:13px;
   color:var(--ink-2); letter-spacing:.04em;
 }
 
@@ -762,7 +745,7 @@
   border-top:1px solid var(--line); padding-top:var(--sp-4);
 }
 .zn-proof-breakdown summary{
-  cursor:pointer; font-family:var(--mono); font-size:var(--t-13);
+  cursor:pointer; font-family:var(--mono); font-size:13px;
   color:var(--zop-orange); letter-spacing:.04em;
   list-style:none;
   padding:var(--sp-2) 0;
@@ -772,7 +755,7 @@
 .zn-breakdown-list{
   list-style:none; padding:0; margin:0;
   display:grid; grid-template-columns:repeat(4, 1fr); gap:var(--sp-3) var(--sp-5);
-  font-family:var(--mono); font-size:var(--t-13);
+  font-family:var(--mono); font-size:13px;
 }
 @media (max-width:720px){ .zn-breakdown-list{ grid-template-columns:repeat(2, 1fr); } }
 .zn-breakdown-list li{
@@ -795,7 +778,7 @@
   text-align:left; vertical-align:top;
 }
 .zn-stake thead th{
-  font-family:var(--mono); font-size:var(--t-11);
+  font-family:var(--mono); font-size:11px;
   letter-spacing:.06em; text-transform:uppercase;
   color:var(--ink-3); border-bottom:1px solid var(--ink);
 }
@@ -803,13 +786,86 @@
 .zn-stake tbody th strong{ color:var(--zop-orange); font-weight:700; }
 .zn-stake tbody td{ color:var(--ink-3); width:39%; line-height:var(--lh-body); }
 @media (max-width:720px){
-  .zn-stake th, .zn-stake td{ padding:var(--sp-3); font-size:var(--t-13); }
+  .zn-stake th, .zn-stake td{ padding:var(--sp-3); font-size:13px; }
 }
 </style>
 <script src="chrome-mobilenav.js" defer></script>
 <script src="chrome-footer.js" defer></script>
 </head>
-<body data-product="zopnight" class="is-tinted">
+<body data-product="zopnight" data-variation="v2-light" class="is-tinted">
+
+<!-- ====================================================================
+     ZOPNIGHT · VARIATION 2 · LIGHT / CREAM THEME
+     Same content as zopnight.html, different visual treatment.
+     ==================================================================== -->
+<style>
+  body[data-variation="v2-light"]{
+    background:#FAF7EC !important; color:#0A0A0A !important;
+  }
+  body[data-variation="v2-light"] .zn-hero,
+  body[data-variation="v2-light"] main.page > section:not(.zn-final):not(.zn-callout-section){
+    background:#FAF7EC;
+  }
+  body[data-variation="v2-light"] .zn-stats,
+  body[data-variation="v2-light"] .zn-stats-trust,
+  body[data-variation="v2-light"] .zn-trust-strip{
+    background:#F0EBDB; border-color:#D4CDB5;
+  }
+  body[data-variation="v2-light"] .zn-stat .v,
+  body[data-variation="v2-light"] .zn-sec-head h2,
+  body[data-variation="v2-light"] .zn-callout-headline,
+  body[data-variation="v2-light"] main h1,
+  body[data-variation="v2-light"] main h2,
+  body[data-variation="v2-light"] main h3{
+    color:#0A0A0A !important;
+  }
+  body[data-variation="v2-light"] main .lead,
+  body[data-variation="v2-light"] main .sub,
+  body[data-variation="v2-light"] main p{
+    color:#3A3A40 !important;
+  }
+  body[data-variation="v2-light"] main em{ color:#F58549; }
+  body[data-variation="v2-light"] .zn-step,
+  body[data-variation="v2-light"] .zn-feat,
+  body[data-variation="v2-light"] .zn-savings,
+  body[data-variation="v2-light"] .zn-event-visual,
+  body[data-variation="v2-light"] .zn-pricing,
+  body[data-variation="v2-light"] .zn-stake,
+  body[data-variation="v2-light"] .zn-problem,
+  body[data-variation="v2-light"] .zn-proof-table-standalone{
+    background:#FFFFFF; border-color:#D4CDB5;
+  }
+  body[data-variation="v2-light"] .zn-pricing thead th,
+  body[data-variation="v2-light"] .zn-pricing-tagline td{
+    background:#F0EBDB; border-bottom-color:#D4CDB5;
+  }
+  body[data-variation="v2-light"] .zn-feat-icon{
+    background:#F0EBDB; border-color:#D4CDB5; color:#3A3A40;
+  }
+  body[data-variation="v2-light"] .zn-event-row{ background:#FFFFFF; }
+  body[data-variation="v2-light"] .zn-callout-section{
+    background:#0A0A0A;
+  }
+  body[data-variation="v2-light"] .zn-callout-section .zn-callout-headline{ color:#FAF7EC; }
+  body[data-variation="v2-light"] .zn-callout-section .zn-callout-sub{ color:rgba(250,247,236,.7); }
+  body[data-variation="v2-light"] .zn-callout-section .zn-callout-eyebrow{ color:#F58549; }
+  body[data-variation="v2-light"] .zn-final{ background:#0A0A0A; }
+  body[data-variation="v2-light"] .zn-final h2{ color:#FAF7EC; }
+  body[data-variation="v2-light"] .zn-final p{ color:rgba(250,247,236,.7); }
+  body[data-variation="v2-light"] .zn-compare-strap{
+    background:rgba(245,133,73,.10); color:#0A0A0A;
+  }
+  body[data-variation="v2-light"] .zn-compare-strap em{ color:#3A3A40; }
+  body[data-variation="v2-light"] table th,
+  body[data-variation="v2-light"] table td{ border-color:#D4CDB5; }
+  body[data-variation="v2-light"] main .meta{ color:#F58549; }
+  body[data-variation="v2-light"] .crumb,
+  body[data-variation="v2-light"] .crumb a{ color:#3A3A40; }
+  body[data-variation="v2-light"] .zn-pricing tbody td{ color:#3A3A40; }
+  body[data-variation="v2-light"] .faq-list details{ background:#FFFFFF; border-color:#D4CDB5; }
+  body[data-variation="v2-light"] .faq-list summary{ color:#0A0A0A; }
+  body[data-variation="v2-light"] .faq-body p{ color:#3A3A40; }
+</style>
 
 <!-- ========================================================================
      SVG defs, the canonical logo + marks. Identical on every page.
@@ -1135,7 +1191,7 @@
           <div class="meta">section 1 &middot; the problem</div>
           <h2>Cloud spend grew. <em>Cloud governance didn't.</em></h2>
         </div>
-        <p class="sub">3 clouds. 8 dashboards. 32+ engineering hours a week on manual start/stop and tagging nobody trusts. The waste isn't dramatic, it's quiet, distributed, and every day.</p>
+        <p class="sub">3 clouds. 8 dashboards. 32+ engineering hours a week on manual start/stop and tagging nobody trusts. The waste isn't dramatic &mdash; it's quiet, distributed, and every day.</p>
       </div>
 
       <div class="zn-problem-wrap">
@@ -1164,7 +1220,7 @@
           Native tools find the obvious 14%.
           The other <em>86%</em> compounds.
         </h2>
-        <p class="zn-callout-sub">AWS Trusted Advisor, GCP Recommender, Azure Advisor, they all surface the same narrow band of findings. Everything else accumulates silently every month, on every account, until someone looks.</p>
+        <p class="zn-callout-sub">AWS Trusted Advisor, GCP Recommender, Azure Advisor &mdash; they all surface the same narrow band of findings. Everything else accumulates silently every month, on every account, until someone looks.</p>
       </div>
     </div>
   </section>
@@ -1186,19 +1242,19 @@
       <div class="zn-how zn-how-3">
         <div class="zn-step">
           <div class="num">01</div>
-          <h3>Recommendations <em class="zn-step-sub">, finds the waste</em></h3>
+          <h3>Recommendations <em class="zn-step-sub">&mdash; finds the waste</em></h3>
           <p>317 rules across AWS &middot; GCP &middot; Azure. Idle, rightsize, orphan, compliance. Every finding ships with the metric, the threshold, the action, and the dollar. <strong>No black-box ML.</strong></p>
           <div class="time">AWS &middot; GCP &middot; Azure</div>
         </div>
         <div class="zn-step">
           <div class="num">02</div>
-          <h3>Scheduling <em class="zn-step-sub">, captures non-prod savings</em></h3>
-          <p>Cron-based, per-timezone, dependency-aware. 30 resource types, VMs, K8s, SQL, Databricks. Storage wakes before compute. Production-safe overrides.</p>
+          <h3>Scheduling <em class="zn-step-sub">&mdash; captures non-prod savings</em></h3>
+          <p>Cron-based, per-timezone, dependency-aware. 30 resource types &mdash; VMs, K8s, SQL, Databricks. Storage wakes before compute. Production-safe overrides.</p>
           <div class="time">30 resource types</div>
         </div>
         <div class="zn-step">
           <div class="num">03</div>
-          <h3>Auto-scaling <em class="zn-step-sub">, captures production elasticity</em></h3>
+          <h3>Auto-scaling <em class="zn-step-sub">&mdash; captures production elasticity</em></h3>
           <p>AKS pools, scale sets, ASGs. <strong>30&ndash;40% compute reduction</strong> on eligible workloads. Three modes: <strong>monitor &rarr; recommend &rarr; autopilot.</strong> You decide where it gets the keys.</p>
           <div class="time">monitor &rarr; recommend &rarr; autopilot</div>
         </div>
@@ -1217,7 +1273,7 @@
       <div class="zn-sec-head">
         <div>
           <div class="meta">section 3 &middot; cdcr</div>
-          <h2>CDCR, the loop that <em>keeps it fixed.</em></h2>
+          <h2>CDCR &mdash; the loop that <em>keeps it fixed.</em></h2>
         </div>
         <p class="sub">CI/CD made code continuous. <strong>CDCR makes your cloud continuous.</strong> Continuous Detection. Continuous Remediation. The discipline that keeps cost and posture from drifting back the day after you fix them.</p>
       </div>
@@ -1228,7 +1284,7 @@
           <div class="zn-feat-icon">
             <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
           </div>
-          <h3>Detect, continuously</h3>
+          <h3>Detect &mdash; continuously</h3>
           <p>Cost drift: new untagged resources, budget breaches, idle accumulating. Posture drift: IAM changes, encryption regressions, public access reopened. Workload drift: schedule overrides expired, rightsize windows missed.</p>
           <ul>
             <li>Cost drift detection</li>
@@ -1241,7 +1297,7 @@
           <div class="zn-feat-icon">
             <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 17V7l7-4 7 4v10z" stroke="currentColor" stroke-width="1.5"/><path d="M3 11h14" stroke="currentColor" stroke-width="1.3"/></svg>
           </div>
-          <h3>Remediate, continuously</h3>
+          <h3>Remediate &mdash; continuously</h3>
           <p>Auto-fix where safe: tags, schedules, idle cleanup, certs. Guided remediation: PR-style approval for the rest. Production writes are opt-in, scoped, and fully logged.</p>
           <ul>
             <li>Auto-fix safe actions</li>
@@ -1255,7 +1311,7 @@
             <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 16h14M5 13l3-4 3 2 4-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
           </div>
           <h3>Reported, not promised</h3>
-          <p>Every action: actor, timestamp, billing impact. Quarterly review with measurable outcomes, not promises. Most FinOps platforms detect and ticket. CDCR detects and acts.</p>
+          <p>Every action: actor, timestamp, billing impact. Quarterly review with measurable outcomes &mdash; not promises. Most FinOps platforms detect and ticket. CDCR detects and acts.</p>
           <ul>
             <li>Actor + timestamp + impact</li>
             <li>Quarterly review</li>
@@ -1281,7 +1337,7 @@
           <div class="meta">section 4 &middot; event readiness</div>
           <h2>Going into a launch? <em>Score the cloud first.</em></h2>
         </div>
-        <p class="sub">Define a launch, a load test, a Black Friday window, any planned spike. ZopNight scores readiness against current capacity, autoscaler posture, and the last 14 days of activity. <strong>Per-scope verdicts</strong> tell you what's ready, what to scale, what to provision.</p>
+        <p class="sub">Define a launch, a load test, a Black Friday window &mdash; any planned spike. ZopNight scores readiness against current capacity, autoscaler posture, and the last 14 days of activity. <strong>Per-scope verdicts</strong> tell you what's ready, what to scale, what to provision.</p>
       </div>
 
       <div class="zn-event">
@@ -1293,7 +1349,7 @@
       <div class="zn-event-visual" aria-label="Event readiness card preview">
         <div class="zn-event-row zn-event-green"><span class="zn-event-scope">EKS &middot; prod-cluster</span><span class="zn-event-verdict">READY</span><span class="zn-event-action">No action required</span></div>
         <div class="zn-event-row zn-event-amber"><span class="zn-event-scope">RDS &middot; payments-db</span><span class="zn-event-verdict">SCALE-UP</span><span class="zn-event-action">Bump to db.r6g.2xlarge for the window</span></div>
-        <div class="zn-event-row zn-event-red"><span class="zn-event-scope">ElastiCache &middot; session-cache</span><span class="zn-event-verdict">CAPACITY GAP</span><span class="zn-event-action">Provision +2 nodes, current headroom 12%</span></div>
+        <div class="zn-event-row zn-event-red"><span class="zn-event-scope">ElastiCache &middot; session-cache</span><span class="zn-event-verdict">CAPACITY GAP</span><span class="zn-event-action">Provision +2 nodes &mdash; current headroom 12%</span></div>
         <div class="zn-event-row zn-event-amber"><span class="zn-event-scope">SQS &middot; order-queue</span><span class="zn-event-verdict">SCALE-UP</span><span class="zn-event-action">Pre-warm consumer pool to 8</span></div>
         <div class="zn-event-row zn-event-green"><span class="zn-event-scope">ALB &middot; public-edge</span><span class="zn-event-verdict">READY</span><span class="zn-event-action">No action required</span></div>
       </div>
@@ -1343,52 +1399,8 @@
           <li><span>Stale storage</span><strong>$640</strong></li>
         </ul>
       </details>
-
-      <!-- ============================================================
-           Multi-cloud exemplars · per docx Comment 6 (Talvinder):
-           "we should mention AWS and GCP as well. This is azure only right now."
-           ============================================================ -->
-      <div class="zn-proof-multicloud">
-        <p class="zn-proof-multicloud-intro"><em>The 86% gap is not an Azure quirk. We see the same pattern across AWS and GCP estates of comparable scale.</em></p>
-        <ul class="zn-proof-multicloud-list">
-          <li>
-            <span class="zn-proof-multicloud-tag">AWS</span>
-            <p>Mid-market SaaS on 4 AWS accounts: Trusted Advisor flagged <strong>22 findings</strong>, ZopNight returned <strong>241</strong>. $11,400/mo recovered in 6 weeks (Savings Plans coverage, idle NAT gateways, gp2&rarr;gp3, orphaned EBS, RDS rightsize).</p>
-          </li>
-          <li>
-            <span class="zn-proof-multicloud-tag">GCP</span>
-            <p>Series-B fintech on 2 GCP projects: Recommender flagged <strong>18 findings</strong>, ZopNight returned <strong>196</strong>. $8,900/mo recovered in 4 weeks (committed-use discount expansion, idle GKE nodepools, persistent disk class downgrade, BigQuery slot rebalancing).</p>
-          </li>
-        </ul>
-      </div>
     </div>
   </section>
-
-  <style>
-  .zn-proof-multicloud{
-    margin-top:var(--sp-8); padding-top:var(--sp-7); border-top:1px solid var(--line);
-  }
-  .zn-proof-multicloud-intro{
-    font-family:var(--mono); font-size:var(--t-13); color:var(--ink-3);
-    margin:0 0 var(--sp-6); text-align:center;
-  }
-  .zn-proof-multicloud-list{
-    list-style:none; padding:0; margin:0;
-    display:grid; grid-template-columns:repeat(2, 1fr); gap:var(--sp-6);
-  }
-  @media (max-width:768px){ .zn-proof-multicloud-list{ grid-template-columns:1fr; } }
-  .zn-proof-multicloud-list li{
-    border:1px solid var(--line); padding:var(--sp-5);
-    display:flex; flex-direction:column; gap:var(--sp-3);
-  }
-  .zn-proof-multicloud-tag{
-    font-family:var(--mono); font-size:var(--t-11); letter-spacing:.08em; text-transform:uppercase;
-    color:var(--zop-orange); font-weight:600;
-  }
-  .zn-proof-multicloud-list p{
-    margin:0; font-size:var(--t-14); line-height:var(--lh-body); color:var(--ink-3);
-  }
-  </style>
 
   <!-- ============================================================
        SECTION 6 · vs. NATIVE TOOLS & FINOPS PLATFORMS
@@ -1427,7 +1439,7 @@
             <tr><th scope="row">India residency</th><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td class="zn-us"><strong>&#10003;</strong></td></tr>
           </tbody>
         </table>
-        <p class="zn-compare-strap"><em>Native advisors recommend. FinOps platforms report.</em> <strong>ZopNight finds, executes, and proves</strong>, <em>against your actual cloud bill.</em></p>
+        <p class="zn-compare-strap"><em>Native advisors recommend. FinOps platforms report.</em> <strong>ZopNight finds, executes, and proves</strong> &mdash; <em>against your actual cloud bill.</em></p>
         <p class="zn-compare-foot"><sup>*</sup> AWS Trusted Advisor and GCP Recommender exhibit the same 14%-only pattern as Azure Advisor.</p>
       </div>
     </div>
@@ -1444,7 +1456,7 @@
           <div class="meta">section 7 &middot; mcp / ai-native</div>
           <h2>Your cloud, <em>in your AI editor.</em></h2>
         </div>
-        <p class="sub">ZopNight ships a Model Context Protocol server with <strong>43 read-only tools</strong>, resources, schedules, costs, recommendations, budgets, audit logs.</p>
+        <p class="sub">ZopNight ships a Model Context Protocol server with <strong>43 read-only tools</strong> &mdash; resources, schedules, costs, recommendations, budgets, audit logs.</p>
       </div>
 
       <div class="zn-mcp">
@@ -1497,8 +1509,8 @@
             <tr><th scope="row">Scheduling engine</th><td>&mdash;</td><td>&#10003;</td><td>&#10003;</td><td class="zn-us">&#10003;</td></tr>
             <tr><th scope="row">Auto-scaling engine</th><td>&mdash;</td><td>&mdash;</td><td>&#10003;</td><td class="zn-us">&#10003;</td></tr>
             <tr><th scope="row">Event Readiness</th><td>&mdash;</td><td>&mdash;</td><td>&#10003;</td><td class="zn-us">&#10003;</td></tr>
-            <tr class="zn-pricing-hi"><th scope="row">CDCR, auto-remediation (safe)</th><td>&mdash;</td><td>&mdash;</td><td><strong>&#10003;</strong></td><td class="zn-us"><strong>&#10003;</strong></td></tr>
-            <tr class="zn-pricing-hi"><th scope="row">CDCR, guided remediation + audit forwarding</th><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td class="zn-us"><strong>&#10003;</strong></td></tr>
+            <tr class="zn-pricing-hi"><th scope="row">CDCR &mdash; auto-remediation (safe)</th><td>&mdash;</td><td>&mdash;</td><td><strong>&#10003;</strong></td><td class="zn-us"><strong>&#10003;</strong></td></tr>
+            <tr class="zn-pricing-hi"><th scope="row">CDCR &mdash; guided remediation + audit forwarding</th><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td class="zn-us"><strong>&#10003;</strong></td></tr>
             <tr><th scope="row">MCP server (Claude/Cursor)</th><td>&#10003;</td><td>&#10003;</td><td>&#10003;</td><td class="zn-us">&#10003;</td></tr>
             <tr><th scope="row">Multi-cloud (AWS+GCP+Azure)</th><td>1 cloud</td><td>&#10003;</td><td>&#10003;</td><td class="zn-us">&#10003;</td></tr>
             <tr><th scope="row">India residency / VPC deploy</th><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td class="zn-us">&#10003;</td></tr>
@@ -1520,7 +1532,7 @@
           </tbody>
         </table>
         <p class="zn-pricing-foot"><strong>No savings, no charge</strong> on the variable. Verified against your actual AWS / GCP / Azure billing.</p>
-        <p class="zn-pricing-note"><sup>*</sup>Placeholder pricing, confirm or replace.</p>
+        <p class="zn-pricing-note"><sup>*</sup>Placeholder pricing &mdash; confirm or replace.</p>
       </div>
     </div>
   </section>
@@ -1545,7 +1557,7 @@
         <li><strong>Read-only by default.</strong> Write access is scoped, opt-in, tag-conditioned.</li>
         <li><strong>Full audit trail.</strong> Every API call. Actor, action, timestamp, body.</li>
         <li><strong>IRDAI ICS 2023</strong> controls mapped &middot; <strong>DPDP Act 2023</strong> DPA available</li>
-        <li><strong>SaaS, or on-prem</strong>, your choice</li>
+        <li><strong>SaaS, or on-prem</strong> &mdash; your choice</li>
       </ul>
     </div>
   </section>
@@ -1596,32 +1608,32 @@
 
         <details>
           <summary>Will ZopNight ever touch production? <span class="faq-chevron">+</span></summary>
-          <div class="faq-body"><p>Only if you explicitly tell it to. Production is gated by an explicit allow-list and a separate "production-aware" flag. Most customers never enable production scheduling, the savings are in dev / staging / sandbox where 70% of waste lives.</p></div>
+          <div class="faq-body"><p>Only if you explicitly tell it to. Production is gated by an explicit allow-list and a separate "production-aware" flag. Most customers never enable production scheduling &mdash; the savings are in dev / staging / sandbox where 70% of waste lives.</p></div>
         </details>
 
         <details>
           <summary>What permissions does ZopNight need? <span class="faq-chevron">+</span></summary>
-          <div class="faq-body"><p>Read-only on day one, we inventory and recommend without changing anything. Once you review the plan, grant scoped write permissions per resource type (e.g. <code>ec2:StopInstances</code>, <code>rds:StopDBInstance</code>). Nothing wider than the action requires. Kubernetes uses a namespaced ServiceAccount, never cluster-admin.</p></div>
+          <div class="faq-body"><p>Read-only on day one &mdash; we inventory and recommend without changing anything. Once you review the plan, grant scoped write permissions per resource type (e.g. <code>ec2:StopInstances</code>, <code>rds:StopDBInstance</code>). Nothing wider than the action requires. Kubernetes uses a namespaced ServiceAccount, never cluster-admin.</p></div>
         </details>
 
         <details>
           <summary>What happens during an incident? <span class="faq-chevron">+</span></summary>
-          <div class="faq-body"><p>Hit the override switch in the UI or call <code>POST /v1/override</code>. Every scheduled action pauses for the window you set. ZopNight also auto-pauses if it detects a deploy through your CI/CD or a PagerDuty incident in scope, we wire those in during onboarding.</p></div>
+          <div class="faq-body"><p>Hit the override switch in the UI or call <code>POST /v1/override</code>. Every scheduled action pauses for the window you set. ZopNight also auto-pauses if it detects a deploy through your CI/CD or a PagerDuty incident in scope &mdash; we wire those in during onboarding.</p></div>
         </details>
 
         <details>
           <summary>How is this different from native AWS / GCP / Azure scheduling? <span class="faq-chevron">+</span></summary>
-          <div class="faq-body"><p>Native schedulers are single-cloud, single-service, and have no dependency awareness. ZopNight is multi-cloud, dependency-ordered (DBs before apps), and adds the bits the providers don't, right-sizing, orphan cleanup, per-team showback, override APIs, and a unified audit trail.</p></div>
+          <div class="faq-body"><p>Native schedulers are single-cloud, single-service, and have no dependency awareness. ZopNight is multi-cloud, dependency-ordered (DBs before apps), and adds the bits the providers don't &mdash; right-sizing, orphan cleanup, per-team showback, override APIs, and a unified audit trail.</p></div>
         </details>
 
         <details>
           <summary>How long until we see savings? <span class="faq-chevron">+</span></summary>
-          <div class="faq-body"><p>Idle and orphan resources surface in the first 60-second scan, that's day-one, $50&ndash;300/mo per account in cleanup. Scheduling savings show up the first night the rule fires (typically 24 hours after onboarding). Right-sizing is week-two, after we've collected enough metrics to be confident.</p></div>
+          <div class="faq-body"><p>Idle and orphan resources surface in the first 60-second scan &mdash; that's day-one, $50&ndash;300/mo per account in cleanup. Scheduling savings show up the first night the rule fires (typically 24 hours after onboarding). Right-sizing is week-two, after we've collected enough metrics to be confident.</p></div>
         </details>
 
         <details>
           <summary>Is there a free tier? <span class="faq-chevron">+</span></summary>
-          <div class="faq-body"><p>Yes. Up to 25 monitored resources, all features, no time limit. We don't gate cost-saving features behind a paywall, if you have a small footprint, we'd rather you save money than pay us.</p></div>
+          <div class="faq-body"><p>Yes. Up to 25 monitored resources, all features, no time limit. We don't gate cost-saving features behind a paywall &mdash; if you have a small footprint, we'd rather you save money than pay us.</p></div>
         </details>
 
       </div>
@@ -1693,54 +1705,6 @@
     <span>4 platforms · 1 console</span><span class="acc">·</span>
   </div>
 </section>
-
-<!-- ============================================================
-     FOOTER GRADUATION BAND · Day 1 / Day 100 / Day 365
-     Shared across all four sites. "You are here" indicator
-     points to ZopNight (Day 365) on this page.
-     ============================================================ -->
-<section class="section tight" id="graduation-band" aria-label="ZopDev product graduation" data-here="day-365">
-  <div class="container">
-    <div class="docsec-table-wrap">
-      <table class="docsec-table">
-        <thead>
-          <tr>
-            <th>Day 1</th>
-            <th>Day 100</th>
-            <th>Day 365 <span class="gb-here" aria-label="you are here">&#9664; you are here</span></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row"><strong>ZopCloud</strong></th>
-            <th scope="row"><strong>ZopDay</strong></th>
-            <th scope="row"><strong>ZopNight</strong></th>
-          </tr>
-          <tr>
-            <td>We host. You push.</td>
-            <td>Your cloud. Our orchestration.</td>
-            <td>Continuous governance + cost optimization.</td>
-          </tr>
-          <tr>
-            <td><a href="zopcloud.html">&rarr; zopcloud.com</a></td>
-            <td><a href="zopday.html">&rarr; zopday.dev</a></td>
-            <td><a href="zopnight.html">&rarr; zopnight.com</a></td>
-          </tr>
-        </tbody>
-      </table>
-      <p class="docsec-tag" style="text-align:center; margin-top:20px; font-style:normal">No re-platform when you grow. No surprise bill when you scale. No drift when it&rsquo;s running. Looking at the platform? <a href="index.html">&rarr; zop.dev</a></p>
-    </div>
-  </div>
-</section>
-<style>
-  #graduation-band .gb-here{
-    display:inline-block; margin-left:8px;
-    font-family:var(--mono); font-size:var(--t-10); letter-spacing:.08em;
-    color:var(--zop-orange); text-transform:uppercase;
-    border:1px solid var(--zop-orange); padding:2px 6px; border-radius:0;
-    vertical-align:middle;
-  }
-</style>
 
 <footer>
   <div class="container">

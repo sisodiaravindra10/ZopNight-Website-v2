@@ -222,16 +222,9 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
   padding:3px 7px;
   border:1px solid var(--line); color:var(--ink-3);
 }
-.cs-side .cta{
-  display:flex; align-items:center; justify-content:space-between;
-  gap:var(--sp-3); padding:var(--sp-3) var(--sp-4);
-  background:var(--zop-orange); color:#0A0A0A;
-  font-family:var(--mono); font-size:var(--t-11);
-  letter-spacing:var(--ls-meta); text-transform:uppercase;
-  font-weight:var(--fw-semibold);
-  transition:transform .14s, box-shadow .14s;
-}
-.cs-side .cta:hover{ transform:translateY(-2px); box-shadow:0 8px 0 -4px var(--ink); }
+/* CTA in side panel uses canonical .btn .btn-accent (orange fill, ink text)
+   from homepage-chrome.css; no local style needed. */
+.cs-side .btn{ width:100%; justify-content:space-between; }
 @media (max-width:980px){ .cs-side{ position:static; } }
 
 /* ── RESULTS BAND · 3-stat grid below story ─────────────────────── */
@@ -363,8 +356,6 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
     </symbol>
   </defs>
 </svg>
-
-<div class="ann-bar" id="ann-bar"><div class="ann-inner"><a href="developers.html" class="ann-chip"><span class="ann-dot"></span><strong>MCP Server</strong>, live in Claude &amp; Codex<span class="ann-arrow">→</span></a><a href="changelog.html" class="ann-link">Changelog →</a><button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button></div></div>
 
 <!-- ============================================================
      SAVINGS CALCULATOR STRIP. Single CTA, links to the calculator.
@@ -688,7 +679,7 @@ em,i,cite,dfn,var,address,blockquote{font-style:normal}
         <span>Override CLI</span>
       </div>
 
-      <a class="cta" href="demo.html">Book a Demo <span aria-hidden="true">→</span></a>
+      <a class="btn btn-accent" href="demo.html">Book a Demo <span aria-hidden="true">→</span></a>
     </aside>
 
   </div>

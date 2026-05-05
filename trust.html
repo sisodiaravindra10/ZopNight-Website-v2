@@ -125,13 +125,9 @@
 .cert-card{
   border:1px solid var(--line); padding:var(--sp-7);
   display:flex; flex-direction:column; gap:var(--sp-4);
-  transition:border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
-.cert-card:hover{
-  border-color:var(--line-b);
-  transform:translateY(-4px);
-  box-shadow:4px 4px 0 0 var(--zop-blue);
-}
+/* Hover handled by chrome.css shared card-lift signature
+   (transform translateY(-4px) + var(--shadow-hover-orange) + border-color) */
 .cert-badge-mark{
   width:40px; height:40px; background:var(--zop-blue);
   display:flex; align-items:center; justify-content:center;
@@ -246,19 +242,17 @@
   margin:0; max-width:800px; color:#FAF7EC;
 }
 .trust-cta p{ font-size:var(--t-17); color:rgba(255,255,255,0.75); margin:0; max-width:600px; line-height:var(--lh-body); }
-.trust-cta .btn-cta{
-  display:inline-flex; align-items:center; gap:var(--sp-2);
-  padding:16px 28px; background:#FAF7EC; color:var(--zop-blue);
-  font-weight:var(--fw-bold); font-size:var(--t-15); border:2px solid #FAF7EC;
-  cursor:pointer; font-family:var(--font);
-  transition:transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out);
+/* trust-cta sits on a blue surface, so we anchor the canonical .btn-primary
+   with a paper fill and ink text so it reads on the blue. Hover signature
+   matches the homepage card-lift orange offset shadow. */
+.trust-cta .btn.btn-primary{
+  background:var(--paper); color:var(--ink); border-color:var(--paper);
 }
-.trust-cta .btn-cta:hover{
+.trust-cta .btn.btn-primary:hover{
   transform:translateY(-4px);
-  box-shadow:4px 4px 0 0 rgba(255,255,255,0.3);
+  box-shadow:0 8px 0 -4px var(--zop-orange);
+  border-color:var(--paper);
 }
-.trust-cta .btn-cta .arrow{ display:inline-block; transition:transform var(--dur-fast) var(--ease-out); }
-.trust-cta .btn-cta:hover .arrow{ transform:translateX(4px); }
 
 @media(max-width:960px){
   .posture-layout{ grid-template-columns:1fr; }
@@ -310,19 +304,6 @@
     </symbol>
   </defs>
 </svg>
-
-<!-- ANNOUNCEMENT BAR -->
-<div class="ann-bar" id="ann-bar">
-  <div class="ann-inner">
-    <a href="developers.html" class="ann-chip">
-      <span class="ann-dot"></span>
-      <strong>MCP Server</strong>, live in Claude &amp; Codex
-      <span class="ann-arrow">→</span>
-    </a>
-    <a href="changelog.html" class="ann-link">Changelog →</a>
-    <button class="ann-close" id="ann-close" aria-label="Dismiss announcement">&times;</button>
-  </div>
-</div>
 
 <!-- LIVE-OPS STRIP -->
 <!-- ============================================================
@@ -993,7 +974,7 @@
     <div class="inner">
       <h2>See the full security documentation. Talk to our security team.</h2>
       <p>Enterprise customers get direct access to our security engineering team, pentest reports under NDA, and a dedicated trust review before onboarding.</p>
-      <a href="demo.html" class="btn-cta">Request security review <span class="arrow">→</span></a>
+      <a href="demo.html" class="btn btn-primary">Request security review <span class="arrow">→</span></a>
     </div>
   </section>
 

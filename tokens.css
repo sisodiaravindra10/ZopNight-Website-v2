@@ -140,7 +140,9 @@ html[data-theme="light"]{
   --t-13: 13px;   /* UI default · body-small */
   --t-14: 14px;   /* buttons · form inputs */
   --t-15: 15px;   /* body */
+  --t-16: 16px;   /* body lead · prose default for marketing pages */
   --t-17: 17px;   /* lede · sub-heading */
+  --t-18: 18px;   /* sub-heading · prominent body lead */
   --t-20: 20px;   /* hero lead */
   --t-22: 22px;   /* h4 · card title small */
   --t-24: 24px;   /* h3 · verb-copy */
