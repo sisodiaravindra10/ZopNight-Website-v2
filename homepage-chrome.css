@@ -71,11 +71,14 @@ h1, h2, h3, h4, h5, h6,
   letter-spacing: -0.02em;
 }
 
-/* Site-wide rule · no italic anywhere. Semantic emphasis tags keep their
-   markup (for screen readers / SEO) but render upright. Override every
-   user-agent default plus any inline style="font-style:italic" via the
-   global selector. */
-em, i, cite, dfn, var, address, blockquote{ font-style: normal; }
+/* Site-wide rule · NO italic anywhere. Semantic emphasis tags keep their
+   markup (for screen readers / SEO) but render upright. !important is
+   used so this beats any inline style="font-style:normal" attribute
+   without forcing every author to remove them. The wildcard ensures
+   no class, descendant rule, or third-party stylesheet can re-introduce
+   italics. */
+*, *::before, *::after{ font-style: normal !important; }
+em, i, cite, dfn, var, address, blockquote{ font-style: normal !important; }
 
 /* Cross-page transitions — native View Transitions API + fallback fade-in */
 @view-transition { navigation: auto; }
