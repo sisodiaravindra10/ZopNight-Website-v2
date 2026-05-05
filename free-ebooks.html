@@ -859,7 +859,7 @@
         </div>
         <span class="cat">Cost optimization · 44 pages</span>
         <h3><a href="#">The right-sizing handbook · family by family</a></h3>
-        <p>T3, M5, R5, C7g — the burstable trap and how to spot it. With confidence intervals, not vibes.</p>
+        <p>T3, M5, R5, C7g · the burstable trap and how to spot it. With confidence intervals, not vibes.</p>
         <div class="when"><span>Released · Dec 2025</span><span>~22 min</span></div>
       </article>
 
@@ -907,10 +907,11 @@
     <div class="eblib-sub">
       <div>
         <h2>Get notified when a new ebook <em>drops.</em></h2>
-        <p>One email per release. No drip campaigns. Unsubscribe with one click — we'd rather lose subscribers than waste their inbox.</p>
+        <p>One email per release. No drip campaigns. Unsubscribe with one click. We'd rather lose subscribers than waste their inbox.</p>
       </div>
       <form class="eblib-sub-form" onsubmit="event.preventDefault(); var b=this.querySelector('button'); b.textContent='✓ subscribed'; b.disabled=true;">
-        <input type="email" placeholder="you@team.com" required/>
+        <label for="eblib-email" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);">Work email</label>
+        <input id="eblib-email" type="email" placeholder="you@team.com" aria-label="Work email" required/>
         <button type="submit">Subscribe</button>
       </form>
     </div>

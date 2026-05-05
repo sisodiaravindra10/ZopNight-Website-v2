@@ -80,6 +80,66 @@ h1, h2, h3, h4, h5, h6,
 *, *::before, *::after{ font-style: normal !important; }
 em, i, cite, dfn, var, address, blockquote{ font-style: normal !important; }
 
+/* =========================================================================
+   ACCESSIBILITY · site-wide a11y rules · centralized so every page inherits
+   ========================================================================= */
+
+/* Focus-visible · 2px orange outline + 2px offset on every interactive
+   element. Single source of truth for keyboard focus styling site-wide. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+details:focus-visible,
+[tabindex]:focus-visible,
+[role="button"]:focus-visible,
+[role="link"]:focus-visible,
+[role="tab"]:focus-visible,
+[role="menuitem"]:focus-visible{
+  outline: 2px solid var(--zop-orange);
+  outline-offset: 2px;
+}
+
+/* Skip-to-content · keyboard-only · should be the first focusable element
+   on every page. Hidden offscreen until focused, then slides into view. */
+.skip-to-content{
+  position:fixed; top:0; left:0;
+  padding:10px 16px;
+  background:var(--ink); color:var(--paper);
+  font-family:var(--mono); font-size:12px;
+  letter-spacing:.08em; text-transform:uppercase;
+  text-decoration:none;
+  transform:translateY(-150%);
+  transition:transform var(--dur-fast) var(--ease-out);
+  z-index:1000;
+}
+.skip-to-content:focus,
+.skip-to-content:focus-visible{
+  transform:translateY(0);
+  outline:2px solid var(--zop-orange);
+  outline-offset:2px;
+}
+
+/* prefers-reduced-motion · respect user OS preference site-wide. Animations
+   collapse to a single instant frame; transitions become near-instant.
+   Continuous loops (marquee, pulse, dot-grid scrolls) stop entirely. */
+@media (prefers-reduced-motion: reduce){
+  *,
+  *::before,
+  *::after{
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .trust-marquee, .marquee-track, [data-marquee],
+  .pulse, [data-pulse]{
+    animation: none !important;
+  }
+}
+
 /* Cross-page transitions — native View Transitions API + fallback fade-in */
 @view-transition { navigation: auto; }
 ::view-transition-old(root), ::view-transition-new(root){
@@ -967,9 +1027,10 @@ body.is-tinted .zc-form button{
     .lang-card, .option-card, .posture-card, .prob-card, .sev-card,
     .status-card, .subpage-card, .blog-card, .ebook-card, .preso-card,
     .resource-card)::after{
-  content:''; position:absolute; top:0; left:0; width:4px; height:0;
+  content:''; position:absolute; top:0; left:0; width:4px; height:100%;
   background:var(--zop-orange);
-  transition:height var(--dur-med) var(--ease-out);
+  transform:scaleY(0); transform-origin:top;
+  transition:transform var(--dur-med) var(--ease-out);
   pointer-events:none; z-index:2;
 }
 :is(.feature, .cb-small, .cb-big, .fp-feature, .feat-allfeatures,
@@ -1003,7 +1064,7 @@ body.is-tinted .zc-form button{
     .lang-card, .option-card, .posture-card, .prob-card, .sev-card,
     .status-card, .subpage-card, .blog-card, .ebook-card, .preso-card,
     .resource-card):hover::after{
-  height:100%;
+  transform:scaleY(1);
 }
 .foot-social{display:flex; gap:14px}
 .foot-social a{

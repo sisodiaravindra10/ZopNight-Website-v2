@@ -93,16 +93,17 @@
   position:relative;
 }
 .icell::after{
-  content:''; position:absolute; top:0; left:0; width:4px; height:0;
+  content:''; position:absolute; top:0; left:0; width:4px; height:100%;
   background:var(--zop-orange);
-  transition:height var(--dur-med) var(--ease-out);
+  transform:scaleY(0); transform-origin:top;
+  transition:transform var(--dur-med) var(--ease-out);
 }
 .icell:hover{
   transform:translateY(-4px);
   border-color:var(--ink);
   box-shadow:0 8px 0 -4px var(--zop-orange);
 }
-.icell:hover::after{ height:100%; }
+.icell:hover::after{ transform:scaleY(1); }
 .icell .ico{
   width:28px; height:28px; color:var(--ink);
 }
@@ -484,6 +485,8 @@
   </div>
 </nav>
 
+<main>
+
 <header class="page-head">
   <div class="crumb"><a href="/">home</a><span class="s">/</span><a href="brand-guidelines.html">brand</a><span class="s">/</span>icons</div>
   <div class="meta">&#167; 12 &middot; icon system</div>
@@ -757,6 +760,8 @@ document.querySelectorAll('.icell').forEach(cell => {
   });
 });
 </script>
+
+</main>
 
 <script src="chrome-darkfold.js" defer></script>
 <script src="chrome-mobilenav.js" defer></script>
